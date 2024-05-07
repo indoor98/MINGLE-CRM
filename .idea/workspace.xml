@@ -5,40 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7f70553e-53cb-43b4-86ef-883e0f7a4270" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/modules/minglecrm.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/minglecrm/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mariadb/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mariadb/config/mariadb.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mariadb/init/init.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/redis/redis.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/minglecrm.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/minglecrm.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/minglecrm.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/minglecrm.test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/workflows/front_workflow.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/8.7/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/build/resources/main/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/build/resources/main/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/build/resources/main/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/build/resources/main/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/build/tmp/compileJava/compileTransaction/stash-dir/UserController.class.uniqueId1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/build/tmp/compileJava/compileTransaction/stash-dir/UserService.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/build/tmp/compileJava/compileTransaction/stash-dir/UserServiceImpl.class.uniqueId2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/minglecrm/src/test/java/com/team2final/minglecrm/MinglecrmApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/minglecrm/src/test/java/com/team2final/minglecrm/MinglecrmApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/mingle/src/components/LoginForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/mingle/src/components/LoginForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mariadb/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mariadb/config/mariadb.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mariadb/init/init.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/redis.conf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +143,7 @@
       <updated>1715090697415</updated>
       <workItem from="1715090698542" duration="1648000" />
       <workItem from="1715101715764" duration="436000" />
-      <workItem from="1715102366013" duration="5265000" />
+      <workItem from="1715102366013" duration="6799000" />
     </task>
     <servers />
   </component>
