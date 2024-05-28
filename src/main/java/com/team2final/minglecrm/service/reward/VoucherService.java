@@ -1,7 +1,7 @@
 package com.team2final.minglecrm.service.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
-import com.team2final.minglecrm.controller.reward.response.VoucherCreateResponse;
+import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.employee.Employee;
 import com.team2final.minglecrm.entity.reward.Voucher;
@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +28,8 @@ public class VoucherService {
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
 
-
     @Transactional
-    public VoucherCreateResponse createVoucher(VoucherCreateRequest request) {
+    public VoucherResponse createVoucher(VoucherCreateRequest request) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
@@ -49,9 +51,9 @@ public class VoucherService {
                 .voucherCode(createdVoucherCode)
                 .build();
 
-        Voucher savedVoucher = voucherRepository.save(voucher);
+        voucherRepository.save(voucher);
 
-        return convertToDTO(savedVoucher);
+        return VoucherResponse.of(voucher);
     }
 
     // voucher code 생성 메서드
@@ -79,16 +81,12 @@ public class VoucherService {
         return createdVoucherCode;
     }
 
-    private VoucherCreateResponse convertToDTO(Voucher voucher){
-        return VoucherCreateResponse.builder()
-                .customerId(voucher.getCustomer().getId())
-                .customerName(voucher.getCustomer().getName())
-                .employeeId(voucher.getEmployee().getId())
-                .employeeName(voucher.getEmployee().getName())
-                .createDate(voucher.getCreateDate())
-                .expireDate(voucher.getExpiredDate())
-                .amount(voucher.getAmount())
-                .voucherCode(voucher.getVoucherCode())
-                .build();
+
+    @Transactional
+    public List<VoucherResponse> voucherList(){
+        List<Voucher> vouchers = voucherRepository.findAll();
+        return vouchers.stream()
+                .map(VoucherResponse::of)
+                .collect(Collectors.toList());
     }
 }

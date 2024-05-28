@@ -1,12 +1,14 @@
 package com.team2final.minglecrm.controller.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
-import com.team2final.minglecrm.controller.reward.response.VoucherCreateResponse;
+import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
 import com.team2final.minglecrm.service.reward.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/vouchers")
@@ -17,8 +19,15 @@ public class VoucherController {
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('MARKETER')")
-    public ResponseEntity<VoucherCreateResponse> createVoucher(@RequestBody VoucherCreateRequest request) {
-        VoucherCreateResponse createdVoucher = voucherService.createVoucher(request);
+    public ResponseEntity<VoucherResponse> createVoucher(@RequestBody VoucherCreateRequest request) {
+        VoucherResponse createdVoucher = voucherService.createVoucher(request);
         return ResponseEntity.ok(createdVoucher);
+    }
+
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<VoucherResponse>> getAllVouchers(){
+        List<VoucherResponse> voucherList = voucherService.voucherList();
+        return ResponseEntity.ok(voucherList);
     }
 }

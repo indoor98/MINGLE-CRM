@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class VoucherCreateResponse {
+public class VoucherResponse {
     private Long customerId;
     private String customerName;
     private Long employeeId;
@@ -18,7 +18,7 @@ public class VoucherCreateResponse {
     private String voucherCode;
 
     @Builder
-    public VoucherCreateResponse(Long customerId, String customerName, Long employeeId, String employeeName, Long amount, LocalDateTime createDate, LocalDateTime expireDate, String voucherCode) {
+    public VoucherResponse(Long customerId, String customerName, Long employeeId, String employeeName, Long amount, LocalDateTime createDate, LocalDateTime expireDate, String voucherCode) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.employeeId = employeeId;
@@ -27,5 +27,16 @@ public class VoucherCreateResponse {
         this.createDate = createDate;
         this.expireDate = expireDate;
         this.voucherCode = voucherCode;
+    }
+    public static VoucherResponse of(Voucher voucher) {
+        return new VoucherResponse(
+                voucher.getCustomer().getId(),
+                voucher.getCustomer().getName(),
+                voucher.getEmployee().getId(),
+                voucher.getEmployee().getName(),
+                voucher.getAmount(),
+                voucher.getCreateDate(),
+                voucher.getExpiredDate(),
+                voucher.getVoucherCode());
     }
 }
