@@ -9,16 +9,20 @@ import java.time.LocalDateTime;
 @Getter
 public class VoucherCreateResponse {
     private Long customerId;
-    private Long EmployeeId;
+    private String customerName;
+    private Long employeeId;
+    private String employeeName;
     private Long amount;
     private LocalDateTime createDate;
     private LocalDateTime expireDate;
     private String voucherCode;
 
     @Builder
-    public VoucherCreateResponse(Long customerId, String customerName, Long employeeId, Long amount, LocalDateTime createDate, LocalDateTime expireDate, String voucherCode) {
+    public VoucherCreateResponse(Long customerId, String customerName, Long employeeId, String employeeName, Long amount, LocalDateTime createDate, LocalDateTime expireDate, String voucherCode) {
         this.customerId = customerId;
-        this.EmployeeId = employeeId;
+        this.customerName = customerName;
+        this.employeeId = employeeId;
+        this.employeeName = employeeName;
         this.amount = amount;
         this.createDate = createDate;
         this.expireDate = expireDate;

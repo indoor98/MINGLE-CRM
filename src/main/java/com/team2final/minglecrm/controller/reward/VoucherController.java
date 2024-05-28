@@ -16,7 +16,7 @@ public class VoucherController {
     private final VoucherService voucherService;
 
     @PostMapping("/new")
-    @PreAuthorize("hasRole('STAFF')")
+    @PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<VoucherCreateResponse> createVoucher(@RequestBody VoucherCreateRequest request) {
         VoucherCreateResponse createdVoucher = voucherService.createVoucher(request);
         return ResponseEntity.ok(createdVoucher);
