@@ -1,10 +1,7 @@
 package com.team2final.minglecrm.service.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
-import com.team2final.minglecrm.controller.reward.response.VoucherApprovalResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
+import com.team2final.minglecrm.controller.reward.response.*;
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.employee.Employee;
 import com.team2final.minglecrm.entity.reward.Voucher;
@@ -122,6 +119,8 @@ public class VoucherService {
                 .customer(voucher.getCustomer())
                 .employeeStaff(employee)
                 .requestDate(LocalDateTime.now())  // 현재 시간을 requestDate로 설정
+                .isAuth(false)
+                .isConvertedYn(false)
                 .build();
 
         voucherHistoryRepository.save(voucherHistory);
@@ -145,6 +144,21 @@ public class VoucherService {
         voucherHistoryRepository.save(voucherHistory);
 
         return VoucherApprovalResponse.of(voucherHistory);
+    }
+
+    @Transactional
+    public List<VoucherStatusResponse> voucherStatusList(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Employee employee = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+        List<VoucherHistory> voucherHistories = voucherHistoryRepository.findAllByEmployeeStaff(employee);
+
+        return voucherHistories.stream()
+                .map(VoucherStatusResponse::of)
+                .collect(Collectors.toList());
     }
 
 }

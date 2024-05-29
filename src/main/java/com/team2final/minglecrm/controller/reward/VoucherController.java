@@ -2,10 +2,7 @@ package com.team2final.minglecrm.controller.reward;
 
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
-import com.team2final.minglecrm.controller.reward.response.VoucherApprovalResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
+import com.team2final.minglecrm.controller.reward.response.*;
 import com.team2final.minglecrm.service.reward.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -43,7 +40,6 @@ public class VoucherController {
         return ResponseEntity.ok(voucherList);
     }
 
-
     @PostMapping("/request/{voucherId}")
     @PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<VoucherRequestResponse> requestVoucher(@PathVariable("voucherId") Long voucherId) {
@@ -58,4 +54,11 @@ public class VoucherController {
         return ResponseEntity.ok(voucherApprovalResponse);
     }
 
+    @GetMapping("/list/requested/marketer")
+    @PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<List<VoucherStatusResponse>> voucherStatusList(){
+        List<VoucherStatusResponse> voucherStatusList = voucherService.voucherStatusList();
+        return ResponseEntity.ok(voucherStatusList);
+    }
+    // 요청전/승인전/승인완료 상태 리스트를 보려면 voucher랑 voucherHistory 조인해서 가져와야함 <- 수정하기
 }
