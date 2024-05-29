@@ -1,6 +1,8 @@
 package com.team2final.minglecrm.controller.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
+import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
+import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
 import com.team2final.minglecrm.service.reward.VoucherService;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +26,17 @@ public class VoucherController {
         return ResponseEntity.ok(createdVoucher);
     }
 
+    @PostMapping("/request/{voucherId}")
+    public ResponseEntity<VoucherRequestResponse> requestVoucher(@PathVariable("voucherId") Long voucherId) {
+        VoucherRequestResponse voucherRequestResponse = voucherService.requestVoucher(voucherId);
+        return ResponseEntity.ok(voucherRequestResponse);
+    }
+
     @GetMapping("/list")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<VoucherResponse>> getAllVouchers(){
         List<VoucherResponse> voucherList = voucherService.voucherList();
         return ResponseEntity.ok(voucherList);
     }
+
 }

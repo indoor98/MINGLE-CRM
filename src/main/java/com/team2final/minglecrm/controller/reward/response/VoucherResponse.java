@@ -28,6 +28,7 @@ public class VoucherResponse {
         this.expireDate = expireDate;
         this.voucherCode = voucherCode;
     }
+
     public static VoucherResponse of(Voucher voucher) {
         return new VoucherResponse(
                 voucher.getCustomer().getId(),
