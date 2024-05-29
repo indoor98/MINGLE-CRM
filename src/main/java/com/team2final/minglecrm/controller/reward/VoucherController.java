@@ -36,6 +36,7 @@ public class VoucherController {
     }
 
     @PostMapping("/request/{voucherId}")
+    @PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<VoucherRequestResponse> requestVoucher(@PathVariable("voucherId") Long voucherId) {
         VoucherRequestResponse voucherRequestResponse = voucherService.requestVoucher(voucherId);
         return ResponseEntity.ok(voucherRequestResponse);
@@ -44,7 +45,8 @@ public class VoucherController {
     @PostMapping("/approval/{voucherId}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<VoucherApprovalResponse> approveVoucher(@PathVariable("voucherId") Long voucherId) {
-        VoucherApprovalResponse voucherApprovalResponse = voucherService.appoveVoucher(voucherId);
+        VoucherApprovalResponse voucherApprovalResponse = voucherService.approveVoucher(voucherId);
         return ResponseEntity.ok(voucherApprovalResponse);
     }
+
 }

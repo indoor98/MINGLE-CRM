@@ -121,12 +121,14 @@ public class VoucherService {
     }
     
     @Transactional
-    public VoucherApprovalResponse appoveVoucher(Long voucherId){
+    public VoucherApprovalResponse approveVoucher(Long voucherId){
 
         VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId).
                 orElseThrow(() -> new RuntimeException("해당 ID의 바우처의 히스토리를 찾을 수 없습니다."));
 
-        voucherHistory.updateVoucherHistory();
+        voucherHistory.approveVoucher();
+        voucherHistoryRepository.save(voucherHistory);
+        return VoucherApprovalResponse.of(voucherHistory);
     }
 
 }

@@ -64,7 +64,8 @@ public class VoucherHistory {
         this.customer = customer;
     }
 
-    public void updateVoucherHistory() {
+    public void approveVoucher() {
         this.isAuth = true;
+        this.authDate = LocalDateTime.now();
     }
 }
