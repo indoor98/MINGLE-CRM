@@ -190,4 +190,5 @@ public class InquiryService {
                 .date(inquiryAction.getDate())
                 .build();
     }
+
 }
