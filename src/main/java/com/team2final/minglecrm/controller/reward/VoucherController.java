@@ -1,7 +1,6 @@
 package com.team2final.minglecrm.controller.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
-import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
 import com.team2final.minglecrm.service.reward.VoucherService;
@@ -39,4 +38,9 @@ public class VoucherController {
         return ResponseEntity.ok(voucherList);
     }
 
+//    @PostMapping("/approval/{voucherId}")
+//    @PreAuthorize("hasRole('MANAGER')")
+//    public ResponseEntity<VoucherApprovalResponse> approveVoucher() {
+//
+//    }
 }
