@@ -35,6 +35,14 @@ public class VoucherController {
         return ResponseEntity.ok(voucherList);
     }
 
+    // 사용자별 바우처 리스트 조회
+    @GetMapping("/list/{customerId}")
+    public ResponseEntity<List<VoucherResponse>> getVouchers(@PathVariable("customerId") Long customerId){
+        List<VoucherResponse> voucherList = voucherService.voucherList();
+        return ResponseEntity.ok(voucherList);
+    }
+
+
     @PostMapping("/request/{voucherId}")
     @PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<VoucherRequestResponse> requestVoucher(@PathVariable("voucherId") Long voucherId) {

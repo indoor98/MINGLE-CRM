@@ -43,11 +43,11 @@ public class VoucherHistory {
     @JoinColumn(name = "manager_id")
     private Employee employeeManager;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "staff_id")
     private Employee employeeStaff;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

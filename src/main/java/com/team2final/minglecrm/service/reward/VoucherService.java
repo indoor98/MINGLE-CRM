@@ -2,7 +2,6 @@ package com.team2final.minglecrm.service.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
 import com.team2final.minglecrm.controller.reward.response.VoucherApprovalResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
 import com.team2final.minglecrm.entity.customer.Customer;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -91,6 +89,16 @@ public class VoucherService {
     @Transactional
     public List<VoucherResponse> voucherList(){
         List<Voucher> vouchers = voucherRepository.findAll();
+        return vouchers.stream()
+                .map(VoucherResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<VoucherResponse> customerVoucherList(Long customerId){
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()-> new RuntimeException("해당 ID의 고객을 찾을 수 없습니다."));
+        List<Voucher> vouchers = voucherRepository.findAllByCustomer(customer);
         return vouchers.stream()
                 .map(VoucherResponse::of)
                 .collect(Collectors.toList());
