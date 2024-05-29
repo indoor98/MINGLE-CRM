@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.service.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
+import com.team2final.minglecrm.controller.reward.response.VoucherApprovalResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
@@ -117,6 +118,15 @@ public class VoucherService {
         voucherHistoryRepository.save(voucherHistory);
 
         return VoucherRequestResponse.of(voucherHistory);
+    }
+    
+    @Transactional
+    public VoucherApprovalResponse appoveVoucher(Long voucherId){
+
+        VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId).
+                orElseThrow(() -> new RuntimeException("해당 ID의 바우처의 히스토리를 찾을 수 없습니다."));
+
+        voucherHistory.updateVoucherHistory();
     }
 
 }

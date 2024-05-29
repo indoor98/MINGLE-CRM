@@ -63,4 +63,8 @@ public class VoucherHistory {
         this.employeeStaff = employeeStaff;
         this.customer = customer;
     }
+
+    public void updateVoucherHistory() {
+        this.isAuth = true;
+    }
 }
