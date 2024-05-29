@@ -39,7 +39,7 @@ public class VoucherHistory {
 
     private LocalDateTime conversionDate;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "manager_id")
     private Employee employeeManager;
 
@@ -64,8 +64,9 @@ public class VoucherHistory {
         this.customer = customer;
     }
 
-    public void approveVoucher() {
+    public void approveVoucher(Employee approver) {
         this.isAuth = true;
         this.authDate = LocalDateTime.now();
+        this.employeeManager = approver;
     }
 }

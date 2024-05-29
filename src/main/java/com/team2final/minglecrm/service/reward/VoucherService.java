@@ -2,6 +2,7 @@ package com.team2final.minglecrm.service.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
 import com.team2final.minglecrm.controller.reward.response.VoucherApprovalResponse;
+import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
 import com.team2final.minglecrm.entity.customer.Customer;
@@ -95,12 +96,12 @@ public class VoucherService {
     }
 
     @Transactional
-    public List<VoucherResponse> customerVoucherList(Long customerId){
+    public List<VoucherHistoryResponse> customerVoucherList(Long customerId){
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(()-> new RuntimeException("해당 ID의 고객을 찾을 수 없습니다."));
-        List<Voucher> vouchers = voucherRepository.findAllByCustomer(customer);
-        return vouchers.stream()
-                .map(VoucherResponse::of)
+        List<VoucherHistory> voucherHistories = voucherHistoryRepository.findAllByCustomer(customer);
+        return voucherHistories.stream()
+                .map(VoucherHistoryResponse::of)
                 .collect(Collectors.toList());
     }
 
@@ -131,11 +132,18 @@ public class VoucherService {
     @Transactional
     public VoucherApprovalResponse approveVoucher(Long voucherId){
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Employee approver = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
         VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId).
                 orElseThrow(() -> new RuntimeException("해당 ID의 바우처의 히스토리를 찾을 수 없습니다."));
 
-        voucherHistory.approveVoucher();
+        voucherHistory.approveVoucher(approver);
         voucherHistoryRepository.save(voucherHistory);
+
         return VoucherApprovalResponse.of(voucherHistory);
     }
 

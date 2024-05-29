@@ -3,6 +3,7 @@ package com.team2final.minglecrm.controller.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
 import com.team2final.minglecrm.controller.reward.response.VoucherApprovalResponse;
+import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
 import com.team2final.minglecrm.service.reward.VoucherService;
@@ -37,8 +38,8 @@ public class VoucherController {
 
     // 사용자별 바우처 리스트 조회
     @GetMapping("/list/{customerId}")
-    public ResponseEntity<List<VoucherResponse>> getVouchers(@PathVariable("customerId") Long customerId){
-        List<VoucherResponse> voucherList = voucherService.voucherList();
+    public ResponseEntity<List<VoucherHistoryResponse>> getVouchers(@PathVariable("customerId") Long customerId){
+        List<VoucherHistoryResponse> voucherList = voucherService.customerVoucherList(customerId);
         return ResponseEntity.ok(voucherList);
     }
 

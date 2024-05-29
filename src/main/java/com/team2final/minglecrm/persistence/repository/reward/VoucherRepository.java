@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher, Long> {
     boolean existsByVoucherCode(String voucherCode);
-    List<Voucher> findAllByCustomer(Customer customer);
 }
