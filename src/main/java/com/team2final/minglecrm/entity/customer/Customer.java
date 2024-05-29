@@ -62,4 +62,9 @@ public class Customer {
     public void deleteCustomer() {
         this.isDeleted = true;
     }
+
+    public void updateCustomerReservationDetail(String memo, String name) {
+        this.memo = memo;
+        this.name = name;
+    }
 }

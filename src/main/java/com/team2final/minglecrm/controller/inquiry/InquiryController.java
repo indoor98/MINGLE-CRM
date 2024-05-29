@@ -1,7 +1,10 @@
 package com.team2final.minglecrm.controller.inquiry;
 
+import com.team2final.minglecrm.controller.inquiry.request.InquiryActionRequest;
 import com.team2final.minglecrm.controller.inquiry.request.InquiryReplyRequest;
+import com.team2final.minglecrm.controller.inquiry.request.UpdateInquiryActionRequest;
 import com.team2final.minglecrm.controller.inquiry.request.UpdateInquiryReplyRequest;
+import com.team2final.minglecrm.controller.inquiry.response.InquiryActionResponse;
 import com.team2final.minglecrm.controller.inquiry.response.InquiryDetailResponse;
 import com.team2final.minglecrm.controller.inquiry.response.InquiryReplyResponse;
 import com.team2final.minglecrm.controller.inquiry.response.InquiryResponse;
@@ -22,8 +25,9 @@ public class InquiryController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('CONSULTANT', 'STAFF', 'MARKETER', 'MANAGER')")
-    public List<InquiryResponse> getAllInquiries() {
-        return inquiryService.getAllInquiries();
+    public ResponseEntity<List<InquiryResponse>> getAllInquiries() {
+        List<InquiryResponse> inquiries = inquiryService.getAllInquiries();
+        return ResponseEntity.ok(inquiries);
     }
 
     @GetMapping("/{inquiryId}")
@@ -34,8 +38,9 @@ public class InquiryController {
 
     @PostMapping("/reply")
     @PreAuthorize("hasRole('CONSULTANT')")
-    public InquiryReplyResponse replyToInquiry(@RequestBody InquiryReplyRequest request) {
-        return inquiryService.replyToInquiry(request);
+    public ResponseEntity<InquiryReplyResponse> replyToInquiry(@RequestBody InquiryReplyRequest request) {
+        InquiryReplyResponse replyResponse = inquiryService.replyToInquiry(request);
+        return ResponseEntity.ok(replyResponse);
     }
 
     @PostMapping("/reply/{inquiryReplyId}")
@@ -46,5 +51,19 @@ public class InquiryController {
         return ResponseEntity.ok(updatedReply);
     }
 
+    @PostMapping("/action")
+    @PreAuthorize("hasRole('CONSULTANT')")
+    public ResponseEntity<InquiryActionResponse> actionToInquiry(@RequestBody InquiryActionRequest request) {
+        InquiryActionResponse actionResponse = inquiryService.actionToInquiry(request);
+        return ResponseEntity.ok(actionResponse);
+    }
+
+    @PostMapping("/action/{inquiryActionId}")
+    @PreAuthorize("hasRole('CONSULTANT')")
+    public ResponseEntity<InquiryActionResponse> updateInquiryAction(@PathVariable Long inquiryActionId,
+                                                                     @RequestBody UpdateInquiryActionRequest request) {
+        InquiryActionResponse updateAction = inquiryService.updateInquiryAction(inquiryActionId, request.getUpdateActionContent());
+        return ResponseEntity.ok(updateAction);
+    }
 
 }
