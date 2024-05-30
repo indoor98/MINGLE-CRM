@@ -54,11 +54,18 @@ public class VoucherController {
         return ResponseEntity.ok(voucherApprovalResponse);
     }
 
-    @GetMapping("/list/requested/marketer")
+//    @GetMapping("/list/status/marketer")
+//    @PreAuthorize("hasRole('MARKETER')")
+//    public ResponseEntity<List<VoucherStatusResponse>> voucherStatusList(){
+//        List<VoucherStatusResponse> voucherStatusList = voucherService.voucherStatusList();
+//        return ResponseEntity.ok(voucherStatusList);
+//    }
+    // 요청전/승인전/승인완료 상태 리스트를 보려면 voucher랑 voucherHistory 조인해서 가져와야함 <- 수정하기
+
+    @GetMapping("/list/status/marketer")
     @PreAuthorize("hasRole('MARKETER')")
-    public ResponseEntity<List<VoucherStatusResponse>> voucherStatusList(){
+    public ResponseEntity<List<VoucherStatusResponse>> voucherStatus(){
         List<VoucherStatusResponse> voucherStatusList = voucherService.voucherStatusList();
         return ResponseEntity.ok(voucherStatusList);
     }
-    // 요청전/승인전/승인완료 상태 리스트를 보려면 voucher랑 voucherHistory 조인해서 가져와야함 <- 수정하기
 }

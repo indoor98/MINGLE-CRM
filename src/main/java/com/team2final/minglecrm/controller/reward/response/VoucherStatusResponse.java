@@ -8,12 +8,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VoucherStatusResponse {
     private final Long voucherId;
-    private final Boolean isAuth;
-
-    public static VoucherStatusResponse of(VoucherHistory voucherHistory){
-        return new VoucherStatusResponse(
-                voucherHistory.getVoucher().getId(),
-                voucherHistory.getIsAuth()
-        );
-    }
+    private final String voucherStatus;
 }
