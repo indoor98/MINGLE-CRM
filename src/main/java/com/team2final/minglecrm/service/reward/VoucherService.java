@@ -148,21 +148,6 @@ public class VoucherService {
         return VoucherApprovalResponse.of(voucherHistory);
     }
 
-//    @Transactional
-//    public List<VoucherStatusResponse> voucherStatusList(){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String userEmail = authentication.getName();
-//
-//        Employee employee = employeeRepository.findByEmail(userEmail)
-//                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
-//
-//        List<VoucherHistory> voucherHistories = voucherHistoryRepository.findAllByEmployeeStaff(employee);
-//
-//        return voucherHistories.stream()
-//                .map(VoucherStatusResponse::of)
-//                .collect(Collectors.toList());
-//    }
-
     @Transactional
     public List<VoucherStatusResponse> voucherStatusList(){
 

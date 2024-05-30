@@ -15,6 +15,4 @@ import java.util.Optional;
 public interface VoucherHistoryRepository extends JpaRepository<VoucherHistory, Long> {
     Optional<VoucherHistory> findByVoucherId(Long voucherId);
     List<VoucherHistory> findAllByCustomer(Customer customer);
-
-    List<VoucherHistory> findAllByEmployeeStaff(Employee employeeStaff);
 }

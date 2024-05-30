@@ -14,10 +14,6 @@ import java.util.List;
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher, Long> {
     boolean existsByVoucherCode(String voucherCode);
-    List<Voucher> findAllByEmployee(Employee employee);
-
-//    @Query("SELECT v, vh.isAuth FROM Voucher v LEFT JOIN VoucherHistory vh ON v.id = vh.voucher.id")
-//    List<Object[]> findAllVouchersWithAuthStatus();
 
     @Query("SELECT v, vh.isAuth FROM Voucher v LEFT JOIN VoucherHistory vh ON v.id = vh.voucher.id WHERE v.employee.id = :employeeId")
     List<Object[]> findAllVouchersWithAuthStatus(@Param("employeeId") Long employeeId);
