@@ -7,6 +7,7 @@ import com.team2final.minglecrm.controller.inquiry.response.InquiryDetailRespons
 import com.team2final.minglecrm.controller.inquiry.response.InquiryReplyResponse;
 import com.team2final.minglecrm.controller.inquiry.response.InquiryResponse;
 import com.team2final.minglecrm.entity.employee.Employee;
+import com.team2final.minglecrm.entity.inquiry.ActionStatus;
 import com.team2final.minglecrm.entity.inquiry.Inquiry;
 import com.team2final.minglecrm.entity.inquiry.InquiryAction;
 import com.team2final.minglecrm.entity.inquiry.InquiryReply;
@@ -158,7 +159,7 @@ public class InquiryService {
         InquiryAction inquiryAction = InquiryAction.builder()
                 .inquiry(inquiry)
                 .employee(employee)
-                .isActionNeeded(true)
+                .actionStatus(request.getActionStatus())
                 .actionContent(request.getActionContent())
                 .date(LocalDateTime.now())
                 .build();
@@ -169,7 +170,7 @@ public class InquiryService {
     }
 
     @Transactional
-    public InquiryActionResponse updateInquiryAction(Long inquiryActionId, String updateAction) {
+    public InquiryActionResponse updateInquiryAction(Long inquiryActionId, String updateAction, ActionStatus actionStatus) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
@@ -179,7 +180,7 @@ public class InquiryService {
         InquiryAction inquiryAction = inquiryActionRepository.findById(inquiryActionId)
                 .orElseThrow(() -> new RuntimeException("조치 내용을 찾을 수 없습니다."));
 
-        inquiryAction.updateAction(updateAction, LocalDateTime.now(), employee);
+        inquiryAction.updateAction(updateAction, LocalDateTime.now(), employee, actionStatus);
 
         return convertToActionDTO(inquiryAction);
     }
@@ -217,7 +218,7 @@ public class InquiryService {
                 .id(inquiryAction.getId())
                 .inquiryId(inquiryAction.getInquiry().getId())
                 .actionContent(inquiryAction.getActionContent())
-                .isActionNeeded(inquiryAction.getIsActionNeeded())
+                .actionStatus(inquiryAction.getActionStatus())
                 .email(inquiryAction.getEmployee().getEmail())
                 .date(inquiryAction.getDate())
                 .build();

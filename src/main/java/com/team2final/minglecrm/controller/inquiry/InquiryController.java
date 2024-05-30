@@ -85,7 +85,7 @@ public class InquiryController {
     @PreAuthorize("hasRole('CONSULTANT')")
     public ResponseEntity<InquiryActionResponse> updateInquiryAction(@PathVariable Long inquiryActionId,
                                                                      @RequestBody UpdateInquiryActionRequest request) {
-        InquiryActionResponse updateAction = inquiryService.updateInquiryAction(inquiryActionId, request.getUpdateActionContent());
+        InquiryActionResponse updateAction = inquiryService.updateInquiryAction(inquiryActionId, request.getUpdateActionContent(), request.getActionStatus());
         return ResponseEntity.ok(updateAction);
     }
 

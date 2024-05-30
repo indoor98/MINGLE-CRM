@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.controller.inquiry.response;
 
+import com.team2final.minglecrm.entity.inquiry.ActionStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,9 +17,10 @@ public class InquiryResponse {
     private String employName;
     private String inquiryTitle;
     private String inquiryContent;
+    private ActionStatus actionStatus;
 
     @Builder
-    public InquiryResponse(Long id, String customerName, String customerPhone, LocalDateTime date, String type, Boolean isReply, String employName, String inquiryTitle, String inquiryContent) {
+    public InquiryResponse(Long id, String customerName, String customerPhone, LocalDateTime date, String type, Boolean isReply, String employName, String inquiryTitle, String inquiryContent, ActionStatus actionStatus) {
         this.id = id;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -28,5 +30,6 @@ public class InquiryResponse {
         this.employName = employName;
         this.inquiryTitle = inquiryTitle;
         this.inquiryContent = inquiryContent;
+        this.actionStatus = actionStatus;
     }
 }
