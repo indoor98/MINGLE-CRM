@@ -47,6 +47,18 @@ public class InquiryController {
         return ResponseEntity.ok(answeredInquiries);
     }
 
+    @GetMapping("/with-action")
+    public ResponseEntity<List<InquiryResponse>> getInquiriesWithAction() {
+        List<InquiryResponse> inquiriesWithAction = inquiryService.getInquiriesWithAction();
+        return ResponseEntity.ok(inquiriesWithAction);
+    }
+
+    @GetMapping("/without-action")
+    public ResponseEntity<List<InquiryResponse>> getInquiriesWithoutAction() {
+        List<InquiryResponse> inquiriesWithoutAction = inquiryService.getInquiriesWithoutAction();
+        return ResponseEntity.ok(inquiriesWithoutAction);
+    }
+
     @PostMapping("/reply")
     @PreAuthorize("hasRole('CONSULTANT')")
     public ResponseEntity<InquiryReplyResponse> replyToInquiry(@RequestBody InquiryReplyRequest request) {

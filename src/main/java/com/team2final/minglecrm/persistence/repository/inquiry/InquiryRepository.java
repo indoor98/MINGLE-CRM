@@ -14,4 +14,10 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     @Query("SELECT i FROM Inquiry i WHERE i.id IN (SELECT ir.inquiry.id FROM InquiryReply ir)")
     List<Inquiry> findInquiriesWithReply();
+
+    @Query("SELECT i FROM Inquiry i WHERE i.id IN (SELECT ia.inquiry.id FROM InquiryAction ia)")
+    List<Inquiry> findInquiriesWithAction();
+
+    @Query("SELECT i FROM Inquiry i WHERE i.id NOT IN (SELECT ia.inquiry.id FROM InquiryAction ia)")
+    List<Inquiry> findInquiriesWithoutAction();
 }

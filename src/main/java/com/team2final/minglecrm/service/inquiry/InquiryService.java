@@ -69,6 +69,22 @@ public class InquiryService {
     }
 
     @Transactional
+    public List<InquiryResponse> getInquiriesWithAction() {
+        List<Inquiry> inquiriesWithAction = inquiryRepository.findInquiriesWithAction();
+        return inquiriesWithAction.stream()
+                .map(inquiry -> convertToDTO(inquiry, null))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<InquiryResponse> getInquiriesWithoutAction() {
+        List<Inquiry> inquiriesWithoutAction = inquiryRepository.findInquiriesWithoutAction();
+        return inquiriesWithoutAction.stream()
+                .map(inquiry -> convertToDTO(inquiry, null))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public InquiryDetailResponse getInquiryById(Long inquiryId) {
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new RuntimeException("문의를 찾을 수 없습니다."));
