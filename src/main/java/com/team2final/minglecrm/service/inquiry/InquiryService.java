@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,21 @@ public class InquiryService {
         List<Inquiry> unansweredInquiries = inquiryRepository.findUnansweredInquiries();
         return unansweredInquiries.stream()
                 .map(inquiry -> convertToDTO(inquiry, null)) // 답변이 없는 문의만 조회했으므로 inquiryReply는 항상 null
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<InquiryResponse> getAnsweredInquiries() {
+        List<Inquiry> answeredInquiries = inquiryRepository.findInquiriesWithReply();
+
+        Map<Long, InquiryReply> inquiryReplyMap = inquiryReplyRepository.findAll().stream()
+                .collect(Collectors.toMap(ir -> ir.getInquiry().getId(), ir -> ir));
+
+        return answeredInquiries.stream()
+                .map(inquiry -> {
+                    InquiryReply inquiryReply = inquiryReplyMap.get(inquiry.getId());
+                    return convertToDTO(inquiry, inquiryReply);
+                })
                 .collect(Collectors.toList());
     }
 

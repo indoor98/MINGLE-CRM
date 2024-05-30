@@ -41,6 +41,11 @@ public class InquiryController {
         return ResponseEntity.ok(unansweredInquiries);
     }
 
+    @GetMapping("/answered")
+    public ResponseEntity<List<InquiryResponse>> getAnsweredInquiries() {
+        List<InquiryResponse> answeredInquiries = inquiryService.getAnsweredInquiries();
+        return ResponseEntity.ok(answeredInquiries);
+    }
 
     @PostMapping("/reply")
     @PreAuthorize("hasRole('CONSULTANT')")

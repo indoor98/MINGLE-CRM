@@ -11,4 +11,7 @@ import java.util.List;
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     @Query("SELECT i FROM Inquiry i WHERE i NOT IN (SELECT ir.inquiry FROM InquiryReply ir)")
     List<Inquiry> findUnansweredInquiries();
+
+    @Query("SELECT i FROM Inquiry i WHERE i.id IN (SELECT ir.inquiry.id FROM InquiryReply ir)")
+    List<Inquiry> findInquiriesWithReply();
 }
