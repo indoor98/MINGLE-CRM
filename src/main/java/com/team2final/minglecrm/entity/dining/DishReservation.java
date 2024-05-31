@@ -1,10 +1,12 @@
 package com.team2final.minglecrm.entity.dining;
 
+import com.team2final.minglecrm.controller.dining.reservation.request.UpdateDiningReservationRequest;
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.payment.Payment;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +34,11 @@ public class DishReservation {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    public void updateDishReservation(UpdateDiningReservationRequest updateDiningReservationRequest) {
+
+    }
+
+    public void cancelDishReservation() {
+        this.payment.cancelReservation(true);
+    }
 }

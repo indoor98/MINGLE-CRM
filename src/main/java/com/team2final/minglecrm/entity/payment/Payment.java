@@ -34,11 +34,9 @@ public class Payment {
 
     private String paymentSpot;
 
-
-
-
-
-
-
-
+    //TODO : reward 취소하는 로직 작성
+    public void cancelReservation(boolean cancel) {
+        this.isRefunded = cancel;
+        this.refundDate = LocalDateTime.now();
+    }
 }

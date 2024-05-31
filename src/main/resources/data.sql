@@ -27,7 +27,6 @@ VALUES
 (3, '2024-05-15', '문의 제목 9', '문의 내용 9', '방문 문의', FALSE),
 (4, '2024-05-14', '문의 제목 10', '문의 내용 10', '온라인 문의', TRUE);
 
-
 -- PAYMENT 데이터 삽입
 INSERT INTO payment (type, amount_before_discount, discount_amount, payment_amount, payment_date, is_refunded, refund_date, created_reward, customer_id, payment_spot) VALUES
 ('Credit Card', 100000, 5000, 95000, '2024-06-01 12:00:00', FALSE, NULL, 100, 1, 'Online'),
