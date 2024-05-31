@@ -40,8 +40,13 @@ public class InquiryService {
     public List<InquiryResponse> getAllInquiries() {
         List<Inquiry> inquiries = inquiryRepository.findAll();
         return inquiries.stream().map(inquiry -> {
+
             Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
             InquiryReply inquiryReply = inquiryReplyOptional.orElse(null); // 답변 없으면 null
+
+            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
+            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+
             return convertToDTO(inquiry, inquiryReply);
         }).collect(Collectors.toList());
     }
@@ -200,6 +205,7 @@ public class InquiryService {
                 .inquiryTitle(inquiry.getInquiryTitle())
                 .inquiryContent(inquiry.getInquiryContent())
                 .isReply(isReply)
+                .actionStatus()
                 .build();
     }
 
