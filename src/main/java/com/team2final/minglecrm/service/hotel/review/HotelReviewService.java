@@ -1,6 +1,6 @@
-package com.team2final.minglecrm.service.review;
+package com.team2final.minglecrm.service.hotel.review;
 
-import com.team2final.minglecrm.controller.review.response.HotelReviewResponse;
+import com.team2final.minglecrm.controller.hotel.review.response.HotelReviewResponse;
 import com.team2final.minglecrm.entity.hotel.HotelReview;
 import com.team2final.minglecrm.persistence.repository.hotel.HotelReviewRepository;
 import lombok.RequiredArgsConstructor;
