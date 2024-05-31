@@ -1,9 +1,7 @@
 package com.team2final.minglecrm.service.reward;
 
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
-import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherRequestResponse;
-import com.team2final.minglecrm.controller.reward.response.VoucherResponse;
+import com.team2final.minglecrm.controller.reward.response.*;
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.employee.Employee;
 import com.team2final.minglecrm.entity.reward.Voucher;
@@ -13,6 +11,7 @@ import com.team2final.minglecrm.persistence.repository.employee.EmployeeReposito
 import com.team2final.minglecrm.persistence.repository.reward.VoucherHistoryRepository;
 import com.team2final.minglecrm.persistence.repository.reward.VoucherRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -95,6 +94,16 @@ public class VoucherService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public List<VoucherHistoryResponse> customerVoucherList(Long customerId){
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()-> new RuntimeException("해당 ID의 고객을 찾을 수 없습니다."));
+        List<VoucherHistory> voucherHistories = voucherHistoryRepository.findAllByCustomer(customer);
+        return voucherHistories.stream()
+                .map(VoucherHistoryResponse::of)
+                .collect(Collectors.toList());
+    }
+
 
     @Transactional
     public VoucherRequestResponse requestVoucher(Long voucherId) {
@@ -112,11 +121,63 @@ public class VoucherService {
                 .customer(voucher.getCustomer())
                 .employeeStaff(employee)
                 .requestDate(LocalDateTime.now())  // 현재 시간을 requestDate로 설정
+                .isAuth(false)
+                .isConvertedYn(false)
                 .build();
 
         voucherHistoryRepository.save(voucherHistory);
 
         return VoucherRequestResponse.of(voucherHistory);
+    }
+    
+    @Transactional
+    public VoucherApprovalResponse approveVoucher(Long voucherId){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Employee approver = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+        VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId).
+                orElseThrow(() -> new RuntimeException("해당 ID의 바우처의 히스토리를 찾을 수 없습니다."));
+
+        voucherHistory.approveVoucher(approver);
+        voucherHistoryRepository.save(voucherHistory);
+
+        return VoucherApprovalResponse.of(voucherHistory);
+    }
+
+    @Transactional
+    public List<VoucherStatusResponse> voucherStatusList(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Employee employee = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+        List<Object[]> results = voucherRepository.findAllVouchersWithAuthStatus(employee.getId());
+        List<VoucherStatusResponse> voucherStatusList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            Voucher voucher = (Voucher) result[0];
+            Boolean isAuth = (Boolean) result[1];
+            String status;
+
+            if (Boolean.TRUE.equals(isAuth)) {
+                status = "승인 완료";
+            } else if (Boolean.FALSE.equals(isAuth)) {
+                status = "승인 대기";
+            } else { // isAuth == null
+                status = "요청 전";
+            }
+
+            VoucherStatusResponse voucherStatus = new VoucherStatusResponse(voucher.getId(), status);
+            voucherStatusList.add(voucherStatus);
+        }
+
+        return voucherStatusList;
     }
 
 }

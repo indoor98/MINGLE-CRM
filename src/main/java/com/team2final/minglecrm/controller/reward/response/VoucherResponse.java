@@ -17,7 +17,7 @@ public class VoucherResponse {
     private LocalDateTime expireDate;
     private String voucherCode;
 
-    @Builder
+//    @Builder
     public VoucherResponse(Long customerId, String customerName, Long employeeId, String employeeName, Long amount, LocalDateTime createDate, LocalDateTime expireDate, String voucherCode) {
         this.customerId = customerId;
         this.customerName = customerName;

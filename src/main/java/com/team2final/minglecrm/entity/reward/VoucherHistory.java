@@ -63,4 +63,10 @@ public class VoucherHistory {
         this.employeeStaff = employeeStaff;
         this.customer = customer;
     }
+
+    public void approveVoucher(Employee approver) {
+        this.isAuth = true;
+        this.authDate = LocalDateTime.now();
+        this.employeeManager = approver;
+    }
 }

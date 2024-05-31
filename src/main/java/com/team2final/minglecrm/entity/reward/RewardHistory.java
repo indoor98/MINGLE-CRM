@@ -32,7 +32,7 @@ public class RewardHistory {
     @JoinColumn(name = "voucher_id")
     private Voucher voucher;
 
-    private String type;
+    private String type; // 적립인지 사용인지 바우처->리워드 전환인지
 
     private Long amount;
 

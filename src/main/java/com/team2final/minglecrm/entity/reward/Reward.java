@@ -3,6 +3,7 @@ package com.team2final.minglecrm.entity.reward;
 import com.team2final.minglecrm.entity.customer.Customer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import static jakarta.persistence.FetchType.LAZY;
@@ -21,4 +22,10 @@ public class Reward {
     private Customer customer;
 
     private Long amount;
+
+    @Builder
+    public Reward(Customer customer, Long amount){
+        this.customer = customer;
+        this.amount = amount;
+    }
 }
