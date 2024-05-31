@@ -8,6 +8,7 @@ on:
       - main
       - dev
       - feature
+      - feature2
 jobs:
   build:
     runs-on: ubuntu-latest # 3. 실행 환경 지정

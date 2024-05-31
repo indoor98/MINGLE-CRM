@@ -24,4 +24,5 @@ public class DemoController {
     public ResponseEntity<String> authTestStaff() {
         return new ResponseEntity<>("요청 승인", HttpStatus.OK);
     }
+
 }
