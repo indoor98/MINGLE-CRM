@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,5 +41,13 @@ public class DishReservation {
 
     public void cancelDishReservation() {
         this.payment.cancelReservation(true);
+    }
+
+
+    @Builder
+    public DishReservation(Long totalPrice, LocalDateTime reservationDate, Customer customer) {
+        this.totalPrice = totalPrice;
+        this.reservationDate = reservationDate;
+        this.customer = customer;
     }
 }

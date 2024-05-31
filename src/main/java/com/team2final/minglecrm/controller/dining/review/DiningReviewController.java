@@ -18,6 +18,7 @@ public class DiningReviewController {
 
     @GetMapping("/api/dining/reviews/{pageno}")
     public ResultResponse<List<DiningReviewResponse>> findAllDiningReview(@PathVariable("pageno") int pageNo){
+        List<DiningReviewResponse> response = diningReviewService.findAllDiningReviewsWithPaging(pageNo);
         return null;
     }
 }
