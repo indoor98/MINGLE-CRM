@@ -47,7 +47,7 @@ public class InquiryService {
             Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
             InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
 
-            return convertToDTO(inquiry, inquiryReply);
+            return convertToDTO(inquiry, inquiryReply, inquiryAction);
         }).collect(Collectors.toList());
     }
 
@@ -205,7 +205,25 @@ public class InquiryService {
                 .inquiryTitle(inquiry.getInquiryTitle())
                 .inquiryContent(inquiry.getInquiryContent())
                 .isReply(isReply)
-                .actionStatus()
+                .build();
+    }
+
+    private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
+        String employName = (inquiryReply != null) ? inquiryReply.getEmployee().getName() : null;
+        boolean isReply = (inquiryReply != null); // 답변이 있으면 true
+
+
+        return InquiryResponse.builder()
+                .id(inquiry.getId())
+                .customerName(inquiry.getCustomer().getName())
+                .customerPhone(inquiry.getCustomer().getPhone())
+                .date(inquiry.getDate())
+                .type(inquiry.getType())
+                .employName(employName)
+                .inquiryTitle(inquiry.getInquiryTitle())
+                .inquiryContent(inquiry.getInquiryContent())
+                .isReply(isReply)
+                .actionStatus(inquiryAction.getActionStatus())
                 .build();
     }
 
