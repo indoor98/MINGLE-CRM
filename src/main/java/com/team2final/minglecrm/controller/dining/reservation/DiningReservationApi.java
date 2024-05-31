@@ -6,6 +6,7 @@ import com.team2final.minglecrm.service.dining.reservation.DishReservationServic
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +23,7 @@ public class DiningReservationApi {
 
     // 다이닝(디시) 전체 예약 내역
     @GetMapping()
+    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<List<DiningReservationResponse>> getReservationsList(
             @PathVariable Long customerId) {
         List<DiningReservationResponse> responses = dishReservationService.findById(customerId);
@@ -30,6 +32,7 @@ public class DiningReservationApi {
 
     // 다이닝(디시) 상세 예약 내역
     @GetMapping("/{reservationId}")
+    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<DiningReservationResponse> getRoomReservation(
             @PathVariable Long customerId, @PathVariable Long reservationId) {
         DiningReservationResponse diningReservationResponse = dishReservationService.findReservationById(
@@ -40,6 +43,7 @@ public class DiningReservationApi {
 
     // 다이닝(디시) 예약 수정
     @PatchMapping("/{reservationId}")
+    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public void updateRoomReservation(
             @PathVariable Long customerId,
             @PathVariable Long reservationId,
@@ -51,6 +55,7 @@ public class DiningReservationApi {
 
     // 다이닝(디시) 상세 예약 삭제
     @DeleteMapping("/{reservationId}")
+    @PreAuthorize("hasRole('MANAGER')")
     public void cancelRoomReservation(
             @PathVariable Long customerId,
             @PathVariable Long reservationId) {
