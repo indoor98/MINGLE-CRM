@@ -18,7 +18,7 @@ public class CustomerApi {
 
     // TODO : paging 처리
     @GetMapping()
-    @PreAuthorize("hasRole('ROLE_STAFF')")
+    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
         List<CustomerResponse> customers = customerService.getAllCustomer();
         return ResponseEntity.ok(customers);
