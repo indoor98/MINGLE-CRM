@@ -28,24 +28,26 @@ public class InquiryAction {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    private Boolean isActionNeeded;
+    @Enumerated(EnumType.STRING)
+    private ActionStatus actionStatus;
 
     private String actionContent;
 
     private LocalDateTime date;
 
     @Builder
-    public InquiryAction(Inquiry inquiry, Employee employee, Boolean isActionNeeded, String actionContent, LocalDateTime date) {
+    public InquiryAction(Inquiry inquiry, Employee employee, ActionStatus actionStatus, String actionContent, LocalDateTime date) {
         this.inquiry = inquiry;
         this.employee = employee;
-        this.isActionNeeded = isActionNeeded;
+        this.actionStatus = actionStatus;
         this.actionContent = actionContent;
         this.date = date;
     }
 
-    public void updateAction(String updateAction, LocalDateTime date, Employee employee) {
+    public void updateAction(String updateAction, LocalDateTime date, Employee employee, ActionStatus actionStatus) {
         this.actionContent = updateAction;
         this.date = date;
         this.employee = employee;
+        this.actionStatus = actionStatus;
     }
 }

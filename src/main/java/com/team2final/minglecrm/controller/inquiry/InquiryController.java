@@ -24,7 +24,6 @@ public class InquiryController {
     private final InquiryService inquiryService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('CONSULTANT', 'STAFF', 'MARKETER', 'MANAGER')")
     public ResponseEntity<List<InquiryResponse>> getAllInquiries() {
         List<InquiryResponse> inquiries = inquiryService.getAllInquiries();
         return ResponseEntity.ok(inquiries);
@@ -34,6 +33,30 @@ public class InquiryController {
     public ResponseEntity<InquiryDetailResponse> getInquiryById(@PathVariable Long inquiryId) {
         InquiryDetailResponse inquiryDetailResponse = inquiryService.getInquiryById(inquiryId);
         return ResponseEntity.ok(inquiryDetailResponse);
+    }
+
+    @GetMapping("/unanswered")
+    public ResponseEntity<List<InquiryResponse>> getUnansweredInquiries() {
+        List<InquiryResponse> unansweredInquiries = inquiryService.getUnansweredInquiries();
+        return ResponseEntity.ok(unansweredInquiries);
+    }
+
+    @GetMapping("/answered")
+    public ResponseEntity<List<InquiryResponse>> getAnsweredInquiries() {
+        List<InquiryResponse> answeredInquiries = inquiryService.getAnsweredInquiries();
+        return ResponseEntity.ok(answeredInquiries);
+    }
+
+    @GetMapping("/with-action")
+    public ResponseEntity<List<InquiryResponse>> getInquiriesWithAction() {
+        List<InquiryResponse> inquiriesWithAction = inquiryService.getInquiriesWithAction();
+        return ResponseEntity.ok(inquiriesWithAction);
+    }
+
+    @GetMapping("/without-action")
+    public ResponseEntity<List<InquiryResponse>> getInquiriesWithoutAction() {
+        List<InquiryResponse> inquiriesWithoutAction = inquiryService.getInquiriesWithoutAction();
+        return ResponseEntity.ok(inquiriesWithoutAction);
     }
 
     @PostMapping("/reply")
@@ -62,7 +85,7 @@ public class InquiryController {
     @PreAuthorize("hasRole('CONSULTANT')")
     public ResponseEntity<InquiryActionResponse> updateInquiryAction(@PathVariable Long inquiryActionId,
                                                                      @RequestBody UpdateInquiryActionRequest request) {
-        InquiryActionResponse updateAction = inquiryService.updateInquiryAction(inquiryActionId, request.getUpdateActionContent());
+        InquiryActionResponse updateAction = inquiryService.updateInquiryAction(inquiryActionId, request.getUpdateActionContent(), request.getActionStatus());
         return ResponseEntity.ok(updateAction);
     }
 

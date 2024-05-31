@@ -7,6 +7,7 @@ import com.team2final.minglecrm.controller.inquiry.response.InquiryDetailRespons
 import com.team2final.minglecrm.controller.inquiry.response.InquiryReplyResponse;
 import com.team2final.minglecrm.controller.inquiry.response.InquiryResponse;
 import com.team2final.minglecrm.entity.employee.Employee;
+import com.team2final.minglecrm.entity.inquiry.ActionStatus;
 import com.team2final.minglecrm.entity.inquiry.Inquiry;
 import com.team2final.minglecrm.entity.inquiry.InquiryAction;
 import com.team2final.minglecrm.entity.inquiry.InquiryReply;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -38,10 +40,54 @@ public class InquiryService {
     public List<InquiryResponse> getAllInquiries() {
         List<Inquiry> inquiries = inquiryRepository.findAll();
         return inquiries.stream().map(inquiry -> {
+
             Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
             InquiryReply inquiryReply = inquiryReplyOptional.orElse(null); // 답변 없으면 null
-            return convertToDTO(inquiry, inquiryReply);
+
+            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
+            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+
+            return convertToDTO(inquiry, inquiryReply, inquiryAction);
         }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<InquiryResponse> getUnansweredInquiries() {
+        List<Inquiry> unansweredInquiries = inquiryRepository.findUnansweredInquiries();
+        return unansweredInquiries.stream()
+                .map(inquiry -> convertToDTO(inquiry, null)) // 답변이 없는 문의만 조회했으므로 inquiryReply는 항상 null
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<InquiryResponse> getAnsweredInquiries() {
+        List<Inquiry> answeredInquiries = inquiryRepository.findInquiriesWithReply();
+
+        Map<Long, InquiryReply> inquiryReplyMap = inquiryReplyRepository.findAll().stream()
+                .collect(Collectors.toMap(ir -> ir.getInquiry().getId(), ir -> ir));
+
+        return answeredInquiries.stream()
+                .map(inquiry -> {
+                    InquiryReply inquiryReply = inquiryReplyMap.get(inquiry.getId());
+                    return convertToDTO(inquiry, inquiryReply);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<InquiryResponse> getInquiriesWithAction() {
+        List<Inquiry> inquiriesWithAction = inquiryRepository.findInquiriesWithAction();
+        return inquiriesWithAction.stream()
+                .map(inquiry -> convertToDTO(inquiry, null))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<InquiryResponse> getInquiriesWithoutAction() {
+        List<Inquiry> inquiriesWithoutAction = inquiryRepository.findInquiriesWithoutAction();
+        return inquiriesWithoutAction.stream()
+                .map(inquiry -> convertToDTO(inquiry, null))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -56,7 +102,7 @@ public class InquiryService {
         InquiryReplyResponse inquiryReplyResponse = (reply != null) ? convertToDTO(reply) : null;
         InquiryActionResponse inquiryActionResponse = (action != null) ? convertToActionDTO(action) : null;
         // 문의에 답변 존재하는지 확인 -> 없으면 null
-
+        //test
         return InquiryDetailResponse.builder()
                 .inquiryResponse(inquiryResponse)
                 .inquiryReplyResponse(inquiryReplyResponse)
@@ -118,7 +164,7 @@ public class InquiryService {
         InquiryAction inquiryAction = InquiryAction.builder()
                 .inquiry(inquiry)
                 .employee(employee)
-                .isActionNeeded(true)
+                .actionStatus(request.getActionStatus())
                 .actionContent(request.getActionContent())
                 .date(LocalDateTime.now())
                 .build();
@@ -129,7 +175,7 @@ public class InquiryService {
     }
 
     @Transactional
-    public InquiryActionResponse updateInquiryAction(Long inquiryActionId, String updateAction) {
+    public InquiryActionResponse updateInquiryAction(Long inquiryActionId, String updateAction, ActionStatus actionStatus) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
@@ -139,7 +185,7 @@ public class InquiryService {
         InquiryAction inquiryAction = inquiryActionRepository.findById(inquiryActionId)
                 .orElseThrow(() -> new RuntimeException("조치 내용을 찾을 수 없습니다."));
 
-        inquiryAction.updateAction(updateAction, LocalDateTime.now(), employee);
+        inquiryAction.updateAction(updateAction, LocalDateTime.now(), employee, actionStatus);
 
         return convertToActionDTO(inquiryAction);
     }
@@ -150,6 +196,7 @@ public class InquiryService {
 
 
         return InquiryResponse.builder()
+                .id(inquiry.getId())
                 .customerName(inquiry.getCustomer().getName())
                 .customerPhone(inquiry.getCustomer().getPhone())
                 .date(inquiry.getDate())
@@ -158,6 +205,25 @@ public class InquiryService {
                 .inquiryTitle(inquiry.getInquiryTitle())
                 .inquiryContent(inquiry.getInquiryContent())
                 .isReply(isReply)
+                .build();
+    }
+
+    private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
+        String employName = (inquiryReply != null) ? inquiryReply.getEmployee().getName() : null;
+        boolean isReply = (inquiryReply != null); // 답변이 있으면 true
+
+
+        return InquiryResponse.builder()
+                .id(inquiry.getId())
+                .customerName(inquiry.getCustomer().getName())
+                .customerPhone(inquiry.getCustomer().getPhone())
+                .date(inquiry.getDate())
+                .type(inquiry.getType())
+                .employName(employName)
+                .inquiryTitle(inquiry.getInquiryTitle())
+                .inquiryContent(inquiry.getInquiryContent())
+                .isReply(isReply)
+                .actionStatus(inquiryAction.getActionStatus())
                 .build();
     }
 
@@ -176,7 +242,7 @@ public class InquiryService {
                 .id(inquiryAction.getId())
                 .inquiryId(inquiryAction.getInquiry().getId())
                 .actionContent(inquiryAction.getActionContent())
-                .isActionNeeded(inquiryAction.getIsActionNeeded())
+                .actionStatus(inquiryAction.getActionStatus())
                 .email(inquiryAction.getEmployee().getEmail())
                 .date(inquiryAction.getDate())
                 .build();
