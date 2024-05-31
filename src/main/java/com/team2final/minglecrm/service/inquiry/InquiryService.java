@@ -212,6 +212,8 @@ public class InquiryService {
         String employName = (inquiryReply != null) ? inquiryReply.getEmployee().getName() : null;
         boolean isReply = (inquiryReply != null); // 답변이 있으면 true
 
+        ActionStatus actionStatus = (inquiryAction != null) ? inquiryAction.getActionStatus() : null;
+
 
         return InquiryResponse.builder()
                 .id(inquiry.getId())
@@ -223,7 +225,7 @@ public class InquiryService {
                 .inquiryTitle(inquiry.getInquiryTitle())
                 .inquiryContent(inquiry.getInquiryContent())
                 .isReply(isReply)
-                .actionStatus(inquiryAction.getActionStatus())
+                .actionStatus(actionStatus)
                 .build();
     }
 
