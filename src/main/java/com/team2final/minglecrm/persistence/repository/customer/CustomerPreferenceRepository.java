@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CustomerPreferenceRepository extends JpaRepository<CustomerPreference, Long> {
+
+    CustomerPreference findByCustomerId(Long customerId);
 }

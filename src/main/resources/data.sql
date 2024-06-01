@@ -160,3 +160,12 @@ INSERT INTO hotel_review (CLEANLINESS_RATING, CONVENIENCE_RATING, KINDNESS_RATIN
 -- (3, 2, 1, 4, '2024-05-08 07:05:15', 8, null, '호텔이 아주 좋아요3'),
 -- (5, 2, 3, 4, '2024-05-09 07:05:15', 9, null, '호텔이 아주 좋아요4'),
 -- (5, 5, 3, 4, '2024-05-10 07:05:15', 10, null, '호텔이 아주 좋아요5');
+
+
+INSERT INTO customer_preference (customer_id, is_smoking, purpose, is_pet, preferred_checkin_time, preferred_checkout_time, dietary_restrictions, funnel, interest, is_breakfast_preferred)
+VALUES
+    (1, true, 'Business', false, '10:00:00', '18:00:00', 'None', 'Sales', 'Golf', true),
+    (2, false, 'Leisure', true, '12:00:00', '10:00:00', 'Vegetarian', 'Marketing', 'Hiking', false),
+    (3, true, 'Business', false, '09:00:00', '15:00:00', 'Gluten-free', 'Sales', 'Sightseeing', true),
+    (4, false, 'Leisure', true, '14:00:00', '11:00:00', 'None', 'Marketing', 'Shopping', false),
+    (5, true, 'Business', false, '11:00:00', '16:00:00', 'Lactose-free', 'Sales', 'Conferences', true);
