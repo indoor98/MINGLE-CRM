@@ -141,6 +141,9 @@ INSERT INTO reward (customer_id, amount) VALUES
 -- REWARD_HISTORY 데이터 삽입
 INSERT INTO reward_history (reward_id, payment_id, voucher_id, type, amount, reason, date) VALUES
 (1, 1, 1, 'Earn', 1000, 'Payment', '2024-06-01 12:00:00'),
+(1, 7, 7, 'Earn', 2000, 'Payment', '2024-06-01 12:00:00'),
+(1, 8, 8, 'Earn', 3000, 'Payment', '2024-06-01 12:00:00'),
+(1, 9, 9, 'Earn', 4000, 'Payment', '2024-06-01 12:00:00'),
 (2, 2, 2, 'Redeem', 2000, 'Voucher', '2024-06-02 12:00:00'),
 (3, 3, 3, 'Earn', 3000, 'Payment', '2024-06-03 12:00:00'),
 (4, 4, 4, 'Redeem', 4000, 'Voucher', '2024-06-04 12:00:00'),
