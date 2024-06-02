@@ -55,7 +55,11 @@ public class InquiryService {
     public List<InquiryResponse> getUnansweredInquiries() {
         List<Inquiry> unansweredInquiries = inquiryRepository.findUnansweredInquiries();
         return unansweredInquiries.stream()
-                .map(inquiry -> convertToDTO(inquiry, null)) // 답변이 없는 문의만 조회했으므로 inquiryReply는 항상 null
+                .map(inquiry -> {
+                    Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
+                    InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+                    return convertToDTO(inquiry, null, inquiryAction); // 답변이 없는 문의만 조회 - inquiryReply는 항상 null
+                })
                 .collect(Collectors.toList());
     }
 
@@ -69,7 +73,11 @@ public class InquiryService {
         return answeredInquiries.stream()
                 .map(inquiry -> {
                     InquiryReply inquiryReply = inquiryReplyMap.get(inquiry.getId());
-                    return convertToDTO(inquiry, inquiryReply);
+
+                    Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
+                    InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+
+                    return convertToDTO(inquiry, inquiryReply, inquiryAction);
                 })
                 .collect(Collectors.toList());
     }
@@ -78,7 +86,15 @@ public class InquiryService {
     public List<InquiryResponse> getInquiriesWithAction() {
         List<Inquiry> inquiriesWithAction = inquiryRepository.findInquiriesWithAction();
         return inquiriesWithAction.stream()
-                .map(inquiry -> convertToDTO(inquiry, null))
+                .map(inquiry -> {
+                    Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+                    InquiryReply inquiryReply = inquiryReplyOptional.orElse(null);
+
+                    Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
+                    InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+
+                    return convertToDTO(inquiry, inquiryReply, inquiryAction);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -86,7 +102,11 @@ public class InquiryService {
     public List<InquiryResponse> getInquiriesWithoutAction() {
         List<Inquiry> inquiriesWithoutAction = inquiryRepository.findInquiriesWithoutAction();
         return inquiriesWithoutAction.stream()
-                .map(inquiry -> convertToDTO(inquiry, null))
+                .map(inquiry -> {
+                    Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+                    InquiryReply inquiryReply = inquiryReplyOptional.orElse(null);
+                    return convertToDTO(inquiry, inquiryReply, null);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -98,11 +118,11 @@ public class InquiryService {
         InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiryId).orElse(null);
         InquiryAction action = inquiryActionRepository.findByInquiryId(inquiryId).orElse(null);
 
-        InquiryResponse inquiryResponse = convertToDTO(inquiry, reply);
+        InquiryResponse inquiryResponse = convertToDTO(inquiry, reply, action);
         InquiryReplyResponse inquiryReplyResponse = (reply != null) ? convertToDTO(reply) : null;
         InquiryActionResponse inquiryActionResponse = (action != null) ? convertToActionDTO(action) : null;
         // 문의에 답변 존재하는지 확인 -> 없으면 null
-        //test
+
         return InquiryDetailResponse.builder()
                 .inquiryResponse(inquiryResponse)
                 .inquiryReplyResponse(inquiryReplyResponse)
@@ -188,24 +208,6 @@ public class InquiryService {
         inquiryAction.updateAction(updateAction, LocalDateTime.now(), employee, actionStatus);
 
         return convertToActionDTO(inquiryAction);
-    }
-
-    private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply) {
-        String employName = (inquiryReply != null) ? inquiryReply.getEmployee().getName() : null; // 답변이 null이 아닐 경우만 실행
-        boolean isReply = (inquiryReply != null); // 답변이 있으면 true
-
-
-        return InquiryResponse.builder()
-                .id(inquiry.getId())
-                .customerName(inquiry.getCustomer().getName())
-                .customerPhone(inquiry.getCustomer().getPhone())
-                .date(inquiry.getDate())
-                .type(inquiry.getType())
-                .employName(employName)
-                .inquiryTitle(inquiry.getInquiryTitle())
-                .inquiryContent(inquiry.getInquiryContent())
-                .isReply(isReply)
-                .build();
     }
 
     private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
