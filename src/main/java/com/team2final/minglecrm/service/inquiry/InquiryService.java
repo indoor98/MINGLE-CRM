@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -241,7 +242,21 @@ public class InquiryService {
                 .build();
     }
 
+    @Transactional
+    public List<InquiryResponse> searchInquiries(String keyword, LocalDate startDate, LocalDate endDate) {
 
+        LocalDateTime startDateTime = startDate.atStartOfDay(); // LocalDate 객체를 LocalDateTime 객체로 변환
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        List<Inquiry> inquiries = inquiryRepository.searchByKeyword(keyword, startDateTime, endDateTime);
+        return inquiries.stream().map(inquiry -> {
+
+            InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId()).orElse(null);
+            InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId()).orElse(null);
+
+            return convertToDTO(inquiry, reply, action);
+        }).collect(Collectors.toList());
+    }
 
     private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
         String employName = (inquiryReply != null) ? inquiryReply.getEmployee().getName() : null;

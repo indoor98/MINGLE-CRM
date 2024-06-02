@@ -10,10 +10,12 @@ import com.team2final.minglecrm.controller.inquiry.response.InquiryReplyResponse
 import com.team2final.minglecrm.controller.inquiry.response.InquiryResponse;
 import com.team2final.minglecrm.service.inquiry.InquiryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -101,6 +103,15 @@ public class InquiryController {
             @PathVariable Long inquiryId) {
         InquiryDetailResponse inquiryDetail = inquiryService.getInquiryDetailByCustomerId(customerId, inquiryId);
         return ResponseEntity.ok(inquiryDetail);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<InquiryResponse>> searchInquiries(
+            @RequestParam String keyword,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        List<InquiryResponse> inquiries = inquiryService.searchInquiries(keyword, startDate, endDate);
+        return ResponseEntity.ok(inquiries);
     }
 
 }

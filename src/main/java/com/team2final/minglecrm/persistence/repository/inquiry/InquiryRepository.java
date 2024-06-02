@@ -3,8 +3,11 @@ package com.team2final.minglecrm.persistence.repository.inquiry;
 import com.team2final.minglecrm.entity.inquiry.Inquiry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,5 +29,13 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     List<Inquiry> findByCustomerId(Long customerId);
 
     Optional<Inquiry> findByIdAndCustomerId(Long inquiryId, Long customerId);
+
+    @Query("SELECT i FROM Inquiry i " +
+            "JOIN i.customer c " +
+            "WHERE (i.inquiryTitle LIKE %:keyword% OR i.inquiryContent LIKE %:keyword% OR c.name LIKE %:keyword%) " +
+            "AND i.date BETWEEN :startDate AND :endDate")
+    List<Inquiry> searchByKeyword(@Param("keyword") String keyword,
+                                              @Param("startDate") LocalDateTime startDate,
+                                              @Param("endDate") LocalDateTime endDate);
 
 }
