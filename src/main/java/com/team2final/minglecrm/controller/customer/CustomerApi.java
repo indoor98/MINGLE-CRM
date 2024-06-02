@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerApi {
     private final CustomerService customerService;
 
-    // TODO : paging 처리
+    // TODO : paging 처리 -> 컨텐츠 총 개수 뽑기
     @GetMapping()
     @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<List<CustomerResponse>> getAllCustomers(Pageable pageable) {
