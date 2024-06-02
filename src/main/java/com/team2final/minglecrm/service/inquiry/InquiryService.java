@@ -210,6 +210,39 @@ public class InquiryService {
         return convertToActionDTO(inquiryAction);
     }
 
+    @Transactional
+    public List<InquiryResponse> getInquiriesByCustomerId(Long customerId) {
+        List<Inquiry> inquiries = inquiryRepository.findByCustomerId(customerId);
+
+        return inquiries.stream().map(inquiry -> {
+            InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId()).orElse(null);
+            InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId()).orElse(null);
+
+            return convertToDTO(inquiry, reply, action);
+        }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public InquiryDetailResponse getInquiryDetailByCustomerId(Long customerId, Long inquiryId) {
+        Inquiry inquiry = inquiryRepository.findByIdAndCustomerId(inquiryId, customerId)
+                .orElseThrow(() -> new RuntimeException("해당 고객의 문의를 찾을 수 없습니다."));
+
+        InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiryId).orElse(null);
+        InquiryAction action = inquiryActionRepository.findByInquiryId(inquiryId).orElse(null);
+
+        InquiryResponse inquiryResponse = convertToDTO(inquiry, reply, action);
+        InquiryReplyResponse inquiryReplyResponse = (reply != null) ? convertToDTO(reply) : null;
+        InquiryActionResponse inquiryActionResponse = (action != null) ? convertToActionDTO(action) : null;
+
+        return InquiryDetailResponse.builder()
+                .inquiryResponse(inquiryResponse)
+                .inquiryReplyResponse(inquiryReplyResponse)
+                .inquiryActionResponse(inquiryActionResponse)
+                .build();
+    }
+
+
+
     private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
         String employName = (inquiryReply != null) ? inquiryReply.getEmployee().getName() : null;
         boolean isReply = (inquiryReply != null); // 답변이 있으면 true

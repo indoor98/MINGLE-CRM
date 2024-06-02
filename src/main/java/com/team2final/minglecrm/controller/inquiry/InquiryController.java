@@ -89,4 +89,18 @@ public class InquiryController {
         return ResponseEntity.ok(updateAction);
     }
 
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<InquiryResponse>> getInquiriesByCustomerId(@PathVariable Long customerId) {
+        List<InquiryResponse> inquiries = inquiryService.getInquiriesByCustomerId(customerId);
+        return ResponseEntity.ok(inquiries);
+    }
+
+    @GetMapping("/customer/{customerId}/inquiry/{inquiryId}")
+    public ResponseEntity<InquiryDetailResponse> getInquiryDetailByCustomerId(
+            @PathVariable Long customerId,
+            @PathVariable Long inquiryId) {
+        InquiryDetailResponse inquiryDetail = inquiryService.getInquiryDetailByCustomerId(customerId, inquiryId);
+        return ResponseEntity.ok(inquiryDetail);
+    }
+
 }

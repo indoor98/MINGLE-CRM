@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
@@ -20,4 +21,10 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     @Query("SELECT i FROM Inquiry i WHERE i.id NOT IN (SELECT ia.inquiry.id FROM InquiryAction ia)")
     List<Inquiry> findInquiriesWithoutAction();
+
+    @Query("SELECT i FROM Inquiry i WHERE i.customer.id = :customerId")
+    List<Inquiry> findByCustomerId(Long customerId);
+
+    Optional<Inquiry> findByIdAndCustomerId(Long inquiryId, Long customerId);
+
 }
