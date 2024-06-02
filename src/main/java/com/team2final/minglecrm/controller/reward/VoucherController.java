@@ -19,25 +19,32 @@ public class VoucherController {
 
     private final VoucherService voucherService;
 
-    @PostMapping("/new")
+    @PostMapping
     @PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<VoucherResponse> createVoucher(@RequestBody VoucherCreateRequest request) {
-        VoucherResponse createdVoucher = voucherService.createVoucher(request);
+        VoucherResponse createdVoucher = voucherService.saveVoucher(request);
         return ResponseEntity.ok(createdVoucher);
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<VoucherResponse>> getAllVouchers(){
-        List<VoucherResponse> voucherList = voucherService.voucherList();
+    public ResponseEntity<List<VoucherResponse>> listVouchers(){
+        List<VoucherResponse> voucherList = voucherService.getAllVouchers();
         return ResponseEntity.ok(voucherList);
     }
 
     // 사용자별 바우처 리스트 조회
-    @GetMapping("/list/{customerId}")
+    @GetMapping("/{customerId}")
     public ResponseEntity<List<VoucherHistoryResponse>> getVouchers(@PathVariable("customerId") Long customerId){
-        List<VoucherHistoryResponse> voucherList = voucherService.customerVoucherList(customerId);
+        List<VoucherHistoryResponse> voucherList = voucherService.getCustomerVouchers(customerId);
         return ResponseEntity.ok(voucherList);
+    }
+
+    // 사용자별 바우처 상세 조회
+    @GetMapping("/{customerId}/{voucherId}")
+    public ResponseEntity<VoucherHistoryResponse> getVoucher(@PathVariable Long customerId, Long voucherId){
+        VoucherHistoryResponse voucherHistory = voucherService.getCustomerVoucher(customerId, voucherId);
+        return ResponseEntity.ok(voucherHistory);
     }
 
     @PostMapping("/request/{voucherId}")
@@ -54,10 +61,10 @@ public class VoucherController {
         return ResponseEntity.ok(voucherApprovalResponse);
     }
 
-    @GetMapping("/list/status/marketer")
+    @GetMapping("/status/marketer")
     @PreAuthorize("hasRole('MARKETER')")
-    public ResponseEntity<List<VoucherStatusResponse>> voucherStatus(){
-        List<VoucherStatusResponse> voucherStatusList = voucherService.voucherStatusList();
+    public ResponseEntity<List<VoucherStatusResponse>> getVouchersStatus(){
+        List<VoucherStatusResponse> voucherStatusList = voucherService.getVouchersStatus();
         return ResponseEntity.ok(voucherStatusList);
     }
 }
