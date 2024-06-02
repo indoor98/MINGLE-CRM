@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.controller.inquiry;
 
+import com.team2final.minglecrm.controller.ResultResponse;
 import com.team2final.minglecrm.controller.inquiry.request.InquiryActionRequest;
 import com.team2final.minglecrm.controller.inquiry.request.InquiryReplyRequest;
 import com.team2final.minglecrm.controller.inquiry.request.UpdateInquiryActionRequest;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,106 +32,106 @@ public class InquiryController {
     private final InquiryService inquiryService;
 
     @GetMapping
-    public ResponseEntity<Page<InquiryResponse>> getAllInquiries(
+    public ResponseEntity<ResultResponse<Page<InquiryResponse>>> getAllInquiries(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> inquiries = inquiryService.getAllInquiries(pageable);
-        return ResponseEntity.ok(inquiries);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 전체 목록 반환 성공", inquiries));
     }
 
     @GetMapping("/{inquiryId}")
-    public ResponseEntity<InquiryDetailResponse> getInquiryById(@PathVariable Long inquiryId) {
+    public ResponseEntity<ResultResponse<InquiryDetailResponse>> getInquiryById(@PathVariable Long inquiryId) {
         InquiryDetailResponse inquiryDetailResponse = inquiryService.getInquiryById(inquiryId);
-        return ResponseEntity.ok(inquiryDetailResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 개별 조회 반환 성공", inquiryDetailResponse));
     }
 
     @GetMapping("/unanswered")
-    public ResponseEntity<Page<InquiryResponse>> getUnansweredInquiries(
+    public ResponseEntity<ResultResponse<Page<InquiryResponse>>> getUnansweredInquiries(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> unansweredInquiries = inquiryService.getUnansweredInquiries(pageable);
-        return ResponseEntity.ok(unansweredInquiries);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "답변 없는 문의 목록 반환 성공", unansweredInquiries));
     }
 
     @GetMapping("/answered")
-    public ResponseEntity<Page<InquiryResponse>> getAnsweredInquiries(
+    public ResponseEntity<ResultResponse<Page<InquiryResponse>>> getAnsweredInquiries(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> answeredInquiries = inquiryService.getAnsweredInquiries(pageable);
-        return ResponseEntity.ok(answeredInquiries);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "답변 있는 문의 목록 반환 성공", answeredInquiries));
     }
 
     @GetMapping("/with-action")
-    public ResponseEntity<Page<InquiryResponse>> getInquiriesWithAction(
+    public ResponseEntity<ResultResponse<Page<InquiryResponse>>> getInquiriesWithAction(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> inquiriesWithAction = inquiryService.getInquiriesWithAction(pageable);
-        return ResponseEntity.ok(inquiriesWithAction);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "조치 내용 있는 문의 목록 반환 성공", inquiriesWithAction));
     }
 
     @GetMapping("/without-action")
-    public ResponseEntity<Page<InquiryResponse>> getInquiriesWithoutAction(
+    public ResponseEntity<ResultResponse<Page<InquiryResponse>>> getInquiriesWithoutAction(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> inquiriesWithoutAction = inquiryService.getInquiriesWithoutAction(pageable);
-        return ResponseEntity.ok(inquiriesWithoutAction);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "조치 내용 없는 문의 목록 반환 성공", inquiriesWithoutAction));
     }
 
     @PostMapping("/reply")
     @PreAuthorize("hasRole('CONSULTANT')")
-    public ResponseEntity<InquiryReplyResponse> replyToInquiry(@RequestBody InquiryReplyRequest request) {
+    public ResponseEntity<ResultResponse<InquiryReplyResponse>> replyToInquiry(@RequestBody InquiryReplyRequest request) {
         InquiryReplyResponse replyResponse = inquiryService.replyToInquiry(request);
-        return ResponseEntity.ok(replyResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 답변 등록 성공", replyResponse));
     }
 
     @PostMapping("/reply/{inquiryReplyId}")
     @PreAuthorize("hasRole('CONSULTANT')")
-    public ResponseEntity<InquiryReplyResponse> updateInquiryReply(@PathVariable Long inquiryReplyId,
+    public ResponseEntity<ResultResponse<InquiryReplyResponse>> updateInquiryReply(@PathVariable Long inquiryReplyId,
                                                                    @RequestBody UpdateInquiryReplyRequest request) {
         InquiryReplyResponse updatedReply = inquiryService.updateInquiryReply(inquiryReplyId, request.getUpdatedReply());
-        return ResponseEntity.ok(updatedReply);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 답변 수정 성공", updatedReply));
     }
 
     @PostMapping("/action")
     @PreAuthorize("hasRole('CONSULTANT')")
-    public ResponseEntity<InquiryActionResponse> actionToInquiry(@RequestBody InquiryActionRequest request) {
+    public ResponseEntity<ResultResponse<InquiryActionResponse>> actionToInquiry(@RequestBody InquiryActionRequest request) {
         InquiryActionResponse actionResponse = inquiryService.actionToInquiry(request);
-        return ResponseEntity.ok(actionResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "조치 내용 등록 성공", actionResponse));
     }
 
     @PostMapping("/action/{inquiryActionId}")
     @PreAuthorize("hasRole('CONSULTANT')")
-    public ResponseEntity<InquiryActionResponse> updateInquiryAction(@PathVariable Long inquiryActionId,
+    public ResponseEntity<ResultResponse<InquiryActionResponse>> updateInquiryAction(@PathVariable Long inquiryActionId,
                                                                      @RequestBody UpdateInquiryActionRequest request) {
         InquiryActionResponse updateAction = inquiryService.updateInquiryAction(inquiryActionId, request.getUpdateActionContent(), request.getActionStatus());
-        return ResponseEntity.ok(updateAction);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "조치 내용 수정 성공", updateAction));
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<Page<InquiryResponse>> getInquiriesByCustomerId(
+    public ResponseEntity<ResultResponse<Page<InquiryResponse>>> getInquiriesByCustomerId(
             @PathVariable Long customerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> inquiries = inquiryService.getInquiriesByCustomerId(customerId, pageable);
-        return ResponseEntity.ok(inquiries);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "고객 문의 목록 반환 성공", inquiries));
     }
 
     @GetMapping("/customer/{customerId}/inquiry/{inquiryId}")
-    public ResponseEntity<InquiryDetailResponse> getInquiryDetailByCustomerId(
+    public ResponseEntity<ResultResponse<InquiryDetailResponse>> getInquiryDetailByCustomerId(
             @PathVariable Long customerId,
             @PathVariable Long inquiryId) {
         InquiryDetailResponse inquiryDetail = inquiryService.getInquiryDetailByCustomerId(customerId, inquiryId);
-        return ResponseEntity.ok(inquiryDetail);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "고객 문의 상세 조회 성공", inquiryDetail));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<InquiryResponse>> searchInquiries(
+    public ResponseEntity<ResultResponse<Page<InquiryResponse>>> searchInquiries(
             @RequestParam String keyword,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
@@ -136,7 +139,7 @@ public class InquiryController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> inquiries = inquiryService.searchInquiries(keyword, startDate, endDate, pageable);
-        return ResponseEntity.ok(inquiries);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 전체 목록 검색 성공", inquiries));
     }
 
 }
