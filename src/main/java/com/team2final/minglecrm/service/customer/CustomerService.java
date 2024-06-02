@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +25,9 @@ public class CustomerService {
 
     // 고객 조회
     @Transactional(readOnly = true)
-    public List<CustomerResponse> getAllCustomer() {
-        return customerRepository.findAll().stream()
+    public List<CustomerResponse> getAllCustomer(Pageable pageable) {
+        pageable = pageable == null ? PageRequest.of(0, 3) : pageable;
+        List<CustomerResponse> result = customerRepository.findAllBy(pageable).stream()
                 .map(customer -> new CustomerResponse(
                         customer.getId(),
                         customer.getName(),
@@ -38,6 +41,8 @@ public class CustomerService {
                         customer.getReward().getAmount()
                 ))
                 .collect(Collectors.toList());
+
+        return result;
     }
 
     public CustomerResponse findById(Long customerId) {

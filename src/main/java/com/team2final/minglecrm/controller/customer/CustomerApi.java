@@ -4,6 +4,7 @@ import com.team2final.minglecrm.controller.customer.response.CustomerResponse;
 import com.team2final.minglecrm.service.customer.CustomerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +20,8 @@ public class CustomerApi {
     // TODO : paging 처리
     @GetMapping()
     @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
-    public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
-        List<CustomerResponse> customers = customerService.getAllCustomer();
+    public ResponseEntity<List<CustomerResponse>> getAllCustomers(Pageable pageable) {
+        List<CustomerResponse> customers = customerService.getAllCustomer(pageable);
         return ResponseEntity.ok(customers);
     }
 
