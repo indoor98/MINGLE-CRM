@@ -1,6 +1,8 @@
 package com.team2final.minglecrm.persistence.repository.inquiry;
 
 import com.team2final.minglecrm.entity.inquiry.Inquiry;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,19 +16,19 @@ import java.util.Optional;
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     @Query("SELECT i FROM Inquiry i WHERE i NOT IN (SELECT ir.inquiry FROM InquiryReply ir)")
-    List<Inquiry> findUnansweredInquiries();
+    Page<Inquiry> findUnansweredInquiries(Pageable pageable);
 
     @Query("SELECT i FROM Inquiry i WHERE i.id IN (SELECT ir.inquiry.id FROM InquiryReply ir)")
-    List<Inquiry> findInquiriesWithReply();
+    Page<Inquiry> findInquiriesWithReply(Pageable pageable);
 
     @Query("SELECT i FROM Inquiry i WHERE i.id IN (SELECT ia.inquiry.id FROM InquiryAction ia)")
-    List<Inquiry> findInquiriesWithAction();
+    Page<Inquiry> findInquiriesWithAction(Pageable pageable);
 
     @Query("SELECT i FROM Inquiry i WHERE i.id NOT IN (SELECT ia.inquiry.id FROM InquiryAction ia)")
-    List<Inquiry> findInquiriesWithoutAction();
+    Page<Inquiry> findInquiriesWithoutAction(Pageable pageable);
 
     @Query("SELECT i FROM Inquiry i WHERE i.customer.id = :customerId")
-    List<Inquiry> findByCustomerId(Long customerId);
+    Page<Inquiry> findByCustomerId(Long customerId, Pageable pageable);
 
     Optional<Inquiry> findByIdAndCustomerId(Long inquiryId, Long customerId);
 
@@ -34,8 +36,9 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
             "JOIN i.customer c " +
             "WHERE (i.inquiryTitle LIKE %:keyword% OR i.inquiryContent LIKE %:keyword% OR c.name LIKE %:keyword%) " +
             "AND i.date BETWEEN :startDate AND :endDate")
-    List<Inquiry> searchByKeyword(@Param("keyword") String keyword,
-                                              @Param("startDate") LocalDateTime startDate,
-                                              @Param("endDate") LocalDateTime endDate);
+    Page<Inquiry> searchByKeyword(@Param("keyword") String keyword,
+                                  @Param("startDate") LocalDateTime startDate,
+                                  @Param("endDate") LocalDateTime endDate,
+                                  Pageable pageable);
 
 }

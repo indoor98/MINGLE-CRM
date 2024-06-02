@@ -16,6 +16,9 @@ import com.team2final.minglecrm.persistence.repository.inquiry.InquiryActionRepo
 import com.team2final.minglecrm.persistence.repository.inquiry.InquiryReplyRepository;
 import com.team2final.minglecrm.persistence.repository.inquiry.InquiryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -38,9 +41,9 @@ public class InquiryService {
     private final EmployeeRepository employeeRepository;
 
     @Transactional
-    public List<InquiryResponse> getAllInquiries() {
-        List<Inquiry> inquiries = inquiryRepository.findAll();
-        return inquiries.stream().map(inquiry -> {
+    public Page<InquiryResponse> getAllInquiries(Pageable pageable) {
+        Page<Inquiry> inquiries = inquiryRepository.findAll(pageable);
+        return inquiries.map(inquiry -> {
 
             Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
             InquiryReply inquiryReply = inquiryReplyOptional.orElse(null); // 답변 없으면 null
@@ -49,66 +52,58 @@ public class InquiryService {
             InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
 
             return convertToDTO(inquiry, inquiryReply, inquiryAction);
-        }).collect(Collectors.toList());
+        });
     }
 
     @Transactional
-    public List<InquiryResponse> getUnansweredInquiries() {
-        List<Inquiry> unansweredInquiries = inquiryRepository.findUnansweredInquiries();
-        return unansweredInquiries.stream()
-                .map(inquiry -> {
-                    Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
-                    InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
-                    return convertToDTO(inquiry, null, inquiryAction); // 답변이 없는 문의만 조회 - inquiryReply는 항상 null
-                })
-                .collect(Collectors.toList());
+    public Page<InquiryResponse> getUnansweredInquiries(Pageable pageable) {
+        Page<Inquiry> unansweredInquiries = inquiryRepository.findUnansweredInquiries(pageable);
+        return unansweredInquiries.map(inquiry -> {
+            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
+            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+            return convertToDTO(inquiry, null, inquiryAction); // 답변이 없는 문의만 조회 - inquiryReply는 항상 null
+        });
     }
 
     @Transactional
-    public List<InquiryResponse> getAnsweredInquiries() {
-        List<Inquiry> answeredInquiries = inquiryRepository.findInquiriesWithReply();
+    public Page<InquiryResponse> getAnsweredInquiries(Pageable pageable) {
+        Page<Inquiry> answeredInquiries = inquiryRepository.findInquiriesWithReply(pageable);
 
         Map<Long, InquiryReply> inquiryReplyMap = inquiryReplyRepository.findAll().stream()
                 .collect(Collectors.toMap(ir -> ir.getInquiry().getId(), ir -> ir));
 
-        return answeredInquiries.stream()
-                .map(inquiry -> {
-                    InquiryReply inquiryReply = inquiryReplyMap.get(inquiry.getId());
+        return answeredInquiries.map(inquiry -> {
+            InquiryReply inquiryReply = inquiryReplyMap.get(inquiry.getId());
 
-                    Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
-                    InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
+            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
 
-                    return convertToDTO(inquiry, inquiryReply, inquiryAction);
-                })
-                .collect(Collectors.toList());
+            return convertToDTO(inquiry, inquiryReply, inquiryAction);
+        });
     }
 
     @Transactional
-    public List<InquiryResponse> getInquiriesWithAction() {
-        List<Inquiry> inquiriesWithAction = inquiryRepository.findInquiriesWithAction();
-        return inquiriesWithAction.stream()
-                .map(inquiry -> {
-                    Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
-                    InquiryReply inquiryReply = inquiryReplyOptional.orElse(null);
+    public Page<InquiryResponse> getInquiriesWithAction(Pageable pageable) {
+        Page<Inquiry> inquiriesWithAction = inquiryRepository.findInquiriesWithAction(pageable);
+        return inquiriesWithAction.map(inquiry -> {
+            Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+            InquiryReply inquiryReply = inquiryReplyOptional.orElse(null);
 
-                    Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
-                    InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
+            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
 
-                    return convertToDTO(inquiry, inquiryReply, inquiryAction);
-                })
-                .collect(Collectors.toList());
+            return convertToDTO(inquiry, inquiryReply, inquiryAction);
+        });
     }
 
     @Transactional
-    public List<InquiryResponse> getInquiriesWithoutAction() {
-        List<Inquiry> inquiriesWithoutAction = inquiryRepository.findInquiriesWithoutAction();
-        return inquiriesWithoutAction.stream()
-                .map(inquiry -> {
-                    Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
-                    InquiryReply inquiryReply = inquiryReplyOptional.orElse(null);
-                    return convertToDTO(inquiry, inquiryReply, null);
-                })
-                .collect(Collectors.toList());
+    public Page<InquiryResponse> getInquiriesWithoutAction(Pageable pageable) {
+        Page<Inquiry> inquiriesWithoutAction = inquiryRepository.findInquiriesWithoutAction(pageable);
+        return inquiriesWithoutAction.map(inquiry -> {
+            Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+            InquiryReply inquiryReply = inquiryReplyOptional.orElse(null);
+            return convertToDTO(inquiry, inquiryReply, null);
+        });
     }
 
     @Transactional
@@ -212,15 +207,15 @@ public class InquiryService {
     }
 
     @Transactional
-    public List<InquiryResponse> getInquiriesByCustomerId(Long customerId) {
-        List<Inquiry> inquiries = inquiryRepository.findByCustomerId(customerId);
+    public Page<InquiryResponse> getInquiriesByCustomerId(Long customerId, Pageable pageable) {
+        Page<Inquiry> inquiries = inquiryRepository.findByCustomerId(customerId, pageable);
 
-        return inquiries.stream().map(inquiry -> {
+        return inquiries.map(inquiry -> {
             InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId()).orElse(null);
             InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId()).orElse(null);
 
             return convertToDTO(inquiry, reply, action);
-        }).collect(Collectors.toList());
+        });
     }
 
     @Transactional
@@ -243,19 +238,19 @@ public class InquiryService {
     }
 
     @Transactional
-    public List<InquiryResponse> searchInquiries(String keyword, LocalDate startDate, LocalDate endDate) {
+    public Page<InquiryResponse> searchInquiries(String keyword, LocalDate startDate, LocalDate endDate, Pageable pageable) {
 
         LocalDateTime startDateTime = startDate.atStartOfDay(); // LocalDate 객체를 LocalDateTime 객체로 변환
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
 
-        List<Inquiry> inquiries = inquiryRepository.searchByKeyword(keyword, startDateTime, endDateTime);
-        return inquiries.stream().map(inquiry -> {
+        Page<Inquiry> inquiries = inquiryRepository.searchByKeyword(keyword, startDateTime, endDateTime, pageable);
+        return inquiries.map(inquiry -> {
 
             InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId()).orElse(null);
             InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId()).orElse(null);
 
             return convertToDTO(inquiry, reply, action);
-        }).collect(Collectors.toList());
+        });
     }
 
     private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {

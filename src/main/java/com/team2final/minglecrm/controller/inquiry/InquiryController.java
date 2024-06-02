@@ -10,6 +10,9 @@ import com.team2final.minglecrm.controller.inquiry.response.InquiryReplyResponse
 import com.team2final.minglecrm.controller.inquiry.response.InquiryResponse;
 import com.team2final.minglecrm.service.inquiry.InquiryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,8 +29,11 @@ public class InquiryController {
     private final InquiryService inquiryService;
 
     @GetMapping
-    public ResponseEntity<List<InquiryResponse>> getAllInquiries() {
-        List<InquiryResponse> inquiries = inquiryService.getAllInquiries();
+    public ResponseEntity<Page<InquiryResponse>> getAllInquiries(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<InquiryResponse> inquiries = inquiryService.getAllInquiries(pageable);
         return ResponseEntity.ok(inquiries);
     }
 
@@ -38,26 +44,38 @@ public class InquiryController {
     }
 
     @GetMapping("/unanswered")
-    public ResponseEntity<List<InquiryResponse>> getUnansweredInquiries() {
-        List<InquiryResponse> unansweredInquiries = inquiryService.getUnansweredInquiries();
+    public ResponseEntity<Page<InquiryResponse>> getUnansweredInquiries(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<InquiryResponse> unansweredInquiries = inquiryService.getUnansweredInquiries(pageable);
         return ResponseEntity.ok(unansweredInquiries);
     }
 
     @GetMapping("/answered")
-    public ResponseEntity<List<InquiryResponse>> getAnsweredInquiries() {
-        List<InquiryResponse> answeredInquiries = inquiryService.getAnsweredInquiries();
+    public ResponseEntity<Page<InquiryResponse>> getAnsweredInquiries(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<InquiryResponse> answeredInquiries = inquiryService.getAnsweredInquiries(pageable);
         return ResponseEntity.ok(answeredInquiries);
     }
 
     @GetMapping("/with-action")
-    public ResponseEntity<List<InquiryResponse>> getInquiriesWithAction() {
-        List<InquiryResponse> inquiriesWithAction = inquiryService.getInquiriesWithAction();
+    public ResponseEntity<Page<InquiryResponse>> getInquiriesWithAction(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<InquiryResponse> inquiriesWithAction = inquiryService.getInquiriesWithAction(pageable);
         return ResponseEntity.ok(inquiriesWithAction);
     }
 
     @GetMapping("/without-action")
-    public ResponseEntity<List<InquiryResponse>> getInquiriesWithoutAction() {
-        List<InquiryResponse> inquiriesWithoutAction = inquiryService.getInquiriesWithoutAction();
+    public ResponseEntity<Page<InquiryResponse>> getInquiriesWithoutAction(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<InquiryResponse> inquiriesWithoutAction = inquiryService.getInquiriesWithoutAction(pageable);
         return ResponseEntity.ok(inquiriesWithoutAction);
     }
 
@@ -92,8 +110,12 @@ public class InquiryController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<InquiryResponse>> getInquiriesByCustomerId(@PathVariable Long customerId) {
-        List<InquiryResponse> inquiries = inquiryService.getInquiriesByCustomerId(customerId);
+    public ResponseEntity<Page<InquiryResponse>> getInquiriesByCustomerId(
+            @PathVariable Long customerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<InquiryResponse> inquiries = inquiryService.getInquiriesByCustomerId(customerId, pageable);
         return ResponseEntity.ok(inquiries);
     }
 
@@ -106,11 +128,14 @@ public class InquiryController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<InquiryResponse>> searchInquiries(
+    public ResponseEntity<Page<InquiryResponse>> searchInquiries(
             @RequestParam String keyword,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        List<InquiryResponse> inquiries = inquiryService.searchInquiries(keyword, startDate, endDate);
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<InquiryResponse> inquiries = inquiryService.searchInquiries(keyword, startDate, endDate, pageable);
         return ResponseEntity.ok(inquiries);
     }
 
