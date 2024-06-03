@@ -109,7 +109,7 @@ public class InquiryService {
     @Transactional
     public InquiryDetailResponse getInquiryById(Long inquiryId) {
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
-                .orElseThrow(() -> new RuntimeException("문의를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다."));
 
         InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiryId).orElse(null);
         InquiryAction action = inquiryActionRepository.findByInquiryId(inquiryId).orElse(null);
@@ -132,10 +132,10 @@ public class InquiryService {
         String userEmail = authentication.getName();
 
         Employee employee = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         Inquiry inquiry = inquiryRepository.findById(request.getInquiryId())
-                .orElseThrow(() -> new RuntimeException("문의를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다."));
 
         InquiryReply inquiryReply = InquiryReply.builder()
                 .inquiry(inquiry)
@@ -155,10 +155,10 @@ public class InquiryService {
         String userEmail = authentication.getName();
 
         Employee employee = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         InquiryReply inquiryReply = inquiryReplyRepository.findById(inquiryReplyId)
-                .orElseThrow(() -> new RuntimeException("답변을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다."));
 
         // 엔티티 메서드 호출
         inquiryReply.updateReply(updatedReply, LocalDateTime.now(), employee);
@@ -172,10 +172,10 @@ public class InquiryService {
         String userEmail = authentication.getName();
 
         Employee employee = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         Inquiry inquiry = inquiryRepository.findById(request.getInquiryId())
-                .orElseThrow(() -> new RuntimeException("문의를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다."));
 
         InquiryAction inquiryAction = InquiryAction.builder()
                 .inquiry(inquiry)
@@ -196,10 +196,10 @@ public class InquiryService {
         String userEmail = authentication.getName();
 
         Employee employee = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         InquiryAction inquiryAction = inquiryActionRepository.findById(inquiryActionId)
-                .orElseThrow(() -> new RuntimeException("조치 내용을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("조치 내용을 찾을 수 없습니다."));
 
         inquiryAction.updateAction(updateAction, LocalDateTime.now(), employee, actionStatus);
 
@@ -221,7 +221,7 @@ public class InquiryService {
     @Transactional
     public InquiryDetailResponse getInquiryDetailByCustomerId(Long customerId, Long inquiryId) {
         Inquiry inquiry = inquiryRepository.findByIdAndCustomerId(inquiryId, customerId)
-                .orElseThrow(() -> new RuntimeException("해당 고객의 문의를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 고객의 문의를 찾을 수 없습니다."));
 
         InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiryId).orElse(null);
         InquiryAction action = inquiryActionRepository.findByInquiryId(inquiryId).orElse(null);
