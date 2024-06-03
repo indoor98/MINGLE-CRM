@@ -1,7 +1,6 @@
 package com.team2final.minglecrm.controller.customer.response;
 
 
-import com.team2final.minglecrm.entity.reward.Reward;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
