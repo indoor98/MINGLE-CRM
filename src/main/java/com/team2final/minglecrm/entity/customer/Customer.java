@@ -13,8 +13,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+
 import java.time.LocalDate;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -66,5 +69,20 @@ public class Customer {
     public void updateCustomerReservationDetail(String memo, String name) {
         this.memo = memo;
         this.name = name;
+    }
+
+    @Builder
+    public Customer(Long id, String name, String grade, String phone, String address, Employee employee, String memo, String gender, LocalDate birth, Reward reward, Boolean isDeleted) {
+        this.id = id;
+        this.name = name;
+        this.grade = grade;
+        this.phone = phone;
+        this.address = address;
+        this.employee = employee;
+        this.memo = memo;
+        this.gender = gender;
+        this.birth = birth;
+        this.reward = reward;
+        this.isDeleted = isDeleted;
     }
 }
