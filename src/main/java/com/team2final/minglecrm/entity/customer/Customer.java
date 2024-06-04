@@ -49,10 +49,14 @@ public class Customer {
 
     private LocalDate birth;
 
+    private LocalDate createdDate;
+
     @OneToOne(mappedBy = "customer")
     private Reward reward;
 
     private Boolean isDeleted;
+
+    private Integer visitCnt;
 
     public void updateCustomerDetail(CustomerUpdateRequest customerUpdateRequest) {
         this.name = customerUpdateRequest.getName();
