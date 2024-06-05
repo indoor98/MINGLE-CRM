@@ -1,8 +1,11 @@
 package com.team2final.minglecrm.controller.customer;
 
+import com.team2final.minglecrm.controller.ResultResponse;
 import com.team2final.minglecrm.controller.reward.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.service.reward.VoucherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,17 +21,19 @@ public class CustomerVoucherApi {
 
     private final VoucherService voucherService;
 
-//    @GetMapping
-//    public ResponseEntity<List<VoucherHistoryResponse>> getCustomerVouchers(@PathVariable Long customerId){
-//        List<VoucherHistoryResponse> voucherList = voucherService.customerVoucherList(customerId);
-//        return ResponseEntity.ok(voucherList);
-//    }
+    // 사용자별 바우처 리스트 조회
+    @GetMapping()
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getVouchers(@PathVariable("customerId") Long customerId){
+        List<VoucherHistoryResponse> customerVoucherList = voucherService.getCustomerVouchers(customerId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 사용 가능 바우처 목록 조회 성공", customerVoucherList));
+    }
 
-//    @GetMapping("/{voucherId}")
-//    public ResponseEntity<VoucherHistoryResponse> getCustomerVouchersDetail(@PathVariable Long customerId){
-//        List<VoucherHistoryResponse> voucherList = voucherService.(customerId);
-//        return ResponseEntity.ok(voucherList);
-//    }
+    // 사용자별 바우처 상세 조회
+    @GetMapping("/{voucherId}")
+    public ResponseEntity<ResultResponse<VoucherHistoryResponse>> getVoucher(@PathVariable Long customerId, @PathVariable Long voucherId){
+        VoucherHistoryResponse voucherHistory = voucherService.getCustomerVoucher(customerId, voucherId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 사용 가능 바우처 상세 조회 성공", voucherHistory));
+    }
 
 
 }
