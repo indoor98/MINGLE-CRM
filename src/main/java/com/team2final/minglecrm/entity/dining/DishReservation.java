@@ -25,14 +25,15 @@ public class DishReservation {
     @OneToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
-    
-    private Long totalPrice;
-
-    private LocalDateTime reservationDate;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    private LocalDateTime reservationDate;
+
+    private Integer visitorCount;
+    private Integer totalPrice;
 
     public void updateDishReservation(UpdateDiningReservationRequest updateDiningReservationRequest) {
 
