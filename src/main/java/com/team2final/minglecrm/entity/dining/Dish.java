@@ -17,7 +17,7 @@ public class Dish {
     private Long id;
 
     private String name;
-    private Integer price;
+    private Long price;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "dish_reservation_id")
