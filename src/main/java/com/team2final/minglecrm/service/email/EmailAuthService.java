@@ -37,6 +37,7 @@ public class EmailAuthService {
         return key.toString();
     }
 
+    // EmailSendService와 중복. 수정 필요
     public void sendMail(String toEmail,
                          String subject,
                          String text) throws MessagingException {
