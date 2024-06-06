@@ -30,6 +30,8 @@ public class Customer {
 
     private String name;
 
+    private String email;
+
     private String grade;
 
     private String phone;
@@ -66,5 +68,9 @@ public class Customer {
     public void updateCustomerReservationDetail(String memo, String name) {
         this.memo = memo;
         this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

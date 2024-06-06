@@ -3,6 +3,7 @@ package com.team2final.minglecrm.entity.event;
 import com.team2final.minglecrm.entity.employee.Employee;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,12 @@ public class Event {
     private Employee employee;
 
     private LocalDateTime sentDate;
+
+    @Builder
+    public Event(String title, String content, Employee employee, LocalDateTime sentDate) {
+        this.title = title;
+        this.content = content;
+        this.employee = employee;
+        this.sentDate = sentDate;
+    }
 }
