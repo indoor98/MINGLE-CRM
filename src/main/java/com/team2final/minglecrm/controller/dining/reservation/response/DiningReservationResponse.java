@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class DiningReservationResponse {
 
     // 상태, 총 가격, 예약 날짜
-    private final Long totalPrice;
+    private final Integer totalPrice;
     private final LocalDateTime reservationDate;
 
     // 식사 상품 이름, 식사 가격, 식사 상품 개수

@@ -13,7 +13,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+
 import java.time.LocalDate;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +33,8 @@ public class Customer {
 
     private String name;
 
+    private String email;
+
     private String grade;
 
     private String phone;
@@ -47,10 +51,14 @@ public class Customer {
 
     private LocalDate birth;
 
+    private LocalDate createdDate;
+
     @OneToOne(mappedBy = "customer")
     private Reward reward;
 
     private Boolean isDeleted;
+
+    private Integer visitCnt;
 
     public void updateCustomerDetail(CustomerUpdateRequest customerUpdateRequest) {
         this.name = customerUpdateRequest.getName();
@@ -70,8 +78,18 @@ public class Customer {
     }
 
     @Builder
-    public Customer(String name, String phone){
+    public Customer(Long id, String name, String grade, String email, String phone, String address, Employee employee, String memo, String gender, LocalDate birth, Reward reward, Boolean isDeleted) {
+        this.id = id;
         this.name = name;
+        this.grade = grade;
+        this.email = email;
         this.phone = phone;
+        this.address = address;
+        this.employee = employee;
+        this.memo = memo;
+        this.gender = gender;
+        this.birth = birth;
+        this.reward = reward;
+        this.isDeleted = isDeleted;
     }
 }

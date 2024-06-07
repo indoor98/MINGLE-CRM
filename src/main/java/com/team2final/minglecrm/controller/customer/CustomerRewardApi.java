@@ -1,10 +1,10 @@
-package com.team2final.minglecrm.controller.reward;
+package com.team2final.minglecrm.controller.customer;
 
 import com.team2final.minglecrm.controller.ResultResponse;
 import com.team2final.minglecrm.controller.reward.response.RewardHistoryResponse;
 import com.team2final.minglecrm.controller.reward.response.RewardResponse;
+import com.team2final.minglecrm.service.customer.CustomerService;
 import com.team2final.minglecrm.service.reward.RewardService;
-import com.team2final.minglecrm.service.reward.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,18 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/rewards")
 @RequiredArgsConstructor
-public class RewardController {
+@RequestMapping("/api/v1/customers/{customerId}/rewards")
+public class CustomerRewardApi {
+
     private final RewardService rewardService;
 
-    @GetMapping("/{customerId}")
+//    @GetMapping("/{rewardId}")
+//    public ResponseEntity<RewardResponse> getReward(@PathVariable Long customerId, @PathVariable Long rewardId) {
+//        RewardResponse reward = rewardService.getReward(customerId);
+//        return ResponseEntity.ok(reward);
+//    }
+
+    @GetMapping()
     public ResponseEntity<ResultResponse<RewardResponse>> getReward(@PathVariable("customerId") Long customerId) {
         RewardResponse reward = rewardService.getReward(customerId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 리워드 조회 성공", reward));
     }
 
-    @GetMapping("/history/{customerId}")
+    @GetMapping("/history")
     public ResponseEntity<ResultResponse<List<RewardHistoryResponse>>> getRewardHistory(@PathVariable("customerId") Long customerId) {
         List<RewardHistoryResponse> rewardHistories = rewardService.getRewardHistories(customerId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 리워드 히스토리 조회 성공", rewardHistories));
