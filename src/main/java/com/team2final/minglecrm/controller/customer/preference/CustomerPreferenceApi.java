@@ -1,0 +1,24 @@
+package com.team2final.minglecrm.controller.customer.preference;
+
+import com.team2final.minglecrm.entity.customer.preference.CustomerPreferenceType;
+import com.team2final.minglecrm.service.customer.preference.CustomerPreferenceService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/customers/preferences")
+public class CustomerPreferenceApi {
+
+    private final CustomerPreferenceService customerPreferenceService;
+
+    // 선호도 목록 조회
+    @GetMapping
+    public ResponseEntity<CustomerPreferenceType[]> getCustomerPreferences() {
+        CustomerPreferenceType[] preferenceResponses = customerPreferenceService.getAllCustomerPreferences();
+        return ResponseEntity.ok(preferenceResponses);
+    }
+
+
+}

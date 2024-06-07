@@ -29,15 +29,17 @@ public class VoucherHistoryResponse {
 
 
     public static VoucherHistoryResponse of(VoucherHistory voucherHistory){
+        Long employeeManagerId = voucherHistory.getEmployeeManager() != null ? voucherHistory.getEmployeeManager().getId() : null;
+
         return new VoucherHistoryResponse(
-                voucherHistory.getId(),
+                voucherHistory.getVoucher().getId(),
                 voucherHistory.getRequestDate(),
                 voucherHistory.getIsAuth(),
                 voucherHistory.getAuthDate(),
                 voucherHistory.getIsConvertedYn(),
                 voucherHistory.getConversionDate(),
                 voucherHistory.getEmployeeStaff().getId(),
-                voucherHistory.getEmployeeManager().getId(),
+                employeeManagerId,
                 voucherHistory.getCustomer().getId()
         );
     }

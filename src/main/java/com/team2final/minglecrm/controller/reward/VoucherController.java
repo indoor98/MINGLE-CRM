@@ -1,11 +1,14 @@
 package com.team2final.minglecrm.controller.reward;
 
 
+import com.team2final.minglecrm.controller.ResultResponse;
 import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
 import com.team2final.minglecrm.controller.reward.response.*;
 import com.team2final.minglecrm.service.reward.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,45 +22,52 @@ public class VoucherController {
 
     private final VoucherService voucherService;
 
-    @PostMapping("/new")
+    @PostMapping
     @PreAuthorize("hasRole('MARKETER')")
-    public ResponseEntity<VoucherResponse> createVoucher(@RequestBody VoucherCreateRequest request) {
-        VoucherResponse createdVoucher = voucherService.createVoucher(request);
-        return ResponseEntity.ok(createdVoucher);
+    public ResponseEntity<ResultResponse<VoucherResponse>> createVoucher(@RequestBody VoucherCreateRequest request) {
+        VoucherResponse createdVoucher = voucherService.saveVoucher(request);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 생성 성공", createdVoucher));
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<VoucherResponse>> getAllVouchers(){
-        List<VoucherResponse> voucherList = voucherService.voucherList();
-        return ResponseEntity.ok(voucherList);
+    public ResponseEntity<ResultResponse<List<VoucherResponse>>> listVouchers(){
+        List<VoucherResponse> voucherList = voucherService.getAllVouchers();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 요청된 바우처 전체 조회 성공", voucherList));
     }
 
     // 사용자별 바우처 리스트 조회
-    @GetMapping("/list/{customerId}")
-    public ResponseEntity<List<VoucherHistoryResponse>> getVouchers(@PathVariable("customerId") Long customerId){
-        List<VoucherHistoryResponse> voucherList = voucherService.customerVoucherList(customerId);
-        return ResponseEntity.ok(voucherList);
+    @GetMapping("/{customerId}")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getVouchers(@PathVariable("customerId") Long customerId){
+        List<VoucherHistoryResponse> customerVoucherList = voucherService.getCustomerVouchers(customerId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 사용 가능 바우처 목록 조회 성공", customerVoucherList));
+    }
+
+    // 사용자별 바우처 상세 조회
+    @GetMapping("/{customerId}/{voucherId}")
+    public ResponseEntity<ResultResponse<VoucherHistoryResponse>> getVoucher(@PathVariable Long customerId, @PathVariable Long voucherId){
+        VoucherHistoryResponse voucherHistory = voucherService.getCustomerVoucher(customerId, voucherId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 사용 가능 바우처 상세 조회 성공", voucherHistory));
     }
 
     @PostMapping("/request/{voucherId}")
     @PreAuthorize("hasRole('MARKETER')")
-    public ResponseEntity<VoucherRequestResponse> requestVoucher(@PathVariable("voucherId") Long voucherId) {
+    public ResponseEntity<ResultResponse<VoucherRequestResponse>> requestVoucher(@PathVariable("voucherId") Long voucherId) {
         VoucherRequestResponse voucherRequestResponse = voucherService.requestVoucher(voucherId);
-        return ResponseEntity.ok(voucherRequestResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 승인 요청 성공", voucherRequestResponse));
     }
 
     @PostMapping("/approval/{voucherId}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<VoucherApprovalResponse> approveVoucher(@PathVariable("voucherId") Long voucherId) {
+    public ResponseEntity<ResultResponse<VoucherApprovalResponse>> approveVoucher(@PathVariable("voucherId") Long voucherId) {
         VoucherApprovalResponse voucherApprovalResponse = voucherService.approveVoucher(voucherId);
-        return ResponseEntity.ok(voucherApprovalResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 승인 성공", voucherApprovalResponse));
     }
 
-    @GetMapping("/list/status/marketer")
+    @GetMapping("/status")
     @PreAuthorize("hasRole('MARKETER')")
-    public ResponseEntity<List<VoucherStatusResponse>> voucherStatus(){
-        List<VoucherStatusResponse> voucherStatusList = voucherService.voucherStatusList();
-        return ResponseEntity.ok(voucherStatusList);
+    public ResponseEntity<ResultResponse<List<VoucherStatusResponse>>> getVouchersStatus(){
+        List<VoucherStatusResponse> voucherStatusList = voucherService.getVouchersStatus();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 요청/승인 상태 조회 성공", voucherStatusList));
     }
 }
