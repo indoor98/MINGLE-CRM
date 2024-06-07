@@ -33,6 +33,8 @@ public class Customer {
 
     private String name;
 
+    private String email;
+
     private String grade;
 
     private String phone;
@@ -76,10 +78,11 @@ public class Customer {
     }
 
     @Builder
-    public Customer(Long id, String name, String grade, String phone, String address, Employee employee, String memo, String gender, LocalDate birth, Reward reward, Boolean isDeleted) {
+    public Customer(Long id, String name, String grade, String email, String phone, String address, Employee employee, String memo, String gender, LocalDate birth, Reward reward, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.grade = grade;
+        this.email = email;
         this.phone = phone;
         this.address = address;
         this.employee = employee;
@@ -88,5 +91,8 @@ public class Customer {
         this.birth = birth;
         this.reward = reward;
         this.isDeleted = isDeleted;
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
