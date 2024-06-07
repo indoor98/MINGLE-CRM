@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -66,5 +67,11 @@ public class Customer {
     public void updateCustomerReservationDetail(String memo, String name) {
         this.memo = memo;
         this.name = name;
+    }
+
+    @Builder
+    public Customer(String name, String phone){
+        this.name = name;
+        this.phone = phone;
     }
 }
