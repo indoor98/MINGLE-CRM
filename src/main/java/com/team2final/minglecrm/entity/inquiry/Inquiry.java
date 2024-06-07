@@ -37,7 +37,8 @@ public class Inquiry {
     private Boolean isReply;
 
     @Builder
-    public Inquiry(Customer customer, LocalDateTime date, String inquiryTitle, String inquiryContent, String type, Boolean isReply, Boolean isActionNeeded, String actionContent) {
+    public Inquiry(Long id, Customer customer, LocalDateTime date, String inquiryTitle, String inquiryContent, String type, Boolean isReply, Boolean isActionNeeded, String actionContent) {
+        this.id = id;
         this.customer = customer;
         this.date = date;
         this.inquiryTitle = inquiryTitle;

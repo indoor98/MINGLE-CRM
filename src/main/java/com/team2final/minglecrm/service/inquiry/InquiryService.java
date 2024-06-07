@@ -44,23 +44,19 @@ public class InquiryService {
     public Page<InquiryResponse> getAllInquiries(Pageable pageable) {
         Page<Inquiry> inquiries = inquiryRepository.findAll(pageable);
         return inquiries.map(inquiry -> {
-
-            Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
-            InquiryReply inquiryReply = inquiryReplyOptional.orElse(null); // 답변 없으면 null
-
-            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
-            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+            InquiryReply inquiryReply = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+            InquiryAction inquiryAction = inquiryActionRepository.findByInquiryId(inquiry.getId());
 
             return convertToDTO(inquiry, inquiryReply, inquiryAction);
         });
     }
 
+
     @Transactional
     public Page<InquiryResponse> getUnansweredInquiries(Pageable pageable) {
         Page<Inquiry> unansweredInquiries = inquiryRepository.findUnansweredInquiries(pageable);
         return unansweredInquiries.map(inquiry -> {
-            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
-            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+            InquiryAction inquiryAction = inquiryActionRepository.findByInquiryId(inquiry.getId());
             return convertToDTO(inquiry, null, inquiryAction); // 답변이 없는 문의만 조회 - inquiryReply는 항상 null
         });
     }
@@ -74,9 +70,7 @@ public class InquiryService {
 
         return answeredInquiries.map(inquiry -> {
             InquiryReply inquiryReply = inquiryReplyMap.get(inquiry.getId());
-
-            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
-            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+            InquiryAction inquiryAction = inquiryActionRepository.findByInquiryId(inquiry.getId());
 
             return convertToDTO(inquiry, inquiryReply, inquiryAction);
         });
@@ -86,11 +80,8 @@ public class InquiryService {
     public Page<InquiryResponse> getInquiriesWithAction(Pageable pageable) {
         Page<Inquiry> inquiriesWithAction = inquiryRepository.findInquiriesWithAction(pageable);
         return inquiriesWithAction.map(inquiry -> {
-            Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
-            InquiryReply inquiryReply = inquiryReplyOptional.orElse(null);
-
-            Optional<InquiryAction> inquiryActionOptional = inquiryActionRepository.findByInquiryId(inquiry.getId());
-            InquiryAction inquiryAction = inquiryActionOptional.orElse(null);
+            InquiryReply inquiryReply = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+            InquiryAction inquiryAction = inquiryActionRepository.findByInquiryId(inquiry.getId());
 
             return convertToDTO(inquiry, inquiryReply, inquiryAction);
         });
@@ -100,8 +91,8 @@ public class InquiryService {
     public Page<InquiryResponse> getInquiriesWithoutAction(Pageable pageable) {
         Page<Inquiry> inquiriesWithoutAction = inquiryRepository.findInquiriesWithoutAction(pageable);
         return inquiriesWithoutAction.map(inquiry -> {
-            Optional<InquiryReply> inquiryReplyOptional = inquiryReplyRepository.findByInquiryId(inquiry.getId());
-            InquiryReply inquiryReply = inquiryReplyOptional.orElse(null);
+            InquiryReply inquiryReply = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+
             return convertToDTO(inquiry, inquiryReply, null);
         });
     }
@@ -111,8 +102,8 @@ public class InquiryService {
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다."));
 
-        InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiryId).orElse(null);
-        InquiryAction action = inquiryActionRepository.findByInquiryId(inquiryId).orElse(null);
+        InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiryId);
+        InquiryAction action = inquiryActionRepository.findByInquiryId(inquiryId);
 
         InquiryResponse inquiryResponse = convertToDTO(inquiry, reply, action);
         InquiryReplyResponse inquiryReplyResponse = (reply != null) ? convertToDTO(reply) : null;
@@ -211,8 +202,8 @@ public class InquiryService {
         Page<Inquiry> inquiries = inquiryRepository.findByCustomerId(customerId, pageable);
 
         return inquiries.map(inquiry -> {
-            InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId()).orElse(null);
-            InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId()).orElse(null);
+            InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+            InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId());
 
             return convertToDTO(inquiry, reply, action);
         });
@@ -223,12 +214,12 @@ public class InquiryService {
         Inquiry inquiry = inquiryRepository.findByIdAndCustomerId(inquiryId, customerId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 고객의 문의를 찾을 수 없습니다."));
 
-        InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiryId).orElse(null);
-        InquiryAction action = inquiryActionRepository.findByInquiryId(inquiryId).orElse(null);
+        InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiryId);
+        InquiryAction action = inquiryActionRepository.findByInquiryId(inquiryId);
 
         InquiryResponse inquiryResponse = convertToDTO(inquiry, reply, action);
-        InquiryReplyResponse inquiryReplyResponse = (reply != null) ? convertToDTO(reply) : null;
-        InquiryActionResponse inquiryActionResponse = (action != null) ? convertToActionDTO(action) : null;
+        InquiryReplyResponse inquiryReplyResponse = reply != null ? convertToDTO(reply) : null;
+        InquiryActionResponse inquiryActionResponse = action != null ? convertToActionDTO(action) : null;
 
         return InquiryDetailResponse.builder()
                 .inquiryResponse(inquiryResponse)
@@ -246,8 +237,8 @@ public class InquiryService {
         Page<Inquiry> inquiries = inquiryRepository.searchByKeyword(keyword, startDateTime, endDateTime, pageable);
         return inquiries.map(inquiry -> {
 
-            InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId()).orElse(null);
-            InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId()).orElse(null);
+            InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+            InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId());
 
             return convertToDTO(inquiry, reply, action);
         });

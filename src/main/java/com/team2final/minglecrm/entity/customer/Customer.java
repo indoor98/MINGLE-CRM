@@ -91,8 +91,5 @@ public class Customer {
         this.birth = birth;
         this.reward = reward;
         this.isDeleted = isDeleted;
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }
