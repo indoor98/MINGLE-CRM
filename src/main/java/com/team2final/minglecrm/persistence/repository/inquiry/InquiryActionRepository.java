@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface InquiryActionRepository extends JpaRepository<InquiryAction, Long> {
-    Optional<InquiryAction> findByInquiryId(Long inquiryId);
+    InquiryAction findByInquiryId(Long inquiryId);
 }
