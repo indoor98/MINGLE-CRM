@@ -17,7 +17,6 @@ public class Dish {
     private Long id;
 
     private String name;
-    private Integer amount;
     private Long price;
 
     @ManyToOne(fetch = LAZY)

@@ -35,7 +35,8 @@ public class InquiryReply {
     private LocalDateTime date;
 
     @Builder
-    public InquiryReply(Employee employee, Inquiry inquiry, String reply, LocalDateTime date) {
+    public InquiryReply(Long id, Employee employee, Inquiry inquiry, String reply, LocalDateTime date) {
+        this.id = id;
         this.employee = employee;
         this.inquiry = inquiry;
         this.reply = reply;
