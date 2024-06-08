@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.controller.review.response;
+package com.team2final.minglecrm.controller.hotel.review.response;
 
 import com.team2final.minglecrm.entity.hotel.HotelReview;
 import com.team2final.minglecrm.entity.hotel.type.RoomType;

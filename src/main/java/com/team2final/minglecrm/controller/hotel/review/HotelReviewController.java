@@ -1,9 +1,8 @@
-package com.team2final.minglecrm.controller.review;
+package com.team2final.minglecrm.controller.hotel.review;
 
 import com.team2final.minglecrm.controller.ResultResponse;
-import com.team2final.minglecrm.controller.review.response.HotelReviewResponse;
-import com.team2final.minglecrm.controller.review.response.WrapperResponse;
-import com.team2final.minglecrm.service.review.HotelReviewService;
+import com.team2final.minglecrm.controller.hotel.review.response.HotelReviewResponse;
+import com.team2final.minglecrm.service.hotel.review.HotelReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
