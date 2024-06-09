@@ -19,7 +19,7 @@ const routes = [
     path: "/mingle",
     component: () => import("layouts/customer/Index.vue"),
     children: [
-      { path: "", component: () => import("pages/customer/IndexPage.vue") },
+      { path: "", component: () => import("pages/IndexPage.vue") },
     ],
   },
 ];
