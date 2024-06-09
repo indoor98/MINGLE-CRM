@@ -3,21 +3,51 @@
     <section class="q-pa-md">
       <div class="row q-pa-xs q-gutter-md">
         <q-btn flat style="color: black; font-size: 24px" label="호텔 리뷰" />
-        <q-btn flat style="color: black; font-size: 24px" label="호텔 리뷰" />
+        <q-btn flat style="color: black; font-size: 24px" label="다이닝 리뷰" />
       </div>
     </section>
-
-    <section class="row q-gutter-md q-pa-md flex flex-center">
-      <!-- First Scroll Area -->
-      <q-input
-        filled
-        bottom-slots
-        v-model="text"
-        label="Label"
-        counter
-        maxlength="12"
-        :dense="dense"
-      >
+    <section class="row q-col-gutter-xl flex flex-center q-pa-xs">
+      <q-input v-model="startDate" mask="date" :rules="['date']" label="시작일">
+        <template v-slot:append>
+          <q-icon name="event" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-date v-model="startDate">
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
+      <q-input v-model="endDate" mask="date" :rules="['date']" label="종료일">
+        <template v-slot:append>
+          <q-icon name="event" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-date v-model="endDate">
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
+      <q-select
+        class="q-mb-md"
+        v-model="roomType"
+        :options="roomTypeOptions"
+        label="호텔 지점"
+      />
+      <q-input bottom-slots v-model="text" label="작성자" maxlength="20">
         <template v-slot:append>
           <q-icon
             v-if="text !== ''"
@@ -27,8 +57,11 @@
           />
           <q-icon name="search" />
         </template>
-        <template v-slot:hint> Field hint </template>
       </q-input>
+    </section>
+
+    <section class="row q-gutter-md q-pa-md flex flex-center">
+      <!-- First Scroll Area -->
 
       <div class="col-4 q-pa-md scroll" style="max-height: 200px">
         <div v-for="n in 100" :key="`second-${n}`" class="q-py-xs">
@@ -120,11 +153,16 @@ import axios from "axios"; // axios 모듈을 기본 내보내기로 임포트
 
 const current = ref(1);
 const reviews = ref([]);
+const roomType = ref("선택 안함");
+const roomTypeOptions = ref(["선택 안함", "grand hotel", "super hotel"]);
+const startDate = ref("");
+const endDate = ref("");
 
 const getHotelReviews = async () => {
   try {
-    const response = await axios.get(
-      `http://localhost:8080/api/hotel/reviews/${current.value - 1}`
+    const response = await axios.post(
+      `http://localhost:8080/api/hotel/reviews/${current.value - 1}`,
+      {}
     );
     reviews.value = response.data.data;
   } catch (error) {
