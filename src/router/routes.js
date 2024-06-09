@@ -6,6 +6,10 @@ const routes = [
       { path: "", component: () => import("pages/IndexPage.vue") },
       { path: "customer", component: () => import("pages/CustomerPage.vue") },
       { path: "review", component: () => import("pages/ReviewPage.vue") },
+      {
+        path: "voucher",
+        component: () => import("pages/voucher/voucherListPage.vue"),
+      },
     ],
   },
 
@@ -18,9 +22,7 @@ const routes = [
   {
     path: "/mingle",
     component: () => import("layouts/customer/Index.vue"),
-    children: [
-      { path: "", component: () => import("pages/IndexPage.vue") },
-    ],
+    children: [{ path: "", component: () => import("pages/IndexPage.vue") }],
   },
 ];
 

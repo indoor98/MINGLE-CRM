@@ -48,6 +48,12 @@ const linksList = [
     icon: "school",
     to: "/review",
   },
+  {
+    title: "바우처",
+    caption: "바우처 탭",
+    icon: "school",
+    to: "/voucher",
+  },
 ];
 
 const leftDrawerOpen = ref(false);
