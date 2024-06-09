@@ -32,8 +32,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build the Vue.js app
-        run: npm run build
+      - name: Install Quasar CLI
+        run: npm install -g @quasar/cli
+
+      - name: Build the Quasar app
+        run: quasar build
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
