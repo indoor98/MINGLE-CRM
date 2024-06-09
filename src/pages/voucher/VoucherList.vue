@@ -1,34 +1,33 @@
 <template>
-  <q-page>
-    <div class="q-pa-md">
-      <h2 class="text-h6">바우처 목록</h2>
-      <q-card class="q-mt-md">
-        <q-card-section>
-          <q-table
-            :rows="vouchers"
-            :columns="columns"
-            row-key="id"
-            :loading="loading"
-            :dense="true"
-            class="q-table--dense"
-          >
-            <template v-slot:no-data>
-              <q-tr>
-                <q-td :colspan="columns.length" class="text-center"
-                  >바우처가 없습니다.</q-td
-                >
-              </q-tr>
-            </template>
-          </q-table>
-        </q-card-section>
-      </q-card>
-      <q-card class="q-mt-md">
-        <q-card-section v-if="errorMessage">
-          <p text-color="red" class="text-center">{{ errorMessage }}</p>
-        </q-card-section>
-      </q-card>
-    </div>
-  </q-page>
+  <div>
+    <h2 class="text-h6">바우처 목록</h2>
+    <q-card class="q-mt-md">
+      <q-card-section>
+        <q-table
+          :rows="vouchers"
+          :columns="columns"
+          row-key="id"
+          :loading="loading"
+          :dense="true"
+          class="q-table--dense"
+          :pagination="{ rowsPerPage: 10 }"
+        >
+          <template v-slot:no-data>
+            <q-tr>
+              <q-td :colspan="columns.length" class="text-center"
+                >바우처가 없습니다.</q-td
+              >
+            </q-tr>
+          </template>
+        </q-table>
+      </q-card-section>
+    </q-card>
+    <q-card class="q-mt-md">
+      <q-card-section v-if="errorMessage">
+        <p style="color: red" class="text-center">{{ errorMessage }}</p>
+      </q-card-section>
+    </q-card>
+  </div>
 </template>
 
 <script setup>
@@ -63,7 +62,12 @@ const columns = ref([
     align: "center",
     field: "employeeName",
   },
-  { name: "amount", label: "금액", align: "center", field: "amount" },
+  {
+    name: "amount",
+    label: "금액",
+    align: "center",
+    field: "amount",
+  },
   {
     name: "voucherCode",
     label: "바우처 코드",
@@ -90,4 +94,4 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style scoped></style>
