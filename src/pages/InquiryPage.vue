@@ -15,15 +15,8 @@
         :loading="loading"
         :pagination="pagination"
         @request="fetchInquiries"
-      >
-        <template v-slot:body-cell="{ row }">
-          <q-td :props="props" @click="onRowClick(row)">
-            <q-item>
-              <q-item-section>{{ row.customerName }}</q-item-section>
-            </q-item>
-          </q-td>
-        </template>
-      </q-table>
+        @row-click="onRowClick"
+      />
       <!-- 페이지네이션 버튼 -->
       <q-pagination
         :page="pagination.page"
@@ -134,7 +127,18 @@ const fetchInquiries = async () => {
         size: pagination.value.rowsPerPage,
       },
     });
-    inquiries.value = response.data.data.content; // 응답 데이터에서 목록 추출
+    inquiries.value = response.data.data.content.map((item) => ({
+      id: item.id,
+      customerName: item.customerName,
+      customerPhone: item.customerPhone,
+      date: new Date(item.date).toLocaleString(),
+      type: item.type,
+      isReply: item.isReply,
+      employName: item.employName,
+      inquiryTitle: item.inquiryTitle,
+      inquiryContent: item.inquiryContent,
+      actionStatus: item.actionStatus,
+    })); // 응답 데이터에서 목록 추출
     pagination.value.rowsNumber = response.data.data.totalElements; // 전체 데이터의 개수를 pagination 객체에 저장
   } catch (error) {
     console.error("문의를 가져오지 못했습니다. :", error);
@@ -144,8 +148,13 @@ const fetchInquiries = async () => {
   }
 };
 
-const onRowClick = (row) => {
-  router.push({ name: "InquiryDetailPage", params: { inquiryId: row.id } });
+const onRowClick = (event, row) => {
+  console.log("Clicked row data:", row); // 디버깅용 로그
+  if (row && row.id) {
+    router.push({ name: "InquiryDetailPage", params: { inquiryId: row.id } });
+  } else {
+    console.error("Invalid row data:", row);
+  }
 };
 
 onMounted(fetchInquiries); // 컴포넌트가 마운트될 때 fetchInquiries 함수 호출
