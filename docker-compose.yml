@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: kwonseongji129/mingle-front:latest
+    environment:
+      - BACKEND_HOST=backend
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on: []
