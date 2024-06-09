@@ -64,14 +64,13 @@ public class VoucherController {
     }
 
     @PostMapping("/request/{voucherId}")
-    @PreAuthorize("hasRole('MARKETER')")
+//    @PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<ResultResponse<VoucherRequestResponse>> requestVoucher(@PathVariable("voucherId") Long voucherId) {
         VoucherRequestResponse voucherRequestResponse = voucherService.requestVoucher(voucherId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 승인 요청 성공", voucherRequestResponse));
     }
 
-    @PostMapping("/approval/{voucherId}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PostMapping("/approval/{voucherId}") // @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResultResponse<VoucherApprovalResponse>> approveVoucher(@PathVariable("voucherId") Long voucherId) {
         VoucherApprovalResponse voucherApprovalResponse = voucherService.approveVoucher(voucherId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 승인 성공", voucherApprovalResponse));

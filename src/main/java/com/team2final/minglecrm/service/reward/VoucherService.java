@@ -158,13 +158,14 @@ public class VoucherService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        Employee approver = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+//        Employee approver = employeeRepository.findByEmail(userEmail)
+//                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
 
         VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId).
                 orElseThrow(() -> new RuntimeException("해당 ID의 바우처의 히스토리를 찾을 수 없습니다."));
 
-        voucherHistory.approveVoucher(approver);
+//        voucherHistory.approveVoucher(approver);
+        voucherHistory.approveVoucher();
         voucherHistoryRepository.save(voucherHistory);
 
         return VoucherApprovalResponse.of(voucherHistory);
