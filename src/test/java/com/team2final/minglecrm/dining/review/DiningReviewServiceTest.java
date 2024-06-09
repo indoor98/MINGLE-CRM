@@ -25,7 +25,6 @@ import java.util.List;
 @SpringBootTest
 class DiningReviewServiceTest {
 
-
     @Autowired
     private DiningReviewService diningReviewService;
 
