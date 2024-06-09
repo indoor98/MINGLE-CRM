@@ -12,11 +12,22 @@
           class="q-table--dense"
           :pagination="{ rowsPerPage: 10 }"
         >
+          <template v-slot:body-cell-approve="props">
+            <q-td :props="props">
+              <q-btn
+                v-if="!props.row.isAuth"
+                label="승인"
+                color="primary"
+                @click="approveVoucher(props.row.voucherId)"
+              ></q-btn>
+              <span v-else>승인됨</span>
+            </q-td>
+          </template>
           <template v-slot:no-data>
             <q-tr>
-              <q-td :colspan="columns.length" class="text-center"
-                >바우처가 없습니다.</q-td
-              >
+              <q-td :colspan="columns.length" class="text-center">
+                바우처가 없습니다.
+              </q-td>
             </q-tr>
           </template>
         </q-table>
@@ -33,10 +44,12 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { Notify, Dialog } from "quasar";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
+
 const columns = ref([
   {
     name: "voucherId",
@@ -50,12 +63,7 @@ const columns = ref([
     align: "center",
     field: "requestDate",
   },
-  {
-    name: "isAuth",
-    label: "승인 여부",
-    align: "center",
-    field: "isAuth",
-  },
+  { name: "isAuth", label: "승인 여부", align: "center", field: "isAuth" },
   {
     name: "issuerId",
     label: "발급 직원명",
@@ -69,6 +77,7 @@ const columns = ref([
     align: "center",
     field: "customerId",
   },
+  { name: "approve", label: "승인", align: "center" }, // 승인 컬럼 추가
 ]);
 
 const fetchVouchers = async () => {
@@ -85,6 +94,33 @@ const fetchVouchers = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const approveVoucher = async (voucherId) => {
+  Dialog.create({
+    title: "확인",
+    message: "바우처 발급을 승인하시겠습니까?",
+    ok: "예",
+    cancel: "아니오",
+  }).onOk(async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/vouchers/approval/${voucherId}`
+      );
+      Notify.create({
+        type: "positive",
+        message: "바우처가 성공적으로 승인되었습니다.",
+      });
+      // Refresh the voucher list after approval
+      fetchVouchers();
+    } catch (error) {
+      console.error("바우처 승인 중 에러 발생:", error);
+      Notify.create({
+        type: "negative",
+        message: "바우처 승인 중 에러가 발생했습니다.",
+      });
+    }
+  });
 };
 
 onMounted(() => {
