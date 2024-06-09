@@ -6,6 +6,13 @@ const routes = [
       { path: "", component: () => import("pages/IndexPage.vue") },
       { path: "customer", component: () => import("pages/CustomerPage.vue") },
       { path: "review", component: () => import("pages/ReviewPage.vue") },
+      { path: "inquiry", component: () => import("pages/InquiryPage.vue") },
+      {
+        path: "inquiry/:inquiryId",
+        name: "InquiryDetailPage",
+        component: () => import("pages/InquiryDetailPage.vue"),
+        props: true,
+      },
       { path: "customers/:customerId/hotel/reservations", component: () => import("pages/reservation/ReservationPage.vue") },
       { path: "customers/:customerId/hotel/reservations/:reservationId", component: () => import("pages/reservation/ReservationPage.vue") },
     ],
