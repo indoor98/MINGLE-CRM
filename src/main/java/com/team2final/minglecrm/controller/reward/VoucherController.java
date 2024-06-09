@@ -6,7 +6,6 @@ import com.team2final.minglecrm.controller.reward.request.VoucherCreateRequest;
 import com.team2final.minglecrm.controller.reward.response.*;
 import com.team2final.minglecrm.service.reward.VoucherService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,24 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 생성 성공", createdVoucher));
     }
 
+    // 생성된 모든 바우처 목록 가져오기
     @GetMapping //@PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ResultResponse<List<VoucherResponse>>> listVouchers(){
+    public ResponseEntity<ResultResponse<List<VoucherResponse>>> getAllVouchers(){
         List<VoucherResponse> voucherList = voucherService.getAllVouchers();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "생성된 바우처 전체 조회 성공", voucherList));
+    }
+
+    // 승인 전&후 바우처 목록 가져오기
+    @GetMapping("histories") //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getVoucherHistories(){
+        List<VoucherHistoryResponse> voucherList = voucherService.getAllVoucherHistories();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 전&후 바우처 전체 조회 성공", voucherList));
+    }
+
+    // 승인전 바우처 목록 가져오기
+    @GetMapping("/requested") //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getRequestedVouchers(){
+        List<VoucherHistoryResponse> voucherList = voucherService.getAllRequestedVouchers();
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 요청된 바우처 전체 조회 성공", voucherList));
     }
 

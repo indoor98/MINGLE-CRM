@@ -93,6 +93,22 @@ public class VoucherService {
     }
 
     @Transactional
+    public List<VoucherHistoryResponse> getAllRequestedVouchers(){
+        List<VoucherHistory> voucherHistories = voucherHistoryRepository.findByIsAuthFalse();
+        return voucherHistories.stream()
+                .map(VoucherHistoryResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<VoucherHistoryResponse> getAllVoucherHistories(){
+        List<VoucherHistory> voucherHistories = voucherHistoryRepository.findAll();
+        return voucherHistories.stream()
+                .map(VoucherHistoryResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public List<VoucherHistoryResponse> getCustomerVouchers(Long customerId){
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(()-> new RuntimeException("해당 ID의 고객을 찾을 수 없습니다."));
@@ -135,7 +151,7 @@ public class VoucherService {
 
         return VoucherRequestResponse.of(voucherHistory);
     }
-    
+
     @Transactional
     public VoucherApprovalResponse approveVoucher(Long voucherId){
 
