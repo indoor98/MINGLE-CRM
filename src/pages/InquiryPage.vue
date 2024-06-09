@@ -15,7 +15,15 @@
         :loading="loading"
         :pagination="pagination"
         @request="fetchInquiries"
-      />
+      >
+        <template v-slot:body-cell="{ row }">
+          <q-td :props="props" @click="onRowClick(row)">
+            <q-item>
+              <q-item-section>{{ row.customerName }}</q-item-section>
+            </q-item>
+          </q-td>
+        </template>
+      </q-table>
       <!-- 페이지네이션 버튼 -->
       <q-pagination
         :page="pagination.page"
@@ -34,6 +42,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 import axios from "axios";
 
 const inquiries = ref([]); // 데이터를 저장하는 반응형 변수
@@ -113,6 +122,8 @@ const columns = [
   },
 ];
 
+const router = useRouter();
+
 // 데이터 요청 함수
 const fetchInquiries = async () => {
   loading.value = true; // 데이터 요청할 때 로딩 상태 true로 설정
@@ -133,6 +144,10 @@ const fetchInquiries = async () => {
   }
 };
 
+const onRowClick = (row) => {
+  router.push({ name: "InquiryDetailPage", params: { inquiryId: row.id } });
+};
+
 onMounted(fetchInquiries); // 컴포넌트가 마운트될 때 fetchInquiries 함수 호출
 
 watch(
@@ -147,16 +162,15 @@ const filteredInquiries = computed(() => {
   if (!filter.value) {
     return inquiries.value; // 필터가 비어 있으면 전체 inquiries 반환
   }
+  const lowerCaseFilter = filter.value.toLowerCase();
   return inquiries.value.filter(
     (
       inquiry // 각 inquiry 항목의 속성을 필터링
     ) =>
-      inquiry.customerName.toLowerCase().includes(filter.value.toLowerCase()) ||
-      inquiry.customerPhone
-        .toLowerCase()
-        .includes(filter.value.toLowerCase()) ||
-      inquiry.inquiryTitle.toLowerCase().includes(filter.value.toLowerCase()) ||
-      inquiry.inquiryContent.toLowerCase().includes(filter.value.toLowerCase())
+      inquiry.customerName.toLowerCase().includes(lowerCaseFilter) ||
+      inquiry.customerPhone.toLowerCase().includes(lowerCaseFilter) ||
+      inquiry.inquiryTitle.toLowerCase().includes(lowerCaseFilter) ||
+      inquiry.inquiryContent.toLowerCase().includes(lowerCaseFilter)
     // 고객이름, 번호, 제목, 내용 값을 소문자로 변환 후, 검색어(filter.value)가 포함되어 있는지 확인
     // .toLowerCase() 사용하여 대소문자 구분하지 않음.
   );
