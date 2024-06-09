@@ -149,11 +149,11 @@ const fetchInquiries = async () => {
 };
 
 const onRowClick = (event, row) => {
-  console.log("Clicked row data:", row); // 디버깅용 로그
+  console.log("선택한 문의 상세 정보:", row); // 디버깅용 로그
   if (row && row.id) {
     router.push({ name: "InquiryDetailPage", params: { inquiryId: row.id } });
   } else {
-    console.error("Invalid row data:", row);
+    console.error("유효하지 않은 문의입니다. :", row);
   }
 };
 
