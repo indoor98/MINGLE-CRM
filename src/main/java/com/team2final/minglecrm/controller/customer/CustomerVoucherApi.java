@@ -18,11 +18,11 @@ public class CustomerVoucherApi {
 
     private final VoucherService voucherService;
 
-    @GetMapping
-    public ResponseEntity<List<VoucherHistoryResponse>> getCustomerVouchers(@PathVariable Long customerId){
-        List<VoucherHistoryResponse> voucherList = voucherService.customerVoucherList(customerId);
-        return ResponseEntity.ok(voucherList);
-    }
+//    @GetMapping
+//    public ResponseEntity<List<VoucherHistoryResponse>> getCustomerVouchers(@PathVariable Long customerId){
+//        List<VoucherHistoryResponse> voucherList = voucherService.customerVoucherList(customerId);
+//        return ResponseEntity.ok(voucherList);
+//    }
 
 //    @GetMapping("/{voucherId}")
 //    public ResponseEntity<VoucherHistoryResponse> getCustomerVouchersDetail(@PathVariable Long customerId){

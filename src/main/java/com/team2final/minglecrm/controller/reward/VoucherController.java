@@ -29,8 +29,7 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 생성 성공", createdVoucher));
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('MANAGER')")
+    @GetMapping //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResultResponse<List<VoucherResponse>>> listVouchers(){
         List<VoucherResponse> voucherList = voucherService.getAllVouchers();
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 요청된 바우처 전체 조회 성공", voucherList));
