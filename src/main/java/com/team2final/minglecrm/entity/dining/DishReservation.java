@@ -34,7 +34,7 @@ public class DishReservation {
     private LocalDateTime reservationDate;
 
     private Integer visitorCount;
-    private Integer totalPrice;
+    private Long totalPrice;
 
     public void updateDishReservation(UpdateDiningReservationRequest updateDiningReservationRequest) {
 
