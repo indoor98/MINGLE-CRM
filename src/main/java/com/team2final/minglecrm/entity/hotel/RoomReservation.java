@@ -6,6 +6,8 @@ import com.team2final.minglecrm.entity.payment.Payment;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ public class RoomReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "hotel_room_id")
     private HotelRoom hotelRoom;
 
@@ -34,9 +36,9 @@ public class RoomReservation {
     private Customer customer;
     private LocalDateTime reservationDate;
 
-    private LocalDateTime checkinTime;
+    private Date startDate;
 
-    private LocalDateTime checkoutTime;
+    private Date endDate;
 
     private Long price;
 

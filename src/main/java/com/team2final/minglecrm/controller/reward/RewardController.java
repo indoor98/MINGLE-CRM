@@ -1,10 +1,13 @@
 package com.team2final.minglecrm.controller.reward;
 
+import com.team2final.minglecrm.controller.ResultResponse;
 import com.team2final.minglecrm.controller.reward.response.RewardHistoryResponse;
 import com.team2final.minglecrm.controller.reward.response.RewardResponse;
 import com.team2final.minglecrm.service.reward.RewardService;
 import com.team2final.minglecrm.service.reward.VoucherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,15 +23,15 @@ public class RewardController {
     private final RewardService rewardService;
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<RewardResponse> getReward(@PathVariable("customerId") Long customerId) {
+    public ResponseEntity<ResultResponse<RewardResponse>> getReward(@PathVariable("customerId") Long customerId) {
         RewardResponse reward = rewardService.getReward(customerId);
-        return ResponseEntity.ok(reward);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 리워드 조회 성공", reward));
     }
 
     @GetMapping("/history/{customerId}")
-    public ResponseEntity<List<RewardHistoryResponse>> getRewardHistory(@PathVariable("customerId") Long customerId) {
+    public ResponseEntity<ResultResponse<List<RewardHistoryResponse>>> getRewardHistory(@PathVariable("customerId") Long customerId) {
         List<RewardHistoryResponse> rewardHistories = rewardService.getRewardHistories(customerId);
-        return ResponseEntity.ok(rewardHistories);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 리워드 히스토리 조회 성공", rewardHistories));
     }
 
 }
