@@ -43,11 +43,16 @@
       </q-input>
       <q-select
         class="q-mb-md"
-        v-model="roomType"
-        :options="roomTypeOptions"
+        v-model="hotel"
+        :options="hotelOptions"
         label="호텔 지점"
       />
-      <q-input bottom-slots v-model="text" label="작성자" maxlength="20">
+      <!-- <q-input
+        bottom-slots
+        v-model="customerName"
+        label="작성자"
+        maxlength="20"
+      >
         <template v-slot:append>
           <q-icon
             v-if="text !== ''"
@@ -56,6 +61,29 @@
             class="cursor-pointer"
           />
           <q-icon name="search" />
+        </template>
+      </q-input> -->
+
+      <q-input
+        bottom-slots
+        v-model="customerName"
+        label="Label"
+        counter
+        maxlength="12"
+        :dense="dense"
+      >
+        <template v-slot:after>
+          <q-btn
+            round
+            dense
+            flat
+            icon="search"
+            @click="
+              () => {
+                getHotelReviews();
+              }
+            "
+          />
         </template>
       </q-input>
     </section>
@@ -153,16 +181,30 @@ import axios from "axios"; // axios 모듈을 기본 내보내기로 임포트
 
 const current = ref(1);
 const reviews = ref([]);
-const roomType = ref("선택 안함");
-const roomTypeOptions = ref(["선택 안함", "grand hotel", "super hotel"]);
+const hotel = ref("선택 안함");
+const hotelOptions = ref(["선택 안함", "grand hotel", "super hotel"]);
 const startDate = ref("");
 const endDate = ref("");
+const customerName = ref("");
 
 const getHotelReviews = async () => {
   try {
+    const searchCondition = ref({});
+
+    if (hotel.value !== "선택 안함") {
+      searchCondition.value.hotel = hotel.value;
+    }
+    if (startDate.value !== "" && endDate.value !== "") {
+      searchCondition.value.startDate = startDate.value;
+      searchCondition.value.endDate = endDate.value;
+    }
+    if (customerName.value !== "") {
+      searchCondition.value.customerName = customerName;
+    }
+
     const response = await axios.post(
       `http://localhost:8080/api/hotel/reviews/${current.value - 1}`,
-      {}
+      searchCondition.value
     );
     reviews.value = response.data.data;
   } catch (error) {
