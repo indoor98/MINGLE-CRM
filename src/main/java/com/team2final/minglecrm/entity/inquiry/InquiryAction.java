@@ -36,7 +36,8 @@ public class InquiryAction {
     private LocalDateTime date;
 
     @Builder
-    public InquiryAction(Inquiry inquiry, Employee employee, ActionStatus actionStatus, String actionContent, LocalDateTime date) {
+    public InquiryAction(Long id, Inquiry inquiry, Employee employee, ActionStatus actionStatus, String actionContent, LocalDateTime date) {
+        this.id = id;
         this.inquiry = inquiry;
         this.employee = employee;
         this.actionStatus = actionStatus;

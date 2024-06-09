@@ -11,10 +11,9 @@ public class DishResponse {
 
     private final String name;
     private final Long price;
-    private final Integer amount;
 
 
     public static DishResponse of(Dish dish) {
-        return new DishResponse(dish.getName(), dish.getPrice(), dish.getAmount());
+        return new DishResponse(dish.getName(), dish.getPrice());
     }
 }
