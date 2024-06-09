@@ -50,6 +50,12 @@ const linksList = [
     icon: "school",
     to: "/review",
   },
+  {
+    title: "상담",
+    caption: "상담 탭",
+    icon: "school",
+    to: "/inquiry",
+  },
 ];
 
 const leftDrawerOpen = ref(false);
