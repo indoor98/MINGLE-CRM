@@ -3,7 +3,6 @@ package com.team2final.minglecrm.controller.hotel.review.request;
 
 import com.team2final.minglecrm.entity.hotel.type.RoomType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

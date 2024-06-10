@@ -27,7 +27,7 @@ public class Payment {
     private Boolean isRefunded;
     private LocalDateTime refundDate;
     private Long createdReward;
-    private String purchaseType;
+    private String consumeType;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "customer_id")

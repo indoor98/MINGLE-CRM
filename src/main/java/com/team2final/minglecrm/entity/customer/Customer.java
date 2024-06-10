@@ -4,23 +4,13 @@ package com.team2final.minglecrm.entity.customer;
 import com.team2final.minglecrm.controller.customer.request.CustomerUpdateRequest;
 import com.team2final.minglecrm.entity.employee.Employee;
 import com.team2final.minglecrm.entity.reward.Reward;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter

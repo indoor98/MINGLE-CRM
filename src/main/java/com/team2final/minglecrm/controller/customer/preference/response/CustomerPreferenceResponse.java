@@ -3,10 +3,8 @@ package com.team2final.minglecrm.controller.customer.preference.response;
 import com.team2final.minglecrm.entity.customer.CustomerPreference;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.sql.Time;
-import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor

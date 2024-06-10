@@ -2,13 +2,11 @@ package com.team2final.minglecrm.entity.customer;
 
 import com.team2final.minglecrm.controller.customer.preference.request.CustomerPreferenceUpdateRequest;
 import jakarta.persistence.*;
-
-import java.sql.Time;
-import java.time.LocalDateTime;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.sql.Time;
 
 @Entity
 @Getter

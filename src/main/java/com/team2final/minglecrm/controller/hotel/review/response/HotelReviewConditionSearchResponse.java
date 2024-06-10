@@ -5,7 +5,6 @@ import com.team2final.minglecrm.entity.hotel.type.RoomType;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter

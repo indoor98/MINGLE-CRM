@@ -3,7 +3,6 @@ package com.team2final.minglecrm.controller.customer;
 import com.team2final.minglecrm.controller.ResultResponse;
 import com.team2final.minglecrm.controller.reward.response.RewardHistoryResponse;
 import com.team2final.minglecrm.controller.reward.response.RewardResponse;
-import com.team2final.minglecrm.service.customer.CustomerService;
 import com.team2final.minglecrm.service.reward.RewardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

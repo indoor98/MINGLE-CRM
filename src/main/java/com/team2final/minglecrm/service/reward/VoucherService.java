@@ -144,7 +144,7 @@ public class VoucherService {
                 .employeeStaff(employee)
                 .requestDate(LocalDateTime.now())  // 현재 시간을 requestDate로 설정
                 .isAuth(false)
-                .isConvertedYn(false)
+                .isConverted(false)
                 .build();
 
         voucherHistoryRepository.save(voucherHistory);
