@@ -1,11 +1,5 @@
 <template>
   <q-page padding>
-    <section class="q-pa-md">
-      <div class="row q-pa-xs q-gutter-md">
-        <q-btn flat style="color: black; font-size: 24px" label="호텔 리뷰" />
-        <q-btn flat style="color: black; font-size: 24px" label="다이닝 리뷰" />
-      </div>
-    </section>
     <section class="row q-col-gutter-xl flex flex-center q-pa-xs">
       <q-input v-model="startDate" mask="date" :rules="['date']" label="시작일">
         <template v-slot:append>
@@ -46,6 +40,12 @@
         v-model="hotel"
         :options="hotelOptions"
         label="호텔 지점"
+      />
+      <q-select
+        class="q-mb-md"
+        v-model="roomType"
+        :options="roomTypeOptions"
+        label="룸 타입"
       />
       <!-- <q-input
         bottom-slots
@@ -115,10 +115,15 @@
           <q-card class="my-card">
             <q-card-section>
               <div class="row">
+                <div class="q-mb-sm">{{ review.hotel }}</div>
+                <q-space></q-space>
+                <div class="q-mb-sm">{{ review.roomType }}</div>
+                <q-space></q-space>
+                <div>{{ review.createdTime.substring(0, 10) }}</div>
+              </div>
+              <div class="row">
                 <div calss="col">
-                  <div class="q-mb-sm">{{ review.roomType }}</div>
                   <div class="q-mb-sm">{{ review.customerName }}</div>
-                  <div>{{ review.createdTime.substring(0, 10) }}</div>
                 </div>
                 <div class="col q-px-lg">
                   <div>친절도</div>
@@ -157,7 +162,6 @@
 
             <q-card-section class="scroll" style="max-height: 300px">
               {{ review.comment }}
-              {{ review.createdTime }}
             </q-card-section>
           </q-card>
         </div>
@@ -182,10 +186,34 @@ import axios from "axios"; // axios 모듈을 기본 내보내기로 임포트
 const current = ref(1);
 const reviews = ref([]);
 const hotel = ref("선택 안함");
-const hotelOptions = ref(["선택 안함", "grand hotel", "super hotel"]);
+const hotelOptions = ref(["선택 안함", "SEOUL", "SOKCHO", "BUSAN"]);
+const roomType = ref("선택 안함");
+const roomTypeOptions = ref([
+  "선택 안함",
+  "SUPERIOR",
+  "DELUXE_DOUBLE",
+  "DELUXE_TWIN",
+  "PREMIER_SUITE",
+  "EXECUTIVE_SUITE",
+  "RESIDENTIAL_SUITE",
+  "PLAZA_SUITE",
+  "PRESIDENTIAL_SUITE",
+  "ROYAL_SUITE",
+]);
 const startDate = ref("");
 const endDate = ref("");
+
 const customerName = ref("");
+
+const dateToLocalDateTime = (beforeDate) => {
+  return (
+    beforeDate.substring(0, 4) +
+    "-" +
+    beforeDate.substring(5, 7) +
+    "-" +
+    beforeDate.substring(8, 10)
+  );
+};
 
 const getHotelReviews = async () => {
   try {
@@ -194,13 +222,21 @@ const getHotelReviews = async () => {
     if (hotel.value !== "선택 안함") {
       searchCondition.value.hotel = hotel.value;
     }
+    if (roomType.value !== "선택 안함") {
+      searchCondition.value.roomType = roomType.value;
+    }
     if (startDate.value !== "" && endDate.value !== "") {
-      searchCondition.value.startDate = startDate.value;
-      searchCondition.value.endDate = endDate.value;
+      // 2021-11-08T11:44:30.327959
+      searchCondition.value.startDate =
+        dateToLocalDateTime(startDate.value) + "T00:00:00";
+      searchCondition.value.endDate =
+        dateToLocalDateTime(endDate.value) + "T23:59:59";
     }
     if (customerName.value !== "") {
       searchCondition.value.customerName = customerName;
     }
+
+    console.log(searchCondition.value);
 
     const response = await axios.post(
       `http://localhost:8080/api/hotel/reviews/${current.value - 1}`,
