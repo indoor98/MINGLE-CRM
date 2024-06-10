@@ -48,10 +48,24 @@ const linksList = [
     icon: "school",
     to: "/review",
   },
+  {
+
+    title: "바우처",
+    caption: "바우처 탭",
+    icon: "school",
+    to: "/voucher",
+  },
+  {
+    title: "상담",
+    caption: "상담 탭",
+    icon: "school",
+    to: "/inquiry",
+  },
 ];
 
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+  //
 }
 </script>
