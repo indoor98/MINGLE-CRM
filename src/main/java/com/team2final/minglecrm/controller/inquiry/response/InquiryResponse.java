@@ -1,6 +1,9 @@
 package com.team2final.minglecrm.controller.inquiry.response;
 
 import com.team2final.minglecrm.entity.inquiry.ActionStatus;
+import com.team2final.minglecrm.entity.inquiry.Inquiry;
+import com.team2final.minglecrm.entity.inquiry.InquiryAction;
+import com.team2final.minglecrm.entity.inquiry.InquiryReply;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -32,4 +35,24 @@ public class InquiryResponse {
         this.inquiryContent = inquiryContent;
         this.actionStatus = actionStatus;
     }
+
+    public static InquiryResponse of(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
+        String employName = (inquiryReply != null) ? inquiryReply.getEmployee().getName() : null;
+        boolean isReply = (inquiryReply != null); // 답변이 있으면 true
+        ActionStatus actionStatus = (inquiryAction != null) ? inquiryAction.getActionStatus() : ActionStatus.UNKNOWN;
+
+        return InquiryResponse.builder()
+                .id(inquiry.getId())
+                .customerName(inquiry.getCustomer().getName())
+                .customerPhone(inquiry.getCustomer().getPhone())
+                .date(inquiry.getDate())
+                .type(inquiry.getType())
+                .employName(employName)
+                .inquiryTitle(inquiry.getInquiryTitle())
+                .inquiryContent(inquiry.getInquiryContent())
+                .isReply(isReply)
+                .actionStatus(actionStatus)
+                .build();
+    }
+
 }
