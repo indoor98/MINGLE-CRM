@@ -49,7 +49,7 @@ public class VoucherService {
                 .employee(employee)
                 .customer(customer)
                 .amount(request.getAmount())
-                .createDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .expiredDate(LocalDateTime.now().plusYears(1))
                 .voucherCode(createdVoucherCode)
                 .build();

@@ -28,7 +28,7 @@ public class VoucherResponse {
                 voucher.getEmployee().getId(),
                 voucher.getEmployee().getName(),
                 voucher.getAmount(),
-                voucher.getCreateDate(),
+                voucher.getCreatedDate(),
                 voucher.getExpiredDate(),
                 voucher.getVoucherCode());
     }
