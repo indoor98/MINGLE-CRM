@@ -2,14 +2,36 @@
   <q-layout view="hHh lpR lff">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar>
-          Title
-        </q-toolbar-title>
-      </q-toolbar>
+      <q-btn flat round dense icon="menu" class="q-mr-sm" @click="toggleLeftDrawer" />
+      <q-avatar>
+        <q-img
+          src="https://github.com/kinggodgeneralteam2/TEAM2-MINGLE-CRM/assets/155680893/d2c27cc2-d62e-4459-9e66-c46426da8fac"
+        />
+      </q-avatar>
+
+      <q-toolbar-title shrink class="text-subtitle1 text-weight-bolder">
+        Mingle CRM
+      </q-toolbar-title>
+      <q-space />
+      <div class="search row items-center">
+        
+      </div>
+      <q-space />
+      <q-btn
+        outline
+        rounded
+        color="accent"
+        icon="account_circle"
+        label="회원가입 "
+      />
+      <q-btn
+        outline
+        rounded
+        color="accent"
+        icon="account_circle"
+        label="로그인"
+      />
+    </q-toolbar>
     </q-header>
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <q-list>
