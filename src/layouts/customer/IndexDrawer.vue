@@ -9,7 +9,7 @@
     <q-scroll-area class="fit">
       <q-list>
         <template v-for="(menuItem, index) in menuList1" :key="index">
-          <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple>
+          <q-item clickable :to="menuItem.to" v-ripple>
             <q-item-section avatar>
               <q-icon :name="menuItem.icon" />
             </q-item-section>
@@ -33,26 +33,31 @@ const menuList1 = [
     icon: 'person',
     label: '고객',
     separator: false,
+    to: "/mingle/customer",
   },
   {
     icon: 'calendar_today',
     label: '예약',
     separator: false,
+    // to: "/mingle/reservation",
   },
   {
     icon: 'chat',
     label: '상담',
     separator: false,
+    // to: "/mingle/consultation",
   },
   {
     icon: 'attach_money',
     label: '판매',
     separator: false,
+    // to: "/mingle/sales",
   },
   {
     icon: 'insert_chart',
     label: '통계',
     separator: true,
+    // to: "/mingle/statistics",
   },
 ];
 </script>
