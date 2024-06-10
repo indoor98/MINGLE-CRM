@@ -30,7 +30,7 @@ public class VoucherHistoryResponse {
                 voucherHistory.getRequestDate(),
                 voucherHistory.getIsAuth(),
                 voucherHistory.getAuthDate(),
-                voucherHistory.getIsConvertedYn(),
+                voucherHistory.getIsConverted(),
                 voucherHistory.getConversionDate(),
                 voucherHistory.getEmployeeStaff().getId(),
                 employeeManagerId,

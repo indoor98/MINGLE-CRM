@@ -35,12 +35,12 @@ public class VoucherHistory {
     private LocalDateTime authDate;
 
     @ColumnDefault("false")
-    private Boolean isConvertedYn;
+    private Boolean isConverted;
 
     private LocalDateTime conversionDate;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", nullable = true)
     private Employee employeeManager;
 
     @ManyToOne(fetch = LAZY)
@@ -52,12 +52,12 @@ public class VoucherHistory {
     private Customer customer;
 
     @Builder
-    public VoucherHistory(Voucher voucher, LocalDateTime requestDate, Boolean isAuth, LocalDateTime authDate, Boolean isConvertedYn, LocalDateTime conversionDate, Employee employeeManager, Employee employeeStaff, Customer customer) {
+    public VoucherHistory(Voucher voucher, LocalDateTime requestDate, Boolean isAuth, LocalDateTime authDate, Boolean isConverted, LocalDateTime conversionDate, Employee employeeManager, Employee employeeStaff, Customer customer) {
         this.voucher = voucher;
         this.requestDate = requestDate;
         this.isAuth = isAuth;
         this.authDate = authDate;
-        this.isConvertedYn = isConvertedYn;
+        this.isConverted = isConverted;
         this.conversionDate = conversionDate;
         this.employeeManager = employeeManager;
         this.employeeStaff = employeeStaff;
