@@ -6,6 +6,10 @@ const routes = [
       { path: "", component: () => import("pages/IndexPage.vue") },
       { path: "customer", component: () => import("pages/CustomerPage.vue") },
       { path: "review", component: () => import("pages/ReviewPage.vue") },
+      {
+        path: "voucher",
+        component: () => import("src/pages/voucher/VoucherPage.vue"),
+      },
       { path: "inquiry", component: () => import("pages/InquiryPage.vue") },
       {
         path: "inquiry/:inquiryId",
@@ -21,6 +25,7 @@ const routes = [
     path: "/mingle",
     component: () => import("layouts/customer/Index.vue"),
     children: [
+      { path: "", component: () => import("pages/IndexPage.vue") },
       { path: "customer", component: () => import("pages/customer/CustomerPage.vue") },
       { path: "customer-detail/:id", component: () => import("pages/customer/CustomerDetailPage.vue") },
       // { path: "reservation", component: () => import("pages/customer/ReservationPage.vue") },  // 추가
