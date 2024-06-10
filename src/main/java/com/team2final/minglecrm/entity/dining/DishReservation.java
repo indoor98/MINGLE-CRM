@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -36,6 +37,9 @@ public class DishReservation {
     private Long totalPrice;
 
     private LocalDateTime visitDate;
+
+    @OneToMany(mappedBy = "dishReservation")
+    private List<DishReservationDetail> dishReservationDetails;
 
     public void updateDishReservation(UpdateDiningReservationRequest updateDiningReservationRequest) {
 

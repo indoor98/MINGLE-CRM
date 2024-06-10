@@ -20,7 +20,7 @@ public class Dish {
     private String name;
     private Long price;
 
-    @OneToMany
+    @OneToMany(mappedBy = "dish")
     private List<DishReservationDetail> dishReservations;
 
 }
