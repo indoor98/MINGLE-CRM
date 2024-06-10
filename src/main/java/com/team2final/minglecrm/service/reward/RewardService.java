@@ -4,7 +4,6 @@ import com.team2final.minglecrm.controller.reward.response.RewardHistoryResponse
 import com.team2final.minglecrm.controller.reward.response.RewardResponse;
 import com.team2final.minglecrm.entity.reward.Reward;
 import com.team2final.minglecrm.entity.reward.RewardHistory;
-import com.team2final.minglecrm.persistence.repository.customer.CustomerRepository;
 import com.team2final.minglecrm.persistence.repository.reward.RewardHistoryRepository;
 import com.team2final.minglecrm.persistence.repository.reward.RewardRepository;
 import lombok.RequiredArgsConstructor;

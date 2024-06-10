@@ -1,9 +1,7 @@
 package com.team2final.minglecrm.controller.reward.response;
 
 import com.team2final.minglecrm.entity.reward.VoucherHistory;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;

@@ -32,16 +32,16 @@ public class Voucher {
     private Customer customer;
 
     private Long amount;
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
     private LocalDateTime expiredDate;
     private String voucherCode;
 
     @Builder
-    public Voucher(Employee employee, Customer customer, Long amount, LocalDateTime createDate, LocalDateTime expiredDate, String voucherCode) {
+    public Voucher(Employee employee, Customer customer, Long amount, LocalDateTime createdDate, LocalDateTime expiredDate, String voucherCode) {
         this.employee = employee;
         this.customer = customer;
         this.amount = amount;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
         this.expiredDate = expiredDate;
         this.voucherCode = voucherCode;
     }

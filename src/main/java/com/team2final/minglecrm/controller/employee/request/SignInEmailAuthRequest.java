@@ -2,7 +2,6 @@ package com.team2final.minglecrm.controller.employee.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Getter
 @RequiredArgsConstructor

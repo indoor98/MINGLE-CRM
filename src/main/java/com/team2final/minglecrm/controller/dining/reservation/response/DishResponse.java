@@ -1,7 +1,6 @@
 package com.team2final.minglecrm.controller.dining.reservation.response;
 
 import com.team2final.minglecrm.entity.dining.Dish;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

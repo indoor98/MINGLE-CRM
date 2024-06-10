@@ -1,8 +1,6 @@
 package com.team2final.minglecrm.entity.customer.preference;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public enum CustomerPreferenceType {
