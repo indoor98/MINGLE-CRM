@@ -70,6 +70,5 @@ public class EventService {
                 .findByEmail(customerEmail).orElseThrow(Exception::new);
 
         EmailLog emailLog = emailLogRepository.findByEventAndCustomer(event, customer);
-        emailLog.readCheck();
     }
 }

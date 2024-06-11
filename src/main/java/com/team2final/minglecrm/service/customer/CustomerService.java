@@ -5,15 +5,14 @@ import com.team2final.minglecrm.controller.customer.response.CustomerResponse;
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.persistence.repository.customer.CustomerRepository;
 import com.team2final.minglecrm.persistence.repository.employee.EmployeeRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

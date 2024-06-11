@@ -31,11 +31,22 @@ public class Event {
 
     private LocalDateTime sentDate;
 
+    private Long sendCount;
+
+    private Long readCount;
+
     @Builder
-    public Event(String title, String content, Employee employee, LocalDateTime sentDate) {
+    public Event(String title, String content, Employee employee, LocalDateTime sentDate, Long sendCount) {
         this.title = title;
         this.content = content;
         this.employee = employee;
         this.sentDate = sentDate;
+        this.sendCount = sendCount;
+        this.readCount = 0L;
+    }
+
+    public Long increaseReadCount() {
+        this.readCount += 1;
+        return readCount;
     }
 }

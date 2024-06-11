@@ -4,12 +4,13 @@ import com.team2final.minglecrm.controller.dining.reservation.request.UpdateDini
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.payment.Payment;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -33,7 +34,14 @@ public class DishReservation {
     private LocalDateTime reservationDate;
 
     private Integer visitorCount;
-    private Integer totalPrice;
+    private Long totalPrice;
+
+    private LocalDateTime visitDate;
+
+    private String restaurant;
+
+    @OneToMany(mappedBy = "dishReservation")
+    private List<DishReservationDetail> dishReservationDetails;
 
     public void updateDishReservation(UpdateDiningReservationRequest updateDiningReservationRequest) {
 
@@ -41,5 +49,15 @@ public class DishReservation {
 
     public void cancelDishReservation() {
         this.payment.cancelReservation(true);
+    }
+
+
+    @Builder
+    public DishReservation(Long totalPrice, LocalDateTime reservationDate, Customer customer, Integer visitCount, String restaurant) {
+        this.totalPrice = totalPrice;
+        this.reservationDate = reservationDate;
+        this.customer = customer;
+        this.visitorCount = visitCount;
+        this.restaurant = restaurant;
     }
 }

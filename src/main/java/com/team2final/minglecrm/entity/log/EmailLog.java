@@ -31,20 +31,9 @@ public class EmailLog {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    private LocalDateTime isRead;
-
-    private LocalDateTime isClickedLink;
-
     @Builder
     public EmailLog(Event event, Customer customer) {
         this.event = event;
         this.customer = customer;
-        this.isRead = null;
-        this.isClickedLink = null;
     }
-
-    public void readCheck() {
-        this.isRead = LocalDateTime.now();
-    }
-
 }

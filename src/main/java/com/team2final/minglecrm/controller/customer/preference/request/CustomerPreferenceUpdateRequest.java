@@ -3,7 +3,6 @@ package com.team2final.minglecrm.controller.customer.preference.request;
 import lombok.Getter;
 
 import java.sql.Time;
-import java.time.LocalDateTime;
 
 @Getter
 public class CustomerPreferenceUpdateRequest {

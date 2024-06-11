@@ -12,9 +12,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiningReservationResponse {
 
-    // 상태, 총 가격, 예약 날짜
-    private final Integer totalPrice;
+    // 상태, 총 가격, 예약 날짜, 방문 일자
+    private final Long totalPrice;
     private final LocalDateTime reservationDate;
+    private final LocalDateTime visitDate;
 
     // 식사 상품 이름, 식사 가격, 식사 상품 개수
     private final List<DishResponse> dishes;
@@ -27,6 +28,7 @@ public class DiningReservationResponse {
         return new DiningReservationResponse(
                 dishReservation.getTotalPrice(),
                 dishReservation.getReservationDate(),
+                dishReservation.getVisitDate(),
                 dishResponses
         );
     }
