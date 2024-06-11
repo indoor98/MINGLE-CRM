@@ -9,18 +9,39 @@ const routes = [
         path: "voucher",
         component: () => import("src/pages/voucher/VoucherPage.vue"),
       },
-      { path: "inquiry", component: () => import("pages/InquiryPage.vue") },
+      {
+        path: "inquiry",
+        component: () => import("src/pages/inquiry/InquiryPage.vue"),
+      },
       {
         path: "inquiry/:inquiryId",
         name: "InquiryDetailPage",
-        component: () => import("pages/InquiryDetailPage.vue"),
+        component: () => import("src/pages/inquiry/InquiryDetailPage.vue"),
         props: true,
+        children: [
+          {
+            path: "reply",
+            component: () => import("src/pages/inquiry/InquiryReply.vue"),
+          },
+        ],
       },
-      { path: "customers/:customerId/hotel/reservations", component: () => import("pages/reservation/ReservationPage.vue") },
-      { path: "customers/:customerId/hotel/reservations/:reservationId", component: () => import("pages/reservation/ReservationPage.vue") },
+      {
+        path: "customers/:customerId/hotel/reservations",
+        component: () => import("pages/reservation/ReservationPage.vue"),
+      },
+      {
+        path: "customers/:customerId/hotel/reservations/:reservationId",
+        component: () => import("pages/reservation/ReservationPage.vue"),
+      },
       { path: "", component: () => import("pages/IndexPage.vue") },
-      { path: "customer", component: () => import("pages/customer/CustomerPage.vue") },
-      { path: "customer-detail/:id", component: () => import("pages/customer/CustomerDetailPage.vue") },
+      {
+        path: "customer",
+        component: () => import("pages/customer/CustomerPage.vue"),
+      },
+      {
+        path: "customer-detail/:id",
+        component: () => import("pages/customer/CustomerDetailPage.vue"),
+      },
     ],
   },
   {

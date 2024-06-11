@@ -1,42 +1,37 @@
 <template>
-  <q-page class="q-pa-xl">
-    <section>
-      <div class="text-h4">상담</div>
-      <q-separator class="q-my-md" />
-      <q-input filled v-model="filter" label="Search" class="q-mb-md" />
-      <!-- 검색 입력 필드 생성
+  <div>
+    <q-input filled v-model="filter" label="Search" class="q-mb-md" />
+    <!-- 검색 입력 필드 생성
       v-model을 통해 filter 변수와 양방향 바인딩
       사용자가 입력한 검색어를 filter 변수에 저장
       @request 이벤트 : 사용자가 페이지를 변경할 때마다 fetchInquiries 함수 호출-->
-      <q-table
-        :rows="filteredInquiries"
-        :columns="columns"
-        row-key="id"
-        :loading="loading"
-        :pagination="pagination"
-        @request="fetchInquiries"
-        @row-click="onRowClick"
-      />
-      <!-- 페이지네이션 버튼 -->
-      <q-pagination
-        :page="pagination.page"
-        :rows-per-page="pagination.rowsPerPage"
-        :rows-number="pagination.rowsNumber"
-        @page-change="fetchInquiries"
-        class="q-mt-md"
-        color="primary"
-        boundary-links
-        :max-pages="5"
-        layout="pages"
-      />
-    </section>
-  </q-page>
+    <q-table
+      :rows="filteredInquiries"
+      :columns="columns"
+      row-key="id"
+      :loading="loading"
+      :pagination="pagination"
+      @request="fetchInquiries"
+      @row-click="onRowClick"
+    />
+    <q-pagination
+      :page="pagination.page"
+      :rows-per-page="pagination.rowsPerPage"
+      :rows-number="pagination.rowsNumber"
+      @page-change="fetchInquiries"
+      class="q-mt-md"
+      color="primary"
+      boundary-links
+      :max-pages="5"
+      layout="pages"
+    />
+  </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import { useRouter } from "vue-router";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 const inquiries = ref([]); // 데이터를 저장하는 반응형 변수
 const loading = ref(false); // 데이터 로딩 상태를 나타냄
@@ -143,13 +138,12 @@ const fetchInquiries = async () => {
   } catch (error) {
     console.error("문의를 가져오지 못했습니다. :", error);
   } finally {
-    // 로딩 상태 종료
-    loading.value = false;
+    loading.value = false; // 로딩 상태 종료
   }
 };
 
 const onRowClick = (event, row) => {
-  console.log("선택한 문의 상세 정보:", row); // 디버깅용 로그
+  console.log("선택한 문의 상세 정보:", row);
   if (row && row.id) {
     router.push({ name: "InquiryDetailPage", params: { inquiryId: row.id } });
   } else {
@@ -211,7 +205,7 @@ $secondary-color: #6c757d;
   }
 
   .q-pagination__item:hover {
-    background-color: $secondary-color; // 호버 효과 색상
+    background-color: $secondary-color;
   }
 }
 </style>

@@ -78,30 +78,37 @@
         </q-card>
 
         <!-- 답변 정보 -->
-        <q-card class="q-mb-md">
+        <q-card v-if="inquiryDetail.inquiryReplyResponse">
           <q-card-section>
             <div class="text-h6">답변 정보</div>
             <q-separator />
             <q-list>
-              <q-item v-if="inquiryDetail.inquiryReplyResponse">
+              <q-item>
                 <q-item-section
                   >답변 담당자 이메일:
                   {{ inquiryDetail.inquiryReplyResponse.email }}</q-item-section
                 >
               </q-item>
-              <q-item v-if="inquiryDetail.inquiryReplyResponse">
+              <q-item>
                 <q-item-section
                   >답변 내용:
                   {{ inquiryDetail.inquiryReplyResponse.reply }}</q-item-section
                 >
               </q-item>
-              <q-item v-if="inquiryDetail.inquiryReplyResponse">
+              <q-item>
                 <q-item-section
                   >답변 날짜:
                   {{ inquiryDetail.inquiryReplyResponse.date }}</q-item-section
                 >
               </q-item>
             </q-list>
+          </q-card-section>
+        </q-card>
+
+        <q-card v-else>
+          <q-card-section>
+            <div class="text-h6">답변 등록</div>
+            <component :is="InquiryReply" :inquiry-id="parseInt(inquiryId)" />
           </q-card-section>
         </q-card>
 
@@ -153,6 +160,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
+import InquiryReply from "src/pages/inquiry/InquiryReply.vue";
 
 const route = useRoute();
 const inquiryId = route.params.inquiryId;
