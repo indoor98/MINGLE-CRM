@@ -15,6 +15,7 @@ public class RewardHistoryResponse {
     private final Long amount;
     private final String reason;
     private final LocalDateTime date;
+    private final String type;
 
     public static RewardHistoryResponse of(RewardHistory rewardHistory){
         Long voucherId = rewardHistory.getVoucher() != null ? rewardHistory.getVoucher().getId() : null;
@@ -28,7 +29,8 @@ public class RewardHistoryResponse {
                 voucherId,
                 rewardHistory.getAmount(),
                 rewardHistory.getReason(),
-                rewardHistory.getDate()
+                rewardHistory.getDate(),
+                rewardHistory.getType()
         );
     }
 

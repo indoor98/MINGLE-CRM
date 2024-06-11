@@ -20,6 +20,7 @@ public class VoucherHistoryResponse {
     private final Long approverId;
     private final Long customerId;
     private final Long amount;
+    private final String voucherCode;
 
 
     public static VoucherHistoryResponse of(VoucherHistory voucherHistory){
@@ -35,7 +36,8 @@ public class VoucherHistoryResponse {
                 voucherHistory.getEmployeeStaff().getId(),
                 employeeManagerId,
                 voucherHistory.getCustomer().getId(),
-                voucherHistory.getVoucher().getAmount()
+                voucherHistory.getVoucher().getAmount(),
+                voucherHistory.getVoucher().getVoucherCode()
         );
     }
 }

@@ -8,11 +8,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RewardResponse {
     private final Long customerId;
+    private final String customerName;
     private final Long amount;
 
     public static RewardResponse of (Reward reward){
         return new RewardResponse(
                 reward.getCustomer().getId(),
+                reward.getCustomer().getName(),
                 reward.getAmount()
         );
     }
