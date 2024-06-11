@@ -38,6 +38,7 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.OK).body(new SignInValidResponse("failed", false));
         }
     }
+
     @PostMapping("/api/v1/auth/signin/email")
     public ResponseEntity<SignInEmailAuthResponse> SignInEmailAuth(@RequestBody SignInEmailAuthRequest request) throws MessagingException {
         try {

@@ -40,7 +40,7 @@ public class EmployeeService {
         }
 
         String encodedPassword = passwordEncoder.encode(password);
-        com.team2final.minglecrm.entity.employee.Employee employee = com.team2final.minglecrm.entity.employee.Employee.builder()
+        Employee employee = Employee.builder()
                 .email(signUpRequest.getEmail())
                 .password(encodedPassword)
                 .name(signUpRequest.getName())
