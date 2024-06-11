@@ -21,6 +21,12 @@ import java.util.List;
 public class RewardController {
     private final RewardService rewardService;
 
+    @GetMapping
+    public ResponseEntity<List<RewardResponse>> getRewards() {
+        List<RewardResponse> rewards = rewardService.getAllRewards();
+        return ResponseEntity.status(HttpStatus.OK).body(rewards);
+    }
+
     @GetMapping("/{customerId}")
     public ResponseEntity<ResultResponse<RewardResponse>> getReward(@PathVariable("customerId") Long customerId) {
         RewardResponse reward = rewardService.getReward(customerId);
