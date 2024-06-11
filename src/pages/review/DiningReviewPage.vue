@@ -37,15 +37,9 @@
       </q-input>
       <q-select
         class="q-mb-md"
-        v-model="hotel"
-        :options="hotelOptions"
-        label="호텔 지점"
-      />
-      <q-select
-        class="q-mb-md"
-        v-model="roomType"
-        :options="roomTypeOptions"
-        label="룸 타입"
+        v-model="restaurant"
+        :options="restaurantOptions"
+        label="식당"
       />
       <!-- <q-input
           bottom-slots
@@ -80,7 +74,7 @@
             icon="search"
             @click="
               () => {
-                getHotelReviews();
+                getDiningReviews();
               }
             "
           />
@@ -115,9 +109,7 @@
           <q-card class="my-card">
             <q-card-section>
               <div class="row">
-                <div class="q-mb-sm">{{ review.hotel }}</div>
-                <q-space></q-space>
-                <div class="q-mb-sm">{{ review.roomType }}</div>
+                <div class="q-mb-sm">{{ review.restaurant }}</div>
                 <q-space></q-space>
                 <div>{{ review.createdTime.substring(0, 10) }}</div>
               </div>
@@ -126,10 +118,10 @@
                   <div class="q-mb-sm">{{ review.customerName }}</div>
                 </div>
                 <div class="col q-px-lg">
-                  <div>친절도</div>
+                  <div>맛</div>
                   <q-rating
                     size="15px"
-                    v-model="review.kindnessRating"
+                    v-model="review.tasteRating"
                     :max="5"
                     color="primary"
                   />
@@ -142,17 +134,17 @@
                   />
                 </div>
                 <div class="col">
-                  <div>편의성</div>
+                  <div>친절도</div>
                   <q-rating
                     size="15px"
-                    v-model="review.convenienceRating"
+                    v-model="review.kindnessRating"
                     :max="5"
                     color="primary"
                   />
-                  <div>위치 만족도</div>
+                  <div>분위기</div>
                   <q-rating
                     size="15px"
-                    v-model="review.locationRating"
+                    v-model="review.atmosphereRating"
                     :max="5"
                     color="primary"
                   />
@@ -160,8 +152,11 @@
               </div>
             </q-card-section>
 
-            <q-card-section class="scroll" style="max-height: 300px">
-              {{ review.comment }}
+            <q-card-section
+              class="scroll"
+              style="min-height: 100px; max-height: 100px"
+            >
+              {{ review.review }}
             </q-card-section>
           </q-card>
         </div>
@@ -185,45 +180,35 @@ import axios from "axios"; // axios 모듈을 기본 내보내기로 임포트
 
 const current = ref(1);
 const reviews = ref([]);
-const hotel = ref("선택 안함");
-const hotelOptions = ref(["선택 안함", "SEOUL", "SOKCHO", "BUSAN"]);
-const roomType = ref("선택 안함");
-const roomTypeOptions = ref([
+const restaurant = ref("선택 안함");
+const restaurantOptions = ref([
   "선택 안함",
-  "SUPERIOR",
-  "DELUXE_DOUBLE",
-  "DELUXE_TWIN",
-  "PREMIER_SUITE",
-  "EXECUTIVE_SUITE",
-  "RESIDENTIAL_SUITE",
-  "PLAZA_SUITE",
-  "PRESIDENTIAL_SUITE",
-  "ROYAL_SUITE",
+  "담소정",
+  "하나미 스시",
+  "Château d Étoiles",
+  "Bella Vista",
 ]);
 const startDate = ref("");
 const endDate = ref("");
 
 const customerName = ref("");
 
-const dateToLocalDateTime = (beforeDate) => {
+const dateToLocalDateTime = (date) => {
   return (
-    beforeDate.substring(0, 4) +
+    date.substring(0, 4) +
     "-" +
-    beforeDate.substring(5, 7) +
+    date.substring(5, 7) +
     "-" +
-    beforeDate.substring(8, 10)
+    date.substring(8, 10)
   );
 };
 
-const getHotelReviews = async () => {
+const getDiningReviews = async () => {
   try {
     const searchCondition = ref({});
 
-    if (hotel.value !== "선택 안함") {
-      searchCondition.value.hotel = hotel.value;
-    }
-    if (roomType.value !== "선택 안함") {
-      searchCondition.value.roomType = roomType.value;
+    if (restaurant.value !== "선택 안함") {
+      searchCondition.value.restaurant = restaurant.value;
     }
     if (startDate.value !== "" && endDate.value !== "") {
       // 2021-11-08T11:44:30.327959
@@ -239,7 +224,7 @@ const getHotelReviews = async () => {
     console.log(searchCondition.value);
 
     const response = await axios.post(
-      `http://localhost:8080/api/hotel/reviews/${current.value - 1}`,
+      `http://localhost:8080/api/dining/reviews/${current.value - 1}`,
       searchCondition.value
     );
     reviews.value = response.data.data;
@@ -250,12 +235,12 @@ const getHotelReviews = async () => {
 
 // 페이지네이션 값이 변경될 때마다 getHotelReviews 함수 호출
 watch(current, () => {
-  getHotelReviews();
+  getDiningReviews();
 });
 
 // 컴포넌트가 마운트될 때 getHotelReviews 함수 호출
 onMounted(() => {
-  getHotelReviews();
+  getDiningReviews();
 });
 </script>
 
