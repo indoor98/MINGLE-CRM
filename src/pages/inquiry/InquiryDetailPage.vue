@@ -108,7 +108,10 @@
         <q-card v-else>
           <q-card-section>
             <div class="text-h6">답변 등록</div>
-            <component :is="InquiryReply" :inquiry-id="parseInt(inquiryId)" />
+            <InquiryReply
+              :inquiry-id="parseInt(inquiryId)"
+              @replySubmitted="handleReplySubmitted"
+            />
           </q-card-section>
         </q-card>
 
@@ -179,6 +182,10 @@ const fetchInquiryDetail = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleReplySubmitted = (replyData) => {
+  inquiryDetail.value.inquiryReplyResponse = replyData; // 답변 정보 업데이트
 };
 
 onMounted(fetchInquiryDetail);

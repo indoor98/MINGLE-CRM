@@ -20,7 +20,7 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
   inquiryId: {
@@ -28,6 +28,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(["replySubmitted"]); // 이벤트 정의
 
 const reply = ref({
   content: "",
@@ -38,7 +40,7 @@ const submitReply = async () => {
   if (!reply.value.content) return;
   loading.value = true;
   try {
-    const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
+    // const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
     const response = await axios.post(
       `http://localhost:8080/api/v1/inquiries/reply`,
       {
@@ -53,6 +55,7 @@ const submitReply = async () => {
       }
     );
     console.log("답변 등록 성공:", response.data);
+    emit("replySubmitted", response.data.data); // 이벤트 발생
   } catch (error) {
     console.error("답변 등록 실패:", error.response?.data || error.message);
   } finally {
