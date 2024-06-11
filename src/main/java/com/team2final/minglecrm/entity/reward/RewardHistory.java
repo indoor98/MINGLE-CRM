@@ -21,15 +21,15 @@ public class RewardHistory {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "reward_id")
+    @JoinColumn(name = "reward_id", nullable = true)
     private Reward reward;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "payment_id")
+    @JoinColumn(name = "payment_id", nullable = true)
     private Payment payment;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "voucher_id")
+    @JoinColumn(name = "voucher_id", nullable = true)
     private Voucher voucher;
 
     private String type; // 적립인지 사용인지 바우처->리워드 전환인지

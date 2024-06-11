@@ -11,7 +11,6 @@ import com.team2final.minglecrm.persistence.repository.employee.EmployeeReposito
 import com.team2final.minglecrm.persistence.repository.reward.VoucherHistoryRepository;
 import com.team2final.minglecrm.persistence.repository.reward.VoucherRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -34,7 +32,7 @@ public class VoucherService {
     private final VoucherHistoryRepository voucherHistoryRepository;
 
     @Transactional
-    public VoucherResponse createVoucher(VoucherCreateRequest request) {
+    public VoucherResponse saveVoucher(VoucherCreateRequest request) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
@@ -51,7 +49,7 @@ public class VoucherService {
                 .employee(employee)
                 .customer(customer)
                 .amount(request.getAmount())
-                .createDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .expiredDate(LocalDateTime.now().plusYears(1))
                 .voucherCode(createdVoucherCode)
                 .build();
@@ -87,7 +85,7 @@ public class VoucherService {
     }
 
     @Transactional
-    public List<VoucherResponse> voucherList(){
+    public List<VoucherResponse> getAllVouchers(){
         List<Voucher> vouchers = voucherRepository.findAll();
         return vouchers.stream()
                 .map(VoucherResponse::of)
@@ -95,13 +93,37 @@ public class VoucherService {
     }
 
     @Transactional
-    public List<VoucherHistoryResponse> customerVoucherList(Long customerId){
+    public List<VoucherHistoryResponse> getAllRequestedVouchers(){
+        List<VoucherHistory> voucherHistories = voucherHistoryRepository.findByIsAuthFalse();
+        return voucherHistories.stream()
+                .map(VoucherHistoryResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<VoucherHistoryResponse> getAllVoucherHistories(){
+        List<VoucherHistory> voucherHistories = voucherHistoryRepository.findAll();
+        return voucherHistories.stream()
+                .map(VoucherHistoryResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<VoucherHistoryResponse> getCustomerVouchers(Long customerId){
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(()-> new RuntimeException("해당 ID의 고객을 찾을 수 없습니다."));
         List<VoucherHistory> voucherHistories = voucherHistoryRepository.findAllByCustomer(customer);
         return voucherHistories.stream()
                 .map(VoucherHistoryResponse::of)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public VoucherHistoryResponse getCustomerVoucher(Long customerId, Long voucherId){
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()-> new RuntimeException("해당 ID의 고객을 찾을 수 없습니다."));
+        VoucherHistory voucherHistory = voucherHistoryRepository.findByCustomerAndVoucherId(customer, voucherId);
+        return VoucherHistoryResponse.of(voucherHistory);
     }
 
 
@@ -122,34 +144,35 @@ public class VoucherService {
                 .employeeStaff(employee)
                 .requestDate(LocalDateTime.now())  // 현재 시간을 requestDate로 설정
                 .isAuth(false)
-                .isConvertedYn(false)
+                .isConverted(false)
                 .build();
 
         voucherHistoryRepository.save(voucherHistory);
 
         return VoucherRequestResponse.of(voucherHistory);
     }
-    
+
     @Transactional
     public VoucherApprovalResponse approveVoucher(Long voucherId){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        Employee approver = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+//        Employee approver = employeeRepository.findByEmail(userEmail)
+//                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
 
         VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId).
                 orElseThrow(() -> new RuntimeException("해당 ID의 바우처의 히스토리를 찾을 수 없습니다."));
 
-        voucherHistory.approveVoucher(approver);
+//        voucherHistory.approveVoucher(approver);
+        voucherHistory.approveVoucher();
         voucherHistoryRepository.save(voucherHistory);
 
         return VoucherApprovalResponse.of(voucherHistory);
     }
 
     @Transactional
-    public List<VoucherStatusResponse> voucherStatusList(){
+    public List<VoucherStatusResponse> getVouchersStatus(){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
@@ -173,7 +196,7 @@ public class VoucherService {
                 status = "요청 전";
             }
 
-            VoucherStatusResponse voucherStatus = new VoucherStatusResponse(voucher.getId(), status);
+            VoucherStatusResponse voucherStatus = VoucherStatusResponse.of(voucher, status);
             voucherStatusList.add(voucherStatus);
         }
 

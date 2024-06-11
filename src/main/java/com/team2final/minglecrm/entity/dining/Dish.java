@@ -1,11 +1,12 @@
 package com.team2final.minglecrm.entity.dining;
 
+import com.team2final.minglecrm.persistence.repository.dining.DishReservationDetailRepository;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.FetchType.LAZY;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,11 +18,9 @@ public class Dish {
     private Long id;
 
     private String name;
-    private Integer amount;
     private Long price;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "dish_reservation_id")
-    private DishReservation dishReservation;
+    @OneToMany(mappedBy = "dish")
+    private List<DishReservationDetail> dishReservations;
 
 }

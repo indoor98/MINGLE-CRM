@@ -25,7 +25,7 @@ public class DishReservationService {
 
         return dishReservations.stream()
                 .map(dishReservation -> {
-                    List<Dish> dishes = dishRepository.findByDishReservationId(dishReservation.getId());
+                    List<Dish> dishes = dishRepository.findByDishReservationsId(dishReservation.getId());
                     return DiningReservationResponse.of(dishReservation, dishes);
                 })
                 .collect(Collectors.toList());
@@ -34,7 +34,7 @@ public class DishReservationService {
     public DiningReservationResponse findReservationById(Long customerId, Long reservationId) {
         DishReservation dishReservation = getDishReservation(reservationId);
         vaildCheck(customerId, dishReservation);
-        List<Dish> dishes = dishRepository.findByDishReservationId(reservationId);
+        List<Dish> dishes = dishRepository.findByDishReservationsId(reservationId);
 
         return DiningReservationResponse.of(dishReservation, dishes);
     }

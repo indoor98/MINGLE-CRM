@@ -4,20 +4,13 @@ package com.team2final.minglecrm.entity.customer;
 import com.team2final.minglecrm.controller.customer.request.CustomerUpdateRequest;
 import com.team2final.minglecrm.entity.employee.Employee;
 import com.team2final.minglecrm.entity.reward.Reward;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import java.time.LocalDate;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -30,6 +23,8 @@ public class Customer {
     private Long id;
 
     private String name;
+
+    private String email;
 
     private String grade;
 
@@ -47,10 +42,14 @@ public class Customer {
 
     private LocalDate birth;
 
+    private LocalDate createdDate;
+
     @OneToOne(mappedBy = "customer")
     private Reward reward;
 
     private Boolean isDeleted;
+
+    private Integer visitCnt;
 
     public void updateCustomerDetail(CustomerUpdateRequest customerUpdateRequest) {
         this.name = customerUpdateRequest.getName();
@@ -70,8 +69,23 @@ public class Customer {
     }
 
     @Builder
-    public Customer(String name, String phone){
+    public Customer(Long id, String name, String grade, String email, String phone, String address, Employee employee, String memo, String gender, LocalDate birth, Reward reward, Boolean isDeleted) {
+        this.id = id;
         this.name = name;
+        this.grade = grade;
+        this.email = email;
         this.phone = phone;
+        this.address = address;
+        this.employee = employee;
+        this.memo = memo;
+        this.gender = gender;
+        this.birth = birth;
+        this.reward = reward;
+        this.isDeleted = isDeleted;
+
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

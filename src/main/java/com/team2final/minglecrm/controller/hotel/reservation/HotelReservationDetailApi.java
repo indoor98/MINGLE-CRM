@@ -6,6 +6,7 @@ import com.team2final.minglecrm.service.hotel.reservation.HotelReservationServic
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,6 +24,7 @@ public class HotelReservationDetailApi {
 
     // 호텔 전체 예약 내역
     @GetMapping()
+    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<List<RoomReservationResponse>> getReservationsList(
             @PathVariable Long customerId) {
         List<RoomReservationResponse> responses = hotelReservationService.findById(customerId);
@@ -31,6 +33,7 @@ public class HotelReservationDetailApi {
 
     // 호텔 내역 상세보기
     @GetMapping("/{reservationId}")
+    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<RoomReservationResponse> getRoomReservation(
             @PathVariable Long customerId, @PathVariable Long reservationId) {
         RoomReservationResponse roomReservationResponse = hotelReservationService.findReservationById(
@@ -42,6 +45,7 @@ public class HotelReservationDetailApi {
 
     // 호텔 내역 수정
     @PatchMapping("/{reservationId}")
+    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public void updateRoomReservation(
             @PathVariable Long customerId,
             @PathVariable Long reservationId,
@@ -53,6 +57,7 @@ public class HotelReservationDetailApi {
 
     // 호텔 내역 삭제
     @DeleteMapping("/{reservationId}")
+    @PreAuthorize("hasRole('MANAGER')")
     public void cancelRoomReservation(
             @PathVariable Long customerId,
             @PathVariable Long reservationId) {

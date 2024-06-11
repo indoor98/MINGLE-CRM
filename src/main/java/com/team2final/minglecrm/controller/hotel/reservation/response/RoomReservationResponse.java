@@ -36,20 +36,5 @@ public class RoomReservationResponse {
                 );
     }
 
-    //    @Builder
-//    public RoomReservationResponse(String state, LocalDateTime reservationDate, String name,
-//            String phoneNumber, String hotelName, String reservationType, String reservationMemo,
-//            String employeeName, String memo) {
-//        this.state = state;
-//        this.reservationDate = reservationDate;
-//        this.name = name;
-//        this.phoneNumber = phoneNumber;
-//        this.hotelName = hotelName;
-//        this.reservationType = reservationType;
-//        this.reservationMemo = reservationMemo;
-//        this.employeeName = employeeName;
-//        this.memo = memo;
-//    }
-
 
 }

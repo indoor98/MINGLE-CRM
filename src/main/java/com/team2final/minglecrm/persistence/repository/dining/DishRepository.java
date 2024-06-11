@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DishRepository extends JpaRepository<Dish, Long> {
-    List<Dish> findByDishReservationId(Long reservationId);
+//    List<Dish> findByDishReservationId(Long reservationId);
+    List<Dish> findByDishReservationsId(Long reservationId);
+
 }

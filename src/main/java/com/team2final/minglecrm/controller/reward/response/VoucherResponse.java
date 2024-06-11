@@ -1,42 +1,34 @@
 package com.team2final.minglecrm.controller.reward.response;
 
 import com.team2final.minglecrm.entity.reward.Voucher;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@RequiredArgsConstructor
 public class VoucherResponse {
-    private Long customerId;
-    private String customerName;
-    private Long employeeId;
-    private String employeeName;
-    private Long amount;
-    private LocalDateTime createDate;
-    private LocalDateTime expireDate;
-    private String voucherCode;
+    private final Long voucherId;
+    private final Long customerId;
+    private final String customerName;
+    private final Long employeeId;
+    private final String employeeName;
+    private final Long amount;
+    private final LocalDateTime createDate;
+    private final LocalDateTime expireDate;
+    private final String voucherCode;
 
-//    @Builder
-    public VoucherResponse(Long customerId, String customerName, Long employeeId, String employeeName, Long amount, LocalDateTime createDate, LocalDateTime expireDate, String voucherCode) {
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.employeeId = employeeId;
-        this.employeeName = employeeName;
-        this.amount = amount;
-        this.createDate = createDate;
-        this.expireDate = expireDate;
-        this.voucherCode = voucherCode;
-    }
 
     public static VoucherResponse of(Voucher voucher) {
         return new VoucherResponse(
+                voucher.getId(),
                 voucher.getCustomer().getId(),
                 voucher.getCustomer().getName(),
                 voucher.getEmployee().getId(),
                 voucher.getEmployee().getName(),
                 voucher.getAmount(),
-                voucher.getCreateDate(),
+                voucher.getCreatedDate(),
                 voucher.getExpiredDate(),
                 voucher.getVoucherCode());
     }
