@@ -184,8 +184,8 @@ const fetchInquiryDetail = async () => {
   }
 };
 
-const handleReplySubmitted = (replyData) => {
-  inquiryDetail.value.inquiryReplyResponse = replyData; // 답변 정보 업데이트
+const handleReplySubmitted = () => {
+  fetchInquiryDetail(); // 답변이 등록된 후, 문의 상세 정보를 새로고침
 };
 
 onMounted(fetchInquiryDetail);
