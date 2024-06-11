@@ -72,10 +72,10 @@ const columns = ref([
   },
   { name: "amount", label: "금액", align: "center", field: "amount" },
   {
-    name: "customerId",
+    name: "voucherCode",
     label: "바우처 코드",
     align: "center",
-    field: "customerId",
+    field: "voucherCode",
   },
   { name: "approve", label: "승인", align: "center" }, // 승인 컬럼 추가
 ]);
@@ -86,6 +86,7 @@ const fetchVouchers = async () => {
       "http://localhost:8080/api/v1/vouchers/requested"
     );
     vouchers.value = response.data.data;
+    console.log(vouchers.value);
     errorMessage.value = "";
   } catch (error) {
     console.error("승인 요청된 바우처 목록을 불러오는 중 에러 발생:", error);

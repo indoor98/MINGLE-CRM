@@ -6,8 +6,14 @@
         <q-tab name="histories" label="리워드 히스토리 리스트" />
       </q-tabs>
       <q-separator />
-      <div v-if="selectedTab === 'all'">
-        <RewardList />
+      <div v-if="selectedTab === 'all' && !showCustomerRewardHistory">
+        <RewardList @row-click="handleRowClick" />
+      </div>
+      <div v-else-if="selectedTab === 'all' && showCustomerRewardHistory">
+        <CustomerRewardHistory
+          :customerId="selectedCustomerId"
+          @back="handleBack"
+        />
       </div>
       <div v-else-if="selectedTab === 'histories'">
         <RewardHistoryList />
@@ -20,8 +26,20 @@
 import { ref } from "vue";
 import RewardList from "./RewardList.vue";
 import RewardHistoryList from "./RewardHistoryList.vue";
+import CustomerRewardHistory from "./CustomerRewardHistory.vue";
 
 const selectedTab = ref("all");
+const showCustomerRewardHistory = ref(false);
+const selectedCustomerId = ref(null);
+
+const handleRowClick = (customerId) => {
+  selectedCustomerId.value = customerId;
+  showCustomerRewardHistory.value = true;
+};
+
+const handleBack = () => {
+  showCustomerRewardHistory.value = false;
+};
 </script>
 
 <style></style>

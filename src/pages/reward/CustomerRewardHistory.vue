@@ -1,22 +1,22 @@
 <template>
   <div>
-    <h2 class="text-h6">리워드 목록</h2>
+    <q-btn flat icon="arrow_back" @click="goBack">뒤로</q-btn>
+    <h2 class="text-h6">{{ customerId }} 리워드 히스토리</h2>
     <q-card class="q-mt-md">
       <q-card-section>
         <q-table
-          :rows="rewards"
+          :rows="rewardHistories"
           :columns="columns"
           row-key="id"
           :loading="loading"
           :dense="true"
           class="q-table--dense"
           :pagination="{ rowsPerPage: 10 }"
-          @row-click="rowClicked"
         >
           <template v-slot:no-data>
             <q-tr>
               <q-td :colspan="columns.length" class="text-center"
-                >리워드가 없습니다.</q-td
+                >리워드 히스토리가 없습니다.</q-td
               >
             </q-tr>
           </template>
@@ -32,10 +32,19 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits } from "vue";
+import { ref, onMounted, watch, defineProps, defineEmits } from "vue";
 import axios from "axios";
 
-const rewards = ref([]);
+const props = defineProps({
+  customerId: {
+    type: Number,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["back"]);
+
+const rewardHistories = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 const columns = ref([
@@ -47,32 +56,42 @@ const columns = ref([
   },
   {
     name: "amount",
-    label: "잔여 리워드",
+    label: "금액",
     align: "center",
     field: "amount",
   },
 ]);
 
-const fetchRewards = async () => {
+const fetchRewardHistories = async (customerId) => {
   try {
-    const response = await axios.get("http://localhost:8080/api/v1/rewards");
-    rewards.value = response.data.data;
+    const response = await axios.get(
+      `http://localhost:8080/api/v1/rewards/history/${customerId}`
+    );
+    console.log(customerId);
+    console.log(response);
+    rewardHistories.value = response.data.data;
     errorMessage.value = "";
   } catch (error) {
-    console.error("리워드 목록을 불러오는 중 에러 발생:", error);
-    errorMessage.value = "리워드 목록을 불러오는 중 에러가 발생했습니다.";
+    console.error("리워드 히스토리를 불러오는 중 에러 발생:", error);
+    errorMessage.value = "리워드 히스토리를 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
   }
 };
 
-const emit = defineEmits(["row-click"]);
-const rowClicked = (row) => {
-  emit("row-click", row.customerId);
+const goBack = () => {
+  emit("back");
 };
 
+watch(
+  () => props.customerId,
+  (newCustomerId) => {
+    fetchRewardHistories(newCustomerId);
+  }
+);
+
 onMounted(() => {
-  fetchRewards();
+  fetchRewardHistories(props.customerId);
 });
 </script>
 
