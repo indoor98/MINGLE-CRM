@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-btn flat icon="arrow_back" @click="goBack">뒤로</q-btn>
+    <q-btn flat icon="arrow_back" @click="goBack"> 뒤로</q-btn>
     <h2 class="text-h6">{{ customerId }} 리워드 히스토리</h2>
     <q-card class="q-mt-md">
       <q-card-section>
@@ -9,8 +9,6 @@
           :columns="columns"
           row-key="id"
           :loading="loading"
-          :dense="true"
-          class="q-table--dense"
           :pagination="{ rowsPerPage: 10 }"
         >
           <template v-slot:no-data>
@@ -48,17 +46,47 @@ const rewardHistories = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 const columns = ref([
-  {
-    name: "customerId",
-    label: "회원 ID",
-    align: "center",
-    field: "customerId",
-  },
+  // {
+  //   name: "customerId",
+  //   label: "회원 ID",
+  //   align: "center",
+  //   field: "customerId",
+  // },
   {
     name: "amount",
     label: "금액",
     align: "center",
     field: "amount",
+  },
+  {
+    name: "type",
+    label: "적립/사용 상태",
+    align: "center",
+    field: "type",
+  },
+  {
+    name: "reason",
+    label: "지급 사유",
+    align: "center",
+    field: "reason",
+  },
+  {
+    name: "date",
+    label: "적립/사용 날짜",
+    align: "center",
+    field: "date",
+  },
+  {
+    name: "paymentId",
+    label: "결제 ID",
+    align: "center",
+    field: "paymentId",
+  },
+  {
+    name: "voucherId",
+    label: "전환 바우처 ID",
+    align: "center",
+    field: "voucherId",
   },
 ]);
 
@@ -83,12 +111,12 @@ const goBack = () => {
   emit("back");
 };
 
-watch(
-  () => props.customerId,
-  (newCustomerId) => {
-    fetchRewardHistories(newCustomerId);
-  }
-);
+// watch(
+//   () => props.customerId,
+//   (newCustomerId) => {
+//     fetchRewardHistories(newCustomerId);
+//   }
+// );
 
 onMounted(() => {
   fetchRewardHistories(props.customerId);

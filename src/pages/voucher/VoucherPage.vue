@@ -3,7 +3,7 @@
     <div class="q-pa-md">
       <q-tabs v-model="selectedTab" dense>
         <q-tab name="all" label="모든 리스트" />
-        <q-tab name="requested" label="승인 요청된 리스트" />
+        <q-tab name="requested" label="승인 요청된 바우처" />
         <q-tab name="histories" label="바우처 히스토리 리스트" />
       </q-tabs>
       <q-separator />
@@ -13,7 +13,7 @@
       <div v-else-if="selectedTab === 'requested'">
         <RequestedVoucherList />
       </div>
-      <div v-else>
+      <div v-else-if="selectedTab === 'histories'">
         <VoucherHistoryList />
       </div>
     </div>

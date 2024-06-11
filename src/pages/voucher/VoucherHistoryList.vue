@@ -8,8 +8,6 @@
           :columns="columns"
           row-key="id"
           :loading="loading"
-          :dense="true"
-          class="q-table--dense"
           :pagination="{ rowsPerPage: 10 }"
         >
           <template v-slot:no-data>
@@ -43,31 +41,41 @@ const columns = ref([
     label: "바우처 ID",
     align: "center",
     field: "voucherId",
+    sortable: true,
   },
   {
     name: "requestDate",
     label: "요청 날짜",
     align: "center",
     field: "requestDate",
+    sortable: true,
   },
   {
     name: "isAuth",
     label: "승인 여부",
     align: "center",
     field: "isAuth",
+    sortable: true,
   },
   {
     name: "issuerId",
-    label: "발급 직원명",
+    label: "발급 직원 ID",
     align: "center",
     field: "issuerId",
+    sortable: true,
   },
-  { name: "amount", label: "금액", align: "center", field: "amount" },
   {
-    name: "customerId",
+    name: "amount",
+    label: "금액",
+    align: "center",
+    field: "amount",
+    sortable: true,
+  },
+  {
+    name: "voucherCode",
     label: "바우처 코드",
     align: "center",
-    field: "customerId",
+    field: "voucherCode",
   },
 ]);
 

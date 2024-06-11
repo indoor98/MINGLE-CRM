@@ -8,11 +8,15 @@
           :columns="columns"
           row-key="id"
           :loading="loading"
-          :dense="true"
-          class="q-table--dense"
           :pagination="{ rowsPerPage: 10 }"
-          @row-click="rowClicked"
         >
+          <template v-slot:body="props">
+            <q-tr :props="props" @click="rowClicked(props.row)">
+              <q-td v-for="col in columns" :key="col.name" :props="props">
+                {{ props.row[col.field] }}
+              </q-td>
+            </q-tr>
+          </template>
           <template v-slot:no-data>
             <q-tr>
               <q-td :colspan="columns.length" class="text-center"
@@ -44,12 +48,21 @@ const columns = ref([
     label: "회원 ID",
     align: "center",
     field: "customerId",
+    sortable: true,
+  },
+  {
+    name: "customerName",
+    label: "회원 이름",
+    align: "center",
+    field: "customerName",
+    sortable: true,
   },
   {
     name: "amount",
     label: "잔여 리워드",
     align: "center",
     field: "amount",
+    sortable: true,
   },
 ]);
 
@@ -68,6 +81,7 @@ const fetchRewards = async () => {
 
 const emit = defineEmits(["row-click"]);
 const rowClicked = (row) => {
+  console.log("Clicked Row: " + row.customerId);
   emit("row-click", row.customerId);
 };
 
