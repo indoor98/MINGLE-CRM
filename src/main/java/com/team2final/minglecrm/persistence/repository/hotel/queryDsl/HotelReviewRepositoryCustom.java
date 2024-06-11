@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.persistence.repository.hotel;
+package com.team2final.minglecrm.persistence.repository.hotel.queryDsl;
 
 import com.team2final.minglecrm.controller.hotel.review.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.controller.hotel.review.response.HotelReviewConditionSearchResponse;

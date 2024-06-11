@@ -38,6 +38,8 @@ public class DishReservation {
 
     private LocalDateTime visitDate;
 
+    private String restaurant;
+
     @OneToMany(mappedBy = "dishReservation")
     private List<DishReservationDetail> dishReservationDetails;
 
@@ -51,10 +53,11 @@ public class DishReservation {
 
 
     @Builder
-    public DishReservation(Long totalPrice, LocalDateTime reservationDate, Customer customer, Integer visitCount) {
+    public DishReservation(Long totalPrice, LocalDateTime reservationDate, Customer customer, Integer visitCount, String restaurant) {
         this.totalPrice = totalPrice;
         this.reservationDate = reservationDate;
         this.customer = customer;
         this.visitorCount = visitCount;
+        this.restaurant = restaurant;
     }
 }

@@ -1,10 +1,9 @@
-package com.team2final.minglecrm.persistence.repository.hotel;
+package com.team2final.minglecrm.persistence.repository.hotel.queryDsl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team2final.minglecrm.controller.hotel.review.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.controller.hotel.review.response.HotelReviewConditionSearchResponse;
-import com.team2final.minglecrm.controller.hotel.review.response.HotelReviewResponse;
 import com.team2final.minglecrm.controller.hotel.review.response.QHotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.entity.customer.QCustomer;
 import com.team2final.minglecrm.entity.hotel.QHotelReview;
@@ -69,6 +68,8 @@ public class HotelReviewRepositoryCustomImpl implements HotelReviewRepositoryCus
                 .offset(pageable.getOffset()) // offset
                 .limit(pageable.getPageSize()) // limit
                 .fetch();
+
+
         return new PageImpl<>(response, pageable, response.size());
     }
 }
