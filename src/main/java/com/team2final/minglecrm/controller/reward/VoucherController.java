@@ -36,7 +36,7 @@ public class VoucherController {
     }
 
     // 승인 전&후 바우처 목록 가져오기
-    @GetMapping("histories") //@PreAuthorize("hasRole('MANAGER')")
+    @GetMapping("/histories") //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getVoucherHistories(){
         List<VoucherHistoryResponse> voucherList = voucherService.getAllVoucherHistories();
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 전&후 바우처 전체 조회 성공", voucherList));
@@ -63,8 +63,7 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 사용 가능 바우처 상세 조회 성공", voucherHistory));
     }
 
-    @PostMapping("/request/{voucherId}")
-//    @PreAuthorize("hasRole('MARKETER')")
+    @PostMapping("/request/{voucherId}") // @PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<ResultResponse<VoucherRequestResponse>> requestVoucher(@PathVariable("voucherId") Long voucherId) {
         VoucherRequestResponse voucherRequestResponse = voucherService.requestVoucher(voucherId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "바우처 승인 요청 성공", voucherRequestResponse));

@@ -22,9 +22,9 @@ public class RewardController {
     private final RewardService rewardService;
 
     @GetMapping
-    public ResponseEntity<List<RewardResponse>> getRewards() {
+    public ResponseEntity<ResultResponse<List<RewardResponse>>> getRewards() {
         List<RewardResponse> rewards = rewardService.getAllRewards();
-        return ResponseEntity.status(HttpStatus.OK).body(rewards);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(),"리워드 리스트 조회 성공", rewards));
     }
 
     @GetMapping("/{customerId}")

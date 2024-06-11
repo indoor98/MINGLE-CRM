@@ -17,10 +17,15 @@ public class RewardHistoryResponse {
     private final LocalDateTime date;
 
     public static RewardHistoryResponse of(RewardHistory rewardHistory){
+        Long voucherId = rewardHistory.getVoucher() != null ? rewardHistory.getVoucher().getId() : null;
+        Long paymentId = rewardHistory.getPayment() != null ? rewardHistory.getPayment().getId() : null;
+
         return new RewardHistoryResponse(
                 rewardHistory.getReward().getCustomer().getId(),
-                rewardHistory.getPayment().getId(),
-                rewardHistory.getVoucher().getId(),
+//                rewardHistory.getPayment().getId(),
+                paymentId,
+//                rewardHistory.getVoucher().getId(),
+                voucherId,
                 rewardHistory.getAmount(),
                 rewardHistory.getReason(),
                 rewardHistory.getDate()
