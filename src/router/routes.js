@@ -16,11 +16,31 @@ const routes = [
         component: () => import("pages/InquiryDetailPage.vue"),
         props: true,
       },
-      { path: "customers/:customerId/hotel/reservations", component: () => import("pages/reservation/ReservationPage.vue") },
-      { path: "customers/:customerId/hotel/reservations/:reservationId", component: () => import("pages/reservation/ReservationPage.vue") },
+      {
+        path: "customers/:customerId/hotel/reservations",
+        component: () => import("pages/reservation/ReservationPage.vue"),
+      },
+      {
+        path: "customers/:customerId/hotel/reservations/:reservationId",
+        component: () => import("pages/reservation/ReservationPage.vue"),
+      },
       { path: "", component: () => import("pages/IndexPage.vue") },
-      { path: "customer", component: () => import("pages/customer/CustomerPage.vue") },
-      { path: "customer-detail/:id", component: () => import("pages/customer/CustomerDetailPage.vue") },
+      {
+        path: "customer",
+        component: () => import("pages/customer/CustomerPage.vue"),
+      },
+      {
+        path: "customer-detail/:id",
+        component: () => import("pages/customer/CustomerDetailPage.vue"),
+      },
+      {
+        path: "signup",
+        component: () => import("pages/auth/SignUpPage.vue"),
+      },
+      {
+        path: "signin",
+        component: () => import("pages/auth/SignInPage.vue"),
+      },
     ],
   },
   {
