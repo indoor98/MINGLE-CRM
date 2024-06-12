@@ -128,7 +128,7 @@
         </q-card>
 
         <!-- 조치 정보 -->
-        <q-card>
+        <q-card v-if="inquiryDetail.inquiryActionResponse">
           <q-card-section>
             <div class="text-h6">조치 정보</div>
             <q-separator />
@@ -166,6 +166,16 @@
             </q-list>
           </q-card-section>
         </q-card>
+
+        <q-card v-else>
+          <q-card-section>
+            <div class="text-h6">조치 내용 등록</div>
+            <InquiryAction
+              :inquiry-id="parseInt(inquiryId)"
+              @actionSubmitted="handleActionSubmitted"
+            />
+          </q-card-section>
+        </q-card>
       </div>
     </section>
   </q-page>
@@ -177,6 +187,7 @@ import { useRoute } from "vue-router";
 import axios from "axios";
 import InquiryReply from "src/pages/inquiry/InquiryReply.vue";
 import InquiryReplyEdit from "src/pages/inquiry/InquiryReplyEdit.vue";
+import InquiryAction from "src/pages/inquiry/InquiryAction.vue";
 
 const route = useRoute();
 const inquiryId = route.params.inquiryId;
@@ -204,6 +215,10 @@ const handleReplySubmitted = () => {
 
 const handleReplyUpdated = () => {
   fetchInquiryDetail(); // 답변이 수정된 후, 문의 상세 정보를 새로고침
+};
+
+const handleActionSubmitted = () => {
+  fetchInquiryDetail(); // 조치 내용이 등록된 후, 문의 상세 정보를 새로고침
 };
 
 onMounted(fetchInquiryDetail);
