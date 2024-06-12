@@ -102,7 +102,19 @@
                 >
               </q-item>
             </q-list>
+            <q-btn
+              v-if="!isEditing"
+              label="수정"
+              color="secondary"
+              @click="isEditing = true"
+            />
           </q-card-section>
+          <InquiryReplyEdit
+            v-if="isEditing"
+            :inquiry-reply-id="inquiryDetail.inquiryReplyResponse.id"
+            :initial-reply="inquiryDetail.inquiryReplyResponse.reply"
+            @replyUpdated="handleReplyUpdated"
+          />
         </q-card>
 
         <q-card v-else>
@@ -164,12 +176,14 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import InquiryReply from "src/pages/inquiry/InquiryReply.vue";
+import InquiryReplyEdit from "src/pages/inquiry/InquiryReplyEdit.vue";
 
 const route = useRoute();
 const inquiryId = route.params.inquiryId;
 
 const inquiryDetail = ref(null);
 const loading = ref(true);
+const isEditing = ref(false);
 
 const fetchInquiryDetail = async () => {
   try {
@@ -186,6 +200,10 @@ const fetchInquiryDetail = async () => {
 
 const handleReplySubmitted = () => {
   fetchInquiryDetail(); // 답변이 등록된 후, 문의 상세 정보를 새로고침
+};
+
+const handleReplyUpdated = () => {
+  fetchInquiryDetail(); // 답변이 수정된 후, 문의 상세 정보를 새로고침
 };
 
 onMounted(fetchInquiryDetail);
