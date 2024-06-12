@@ -22,22 +22,43 @@
         <q-space />
         <div class="search row items-center"></div>
         <q-space />
-        <q-btn
-          outline
-          rounded
-          color="accent"
-          icon="account_circle"
-          label="회원가입 "
-          href="#/signup"
-        />
-        <q-btn
-          outline
-          rounded
-          color="accent"
-          icon="account_circle"
-          label="로그인"
-          href="#/signin"
-        />
+        <div v-if="atk">
+          <q-btn
+            outline
+            rounded
+            color="accent"
+            icon="account_circle"
+            label="로그아웃 "
+            to="/"
+            @click="logout"
+          />
+          <q-btn
+            outline
+            rounded
+            color="accent"
+            icon="account_circle"
+            label="마이페이지"
+            to="/mypage"
+          />
+        </div>
+        <div v-else>
+          <q-btn
+            outline
+            rounded
+            color="accent"
+            icon="account_circle"
+            label="회원가입 "
+            href="#/signup"
+          />
+          <q-btn
+            outline
+            rounded
+            color="accent"
+            icon="account_circle"
+            label="로그인"
+            href="#/signin"
+          />
+        </div>
       </q-toolbar>
     </q-header>
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
@@ -57,11 +78,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
+import { useTokenStore } from "src/stores/token-store";
+import { storeToRefs } from "pinia";
 
-defineOptions({
-  name: "MainLayout",
+const store = useTokenStore();
+
+const { atk, atkExpiration } = storeToRefs(store);
+
+watch(atk, (newVal) => {
+  console.log("atk changed: ", newVal);
+});
+
+watch(atkExpiration, (newVal) => {
+  console.log("atkExpiration : ", newVal);
 });
 
 const linksList = [
@@ -90,6 +121,15 @@ const linksList = [
     to: "/inquiry",
   },
 ];
+
+const logout = async () => {
+  try {
+    console.log("로그아웃");
+    store.setAtk("");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {

@@ -20,6 +20,7 @@
                   filled
                   type="password"
                   label="비밀번호"
+                  v-model="password"
                   hint="영문 대/소문자 포함 8자 이상"
                 ></q-input>
               </div>
@@ -29,6 +30,7 @@
                 color="primary"
                 size="lg"
                 label="로그인 하기"
+                @click="signIn"
               />
               <q-btn
                 class="full-width q-mt-md"
@@ -52,8 +54,44 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { useTokenStore } from "stores/token-store";
+import { storeToRefs } from "pinia";
+import { useQuasar } from "quasar";
 
+const store = useTokenStore();
 const email = ref("");
+const password = ref("");
+const router = useRouter();
+
+const { atk, rtkExpiration, atkExpiration } = storeToRefs(store);
+
+const signIn = async () => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/v1/auth/signintest",
+      {
+        email: email.value,
+        password: password.value,
+      },
+      {
+        withCredentials: true, // 쿠키를 포함하여 요청 보내기
+      }
+    );
+
+    // 메모리에 atk, atk 만료시간, rtk 만료시간 저장
+    store.setSigninResponse(
+      response.data.data.atk,
+      response.data.data.atkExpiration,
+      response.data.data.rtkExpiration
+    );
+
+    router.push("/");
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>
 
 <style lang="scss"></style>

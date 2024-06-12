@@ -204,7 +204,8 @@ const getHotelReviews = async () => {
 
     const response = await axios.post(
       `http://localhost:8080/api/hotel/reviews/${current.value - 1}`,
-      searchCondition.value
+      searchCondition.value,
+      { withCredentials: true }
     );
     reviews.value = response.data.data;
   } catch (error) {

@@ -54,7 +54,12 @@
             label="가입하기"
             @click="signUp"
           />
-          <q-btn class="full-width q-mt-md" flat label="로그인 하기" />
+          <q-btn
+            class="full-width q-mt-md"
+            flat
+            label="로그인 하기"
+            to="/signin"
+          />
         </q-form>
       </q-card-section>
     </q-card>
