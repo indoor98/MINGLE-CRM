@@ -60,7 +60,12 @@ public class JwtProvider {
 
         redisDao.setValues(employee.getEmail(), rtk, Duration.ofMillis(rtkLive));
 
-        return new TokenResponse("success", atk, rtk);
+        return TokenResponse.builder()
+                .atk(atk)
+                .rtk(rtk)
+                .atkExpiration(getTokenExpiration(atk))
+                .rtkExpiration(getTokenExpiration(rtk))
+                .build();
     }
 
     // 토큰 생성 로직
@@ -88,6 +93,17 @@ public class JwtProvider {
                 .getBody()
                 .getSubject();
         return objectMapper.readValue(subjectStr, Subject.class);
+    }
+
+    public Date getTokenExpiration(String token) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody().getExpiration();
+        return expiration;
+
     }
 
     /**
@@ -118,6 +134,11 @@ public class JwtProvider {
 
         // RefreshToken 갱신
         redisDao.setValues(subject.getEmail(), newRtk, Duration.ofMillis(rtkLive));
-        return new TokenResponse("success", newAtk, newRtk);
+        return TokenResponse.builder()
+                .atk(newAtk)
+                .rtk(newRtk)
+                .atkExpiration(getTokenExpiration(newAtk))
+                .rtkExpiration(getTokenExpiration(newRtk))
+                .build();
     }
 }
