@@ -31,6 +31,43 @@ public class EmployeeController {
     private final JwtProvider jwtProvider;
     private final EmailAuthService emailAuthService;
 
+    private Cookie createRefreshTokenCookie(TokenResponse tokenResponse) {
+        Cookie cookie = new Cookie("rtk", tokenResponse.getRtk());
+        cookie.setHttpOnly(true);
+//            cookie.setSecure(true); // Https 사용 시
+        cookie.setPath("/");
+
+        Date now = new Date();
+        int age = (int) (tokenResponse.getRtkExpiration().getTime() - now.getTime()) / 1000;
+        cookie.setMaxAge(age);
+
+        return cookie;
+    }
+
+    private String getRefreshTokenFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            return null; // 또는 적절한 예외 처리
+        }
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("rtk")) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+    private Cookie createDeleteCookie() {
+        // 쿠키 삭제
+        Cookie cookie = new Cookie("rtk", null); // 쿠키 이름과 값을 설정
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // 쿠키 만료 시간 설정 (0으로 설정하면 쿠키가 삭제됨)
+        return cookie;
+    }
+
     @PostMapping("/api/v1/auth/signup")
     public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest requestDTO) {
         SignUpResponse responseDTO = employeeService.signUp(requestDTO);
@@ -72,14 +109,7 @@ public class EmployeeController {
         if(employeeService.isValidEmailAndPassword(request)) {
             TokenResponse tokenResponse = jwtProvider.createTokensBySignIn(request.getEmail());
 
-            Cookie cookie = new Cookie("rtk", tokenResponse.getRtk());
-            cookie.setHttpOnly(true);
-//            cookie.setSecure(true); // Https 사용 시
-            cookie.setPath("/");
-
-            Date now = new Date();
-            int age = (int) (tokenResponse.getRtkExpiration().getTime() - now.getTime()) / 1000;
-            cookie.setMaxAge(age);
+            Cookie cookie = createRefreshTokenCookie(tokenResponse);
             response.addCookie(cookie);
 
             return new ResultResponse<>(HttpStatus.OK.value(), "success", AccessTokenResponse.builder()
@@ -94,17 +124,18 @@ public class EmployeeController {
 
     @GetMapping("/api/v1/auth/renew")
     public ResultResponse<AccessTokenResponse> reNew(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
-        String rtk = request.getHeader("Authorization").substring(7);
-        TokenResponse tokenResponse = jwtProvider.renewToken(rtk);
-        Cookie cookie = new Cookie("rtk", tokenResponse.getRtk());
-        cookie.setHttpOnly(true);
-//            cookie.setSecure(true); // Https 사용 시
-        cookie.setPath("/");
 
-        Date now = new Date();
-        int age = (int) (tokenResponse.getRtkExpiration().getTime() - now.getTime()) / 1000;
-        cookie.setMaxAge(age);
+        String rtk = getRefreshTokenFromCookie(request);
+
+        if (rtk == null) {
+            return new ResultResponse<>(HttpStatus.UNAUTHORIZED.value(), "fail", null);
+        }
+
+        TokenResponse tokenResponse = jwtProvider.renewToken(rtk);
+        Cookie cookie = createRefreshTokenCookie(tokenResponse);
         response.addCookie(cookie);
+        System.out.println(cookie);
+
         return new ResultResponse<>(HttpStatus.OK.value(), "success", AccessTokenResponse.builder()
                 .atk(tokenResponse.getAtk())
                 .atkExpiration(tokenResponse.getAtkExpiration())
@@ -113,10 +144,19 @@ public class EmployeeController {
 
 
     @GetMapping("/api/v1/auth/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request) throws JsonProcessingException {
-        String atk = request.getHeader("Authorization").substring(7);
-        employeeService.logout(atk);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResultResponse<Void> logout(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
+
+        String rtk = getRefreshTokenFromCookie(request);
+
+        if (rtk == null) {
+            return new ResultResponse<>(HttpStatus.BAD_REQUEST.value(), "fail", null);
+        }
+
+        response.addCookie(createDeleteCookie());
+
+        employeeService.logout(rtk);
+
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", null);
     }
 
     @PostMapping("/api/v1/auth/signup/emailauth")
