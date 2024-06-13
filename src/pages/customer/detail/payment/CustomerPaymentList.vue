@@ -13,13 +13,18 @@
       v-model:pagination="paymentPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props">
+        <q-tr :props="props" @click="showPaymentDetail(props.row)">
           <q-td v-for="col in paymentColumns" :key="col.name" :props="props">
             {{ props.row[col.field] }}
           </q-td>
         </q-tr>
       </template>
     </q-table>
+
+    <!-- 결제 상세 정보 다이얼로그 -->
+    <q-dialog v-model="showDialog">
+      <customer-payment-detail :payment="selectedPayment" />
+    </q-dialog>
   </div>
 </template>
 
@@ -27,6 +32,7 @@
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import CustomerPaymentDetail from './CustomerPaymentDetail.vue';
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -38,6 +44,8 @@ const paymentPagination = ref({
   isFirstPage: true,
   isLastPage: true
 });
+const showDialog = ref(false);
+const selectedPayment = ref({});
 
 const fetchPayments = async () => {
   try {
@@ -68,6 +76,11 @@ const fetchPayments = async () => {
   }
 };
 
+const showPaymentDetail = (payment) => {
+  selectedPayment.value = payment;
+  showDialog.value = true;
+};
+
 onMounted(() => {
   fetchPayments();
 });
@@ -87,3 +100,7 @@ const paymentColumns = [
   { name: 'paymentSpot', label: 'Payment Spot', align: 'center', field: 'paymentSpot' }
 ];
 </script>
+
+<style scoped>
+/* 필요한 스타일을 추가할 수 있습니다. */
+</style>
