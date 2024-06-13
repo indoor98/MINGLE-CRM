@@ -2,14 +2,12 @@ vue
 코드 복사
 <template>
   <div class="q-pa-md">
-    <div class="text-h4">고객 요약 정보</div>
     <q-separator class="q-my-md" />
 
     <div v-if="customer">
       <q-card>
         <q-card-section>고객 ID: {{ customer.id }}</q-card-section>
         <q-card-section>고객 이름: {{ customer.name }}</q-card-section>
-        <!-- 다른 고객 정보 항목들을 표시 -->
         <q-card-section>고객 등급: {{ customer.grade }}</q-card-section>
         <q-card-section>전화번호: {{ customer.phone }}</q-card-section>
         <q-card-section>주소: {{ customer.address }}</q-card-section>
