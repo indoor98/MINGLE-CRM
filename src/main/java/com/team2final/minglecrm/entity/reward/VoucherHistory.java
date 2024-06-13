@@ -2,6 +2,7 @@ package com.team2final.minglecrm.entity.reward;
 
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.employee.Employee;
+import com.team2final.minglecrm.entity.reward.status.VoucherStatusType;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -27,17 +27,11 @@ public class VoucherHistory {
     @JoinColumn(name = "voucher_id")
     private Voucher voucher;
 
-    private LocalDateTime requestDate;
+    private VoucherStatusType status;
+    private LocalDateTime requestDate; // 승인 요청 일시
+    private LocalDateTime confirmDate; // 승인/거절 일시
 
-    @ColumnDefault("false")
-    private Boolean isAuth;
-
-    private LocalDateTime authDate;
-
-    @ColumnDefault("false")
-    private Boolean isConverted;
-
-    private LocalDateTime conversionDate;
+    private LocalDateTime conversionDate; // 리워드 전환 일시
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "manager_id", nullable = true)
@@ -51,27 +45,39 @@ public class VoucherHistory {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    private String voucherCode;
+    private String rejectedReason;
+
     @Builder
-    public VoucherHistory(Voucher voucher, LocalDateTime requestDate, Boolean isAuth, LocalDateTime authDate, Boolean isConverted, LocalDateTime conversionDate, Employee employeeManager, Employee employeeStaff, Customer customer) {
+    public VoucherHistory(Voucher voucher, LocalDateTime requestDate, VoucherStatusType status, LocalDateTime confirmDate, LocalDateTime conversionDate, Employee employeeManager, Employee employeeStaff, Customer customer, String voucherCode, String rejectedReason) {
         this.voucher = voucher;
         this.requestDate = requestDate;
-        this.isAuth = isAuth;
-        this.authDate = authDate;
-        this.isConverted = isConverted;
+
+        this.status = status;
+        this.confirmDate = confirmDate;
         this.conversionDate = conversionDate;
+
         this.employeeManager = employeeManager;
         this.employeeStaff = employeeStaff;
         this.customer = customer;
+
+        this.voucherCode = voucherCode;
+        this.rejectedReason = rejectedReason;
     }
 
     public void approveVoucher(Employee approver) {
-        this.isAuth = true;
-        this.authDate = LocalDateTime.now();
+
+        this.confirmDate = LocalDateTime.now();
         this.employeeManager = approver;
     }
 
     public void approveVoucher() {
-        this.isAuth = true;
-        this.authDate = LocalDateTime.now();
+        this.confirmDate = LocalDateTime.now();
+        this.status = VoucherStatusType.APPROVED;
+    }
+
+    public void rejectVoucher(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
+        this.confirmDate = LocalDateTime.now();
     }
 }
