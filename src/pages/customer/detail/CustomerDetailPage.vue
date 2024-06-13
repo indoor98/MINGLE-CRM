@@ -41,7 +41,7 @@ vue
         <q-tab-panel name="payment">
           <div class="text-h5">결제</div>
           <q-card>
-            <q-card-section>결제 정보를 표시합니다.</q-card-section>
+            <CustomerPaymentList></CustomerPaymentList>
           </q-card>
         </q-tab-panel>
 
@@ -66,11 +66,13 @@ vue
 <script setup>
 import { ref } from 'vue';
 import CustomerSummary from 'pages/customer/detail/summary/CustomerSummary.vue';
+import CustomerPaymentList from "pages/customer/detail/payment/CustomerPaymentList.vue";
 
 const activeTab = ref('summary');
 
 const changeTab = (tabName) => {
   activeTab.value = tabName;
+  // 여기에 필요한 경우 해당 탭에 맞는 데이터를 로드하는 로직 추가 가능
 };
 </script>
 
