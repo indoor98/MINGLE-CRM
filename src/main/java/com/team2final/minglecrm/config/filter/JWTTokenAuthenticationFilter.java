@@ -5,6 +5,7 @@ import com.team2final.minglecrm.controller.employee.vo.Subject;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,23 @@ public class JWTTokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String authorization = request.getHeader("Authorization"); // 요청 헤더 중 Authorizaion: Bearer '토큰'
+
+
+        Cookie[] cookies = request.getCookies();
+        String rtk = null;
+
+        if (cookies != null ) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("rtk")) {
+                    // 해당 쿠키의 값 반환
+                    rtk = cookie.getValue();
+                    System.out.println(rtk);
+                }
+            }
+        } else {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if(authorization!=null) {
             String atk = authorization.substring(7); // Bearer 이후
