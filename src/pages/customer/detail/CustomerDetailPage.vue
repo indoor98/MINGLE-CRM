@@ -1,5 +1,3 @@
-vue
-코드 복사
 <template>
   <q-page class="q-pa-xl">
     <q-card class="my-card" flat bordered>
@@ -50,7 +48,7 @@ vue
         <q-tab-panel name="consultation">
           <div class="text-h5">상담</div>
           <q-card>
-            <q-card-section>상담 정보를 표시합니다.</q-card-section>
+            <CustomerConsultationList></CustomerConsultationList>
           </q-card>
         </q-tab-panel>
 
@@ -85,6 +83,7 @@ import CustomerSummary from 'pages/customer/detail/summary/CustomerSummary.vue';
 import CustomerPaymentList from "pages/customer/detail/payment/CustomerPaymentList.vue";
 import HotelReservationList from "pages/customer/detail/reservation/hotel/HotelReservationList.vue";
 import DiningReservationList from "pages/customer/detail/reservation/dining/DiningReservationList.vue";
+import CustomerConsultationList from "pages/customer/detail/consultation/CustomerConsultationList.vue";
 
 const activeTab = ref('summary');
 const activeReservationTab = ref('hotel'); // 기본적으로 호텔 예약 탭이 활성화되도록 설정
