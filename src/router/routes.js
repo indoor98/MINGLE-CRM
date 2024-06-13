@@ -29,7 +29,7 @@ const routes = [
       },
       { path: "", component: () => import("pages/IndexPage.vue") },
       {
-        path: "customer",
+        path: "customers",
         component: () => import("pages/customer/CustomerPage.vue"),
       },
       {
