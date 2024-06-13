@@ -41,6 +41,7 @@ vue
               <div class="text-h5">다이닝 예약</div>
               <q-card>
                 <q-card-section>다이닝 예약 정보를 표시합니다.</q-card-section>
+                <DiningReservationList></DiningReservationList>
               </q-card>
             </q-tab-panel>
           </q-tab-panels>
@@ -83,6 +84,7 @@ import { ref } from 'vue';
 import CustomerSummary from 'pages/customer/detail/summary/CustomerSummary.vue';
 import CustomerPaymentList from "pages/customer/detail/payment/CustomerPaymentList.vue";
 import HotelReservationList from "pages/customer/detail/reservation/hotel/HotelReservationList.vue";
+import DiningReservationList from "pages/customer/detail/reservation/dining/DiningReservationList.vue";
 
 const activeTab = ref('summary');
 const activeReservationTab = ref('hotel'); // 기본적으로 호텔 예약 탭이 활성화되도록 설정
