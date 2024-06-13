@@ -25,10 +25,25 @@ vue
         </q-tab-panel>
 
         <q-tab-panel name="reservation">
-          <div class="text-h5">예약</div>
-          <q-card>
-            <q-card-section>예약 정보를 표시합니다.</q-card-section>
-          </q-card>
+          <q-tabs v-model="activeReservationTab">
+            <q-tab label="호텔 예약" name="hotel" @click="changeReservationTab('hotel')" />
+            <q-tab label="다이닝 예약" name="dining" @click="changeReservationTab('dining')" />
+          </q-tabs>
+          <q-tab-panels v-model="activeReservationTab">
+            <q-tab-panel name="hotel">
+              <div class="text-h5">호텔 예약</div>
+              <q-card>
+                <q-card-section>호텔 예약 정보를 표시합니다.</q-card-section>
+                <HotelReservationList></HotelReservationList>
+              </q-card>
+            </q-tab-panel>
+            <q-tab-panel name="dining">
+              <div class="text-h5">다이닝 예약</div>
+              <q-card>
+                <q-card-section>다이닝 예약 정보를 표시합니다.</q-card-section>
+              </q-card>
+            </q-tab-panel>
+          </q-tab-panels>
         </q-tab-panel>
 
         <q-tab-panel name="consultation">
@@ -67,12 +82,17 @@ vue
 import { ref } from 'vue';
 import CustomerSummary from 'pages/customer/detail/summary/CustomerSummary.vue';
 import CustomerPaymentList from "pages/customer/detail/payment/CustomerPaymentList.vue";
+import HotelReservationList from "pages/customer/detail/reservation/hotel/HotelReservationList.vue";
 
 const activeTab = ref('summary');
+const activeReservationTab = ref('hotel'); // 기본적으로 호텔 예약 탭이 활성화되도록 설정
 
 const changeTab = (tabName) => {
   activeTab.value = tabName;
-  // 여기에 필요한 경우 해당 탭에 맞는 데이터를 로드하는 로직 추가 가능
+};
+
+const changeReservationTab = (tabName) => {
+  activeReservationTab.value = tabName;
 };
 </script>
 
