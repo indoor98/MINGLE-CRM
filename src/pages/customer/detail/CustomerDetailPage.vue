@@ -63,6 +63,7 @@
           <div class="text-h5">바우처</div>
           <q-card>
             <q-card-section>바우처 정보를 표시합니다.</q-card-section>
+            <CustomerVoucherList></CustomerVoucherList>
           </q-card>
         </q-tab-panel>
 
@@ -86,6 +87,7 @@ import HotelReservationList from "pages/customer/detail/reservation/hotel/HotelR
 import DiningReservationList from "pages/customer/detail/reservation/dining/DiningReservationList.vue";
 import CustomerConsultationList from "pages/customer/detail/consultation/CustomerConsultationList.vue";
 import CustomerRewardList from "pages/customer/detail/reward/CustomerRewardList.vue";
+import CustomerVoucherList from "pages/customer/detail/voucher/CustomerVoucherList.vue";
 
 const activeTab = ref('summary');
 const activeReservationTab = ref('hotel'); // 기본적으로 호텔 예약 탭이 활성화되도록 설정
