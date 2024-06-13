@@ -1,5 +1,3 @@
-vue
-코드 복사
 <template>
   <div class="q-pa-md">
     <q-separator class="q-my-md" />
