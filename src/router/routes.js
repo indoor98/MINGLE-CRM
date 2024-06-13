@@ -36,6 +36,14 @@ const routes = [
         path: "customer-detail/:id",
         component: () => import("pages/customer/CustomerDetailPage.vue"),
       },
+      {
+        path: "signup",
+        component: () => import("pages/auth/SignUpPage.vue"),
+      },
+      {
+        path: "signin",
+        component: () => import("pages/auth/SignInPage.vue"),
+      },
     ],
   },
   {

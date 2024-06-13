@@ -2,36 +2,64 @@
   <q-layout view="hHh lpR lff">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-      <q-btn flat round dense icon="menu" class="q-mr-sm" @click="toggleLeftDrawer" />
-      <q-avatar>
-        <q-img
-          src="https://github.com/kinggodgeneralteam2/TEAM2-MINGLE-CRM/assets/155680893/d2c27cc2-d62e-4459-9e66-c46426da8fac"
+        <q-btn
+          flat
+          round
+          dense
+          icon="menu"
+          class="q-mr-sm"
+          @click="toggleLeftDrawer"
         />
-      </q-avatar>
+        <q-avatar>
+          <q-img
+            src="https://github.com/kinggodgeneralteam2/TEAM2-MINGLE-CRM/assets/155680893/d2c27cc2-d62e-4459-9e66-c46426da8fac"
+          />
+        </q-avatar>
 
-      <q-toolbar-title shrink class="text-subtitle1 text-weight-bolder">
-        Mingle CRM
-      </q-toolbar-title>
-      <q-space />
-      <div class="search row items-center">
-        
-      </div>
-      <q-space />
-      <q-btn
-        outline
-        rounded
-        color="accent"
-        icon="account_circle"
-        label="회원가입 "
-      />
-      <q-btn
-        outline
-        rounded
-        color="accent"
-        icon="account_circle"
-        label="로그인"
-      />
-    </q-toolbar>
+        <q-toolbar-title shrink class="text-subtitle1 text-weight-bolder">
+          Mingle CRM
+        </q-toolbar-title>
+        <q-space />
+        <div class="search row items-center"></div>
+        <q-space />
+        <div v-if="atk">
+          <q-btn
+            outline
+            rounded
+            color="accent"
+            icon="account_circle"
+            label="로그아웃 "
+            to="/"
+            @click="logout"
+          />
+          <q-btn
+            outline
+            rounded
+            color="accent"
+            icon="account_circle"
+            label="마이페이지"
+            to="/mypage"
+          />
+        </div>
+        <div v-else>
+          <q-btn
+            outline
+            rounded
+            color="accent"
+            icon="account_circle"
+            label="회원가입 "
+            href="#/signup"
+          />
+          <q-btn
+            outline
+            rounded
+            color="accent"
+            icon="account_circle"
+            label="로그인"
+            href="#/signin"
+          />
+        </div>
+      </q-toolbar>
     </q-header>
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <q-list>
@@ -50,12 +78,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
+import { useTokenStore } from "src/stores/token-store";
+import { storeToRefs } from "pinia";
+import axios from "axios";
 
-defineOptions({
-  name: "MainLayout",
-});
+const store = useTokenStore();
+const { atk } = storeToRefs(store);
 
 const linksList = [
   {
@@ -71,7 +101,6 @@ const linksList = [
     to: "/review",
   },
   {
-
     title: "바우처",
     caption: "바우처 탭",
     icon: "school",
@@ -85,9 +114,53 @@ const linksList = [
   },
 ];
 
+const logout = async () => {
+  try {
+    console.log("로그아웃");
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/auth/logout",
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(response.status);
+    store.setAtk("");
+    atkExpiration = "";
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const renewToken = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/auth/renew",
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(response.data);
+    console.log("renewToken 실행 완료");
+    if (response.data.code === 200) {
+      const { atk, atkExpiration } = response.data.data;
+      store.setSigninResponse(atk, atkExpiration);
+      console.log("갱신 완료");
+    } else {
+      throw new Error("Token renewal failed");
+    }
+  } catch (error) {
+    console.log(error);
+    console.log("토큰 갱신 실패 -> 로그아웃 상태");
+    window.location.href = "/#/signin";
+    return Promise.reject(error);
+  }
+};
+
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
   //
 }
+
+onMounted(renewToken);
 </script>
