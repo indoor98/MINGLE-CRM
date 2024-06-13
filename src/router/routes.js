@@ -34,7 +34,8 @@ const routes = [
       },
       {
         path: "customer-detail/:id",
-        component: () => import("pages/customer/CustomerDetailPage.vue"),
+        component: () => import("pages/customer/detail/CustomerDetailPage.vue"),
+        props: true, // 이 부분이 중요합니다. 동적 경로로 전달된 props를 컴포넌트 props로 사용할 수 있게 해줍니다.
       },
       {
         path: "signup",
