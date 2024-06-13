@@ -78,22 +78,14 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import { useTokenStore } from "src/stores/token-store";
 import { storeToRefs } from "pinia";
+import axios from "axios";
 
 const store = useTokenStore();
-
-const { atk, atkExpiration } = storeToRefs(store);
-
-watch(atk, (newVal) => {
-  console.log("atk changed: ", newVal);
-});
-
-watch(atkExpiration, (newVal) => {
-  console.log("atkExpiration : ", newVal);
-});
+const { atk } = storeToRefs(store);
 
 const linksList = [
   {
@@ -125,9 +117,42 @@ const linksList = [
 const logout = async () => {
   try {
     console.log("로그아웃");
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/auth/logout",
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(response.status);
     store.setAtk("");
+    atkExpiration = "";
   } catch (error) {
     console.log(error);
+  }
+};
+
+const renewToken = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/auth/renew",
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(response.data);
+    console.log("renewToken 실행 완료");
+    if (response.data.code === 200) {
+      const { atk, atkExpiration } = response.data.data;
+      store.setSigninResponse(atk, atkExpiration);
+      console.log("갱신 완료");
+    } else {
+      throw new Error("Token renewal failed");
+    }
+  } catch (error) {
+    console.log(error);
+    console.log("토큰 갱신 실패 -> 로그아웃 상태");
+    window.location.href = "/#/signin";
+    return Promise.reject(error);
   }
 };
 
@@ -136,4 +161,6 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
   //
 }
+
+onMounted(renewToken);
 </script>

@@ -177,7 +177,8 @@
 </template>
 <script setup>
 import { ref, watch, onMounted } from "vue";
-import axios from "axios"; // axios 모듈을 기본 내보내기로 임포트
+import { api as axios } from "src/boot/axios";
+// import axios from "axios"; // axios 모듈을 기본 내보내기로 임포트
 
 const current = ref(1);
 const reviews = ref([]);
@@ -208,6 +209,7 @@ const getHotelReviews = async () => {
       { withCredentials: true }
     );
     reviews.value = response.data.data;
+    console.log(reviews);
   } catch (error) {
     console.log(error);
   }

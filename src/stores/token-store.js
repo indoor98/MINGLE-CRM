@@ -15,11 +15,9 @@ export const useTokenStore = defineStore("token", () => {
     atk.value = token;
   }
 
-  function setSigninResponse(atkParam, atkExpirationParam, rtkExpirationParam) {
+  function setSigninResponse(atkParam, atkExpirationParam) {
     atk.value = atkParam;
-
     atkExpiration.value = new Date(atkExpirationParam);
-    rtkExpiration.value = new Date(rtkExpirationParam);
   }
 
   return {
