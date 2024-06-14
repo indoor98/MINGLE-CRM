@@ -21,6 +21,11 @@
       :pagination="pagination"
       @row-click="onRowClick"
     />
+    <AnsweredInquiryList
+      v-if="selectedOption.value === 'answered'"
+      :pagination="pagination"
+      @row-click="onRowClick"
+    />
   </q-page>
 </template>
 
@@ -28,12 +33,14 @@
 import { ref } from "vue";
 import InquiryList from "pages/inquiry/InquiryList.vue";
 import UnansweredInquiryList from "pages/inquiry/UnansweredInquiryList.vue";
+import AnsweredInquiryList from "pages/inquiry/AnsweredInquiryList.vue";
 
 const pagination = ref({ page: 1, rowsPerPage: 10, rowsNumber: 0 });
 const selectedOption = ref({ label: "전체 문의", value: "all" });
 const options = [
   { label: "전체 문의", value: "all" },
   { label: "답변 없는 문의", value: "unanswered" },
+  { label: "답변 있는 문의", value: "answered" },
 ];
 
 const handleOptionChange = (value) => {

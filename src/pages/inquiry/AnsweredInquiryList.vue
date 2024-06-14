@@ -1,11 +1,7 @@
 <template>
   <div>
-    <div class="text-h4">전체 문의 목록</div>
+    <div class="text-h4">답변 있는 문의</div>
     <q-input filled v-model="filter" label="Search" class="q-mb-md" />
-    <!-- 검색 입력 필드 생성
-      v-model을 통해 filter 변수와 양방향 바인딩
-      사용자가 입력한 검색어를 filter 변수에 저장
-      @request 이벤트 : 사용자가 페이지를 변경할 때마다 fetchInquiries 함수 호출-->
     <q-table
       :rows="filteredInquiries"
       :columns="columns"
@@ -23,9 +19,12 @@
       class="q-mt-md"
       color="primary"
       boundary-links
-      :max-pages="5"
+      :max-pages="Math.ceil(pagination.rowsNumber / pagination.rowsPerPage)"
       layout="pages"
     />
+    <div v-if="error" class="q-mt-md q-pa-md q-mb-md q-bg-red-2 q-text-white">
+      <span>{{ error }}</span>
+    </div>
   </div>
 </template>
 
@@ -34,12 +33,12 @@ import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
-const inquiries = ref([]); // 데이터를 저장하는 반응형 변수
-const loading = ref(false); // 데이터 로딩 상태를 나타냄
-const filter = ref(""); // 검색 입력 값을 저장
-const pagination = ref({ page: 1, rowsPerPage: 10, rowsNumber: 0 }); // 페이징 정보를 저장하는 반응형 변수 초기값 설정
+const inquiries = ref([]);
+const loading = ref(false);
+const filter = ref("");
+const pagination = ref({ page: 1, rowsPerPage: 10, rowsNumber: 0 });
+const error = ref(null);
 
-// 컬럼 정의
 const columns = [
   {
     name: "id",
@@ -113,16 +112,19 @@ const columns = [
 
 const router = useRouter();
 
-// 데이터 요청 함수
 const fetchInquiries = async () => {
-  loading.value = true; // 데이터 요청할 때 로딩 상태 true로 설정
+  loading.value = true;
+  error.value = null;
   try {
-    const response = await axios.get("http://localhost:8080/api/v1/inquiries", {
-      params: {
-        page: pagination.value.page - 1, // 백엔드 페이지 번호가 0부터 시작
-        size: pagination.value.rowsPerPage,
-      },
-    });
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/inquiries/answered",
+      {
+        params: {
+          page: pagination.value.page - 1,
+          size: pagination.value.rowsPerPage,
+        },
+      }
+    );
     inquiries.value = response.data.data.content.map((item) => ({
       id: item.id,
       customerName: item.customerName,
@@ -134,12 +136,13 @@ const fetchInquiries = async () => {
       inquiryTitle: item.inquiryTitle,
       inquiryContent: item.inquiryContent,
       actionStatus: item.actionStatus,
-    })); // 응답 데이터에서 목록 추출
-    pagination.value.rowsNumber = response.data.data.totalElements; // 전체 데이터의 개수를 pagination 객체에 저장
+    }));
+    pagination.value.rowsNumber = response.data.data.totalElements;
   } catch (error) {
     console.error("문의를 가져오지 못했습니다. :", error);
+    error.value = "문의를 가져오는데 실패했습니다. 잠시 후 다시 시도해주세요.";
   } finally {
-    loading.value = false; // 로딩 상태 종료
+    loading.value = false;
   }
 };
 
@@ -152,37 +155,30 @@ const onRowClick = (event, row) => {
   }
 };
 
-onMounted(fetchInquiries); // 컴포넌트가 마운트될 때 fetchInquiries 함수 호출
+onMounted(fetchInquiries);
 
 watch(
-  // pagination.value.page 와 pagination.value.rowsPerPage가 변경될 때마다 fetchInquiries 함수 호출
   [() => pagination.value.page, () => pagination.value.rowsPerPage],
   fetchInquiries,
-  { immediate: true } // 컴포넌트가 마운트될 때 바로 데이터 로드
+  { immediate: true }
 );
 
-// computed 속성 : filteredInquiries - 필터링된 목록을 반환하는 계산된 속성
 const filteredInquiries = computed(() => {
   if (!filter.value) {
-    return inquiries.value; // 필터가 비어 있으면 전체 inquiries 반환
+    return inquiries.value;
   }
   const lowerCaseFilter = filter.value.toLowerCase();
   return inquiries.value.filter(
-    (
-      inquiry // 각 inquiry 항목의 속성을 필터링
-    ) =>
+    (inquiry) =>
       inquiry.customerName.toLowerCase().includes(lowerCaseFilter) ||
       inquiry.customerPhone.toLowerCase().includes(lowerCaseFilter) ||
       inquiry.inquiryTitle.toLowerCase().includes(lowerCaseFilter) ||
       inquiry.inquiryContent.toLowerCase().includes(lowerCaseFilter)
-    // 고객이름, 번호, 제목, 내용 값을 소문자로 변환 후, 검색어(filter.value)가 포함되어 있는지 확인
-    // .toLowerCase() 사용하여 대소문자 구분하지 않음.
   );
 });
 </script>
 
 <style lang="scss" scoped>
-/* 직접 변수 값을 설정 */
 $primary-color: #007bff;
 $secondary-color: #6c757d;
 
@@ -199,7 +195,7 @@ $secondary-color: #6c757d;
   .q-pagination__item {
     margin: 0 5px;
     &.q-pagination__item--active {
-      background-color: $primary-color; // 활성 페이지 버튼 색상
+      background-color: $primary-color;
       color: white;
       border-radius: 50%;
     }
@@ -208,5 +204,14 @@ $secondary-color: #6c757d;
   .q-pagination__item:hover {
     background-color: $secondary-color;
   }
+}
+
+.error-message {
+  background-color: #ff4d4f;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
 }
 </style>
