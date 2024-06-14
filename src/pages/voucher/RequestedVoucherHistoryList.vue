@@ -13,12 +13,15 @@
           <template v-slot:body-cell-approve="props">
             <q-td :props="props">
               <q-btn
-                v-if="!props.row.isAuth"
                 label="승인"
                 color="primary"
                 @click="approveVoucher(props.row.voucherId)"
               ></q-btn>
-              <span v-else>승인됨</span>
+              <q-btn
+                label="거절"
+                color="secondary"
+                @click="rejectVoucher(props.row.voucherId)"
+              ></q-btn>
             </q-td>
           </template>
           <template v-slot:no-data>
@@ -56,25 +59,39 @@ const columns = ref([
     field: "voucherId",
     sortable: true,
   },
+  // {
+  //   name: "customerId",
+  //   label: "고객 ID",
+  //   align: "center",
+  //   field: "customerId",
+  //   sortable: true,
+  // },
+  {
+    name: "customerName",
+    label: "고객 이름",
+    align: "center",
+    field: "customerName",
+    sortable: true,
+  },
+  {
+    name: "creatorName",
+    label: "발급 직원 이름",
+    align: "center",
+    field: "creatorName",
+    sortable: true,
+  },
+  {
+    name: "createdReason",
+    label: "생성 사유",
+    align: "center",
+    field: "createdReason",
+    sortable: true,
+  },
   {
     name: "requestDate",
     label: "요청 날짜",
     align: "center",
     field: "requestDate",
-    sortable: true,
-  },
-  // {
-  //   name: "isAuth",
-  //   label: "승인 여부",
-  //   align: "center",
-  //   field: "isAuth",
-  //   sortable: true,
-  // },
-  {
-    name: "issuerId",
-    label: "발급 직원 ID",
-    align: "center",
-    field: "issuerId",
     sortable: true,
   },
   {
@@ -84,13 +101,7 @@ const columns = ref([
     field: "amount",
     sortable: true,
   },
-  {
-    name: "voucherCode",
-    label: "바우처 코드",
-    align: "center",
-    field: "voucherCode",
-  },
-  { name: "approve", label: "승인", align: "center", sortable: true }, // 승인 컬럼 추가
+  { name: "approve", label: "승인/거절", align: "center", sortable: false },
 ]);
 
 const fetchVouchers = async () => {
@@ -113,12 +124,12 @@ const fetchVouchers = async () => {
 const approveVoucher = async (voucherId) => {
   Dialog.create({
     title: "확인",
-    message: "바우처 발급을 승인하시겠습니까?",
+    message: `${voucherId}번 바우처 발급을 승인하시겠습니까?`,
     ok: "예",
     cancel: "아니오",
   }).onOk(async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:8080/api/v1/vouchers/approval/${voucherId}`
       );
       Notify.create({
@@ -132,6 +143,38 @@ const approveVoucher = async (voucherId) => {
       Notify.create({
         type: "negative",
         message: "바우처 승인 중 에러가 발생했습니다.",
+      });
+    }
+  });
+};
+
+const rejectVoucher = async (voucherId) => {
+  Dialog.create({
+    title: "거절 사유 입력",
+    message: "거절 사유를 입력해주세요:",
+    prompt: {
+      model: "",
+      type: "textarea",
+    },
+    ok: "확인",
+    cancel: "취소",
+  }).onOk(async (reason) => {
+    try {
+      await axios.post(
+        `http://localhost:8080/api/v1/vouchers/rejection/${voucherId}`,
+        { reason }
+      );
+      Notify.create({
+        type: "positive",
+        message: "바우처가 성공적으로 거절되었습니다.",
+      });
+      // Refresh the voucher list after rejection
+      fetchVouchers();
+    } catch (error) {
+      console.error("바우처 거절 중 에러 발생:", error);
+      Notify.create({
+        type: "negative",
+        message: "바우처 거절 중 에러가 발생했습니다.",
       });
     }
   });

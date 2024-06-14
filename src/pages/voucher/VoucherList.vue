@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between items-center">
-      <h2 class="text-h6">바우처 목록</h2>
-      <q-btn color="primary" label="+ 바우처 생성" @click="showModal = true" />
-    </div>
+    <h2 class="text-h6">승인 요청된 바우처 목록</h2>
     <q-card class="q-mt-md">
       <q-card-section>
         <q-table
@@ -13,11 +10,45 @@
           :loading="loading"
           :pagination="{ rowsPerPage: 10 }"
         >
+          <template v-slot:body-cell-createdReason="props">
+            <q-td :props="props">
+              {{ truncateReason(props.row.createdReason) }}
+            </q-td>
+          </template>
+          <template v-slot:body-cell-requestDate="props">
+            <q-td :props="props">
+              {{ formattedDate(props.row.requestDate) }}
+            </q-td>
+          </template>
+          <template v-slot:body-cell-approve="props">
+            <q-td :props="props">
+              <q-btn
+                label="승인"
+                color="primary"
+                @click.stop="approveVoucher(props.row.voucherId)"
+              ></q-btn>
+              <q-btn
+                label="거절"
+                color="secondary"
+                @click.stop="rejectVoucher(props.row.voucherId)"
+              ></q-btn>
+            </q-td>
+          </template>
+          <template v-slot:body="props">
+            <q-tr
+              :props="props"
+              @click="showVoucherDetail(props.row.voucherId)"
+            >
+              <q-td v-for="col in columns" :key="col.name" :props="props">
+                {{ props.row[col.field] }}
+              </q-td>
+            </q-tr>
+          </template>
           <template v-slot:no-data>
             <q-tr>
-              <q-td :colspan="columns.length" class="text-center"
-                >바우처가 없습니다.</q-td
-              >
+              <q-td :colspan="columns.length" class="text-center">
+                바우처가 없습니다.
+              </q-td>
             </q-tr>
           </template>
         </q-table>
@@ -28,119 +59,162 @@
         <p style="color: red" class="text-center">{{ errorMessage }}</p>
       </q-card-section>
     </q-card>
-
-    <!-- Modal -->
-    <q-dialog v-model="showModal">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">바우처 생성</div>
-        </q-card-section>
-
-        <q-card-section>
-          <q-input v-model="voucher.customerId" label="회원 ID" />
-          <q-input v-model="voucher.amount" label="금액" type="number" />
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="취소" color="primary" @click="showModal = false" />
-          <q-btn flat label="생성" color="primary" @click="createVoucher" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+    <VoucherDetail
+      :voucherId="selectedVoucherId"
+      v-model:visible="detailVisible"
+    />
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { Notify, Dialog } from "quasar";
+import VoucherDetail from "./VoucherDetail.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
-const showModal = ref(false); // 모달 창 표시 여부
-const voucher = ref({
-  customerId: "",
-  amount: 0,
-});
 
 const columns = ref([
   {
-    name: "customerId",
-    label: "회원 ID",
+    name: "voucherId",
+    label: "바우처 ID",
     align: "center",
-    field: "customerId",
+    field: "voucherId",
+    sortable: true,
   },
   {
     name: "customerName",
-    label: "회원명",
+    label: "고객 이름",
     align: "center",
     field: "customerName",
+    sortable: true,
   },
   {
-    name: "employeeId",
-    label: "발급 직원 ID",
+    name: "creatorName",
+    label: "발급 직원 이름",
     align: "center",
-    field: "employeeId",
+    field: "creatorName",
+    sortable: true,
   },
   {
-    name: "employeeName",
-    label: "발급 직원명",
+    name: "createdReason",
+    label: "생성 사유",
     align: "center",
-    field: "employeeName",
+    field: "createdReason",
+    sortable: true,
+  },
+  {
+    name: "requestDate",
+    label: "요청 날짜",
+    align: "center",
+    field: "requestDate",
+    sortable: true,
   },
   {
     name: "amount",
     label: "금액",
     align: "center",
     field: "amount",
+    sortable: true,
   },
-  {
-    name: "voucherCode",
-    label: "바우처 코드",
-    align: "center",
-    field: "voucherCode",
-  },
+  { name: "approve", label: "승인/거절", align: "center", sortable: false },
 ]);
+
+const selectedVoucherId = ref(null);
+const detailVisible = ref(false);
 
 const fetchVouchers = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/v1/vouchers");
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/vouchers/requested"
+    );
     vouchers.value = response.data.data;
+    console.log(vouchers.value);
     errorMessage.value = "";
   } catch (error) {
-    console.error("바우처 목록을 불러오는 중 에러 발생:", error);
-    errorMessage.value = "바우처 목록을 불러오는 중 에러가 발생했습니다.";
+    console.error("승인 요청된 바우처 목록을 불러오는 중 에러 발생:", error);
+    errorMessage.value =
+      "승인 요청된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
   }
 };
 
-const createVoucher = async () => {
-  try {
-    const response = await axios.post("http://localhost:8080/api/v1/vouchers", {
-      customerId: voucher.value.customerId,
-      amount: voucher.value.amount,
-    });
-    // 새로운 바우처 목록을 다시 불러옴
-    fetchVouchers();
-    showModal.value = false;
-  } catch (error) {
-    console.error("바우처 생성 중 에러 발생:", error);
-    errorMessage.value = "바우처 생성 중 에러가 발생했습니다.";
-  }
+const approveVoucher = async (voucherId) => {
+  Dialog.create({
+    title: "확인",
+    message: `${voucherId}번 바우처 발급을 승인하시겠습니까?`,
+    ok: "예",
+    cancel: "아니오",
+  }).onOk(async () => {
+    try {
+      await axios.post(
+        `http://localhost:8080/api/v1/vouchers/approval/${voucherId}`
+      );
+      Notify.create({
+        type: "positive",
+        message: "바우처가 성공적으로 승인되었습니다.",
+      });
+      fetchVouchers();
+    } catch (error) {
+      console.error("바우처 승인 중 에러 발생:", error);
+      Notify.create({
+        type: "negative",
+        message: "바우처 승인 중 에러가 발생했습니다.",
+      });
+    }
+  });
+};
+
+const rejectVoucher = async (voucherId) => {
+  Dialog.create({
+    title: "거절 사유 입력",
+    message: "거절 사유를 입력해주세요:",
+    prompt: {
+      model: "",
+      type: "String",
+    },
+    ok: "확인",
+    cancel: "취소",
+  }).onOk(async (reason) => {
+    try {
+      await axios.post(
+        `http://localhost:8080/api/v1/vouchers/rejection/${voucherId}`,
+        { reason }
+      );
+      Notify.create({
+        type: "positive",
+        message: "바우처가 성공적으로 거절되었습니다.",
+      });
+      fetchVouchers();
+    } catch (error) {
+      console.error("바우처 거절 중 에러 발생:", error);
+      Notify.create({
+        type: "negative",
+        message: "바우처 거절 중 에러가 발생했습니다.",
+      });
+    }
+  });
+};
+
+const showVoucherDetail = (voucherId) => {
+  selectedVoucherId.value = voucherId;
+  detailVisible.value = true;
+};
+
+const truncateReason = (reason) => {
+  return reason.length > 16 ? reason.substring(0, 16) + "..." : reason;
+};
+
+const formattedDate = (dateString) => {
+  return dateString ? dateString.split("T")[0] : "";
 };
 
 onMounted(() => {
   fetchVouchers();
 });
 </script>
-<style scoped>
-.flex {
-  display: flex;
-}
-.justify-between {
-  justify-content: space-between;
-}
-.items-center {
-  align-items: center;
-}
-</style>
+
+<style scoped></style>

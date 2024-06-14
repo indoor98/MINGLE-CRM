@@ -7,7 +7,7 @@ const routes = [
       { path: "review", component: () => import("pages/ReviewPage.vue") },
       {
         path: "voucher",
-        component: () => import("src/pages/voucher/VoucherPage.vue"),
+        component: () => import("src/pages/voucher/ManagerVoucherPage.vue"),
       },
       {
         path: "reward",

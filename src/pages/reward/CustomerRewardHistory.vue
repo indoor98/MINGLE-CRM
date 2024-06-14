@@ -111,12 +111,12 @@ const goBack = () => {
   emit("back");
 };
 
-// watch(
-//   () => props.customerId,
-//   (newCustomerId) => {
-//     fetchRewardHistories(newCustomerId);
-//   }
-// );
+watch(
+  () => props.customerId,
+  (newCustomerId) => {
+    fetchRewardHistories(newCustomerId);
+  }
+);
 
 onMounted(() => {
   fetchRewardHistories(props.customerId);
