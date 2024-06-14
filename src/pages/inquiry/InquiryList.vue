@@ -11,19 +11,17 @@
       :columns="columns"
       row-key="id"
       :loading="loading"
-      :pagination="pagination"
+      pagination.sync="pagination"
       @request="fetchInquiries"
       @row-click="onRowClick"
     />
     <q-pagination
-      :page="pagination.page"
-      :rows-per-page="pagination.rowsPerPage"
-      :rows-number="pagination.rowsNumber"
+      v-model="pagination.page"
+      :max="Math.min(5, maxPages)"
       @page-change="fetchInquiries"
-      class="q-mt-md"
       color="primary"
       boundary-links
-      :max-pages="5"
+      class="q-mt-md"
       layout="pages"
     />
   </div>
@@ -37,7 +35,8 @@ import { useRouter } from "vue-router";
 const inquiries = ref([]); // 데이터를 저장하는 반응형 변수
 const loading = ref(false); // 데이터 로딩 상태를 나타냄
 const filter = ref(""); // 검색 입력 값을 저장
-const pagination = ref({ page: 1, rowsPerPage: 10, rowsNumber: 0 }); // 페이징 정보를 저장하는 반응형 변수 초기값 설정
+const pagination = ref({ page: 1, rowsPerPage: 30, rowsNumber: 0 }); // 페이징 정보를 저장하는 반응형 변수 초기값 설정
+const maxPages = ref(1); // 전체 페이지 수를 저장하는 변수
 
 // 컬럼 정의
 const columns = [
@@ -123,7 +122,15 @@ const fetchInquiries = async () => {
         size: pagination.value.rowsPerPage,
       },
     });
-    inquiries.value = response.data.data.content.map((item) => ({
+
+    const { content, totalElements, totalPages } = response.data.data;
+    console.log("응답 데이터:", response.data.data);
+    console.log("페이지:", pagination.value.page);
+    console.log("한 페이지당 항목 수:", pagination.value.rowsPerPage);
+    console.log("총 항목 수:", totalElements);
+    console.log("총 페이지 수:", totalPages);
+
+    inquiries.value = content.map((item) => ({
       id: item.id,
       customerName: item.customerName,
       customerPhone: item.customerPhone,
@@ -135,7 +142,20 @@ const fetchInquiries = async () => {
       inquiryContent: item.inquiryContent,
       actionStatus: item.actionStatus,
     })); // 응답 데이터에서 목록 추출
-    pagination.value.rowsNumber = response.data.data.totalElements; // 전체 데이터의 개수를 pagination 객체에 저장
+    // pagination.value.rowsNumber = response.data.data.totalElements; // 전체 데이터의 개수를 pagination 객체에 저장
+    // maxPages.value = Math.ceil(
+    //   data.totalElements / pagination.value.rowsPerPage
+    // );
+
+    pagination.value.rowsNumber = totalElements;
+    // pagination.value.page = totalPages; // 현재 페이지 설정
+    maxPages.value = totalPages; // 최대 페이지 수 설정
+    console.log("데이터 로드 완료:", response.data.data);
+    console.log("페이지 정보:", pagination.value);
+
+    console.log("페이지:", pagination.value.page);
+    console.log("한 페이지당 항목 수:", pagination.value.rowsPerPage);
+    console.log("총 항목 수:", pagination.value.rowsNumber);
   } catch (error) {
     console.error("문의를 가져오지 못했습니다. :", error);
   } finally {
