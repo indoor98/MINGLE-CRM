@@ -1,6 +1,8 @@
 package com.team2final.minglecrm.service.event;
 
+import com.team2final.minglecrm.controller.event.request.CreateEventRequest;
 import com.team2final.minglecrm.controller.event.request.EventEmailSendRequest;
+import com.team2final.minglecrm.controller.event.request.PersonalEmailSendRequest;
 import com.team2final.minglecrm.controller.event.request.ToEmailRequest;
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.employee.Employee;
@@ -62,6 +64,22 @@ public class EventService {
         }
     }
 
+    public Long createEvent(CreateEventRequest request) {
+
+        Employee employee = employeeRepository.findByEmail(request.getEmployeeEmail()).orElseThrow( () -> new IllegalArgumentException("없는 직원 입니다."));
+
+        Event event = Event.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .employee(employee)
+                .sentDate(LocalDateTime.now())
+                .sendCount(request.getSendCount())
+                .build();
+
+        Event savedEvent = eventRepository.save(event);
+        return savedEvent.getId();
+    }
+
     public void emailOpenCheck(Long eventId, String customerEmail) throws Exception {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(Exception::new);
@@ -70,5 +88,6 @@ public class EventService {
                 .findByEmail(customerEmail).orElseThrow(Exception::new);
 
         EmailLog emailLog = emailLogRepository.findByEventAndCustomer(event, customer);
+
     }
 }

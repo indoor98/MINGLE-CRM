@@ -31,9 +31,16 @@ public class EmailLog {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    private Boolean isOpened;
+
+    private LocalDateTime openedTime;
+
     @Builder
     public EmailLog(Event event, Customer customer) {
         this.event = event;
         this.customer = customer;
+        this.isOpened = false;
+        this.openedTime = null;
     }
+
 }

@@ -466,6 +466,10 @@ VALUES (1, 'akincaid0', 'VIP', '996-953-6203', 'rbittlestone0@springer.com', '0 
         'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', 'Female', '1964-09-11',
         '2021-02-10', FALSE, 1),
        (200, 'mglaze5j', 'BASIC', '721-969-1224', 'jharewood5j@canalblog.com', '382 Vera Trail', 12, '', 'Female',
+        '1951-09-16', '2019-09-15', FALSE, 10),
+       (201, '장명훈', 'BASIC', '721-969-1224', 'thinghoon@icloud.com', '382 Vera Trail', 12, '', 'Female',
+        '1951-09-16', '2019-09-15', FALSE, 10),
+       (202, 'mglaze5j', 'BASIC', '721-969-1224', 'wkdaudgns132@naver.com', '382 Vera Trail', 12, '', 'Female',
         '1951-09-16', '2019-09-15', FALSE, 10);
 
 INSERT INTO customer_preference (id, customer_id, is_smoking, purpose, is_pet, preferred_checkin_time,
