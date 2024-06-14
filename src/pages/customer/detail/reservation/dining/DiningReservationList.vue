@@ -13,20 +13,27 @@
       v-model:pagination="reservationPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props">
+        <q-tr :props="props" @click="showReservationDetail(props)">
           <q-td v-for="col in reservationColumns" :key="col.name" :props="props">
             {{ props.row[col.field] }}
           </q-td>
         </q-tr>
       </template>
+
     </q-table>
+
+    <!-- 예약 상세 정보 다이얼로그 -->
+    <q-dialog v-model="showDialog" persistent>
+      <dining-reservation-detail :reservation="selectedReservation" @close="closeReservationDetail" />
+    </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import DiningReservationDetail from './DiningReservationDetail.vue';
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -39,11 +46,15 @@ const reservationPagination = ref({
   isLastPage: true
 });
 
+const showDialog = ref(false);
+const selectedReservation = ref(null);
+
+// 예약 목록 가져오기
 const fetchReservations = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/dish/reservations`);
-    reservations.value = response.data.map((reservation, index) => ({
-      reservationId: index + 1,
+    reservations.value = response.data.map((reservation,index) => ({
+      reservationId: index+1,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),
       visitDate: new Date(reservation.visitDate).toLocaleDateString(),
       totalPrice: reservation.totalPrice,
@@ -61,16 +72,28 @@ const fetchReservations = async () => {
   }
 };
 
+// 예약 상세 정보 보기
+const showReservationDetail = (props) => {
+  selectedReservation.value = props.row;
+  showDialog.value = true;
+};
+
+// 예약 상세 정보 닫기
+const closeReservationDetail = () => {
+  showDialog.value = false;
+  selectedReservation.value = null;
+};
+
 onMounted(() => {
   fetchReservations();
 });
 
 const reservationColumns = [
-  { name: 'reservationId', label: '#', align: 'left', field: 'reservationId' },
-  { name: 'reservationDate', label: '예약 날짜', align: 'left', field: 'reservationDate' },
-  { name: 'visitDate', label: '방문일', align: 'center', field: 'visitDate' },
-  { name: 'totalPrice', label: '총 가격', align: 'center', field: 'totalPrice' },
-  { name: 'dishes', label: '음식', align: 'center', field: 'dishes' }
+  {name: 'reservationId', label: '#', align: 'left', field: 'reservationId'},
+  {name: 'reservationDate', label: 'Reservation Date', align: 'left', field: 'reservationDate'},
+  {name: 'visitDate', label: 'Visit Date', align: 'center', field: 'visitDate'},
+  {name: 'totalPrice', label: 'Total Price', align: 'center', field: 'totalPrice'},
+  {name: 'dishes', label: 'Dishes', align: 'center', field: 'dishes'}
 ];
 </script>
 

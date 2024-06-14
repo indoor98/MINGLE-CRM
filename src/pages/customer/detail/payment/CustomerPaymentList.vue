@@ -86,12 +86,12 @@ onMounted(() => {
 });
 
 const paymentColumns = [
-  { name: 'paymentId', label: '#', align: 'left', field: 'paymentId' },
-  { name: 'customerName', label: 'Customer Name', align: 'left', field: 'customerName' },
-  { name: 'number', label: 'Number', align: 'center', field: 'number' },
-  { name: 'type', label: 'Type', align: 'center', field: 'type' },
-  { name: 'amountBeforeDiscount', label: 'Amount Before Discount', align: 'center', field: 'amountBeforeDiscount' },
-  { name: 'discountAmount', label: 'Discount Amount', align: 'center', field: 'discountAmount' },
+  { name: 'paymentId', label: '#', align: 'left', field: 'paymentId', sortable: true},
+  { name: 'customerName', label: 'Customer Name', align: 'left', field: 'customerName',sortable: true },
+  { name: 'number', label: 'Number', align: 'center', field: 'number',sortable: true },
+  { name: 'type', label: 'Type', align: 'center', field: 'type' ,sortable: true },
+  { name: 'amountBeforeDiscount', label: 'Amount Before Discount', align: 'center', field: 'amountBeforeDiscount' ,sortable: true },
+  { name: 'discountAmount', label: 'Discount Amount', align: 'center', field: 'discountAmount',sortable: true },
   { name: 'paymentAmount', label: 'Payment Amount', align: 'center', field: 'paymentAmount' },
   { name: 'paymentDate', label: 'Payment Date', align: 'center', field: 'paymentDate' },
   { name: 'isRefunded', label: 'Refunded', align: 'center', field: 'isRefunded' },
