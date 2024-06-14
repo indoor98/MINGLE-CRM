@@ -8,29 +8,36 @@
       bordered
       title="Hotel Reservations"
       :rows="reservations"
-      :columns="reservationColumns"
+      :columns="hotelReservationColumns"
       row-key="reservationId"
       v-model:pagination="reservationPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td v-for="col in reservationColumns" :key="col.name" :props="props">
+        <q-tr :props="props"  @click="showReservationDetail(props)">
+          <q-td v-for="col in hotelReservationColumns" :key="col.name" :props="props">
             {{ props.row[col.field] }}
           </q-td>
         </q-tr>
       </template>
     </q-table>
+
+    <!-- 예약 상세 정보 다이얼로그 -->
+    <q-dialog v-model="showDialog" persistent>
+      <hotel-reservation-detail :reservation="selectedReservation" @close="closeReservationDetail"/>
+    </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import {useRoute} from 'vue-router';
+import HotelReservationDetail from './HotelReservationDetail.vue';
 
 const route = useRoute();
 const customerId = route.params.id;
 const reservations = ref([]);
+
 const reservationPagination = ref({
   rowsPerPage: 10,
   page: 1,
@@ -39,6 +46,10 @@ const reservationPagination = ref({
   isLastPage: true
 });
 
+const showDialog = ref(false);
+const selectedReservation = ref(null);
+
+// 예약 목록 가져오기
 const fetchReservations = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/hotel/reservations`);
@@ -63,18 +74,30 @@ const fetchReservations = async () => {
   }
 };
 
+// 예약 상세 정보 보기
+const showReservationDetail = (props) => {
+  selectedReservation.value = props.row;
+  showDialog.value = true;
+};
+
+// 예약 상세 정보 닫기
+const closeReservationDetail = () => {
+  showDialog.value = false;
+  selectedReservation.value = null;
+};
+
 onMounted(() => {
   fetchReservations();
 });
 
-const reservationColumns = [
-  { name: 'reservationId', label: '#', align: 'left', field: 'reservationId' },
-  { name: 'reservationDate', label: '예약 날짜', align: 'left', field: 'reservationDate' },
-  { name: 'name', label: '고객명', align: 'center', field: 'name' },
-  { name: 'phoneNumber', label: '전화번호', align: 'center', field: 'phoneNumber' },
-  { name: 'hotelName', label: '호텔명', align: 'center', field: 'hotelName' },
-  { name: 'reservationType', label: '방 유형', align: 'center', field: 'reservationType' },
-  { name: 'memo', label: '메모', align: 'center', field: 'memo' }
+const hotelReservationColumns = [
+  {name: 'reservationId', label: '#', align: 'left', field: 'reservationId'},
+  {name: 'reservationDate', label: '예약 날짜', align: 'left', field: 'reservationDate'},
+  {name: 'name', label: '고객명', align: 'center', field: 'name'},
+  {name: 'phoneNumber', label: '전화번호', align: 'center', field: 'phoneNumber'},
+  {name: 'hotelName', label: '호텔명', align: 'center', field: 'hotelName'},
+  {name: 'reservationType', label: '방 유형', align: 'center', field: 'reservationType'},
+  {name: 'memo', label: '메모', align: 'center', field: 'memo'}
 ];
 </script>
 
