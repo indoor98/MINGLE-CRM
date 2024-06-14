@@ -48,6 +48,11 @@ const routes = [
         path: "email",
         component: () => import("pages/email/EmailPage.vue"),
       },
+      {
+        path: "email/:eventId",
+        name: "emailDetailPage",
+        component: () => import("pages/email/EmailLogDetailPage.vue"),
+      },
     ],
   },
   {

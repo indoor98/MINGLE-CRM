@@ -9,6 +9,7 @@
       row-key="eventId"
       :pagination="{ page: currentPage, rowsPerPage: rowsPerPage }"
       hide-pagination
+      @row-click="onRowClick"
     />
 
     <div class="row justify-center q-mt-md">
@@ -23,13 +24,16 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 const currentPage = ref(0);
 const rows = ref([]);
 const rowsPerPage = 3;
 const pagesNumber = ref(5);
+
+const router = useRouter();
 
 const columns = [
   {
@@ -84,6 +88,11 @@ const columns = [
   { name: "readCount", label: "열람 수", align: "center", field: "readCount" },
 ];
 
+const onRowClick = (event, row) => {
+  console.log(event, row);
+  router.push({ name: "emailDetailPage", params: { eventId: row.eventId } });
+};
+
 const getEventByPage = async (pageNo) => {
   try {
     const response = await axios.get(
@@ -105,5 +114,7 @@ watch(currentPage, (newPage) => {
 });
 
 // Initial data fetch
-getEventByPage(currentPage.value);
+onMounted(() => {
+  getEventByPage(currentPage.value);
+});
 </script>
