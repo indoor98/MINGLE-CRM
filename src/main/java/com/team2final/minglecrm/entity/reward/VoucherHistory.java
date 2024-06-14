@@ -78,6 +78,7 @@ public class VoucherHistory {
     }
 
     public void rejectVoucher(String rejectedReason) {
+        this.status = VoucherStatusType.REJECTED;
         this.rejectedReason = rejectedReason;
         this.confirmDate = LocalDateTime.now();
     }

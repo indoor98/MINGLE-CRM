@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -50,6 +51,9 @@ public class VoucherService {
                 .customer(customer)
                 .amount(request.getAmount())
                 .createdReason(request.getReason())
+                .createdDate(LocalDateTime.now())
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
                 .build();
 
         voucherRepository.save(voucher);
@@ -80,15 +84,6 @@ public class VoucherService {
         }
 
         return createdVoucherCode;
-    }
-
-    @Transactional
-    public List<VoucherResponse> getAllVouchers() {
-        List<Voucher> vouchers = voucherRepository.findAll();
-
-        return vouchers.stream()
-                .map(VoucherResponse::of)
-                .collect(Collectors.toList());
     }
 
     @Transactional
