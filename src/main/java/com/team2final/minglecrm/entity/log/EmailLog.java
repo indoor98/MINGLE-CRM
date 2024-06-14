@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -41,6 +42,14 @@ public class EmailLog {
         this.customer = customer;
         this.isOpened = false;
         this.openedTime = null;
+    }
+
+    @Transactional
+    public LocalDateTime open() {
+        this.isOpened = true;
+        this.openedTime = LocalDateTime.now();
+
+        return this.openedTime;
     }
 
 }

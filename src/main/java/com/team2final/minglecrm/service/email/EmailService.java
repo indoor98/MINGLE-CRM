@@ -42,7 +42,7 @@ public class EmailService {
 
         // 이메일 보내기
         String content = request.getContent();
-        content = "<img src=http://localhost:8080/readcheck/" + eventId.toString() + "/" + request.getToEmail() + "\"" + "/>";
+        content = "<img src=http://localhost:8080/api/readcheck/" + eventId.toString() + "/" + request.getToEmail() + "\" " + "onerror=this.style.display='none';>";
         emailSendService.sendMail(request.getToEmail(), request.getTitle(), content);
 
         // 이메일 로그 생성

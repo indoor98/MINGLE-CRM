@@ -5,6 +5,7 @@ import com.team2final.minglecrm.controller.ResultResponse;
 import com.team2final.minglecrm.controller.employee.vo.Subject;
 import com.team2final.minglecrm.controller.event.request.EventEmailSendRequest;
 import com.team2final.minglecrm.controller.event.request.PersonalEmailSendRequest;
+import com.team2final.minglecrm.controller.event.response.EventLogResponse;
 import com.team2final.minglecrm.entity.employee.Employee;
 import com.team2final.minglecrm.service.email.EmailSendService;
 import com.team2final.minglecrm.service.email.EmailService;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +53,8 @@ public class EventController {
         return new ResultResponse<>(HttpStatus.OK.value(), "success", null);
     }
 
-
+    @GetMapping("/api/events/{pageno}")
+    public ResultResponse<List<EventLogResponse>> getAllEvents(@PathVariable(name="pageno") int pageNo) {
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", eventService.getAllEvents(pageNo));
+    }
 }
