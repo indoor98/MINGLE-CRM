@@ -15,7 +15,12 @@
       <template v-slot:body="props">
         <q-tr :props="props" @click="showVoucherDetail(props.row)">
           <q-td v-for="col in voucherColumns" :key="col.name" :props="props">
-            {{ props.row[col.field] }}
+            <template v-if="col.name === 'amount'">
+              {{ formatPrice(props.row[col.field]) }}
+            </template>
+            <template v-else>
+              {{ props.row[col.field] }}
+            </template>
           </q-td>
         </q-tr>
       </template>
@@ -33,6 +38,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import CustomerVoucherDetail from './CustomerVoucherDetail.vue';
+import { formatPrice } from 'src/utils/utils.js'; // 유틸리티 함수 불러오기
 
 const route = useRoute();
 const customerId = route.params.id;

@@ -5,22 +5,16 @@
     <!-- 리워드 정보 표시 -->
     <q-card class="q-mt-md">
       <q-card-section class="q-pa-md">
-        <q-table
-          flat
-          bordered
-          title=""
-          :rows="[rewardInfo]"
-          :columns="rewardColumns"
-          row-key="customerId"
-        >
-          <template v-slot:body="props">
-            <q-tr :props="props">
-              <q-td v-for="col in rewardColumns" :key="col.name" :props="props">
-                {{ props.row[col.field] }}
-              </q-td>
-            </q-tr>
-          </template>
-        </q-table>
+        <q-list>
+          <q-item>
+            <q-item-section>Customer ID</q-item-section>
+            <q-item-section>{{ rewardInfo.customerId }}</q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>Amount</q-item-section>
+            <q-item-section>{{ rewardInfo.amount }}</q-item-section>
+          </q-item>
+        </q-list>
       </q-card-section>
     </q-card>
   </div>
@@ -51,11 +45,6 @@ const fetchRewardInfo = async () => {
 onMounted(() => {
   fetchRewardInfo();
 });
-
-const rewardColumns = [
-  { name: 'customerId', label: '고객 ID', align: 'left', field: 'customerId' },
-  { name: 'amount', label: '보유 금액', align: 'left', field: 'amount' }
-];
 </script>
 
 <style scoped>

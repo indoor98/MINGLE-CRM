@@ -15,7 +15,12 @@
       <template v-slot:body="props">
         <q-tr :props="props" @click="showPaymentDetail(props.row)">
           <q-td v-for="col in paymentColumns" :key="col.name" :props="props">
-            {{ props.row[col.field] }}
+            <template v-if="['amountBeforeDiscount', 'discountAmount', 'paymentAmount', 'createdReward'].includes(col.name)">
+              {{ formatPrice(props.row[col.field]) }}
+            </template>
+            <template v-else>
+              {{ props.row[col.field] }}
+            </template>
           </q-td>
         </q-tr>
       </template>
@@ -29,10 +34,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import CustomerPaymentDetail from './CustomerPaymentDetail.vue';
+import { formatPrice } from 'src/utils/utils.js'; // 유틸리티 함수 불러오기
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -86,18 +92,18 @@ onMounted(() => {
 });
 
 const paymentColumns = [
-  { name: 'paymentId', label: '#', align: 'left', field: 'paymentId', sortable: true},
-  { name: 'customerName', label: '고객명', align: 'left', field: 'customerName',sortable: true },
-  { name: 'number', label: '전화번호', align: 'center', field: 'number',sortable: true },
-  { name: 'type', label: '결제 종류', align: 'center', field: 'type' ,sortable: true },
-  { name: 'amountBeforeDiscount', label: '할인 전 금액', align: 'center', field: 'amountBeforeDiscount' ,sortable: true },
-  { name: 'discountAmount', label: '할인 금액', align: 'center', field: 'discountAmount',sortable: true },
-  { name: 'paymentAmount', label: '결제 금액', align: 'center', field: 'paymentAmount' },
-  { name: 'paymentDate', label: '결제 날짜', align: 'center', field: 'paymentDate' },
-  { name: 'isRefunded', label: '환불 여부', align: 'center', field: 'isRefunded' },
-  { name: 'refundDate', label: '환불 날짜', align: 'center', field: 'refundDate' },
-  { name: 'createdReward', label: '적립금', align: 'center', field: 'createdReward' },
-  { name: 'paymentSpot', label: '결제 지점', align: 'center', field: 'paymentSpot' }
+  {name: 'paymentId', label: '#', align: 'left', field: 'paymentId', sortable: true},
+  {name: 'customerName', label: '고객명', align: 'left', field: 'customerName', sortable: true},
+  {name: 'number', label: '전화번호', align: 'center', field: 'number', sortable: true},
+  {name: 'type', label: '결제 종류', align: 'center', field: 'type', sortable: true},
+  {name: 'amountBeforeDiscount', label: '할인 전 금액', align: 'center', field: 'amountBeforeDiscount', sortable: true},
+  {name: 'discountAmount', label: '할인 금액', align: 'center', field: 'discountAmount', sortable: true},
+  {name: 'paymentAmount', label: '결제 금액', align: 'center', field: 'paymentAmount'},
+  {name: 'paymentDate', label: '결제 날짜', align: 'center', field: 'paymentDate'},
+  {name: 'isRefunded', label: '환불 여부', align: 'center', field: 'isRefunded'},
+  {name: 'refundDate', label: '환불 날짜', align: 'center', field: 'refundDate'},
+  {name: 'createdReward', label: '적립금', align: 'center', field: 'createdReward'},
+  {name: 'paymentSpot', label: '결제 지점', align: 'center', field: 'paymentSpot'}
 ];
 </script>
 

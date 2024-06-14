@@ -15,7 +15,13 @@
       <template v-slot:body="props">
         <q-tr :props="props" @click="showReservationDetail(props)">
           <q-td v-for="col in reservationColumns" :key="col.name" :props="props">
-            {{ props.row[col.field] }}
+            <!-- totalPrice 필드 포맷 처리 -->
+            <template v-if="col.name === 'totalPrice'">
+              {{ formatPrice(props.row[col.field]) }}
+            </template>
+            <template v-else>
+              {{ props.row[col.field] }}
+            </template>
           </q-td>
         </q-tr>
       </template>
@@ -34,6 +40,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import DiningReservationDetail from './DiningReservationDetail.vue';
+import { formatPrice } from '/src/utils/utils';  // 유틸리티 함수 불러오기
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -54,7 +61,7 @@ const fetchReservations = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/dish/reservations`);
     reservations.value = response.data.map((reservation,index) => ({
-      reservationId: index+1,
+      reservationId: index + 1,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),
       visitDate: new Date(reservation.visitDate).toLocaleDateString(),
       totalPrice: reservation.totalPrice,
