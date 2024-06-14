@@ -13,13 +13,18 @@
       v-model:pagination="voucherPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props">
+        <q-tr :props="props" @click="showVoucherDetail(props.row)">
           <q-td v-for="col in voucherColumns" :key="col.name" :props="props">
             {{ props.row[col.field] }}
           </q-td>
         </q-tr>
       </template>
     </q-table>
+
+    <!-- 바우처 상세 정보 다이얼로그 -->
+    <q-dialog v-model="showDialog" persistent>
+      <customer-voucher-detail :voucher="selectedVoucher" @close="showDialog = false" />
+    </q-dialog>
   </div>
 </template>
 
@@ -27,6 +32,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import CustomerVoucherDetail from './CustomerVoucherDetail.vue';
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -38,11 +44,13 @@ const voucherPagination = ref({
   isFirstPage: true,
   isLastPage: true
 });
+const showDialog = ref(false);
+const selectedVoucher = ref({});
 
 const fetchVouchers = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/voucher`);
-    vouchers.value = response.data.data.map((voucher, index) => ({
+    vouchers.value = response.data.data.map((voucher) => ({
       voucherId: voucher.voucherId,
       requestDate: new Date(voucher.requestDate).toLocaleDateString(),
       isAuth: voucher.isAuth ? 'Yes' : 'No',
@@ -59,11 +67,14 @@ const fetchVouchers = async () => {
     voucherPagination.value.pagesNumber = Math.ceil(response.data.data.length / voucherPagination.value.rowsPerPage);
     voucherPagination.value.isFirstPage = voucherPagination.value.page === 1;
     voucherPagination.value.isLastPage = voucherPagination.value.page === voucherPagination.value.pagesNumber;
-
-    console.log(vouchers.value); // 데이터 확인용 콘솔 출력
   } catch (error) {
     console.error('Error fetching vouchers:', error);
   }
+};
+
+const showVoucherDetail = (voucher) => {
+  selectedVoucher.value = voucher;
+  showDialog.value = true;
 };
 
 onMounted(() => {
