@@ -25,7 +25,7 @@ public class VoucherController {
     // 매니저 권한일 때
 
     // 1. 승인 요청된 바우처 목록
-    @GetMapping //@PreAuthorize("hasRole('MANAGER')")
+    @GetMapping("/requested") //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getRequestedVouchers(){
         List<VoucherHistoryResponse> voucherList = voucherService.getAllRequestedVouchers();
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 요청된 바우처 목록 조회 성공", voucherList));
@@ -111,7 +111,7 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 요청 전 바우처 삭제 완료", null));
     }
     // 5. 승인 요청한 바우처 목록
-    @GetMapping("/requested-list") //@PreAuthorize("hasRole('MARKETER')")
+    @GetMapping("/requested-marketer") //@PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getRequestedVouchersByMarketer() {
         List<VoucherHistoryResponse> voucherList = voucherService.getRequestedVouchersByMarketer();
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 요청한 바우처 목록 조회 성공", voucherList));
