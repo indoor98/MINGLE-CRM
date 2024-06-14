@@ -164,7 +164,25 @@
                 >
               </q-item>
             </q-list>
+            <q-btn
+              v-if="!isActionEditing"
+              label="수정"
+              color="secondary"
+              @click="isActionEditing = true"
+            />
           </q-card-section>
+          <InquiryActionEdit
+            v-if="isActionEditing"
+            :inquiry-action-id="inquiryDetail.inquiryActionResponse.id"
+            :initial-action-status="
+              inquiryDetail.inquiryActionResponse.actionStatus
+            "
+            :initial-action-content="
+              inquiryDetail.inquiryActionResponse.actionContent
+            "
+            @actionUpdated="handleActionUpdated"
+            @cancelEdit="isActionEditing = false"
+          />
         </q-card>
 
         <q-card v-else>
@@ -188,19 +206,21 @@ import axios from "axios";
 import InquiryReply from "src/pages/inquiry/InquiryReply.vue";
 import InquiryReplyEdit from "src/pages/inquiry/InquiryReplyEdit.vue";
 import InquiryAction from "src/pages/inquiry/InquiryAction.vue";
+import InquiryActionEdit from "src/pages/inquiry/InquiryActionEdit.vue";
 
 const route = useRoute();
 const inquiryId = route.params.inquiryId;
-
 const inquiryDetail = ref(null);
 const loading = ref(true);
 const isEditing = ref(false);
+const isActionEditing = ref(false);
 
 const fetchInquiryDetail = async () => {
   try {
     const response = await axios.get(
       `http://localhost:8080/api/v1/inquiries/${inquiryId}`
     );
+    console.log("문의 상세 정보:", response.data.data); // 로그 추가
     inquiryDetail.value = response.data.data;
   } catch (error) {
     console.error("문의 상세 정보를 가져오는 데 실패했습니다:", error);
@@ -219,6 +239,11 @@ const handleReplyUpdated = () => {
 
 const handleActionSubmitted = () => {
   fetchInquiryDetail(); // 조치 내용이 등록된 후, 문의 상세 정보를 새로고침
+};
+
+const handleActionUpdated = () => {
+  // isActionEditing.value = false;
+  fetchInquiryDetail();
 };
 
 onMounted(fetchInquiryDetail);
