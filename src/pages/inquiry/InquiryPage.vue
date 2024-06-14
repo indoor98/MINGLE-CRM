@@ -31,6 +31,11 @@
       :pagination="pagination"
       @row-click="onRowClick"
     />
+    <InquiryWithoutActionList
+      v-if="selectedOption.value === 'withoutaction'"
+      :pagination="pagination"
+      @row-click="onRowClick"
+    />
   </q-page>
 </template>
 
@@ -40,6 +45,7 @@ import InquiryList from "pages/inquiry/InquiryList.vue";
 import AnsweredInquiryList from "pages/inquiry/AnsweredInquiryList.vue";
 import UnansweredInquiryList from "pages/inquiry/UnansweredInquiryList.vue";
 import InquiryWithActionList from "pages/inquiry/InquiryWithActionList.vue";
+import InquiryWithoutActionList from "pages/inquiry/InquiryWithoutActionList.vue";
 
 const pagination = ref({ page: 1, rowsPerPage: 10, rowsNumber: 0 });
 const selectedOption = ref({ label: "전체 문의", value: "all" });
@@ -48,6 +54,7 @@ const options = [
   { label: "답변 있는 문의", value: "answered" },
   { label: "답변 없는 문의", value: "unanswered" },
   { label: "조치 내용 있는 문의", value: "withaction" },
+  { label: "조치 내용 없는 문의", value: "withoutaction" },
 ];
 
 const handleOptionChange = (value) => {
