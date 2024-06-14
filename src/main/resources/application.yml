@@ -45,3 +45,11 @@ spring:
           timeout: 5000
           write timeout: 5000
     auth-code-expiration-millis: 300000
+
+
+  batch:
+    job:
+      enabled: false
+      name: importCustomerJob,visitCustomerJob, monthlyReservationJob
+    jdbc:
+      initialize-schema: always
