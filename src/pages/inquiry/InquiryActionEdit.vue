@@ -19,6 +19,13 @@
       <q-btn label="저장" color="primary" type="submit" :loading="loading" />
       <q-btn label="취소" color="secondary" @click="$emit('cancelEdit')" />
     </q-form>
+    <!-- 오류 메시지 표시 -->
+    <div
+      v-if="errorMessage"
+      class="q-mt-xs q-pa-xs q-mb-xs q-bg-negative q-text-white"
+    >
+      {{ errorMessage }}
+    </div>
   </q-card-section>
 </template>
 
@@ -47,15 +54,14 @@ const actionStatus = ref(props.initialActionStatus);
 const actionContent = ref({
   content: props.initialActionContent,
 });
-
-console.log("initialActionContent:", props.initialActionContent);
+const loading = ref(false);
+const errorMessage = ref(null);
 
 const actionStatusOptions = [
   { label: "조치 불필요", value: "조치 불필요" },
   { label: "조치 전", value: "조치 전" },
   { label: "조치 후", value: "조치 후" },
 ];
-const loading = ref(false);
 
 const updateAction = async () => {
   console.log("업데이트 요청 시작");
@@ -63,24 +69,25 @@ const updateAction = async () => {
   console.log("현재 상태:", actionStatus.value.value);
   console.log("현재 내용:", actionContent.value.content);
 
-  if (!actionContent.value.content || !actionStatus.value.value) {
-    console.log(
-      "입력된 내용이 부족합니다. 상태:",
-      actionStatus.value.value,
-      "내용:",
-      actionContent.value.content
-    );
+  const updatedContent = actionContent.value.content.trim();
+  const updatedStatus = actionStatus.value.value;
+
+  if (!updatedContent) {
+    console.log("조치 내용이 입력되지 않았습니다.");
     return;
   }
 
+  // 조치 상태가 변경되지 않았을 경우 처리
+  const statusChanged = updatedStatus !== props.initialActionStatus;
   console.log("폼 제출 시점 actionContent:", actionContent.value.content);
-
-  loading.value = true;
 
   const payload = {
     updateActionContent: actionContent.value.content,
     actionStatus: actionStatus.value.value,
   };
+
+  loading.value = true;
+  errorMessage.value = null;
 
   try {
     console.log("request 전송 확인: ", JSON.stringify(payload));
