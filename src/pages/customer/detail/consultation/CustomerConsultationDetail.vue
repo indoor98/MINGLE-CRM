@@ -1,7 +1,5 @@
-vue
-코드 복사
 <template>
-  <q-card class="custom-card">
+  <q-card>
     <q-card-section>
       <div class="text-h6">Customer Inquiry Details</div>
     </q-card-section>
@@ -52,7 +50,7 @@ vue
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import axios from 'axios';
 
 const props = defineProps(['inquiry']);
@@ -67,33 +65,29 @@ const fetchInquiryDetail = async (customerId, inquiryId) => {
   }
 };
 
-watch([() => props.inquiry.customerId, () => props.inquiry.id], ([newCustomerId, newInquiryId]) => {
-  if (newCustomerId && newInquiryId) {
-    fetchInquiryDetail(newCustomerId, newInquiryId);
+watchEffect(() => {
+  if (props.inquiry.customerId && props.inquiry.id) {
+    fetchInquiryDetail(props.inquiry.customerId, props.inquiry.id);
   }
-});
-
-onMounted(() => {
-  fetchInquiryDetail(props.inquiry.customerId, props.inquiry.id);
 });
 </script>
 
 <style scoped>
-.custom-card {
-  max-width: 600px;
-  margin: auto;
+.q-card {
+  width: 400px; /* 카드의 너비 조정 */
+  margin: auto; /* 가운데 정렬 */
 }
 
 .text-h6 {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1.25rem; /* 제목 글꼴 크기 조정 */
+  font-weight: bold; /* 제목 글꼴 두껍게 */
 }
 
 .q-item {
-  padding: 10px 0;
+  padding: 10px 0; /* 각 항목 사이의 간격 조정 */
 }
 
 .q-item-label {
-  font-weight: bold;
+  font-weight: bold; /* 항목 레이블 글꼴 두껍게 */
 }
 </style>

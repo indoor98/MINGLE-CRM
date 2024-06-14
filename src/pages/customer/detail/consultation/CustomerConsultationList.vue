@@ -1,5 +1,3 @@
-vue
-코드 복사
 <template>
   <div class="q-pa-md">
     <q-separator class="q-my-md" />
@@ -24,7 +22,7 @@ vue
     </q-table>
 
     <!-- 문의 상세 정보 다이얼로그 -->
-    <q-dialog v-model="showDialog" persistent>
+    <q-dialog v-model="showDialog">
       <customer-consultation-detail :inquiry="selectedInquiry" />
     </q-dialog>
   </div>
