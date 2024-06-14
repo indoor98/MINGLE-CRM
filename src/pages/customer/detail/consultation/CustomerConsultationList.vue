@@ -1,3 +1,5 @@
+vue
+코드 복사
 <template>
   <div class="q-pa-md">
     <q-separator class="q-my-md" />
@@ -13,13 +15,18 @@
       v-model:pagination="inquiryPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props">
+        <q-tr :props="props" @click="showInquiryDetail(props.row)">
           <q-td v-for="col in inquiryColumns" :key="col.name" :props="props">
             {{ props.row[col.field] }}
           </q-td>
         </q-tr>
       </template>
     </q-table>
+
+    <!-- 문의 상세 정보 다이얼로그 -->
+    <q-dialog v-model="showDialog" persistent>
+      <customer-consultation-detail :inquiry="selectedInquiry" />
+    </q-dialog>
   </div>
 </template>
 
@@ -27,6 +34,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import CustomerConsultationDetail from './CustomerConsultationDetail.vue';
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -38,12 +46,15 @@ const inquiryPagination = ref({
   isFirstPage: true,
   isLastPage: true
 });
+const showDialog = ref(false);
+const selectedInquiry = ref({});
 
 const fetchInquiries = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/inquiries`);
-    inquiries.value = response.data.data.content.map((inquiry, index) => ({
+    inquiries.value = response.data.data.content.map((inquiry) => ({
       id: inquiry.id,
+      customerId: customerId,
       customerName: inquiry.customerName,
       customerPhone: inquiry.customerPhone,
       date: new Date(inquiry.date).toLocaleDateString(),
@@ -59,11 +70,14 @@ const fetchInquiries = async () => {
     inquiryPagination.value.pagesNumber = Math.ceil(response.data.data.content.length / inquiryPagination.value.rowsPerPage);
     inquiryPagination.value.isFirstPage = inquiryPagination.value.page === 1;
     inquiryPagination.value.isLastPage = inquiryPagination.value.page === inquiryPagination.value.pagesNumber;
-
-    console.log(inquiries.value); // 데이터 확인용 콘솔 출력
   } catch (error) {
     console.error('Error fetching inquiries:', error);
   }
+};
+
+const showInquiryDetail = (inquiry) => {
+  selectedInquiry.value = inquiry;
+  showDialog.value = true;
 };
 
 onMounted(() => {
