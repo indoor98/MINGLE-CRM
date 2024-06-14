@@ -176,6 +176,7 @@ public class VoucherService {
 //        voucherHistory.approveVoucher(approver);
         voucherHistory.rejectVoucher(rejectReason);
 //        voucherHistoryRepository.save(voucherHistory);
+        voucherHistoryRepository.save(voucherHistory);
 
         return VoucherHistoryResponse.of(voucherHistory);
     }

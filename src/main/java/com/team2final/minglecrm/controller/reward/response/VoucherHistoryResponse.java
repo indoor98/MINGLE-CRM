@@ -16,14 +16,21 @@ public class VoucherHistoryResponse {
     private final VoucherStatusType status;
 
     private final LocalDateTime requestDate;
+    private final String createdReason;
+
     private final LocalDateTime confirmDate;
     private final LocalDateTime conversionDate;
 
     private final Long creatorId;
-    private final Long approverId;
-    private final Long customerId;
-    private final Long amount;
+    private final String creatorName;
 
+    private final Long approverId;
+    private final String approverName;
+
+    private final Long customerId;
+    private final String customerName;
+
+    private final Long amount;
     private final String rejectedReason;
     private final String voucherCode;
 
@@ -31,16 +38,27 @@ public class VoucherHistoryResponse {
     public static VoucherHistoryResponse of(VoucherHistory voucherHistory){
         Long employeeStaffId = voucherHistory.getEmployeeStaff() != null ? voucherHistory.getEmployeeStaff().getId() : null;
         Long employeeManagerId = voucherHistory.getEmployeeManager() != null ? voucherHistory.getEmployeeManager().getId() : null;
+        String employeeStaffName = voucherHistory.getEmployeeStaff() != null ? voucherHistory.getEmployeeStaff().getName() : null;
+        String employeeManagerName = voucherHistory.getEmployeeManager() != null ? voucherHistory.getEmployeeManager().getName() : null;
+
 
         return new VoucherHistoryResponse(
                 voucherHistory.getVoucher().getId(),
                 voucherHistory.getStatus(),
                 voucherHistory.getRequestDate(),
+                voucherHistory.getVoucher().getCreatedReason(),
                 voucherHistory.getConfirmDate(),
                 voucherHistory.getConversionDate(),
+
                 employeeStaffId,
+                employeeStaffName,
+
                 employeeManagerId,
+                employeeManagerName,
+
                 voucherHistory.getCustomer().getId(),
+                voucherHistory.getCustomer().getName(),
+
                 voucherHistory.getVoucher().getAmount(),
                 voucherHistory.getRejectedReason(),
                 voucherHistory.getVoucherCode()
