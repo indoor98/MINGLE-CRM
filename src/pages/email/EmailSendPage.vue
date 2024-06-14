@@ -43,8 +43,11 @@
 
 <script setup>
 import { ref } from "vue";
-import { api as axios } from "src/boot/axios";
 // import axios from "axios";
+import { api as axios } from "src/boot/axios";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const content = ref("");
 const toEmails = ref("");
@@ -63,7 +66,11 @@ const sendPersonalEmail = async () => {
         content: content.value,
       }
     );
-    console.log(response.data);
+
+    window.alert("이메일이 발송되었습니다!");
+    content.value = "";
+    title.value = "";
+    toEmails.value = "";
   } catch (error) {
     console.log("개인 메일 발송 에러 발생");
     console.log(error);
