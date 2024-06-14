@@ -2,7 +2,7 @@
   <q-page class="q-pa-xl">
     <q-card class="my-card" flat bordered>
       <q-card-section>
-        <div class="text-h6">Customer Details</div>
+        <div class="text-h5">고객 상세</div>
         <CustomerSummary />
       </q-card-section>
 
@@ -29,16 +29,14 @@
           </q-tabs>
           <q-tab-panels v-model="activeReservationTab">
             <q-tab-panel name="hotel">
-              <div class="text-h5">호텔 예약</div>
               <q-card>
-                <q-card-section>호텔 예약 정보를 표시합니다.</q-card-section>
+                <q-card-section>검색</q-card-section>
                 <HotelReservationList></HotelReservationList>
               </q-card>
             </q-tab-panel>
             <q-tab-panel name="dining">
-              <div class="text-h5">다이닝 예약</div>
               <q-card>
-                <q-card-section>다이닝 예약 정보를 표시합니다.</q-card-section>
+                <q-card-section>검색</q-card-section>
                 <DiningReservationList></DiningReservationList>
               </q-card>
             </q-tab-panel>
@@ -46,31 +44,29 @@
         </q-tab-panel>
 
         <q-tab-panel name="consultation">
-          <div class="text-h5">상담</div>
           <q-card>
+            <q-card-section>검색</q-card-section>
             <CustomerConsultationList></CustomerConsultationList>
           </q-card>
         </q-tab-panel>
 
         <q-tab-panel name="payment">
-          <div class="text-h5">결제</div>
           <q-card>
+            <q-card-section>검색</q-card-section>
             <CustomerPaymentList></CustomerPaymentList>
           </q-card>
         </q-tab-panel>
 
         <q-tab-panel name="voucher">
-          <div class="text-h5">바우처</div>
           <q-card>
-            <q-card-section>바우처 정보를 표시합니다.</q-card-section>
+            <q-card-section>검색</q-card-section>
             <CustomerVoucherList></CustomerVoucherList>
           </q-card>
         </q-tab-panel>
 
         <q-tab-panel name="reward">
-          <div class="text-h5">리워드</div>
           <q-card>
-            <q-card-section>리워드 정보를 표시합니다.</q-card-section>
+            <q-card-section>검색</q-card-section>
             <CustomerRewardList></CustomerRewardList>
           </q-card>
         </q-tab-panel>

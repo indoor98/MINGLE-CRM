@@ -6,7 +6,7 @@
     <q-table
       flat
       bordered
-      title="Hotel Reservations"
+      title=""
       :rows="reservations"
       :columns="hotelReservationColumns"
       row-key="reservationId"

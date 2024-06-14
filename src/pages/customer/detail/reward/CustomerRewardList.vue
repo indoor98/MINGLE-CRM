@@ -8,7 +8,7 @@
         <q-table
           flat
           bordered
-          title="Reward Information"
+          title=""
           :rows="[rewardInfo]"
           :columns="rewardColumns"
           row-key="customerId"

@@ -6,7 +6,7 @@
     <q-table
       flat
       bordered
-      title="Payments"
+      title=""
       :rows="payments"
       :columns="paymentColumns"
       row-key="paymentId"
@@ -87,17 +87,17 @@ onMounted(() => {
 
 const paymentColumns = [
   { name: 'paymentId', label: '#', align: 'left', field: 'paymentId', sortable: true},
-  { name: 'customerName', label: 'Customer Name', align: 'left', field: 'customerName',sortable: true },
-  { name: 'number', label: 'Number', align: 'center', field: 'number',sortable: true },
-  { name: 'type', label: 'Type', align: 'center', field: 'type' ,sortable: true },
-  { name: 'amountBeforeDiscount', label: 'Amount Before Discount', align: 'center', field: 'amountBeforeDiscount' ,sortable: true },
-  { name: 'discountAmount', label: 'Discount Amount', align: 'center', field: 'discountAmount',sortable: true },
-  { name: 'paymentAmount', label: 'Payment Amount', align: 'center', field: 'paymentAmount' },
-  { name: 'paymentDate', label: 'Payment Date', align: 'center', field: 'paymentDate' },
-  { name: 'isRefunded', label: 'Refunded', align: 'center', field: 'isRefunded' },
-  { name: 'refundDate', label: 'Refund Date', align: 'center', field: 'refundDate' },
-  { name: 'createdReward', label: 'Created Reward', align: 'center', field: 'createdReward' },
-  { name: 'paymentSpot', label: 'Payment Spot', align: 'center', field: 'paymentSpot' }
+  { name: 'customerName', label: '고객명', align: 'left', field: 'customerName',sortable: true },
+  { name: 'number', label: '전화번호', align: 'center', field: 'number',sortable: true },
+  { name: 'type', label: '결제 종류', align: 'center', field: 'type' ,sortable: true },
+  { name: 'amountBeforeDiscount', label: '할인 전 금액', align: 'center', field: 'amountBeforeDiscount' ,sortable: true },
+  { name: 'discountAmount', label: '할인 금액', align: 'center', field: 'discountAmount',sortable: true },
+  { name: 'paymentAmount', label: '결제 금액', align: 'center', field: 'paymentAmount' },
+  { name: 'paymentDate', label: '결제 날짜', align: 'center', field: 'paymentDate' },
+  { name: 'isRefunded', label: '환불 여부', align: 'center', field: 'isRefunded' },
+  { name: 'refundDate', label: '환불 날짜', align: 'center', field: 'refundDate' },
+  { name: 'createdReward', label: '적립금', align: 'center', field: 'createdReward' },
+  { name: 'paymentSpot', label: '결제 지점', align: 'center', field: 'paymentSpot' }
 ];
 </script>
 

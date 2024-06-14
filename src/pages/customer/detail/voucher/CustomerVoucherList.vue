@@ -6,7 +6,7 @@
     <q-table
       flat
       bordered
-      title="Customer Vouchers"
+      title=""
       :rows="vouchers"
       :columns="voucherColumns"
       row-key="voucherId"

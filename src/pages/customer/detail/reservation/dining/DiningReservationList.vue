@@ -6,7 +6,7 @@
     <q-table
       flat
       bordered
-      title="Dining Reservations"
+      title=""
       :rows="reservations"
       :columns="reservationColumns"
       row-key="reservationId"
@@ -90,10 +90,10 @@ onMounted(() => {
 
 const reservationColumns = [
   {name: 'reservationId', label: '#', align: 'left', field: 'reservationId'},
-  {name: 'reservationDate', label: 'Reservation Date', align: 'left', field: 'reservationDate'},
-  {name: 'visitDate', label: 'Visit Date', align: 'center', field: 'visitDate'},
-  {name: 'totalPrice', label: 'Total Price', align: 'center', field: 'totalPrice'},
-  {name: 'dishes', label: 'Dishes', align: 'center', field: 'dishes'}
+  {name: 'reservationDate', label: '예약 날짜', align: 'left', field: 'reservationDate'},
+  {name: 'visitDate', label: '방문 날짜', align: 'center', field: 'visitDate'},
+  {name: 'totalPrice', label: '총 가격', align: 'center', field: 'totalPrice'},
+  {name: 'dishes', label: '음식', align: 'center', field: 'dishes'}
 ];
 </script>
 

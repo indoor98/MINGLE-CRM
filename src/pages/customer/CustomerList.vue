@@ -13,7 +13,7 @@
     <q-table
       flat
       bordered
-      title="Customers"
+      title="고객 목록"
       :rows="filteredRows"
       :columns="columns"
       row-key="id"
@@ -30,52 +30,15 @@
 
       <!-- 페이지네이션 컨트롤 버튼 -->
       <template v-slot:top-right>
-        <q-btn
-          v-if="pagination.pagesNumber > 2"
-          icon="first_page"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="pagination.isFirstPage"
-          @click="firstPage"
-        />
-        <q-btn
-          icon="chevron_left"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="pagination.isFirstPage"
-          @click="prevPage"
-        />
-        <q-btn
-          icon="chevron_right"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="pagination.isLastPage"
-          @click="nextPage"
-        />
-        <q-btn
-          v-if="pagination.pagesNumber > 2"
-          icon="last_page"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="pagination.isLastPage"
-          @click="lastPage"
-        />
+
       </template>
     </q-table>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import {ref, computed, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
 // import { api as axios } from "src/boot/axios";
 import axios from 'axios';
 
@@ -120,7 +83,7 @@ const rowClicked = (row) => {
   console.log('Clicked row:', row);
   console.log('Clicked row id:', row.id);
   if (row && row.id) {
-    router.push({ path: `/customer-detail/${row.id}` });
+    router.push({path: `/customer-detail/${row.id}`});
   } else {
     console.error('Invalid row data:', row);
   }
@@ -165,14 +128,14 @@ onMounted(() => {
 });
 
 const columns = [
-  { name: 'id', label: '#', align: 'left', field: 'id' },
-  { name: 'name', label: 'Name', align: 'left', field: 'name', sortable: true },
-  { name: 'grade', label: 'Grade', align: 'center', field: 'grade', sortable: true },
-  { name: 'phone', label: 'Phone', align: 'center', field: 'phone', sortable: true },
-  { name: 'address', label: 'Address', align: 'left', field: 'address' },
-  { name: 'employee_id', label: 'Employee ID', align: 'center', field: 'employee_id' },
-  { name: 'memo', label: 'Memo', align: 'left', field: 'memo' },
-  { name: 'gender', label: 'Gender', align: 'center', field: 'gender' },
-  { name: 'birth', label: 'Birth', align: 'center', field: 'birth' },
+  {name: 'id', label: '#', align: 'left', field: 'id'},
+  {name: 'name', label: '이름', align: 'left', field: 'name', sortable: true},
+  {name: 'grade', label: '등급', align: 'center', field: 'grade', sortable: true},
+  {name: 'phone', label: '전화번호', align: 'center', field: 'phone', sortable: true},
+  {name: 'address', label: '주소', align: 'left', field: 'address'},
+  {name: 'employee_id', label: '직원 ID', align: 'center', field: 'employee_id'},
+  {name: 'memo', label: '메모', align: 'left', field: 'memo'},
+  {name: 'gender', label: '성별', align: 'center', field: 'gender'},
+  {name: 'birth', label: '생년월일', align: 'center', field: 'birth'},
 ];
 </script>
