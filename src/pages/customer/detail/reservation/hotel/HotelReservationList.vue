@@ -69,12 +69,12 @@ onMounted(() => {
 
 const reservationColumns = [
   { name: 'reservationId', label: '#', align: 'left', field: 'reservationId' },
-  { name: 'reservationDate', label: 'Reservation Date', align: 'left', field: 'reservationDate' },
-  { name: 'name', label: 'Name', align: 'center', field: 'name' },
-  { name: 'phoneNumber', label: 'Phone Number', align: 'center', field: 'phoneNumber' },
-  { name: 'hotelName', label: 'Hotel Name', align: 'center', field: 'hotelName' },
-  { name: 'reservationType', label: 'Reservation Type', align: 'center', field: 'reservationType' },
-  { name: 'memo', label: 'Memo', align: 'center', field: 'memo' }
+  { name: 'reservationDate', label: '예약 날짜', align: 'left', field: 'reservationDate' },
+  { name: 'name', label: '고객명', align: 'center', field: 'name' },
+  { name: 'phoneNumber', label: '전화번호', align: 'center', field: 'phoneNumber' },
+  { name: 'hotelName', label: '호텔명', align: 'center', field: 'hotelName' },
+  { name: 'reservationType', label: '방 유형', align: 'center', field: 'reservationType' },
+  { name: 'memo', label: '메모', align: 'center', field: 'memo' }
 ];
 </script>
 

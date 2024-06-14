@@ -1,10 +1,6 @@
-vue
-코드 복사
 <template>
   <q-card class="custom-card">
-    <q-card-section>
-      <div class="text-h6">Voucher Details</div>
-    </q-card-section>
+
 
     <q-separator />
 

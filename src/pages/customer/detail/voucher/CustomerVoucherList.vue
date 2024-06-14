@@ -82,16 +82,16 @@ onMounted(() => {
 });
 
 const voucherColumns = [
-  { name: 'voucherId', label: 'Voucher ID', align: 'left', field: 'voucherId' },
-  { name: 'requestDate', label: 'Request Date', align: 'left', field: 'requestDate' },
-  { name: 'isAuth', label: 'Authorized', align: 'center', field: 'isAuth' },
-  { name: 'authDate', label: 'Authorization Date', align: 'center', field: 'authDate' },
-  { name: 'isConvertedYn', label: 'Converted', align: 'center', field: 'isConvertedYn' },
-  { name: 'conversionDate', label: 'Conversion Date', align: 'center', field: 'conversionDate' },
-  { name: 'issuerId', label: 'Issuer ID', align: 'center', field: 'issuerId' },
-  { name: 'approverId', label: 'Approver ID', align: 'center', field: 'approverId' },
-  { name: 'customerId', label: 'Customer ID', align: 'center', field: 'customerId' },
-  { name: 'amount', label: 'Amount', align: 'center', field: 'amount' }
+  { name: 'voucherId', label: '바우처 ID', align: 'left', field: 'voucherId' },
+  { name: 'requestDate', label: '요청 날짜', align: 'left', field: 'requestDate' },
+  { name: 'isAuth', label: '인증 여부', align: 'center', field: 'isAuth' },
+  { name: 'authDate', label: '인증 날짜', align: 'center', field: 'authDate' },
+  { name: 'isConvertedYn', label: '전환 여부', align: 'center', field: 'isConvertedYn' },
+  { name: 'conversionDate', label: '전환 날짜', align: 'center', field: 'conversionDate' },
+  { name: 'issuerId', label: '발급자 ID', align: 'center', field: 'issuerId' },
+  { name: 'approverId', label: '승인자 ID', align: 'center', field: 'approverId' },
+  { name: 'customerId', label: '고객 ID', align: 'center', field: 'customerId' },
+  { name: 'amount', label: '금액', align: 'center', field: 'amount' }
 ];
 </script>
 

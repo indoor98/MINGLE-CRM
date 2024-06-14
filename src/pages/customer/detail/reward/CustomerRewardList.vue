@@ -53,8 +53,8 @@ onMounted(() => {
 });
 
 const rewardColumns = [
-  { name: 'customerId', label: 'Customer ID', align: 'left', field: 'customerId' },
-  { name: 'amount', label: 'Amount', align: 'left', field: 'amount' }
+  { name: 'customerId', label: '고객 ID', align: 'left', field: 'customerId' },
+  { name: 'amount', label: '보유 금액', align: 'left', field: 'amount' }
 ];
 </script>
 
