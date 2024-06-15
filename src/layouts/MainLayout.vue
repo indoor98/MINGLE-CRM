@@ -113,6 +113,12 @@ const linksList = [
     to: "/voucher-marketer",
   },
   {
+    title: "리워드",
+    caption: "리워드 탭",
+    icon: "school",
+    to: "/reward",
+  },
+  {
     title: "상담",
     caption: "상담 탭",
     icon: "school",
