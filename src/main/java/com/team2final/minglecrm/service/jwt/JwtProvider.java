@@ -11,6 +11,7 @@ import com.team2final.minglecrm.controller.employee.vo.Subject;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -95,6 +96,16 @@ public class JwtProvider {
         return objectMapper.readValue(subjectStr, Subject.class);
     }
 
+    // HttpServeltRequest에 담긴 atk를 사용해 현재 로그인한 유저 정보 반환
+    public Employee getEmployeeFromHttpServletRequest(HttpServletRequest request) throws Exception {
+        String atk = request.getHeader("Authorization").substring(7);
+        Subject subject = this.getSubject(atk);
+        Employee employee = employeeRepository.findByEmail(subject.getEmail()).orElseThrow(Exception::new);
+        return employee;
+
+    }
+
+
     public Date getTokenExpiration(String token) {
         SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
         Date expiration = Jwts.parserBuilder()
@@ -141,4 +152,6 @@ public class JwtProvider {
                 .rtkExpiration(getTokenExpiration(newRtk))
                 .build();
     }
+
+
 }

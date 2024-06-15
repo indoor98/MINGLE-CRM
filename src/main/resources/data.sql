@@ -466,6 +466,10 @@ VALUES (1, 'akincaid0', 'VIP', '996-953-6203', 'rbittlestone0@springer.com', '0 
         'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', 'Female', '1964-09-11',
         '2021-02-10', FALSE, 1),
        (200, 'mglaze5j', 'BASIC', '721-969-1224', 'jharewood5j@canalblog.com', '382 Vera Trail', 12, '', 'Female',
+        '1951-09-16', '2019-09-15', FALSE, 10),
+       (201, '장명훈', 'BASIC', '721-969-1224', 'thinghoon@icloud.com', '382 Vera Trail', 12, '', 'Female',
+        '1951-09-16', '2019-09-15', FALSE, 10),
+       (202, 'mglaze5j', 'BASIC', '721-969-1224', 'wkdaudgns132@naver.com', '382 Vera Trail', 12, '', 'Female',
         '1951-09-16', '2019-09-15', FALSE, 10);
 
 INSERT INTO customer_preference (id, customer_id, is_smoking, purpose, is_pet, preferred_checkin_time,
@@ -5848,3 +5852,27 @@ VALUES
     (21, 1.0, 3.0, 1.0, 3.0, '좋아. 그래도 뭔가 잘못된 것 같습니다.', 20, 66, '2024-06-07 0:00:00');
 
 ALTER TABLE employee ALTER COLUMN id RESTART WITH 21;
+
+
+
+INSERT INTO event (id, employee_id, title, content, sent_date, send_count)
+VALUES (1, 1, '이벤트1', '이벤트 이메일 내용1', '2024-05-13 0:00:00', 5),
+       (2, 2, '이벤트2', '이벤트 이메일 내용2', '2024-05-14 0:00:00', 6);
+--        (3, 3, '이벤트3', '이벤트 이메일 내용3', '2024-05-15 0:00:00', 7),
+--        (4, 4, '이벤트4', '이벤트 이메일 내용4', '2024-05-16 0:00:00', 8),
+--        (5, 5, '이벤트5', '이벤트 이메일 내용5', '2024-05-17 0:00:00', 9);
+
+
+INSERT INTO email_log (ID, EVENT_ID, CUSTOMER_ID, IS_OPENED, OPENED_TIME)
+VALUES (1, 1, 1, true, '2024-05-13 2:00:00'),
+       (2, 1, 2, true, '2024-05-13 3:00:00'),
+       (3, 1, 3, true, '2024-05-13 4:00:00'),
+       (4, 1, 4, false, null),
+       (5, 1, 5, false, null),
+       (6, 2, 6, true, '2024-05-14 2:00:00'),
+       (7, 2, 7, true, '2024-05-14 3:00:00'),
+       (8, 2, 8, true, '2024-05-14 4:00:00'),
+       (9, 2, 9, true, '2024-05-14 5:00:00'),
+       (10, 2, 10, false, null),
+       (11, 2, 11, false, null);
+
