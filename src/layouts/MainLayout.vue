@@ -55,12 +55,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
+import { useTokenStore } from "src/stores/token-store";
+import { storeToRefs } from "pinia";
+import axios from "axios";
 
-defineOptions({
-  name: "MainLayout",
-});
+const store = useTokenStore();
+const { atk } = storeToRefs(store);
 
 const linksList = [
   {
@@ -76,13 +78,7 @@ const linksList = [
     to: "/review",
   },
   {
-    title: "바우처 - 매니저",
-    caption: "바우처 탭",
-    icon: "school",
-    to: "/voucher-manager",
-  },
-  {
-    title: "바우처 - 마케터",
+    title: "바우처",
     caption: "바우처 탭",
     icon: "school",
     to: "/voucher-marketer",
@@ -99,11 +95,61 @@ const linksList = [
     icon: "school",
     to: "/inquiry",
   },
+  {
+    title: "이메일",
+    caption: "이메일 탭",
+    icon: "email",
+    to: "/email",
+  },
 ];
+
+const logout = async () => {
+  try {
+    console.log("로그아웃");
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/auth/logout",
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(response.status);
+    store.setAtk("");
+    atkExpiration = "";
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const renewToken = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/auth/renew",
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(response.data);
+    console.log("renewToken 실행 완료");
+    if (response.data.code === 200) {
+      const { atk, atkExpiration } = response.data.data;
+      store.setSigninResponse(atk, atkExpiration);
+      console.log("갱신 완료");
+    } else {
+      throw new Error("Token renewal failed");
+    }
+  } catch (error) {
+    console.log(error);
+    console.log("토큰 갱신 실패 -> 로그아웃 상태");
+    window.location.href = "/#/signin";
+    return Promise.reject(error);
+  }
+};
 
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
   //
 }
+
+onMounted(renewToken);
 </script>

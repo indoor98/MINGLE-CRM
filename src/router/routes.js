@@ -4,7 +4,10 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/IndexPage.vue") },
-      { path: "review", component: () => import("pages/ReviewPage.vue") },
+      {
+        path: "review",
+        component: () => import("pages/review/ReviewPage.vue"),
+      },
       {
         path: "voucher-manager",
         component: () => import("src/pages/voucher/ManagerVoucherPage.vue"),
@@ -40,6 +43,23 @@ const routes = [
       {
         path: "customer-detail/:id",
         component: () => import("pages/customer/CustomerDetailPage.vue"),
+      },
+      {
+        path: "signup",
+        component: () => import("pages/auth/SignUpPage.vue"),
+      },
+      {
+        path: "signin",
+        component: () => import("pages/auth/SignInPage.vue"),
+      },
+      {
+        path: "email",
+        component: () => import("pages/email/EmailPage.vue"),
+      },
+      {
+        path: "email/:eventId",
+        name: "emailDetailPage",
+        component: () => import("pages/email/EmailLogDetailPage.vue"),
       },
     ],
   },

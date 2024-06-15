@@ -15,7 +15,9 @@
           :columns="columns"
           row-key="id"
           :loading="loading"
-          :pagination="{ rowsPerPage: 10 }"
+          :dense="true"
+          class="q-table--dense"
+          :pagination="{ rowsPerPage: 50 }"
         >
           <template v-slot:body-cell-createdReason="props">
             <q-td :props="props">
