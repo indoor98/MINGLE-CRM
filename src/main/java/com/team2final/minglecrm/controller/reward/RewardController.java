@@ -5,6 +5,7 @@ import com.team2final.minglecrm.controller.reward.response.RewardHistoryResponse
 import com.team2final.minglecrm.controller.reward.response.RewardResponse;
 import com.team2final.minglecrm.service.reward.RewardService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,12 @@ import java.util.List;
 public class RewardController {
     private final RewardService rewardService;
 
+    @GetMapping
+    public ResponseEntity<ResultResponse<List<RewardResponse>>> getRewards() {
+        List<RewardResponse> rewards = rewardService.getAllRewards();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(),"리워드 리스트 조회 성공", rewards));
+    }
+
     @GetMapping("/{customerId}")
     public ResponseEntity<ResultResponse<RewardResponse>> getReward(@PathVariable("customerId") Long customerId) {
         RewardResponse reward = rewardService.getReward(customerId);
@@ -31,6 +38,12 @@ public class RewardController {
     public ResponseEntity<ResultResponse<List<RewardHistoryResponse>>> getRewardHistory(@PathVariable("customerId") Long customerId) {
         List<RewardHistoryResponse> rewardHistories = rewardService.getRewardHistories(customerId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 리워드 히스토리 조회 성공", rewardHistories));
+    }
+
+    @GetMapping("/histories")
+    public ResponseEntity<ResultResponse<List<RewardHistoryResponse>>> getRewardHistories() {
+        List<RewardHistoryResponse> rewardHistories = rewardService.getAllRewardHistories();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "전체 리워드 히스토리 목록 조회 성공", rewardHistories));
     }
 
 }
