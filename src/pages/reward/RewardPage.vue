@@ -2,7 +2,7 @@
   <q-page>
     <div class="q-pa-md">
       <q-tabs v-model="selectedTab" dense>
-        <q-tab name="all" label="모든 리워드 리스트" />
+        <q-tab name="all" label="리워드 리스트" />
         <q-tab name="histories" label="리워드 히스토리 리스트" />
       </q-tabs>
       <q-separator />

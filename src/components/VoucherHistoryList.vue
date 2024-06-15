@@ -10,15 +10,19 @@
           :loading="loading"
           :pagination="{ rowsPerPage: 10 }"
         >
-          <template v-slot:body-cell-approve="props">
+          <template v-slot:body-cell-requestDate="props">
             <q-td :props="props">
-              <q-btn
-                v-if="!props.row.isAuth"
-                label="승인"
-                color="primary"
-                @click="approveVoucher(props.row.voucherId)"
-              ></q-btn>
-              <span v-else>승인됨</span>
+              {{ toDate(props.row.requestDate) }}
+            </q-td>
+          </template>
+          <template v-slot:body-cell-confirmDate="props">
+            <q-td :props="props">
+              {{ toDate(props.row.confirmDate) }}
+            </q-td>
+          </template>
+          <template v-slot:body-cell-rejectedReason="props">
+            <q-td :props="props">
+              {{ toTenWords(props.row.rejectedReason) }}
             </q-td>
           </template>
           <template v-slot:no-data>
@@ -68,7 +72,7 @@ const defaultColumns = [
   },
   {
     name: "requestDate",
-    label: "요청 날짜",
+    label: "요청 일자",
     align: "center",
     field: "requestDate",
     sortable: true,
@@ -140,6 +144,22 @@ const allColumns = [
     sortable: true,
   },
 ];
+
+const toDate = (beforeDate) => {
+  return (
+    beforeDate.substring(0, 4) +
+    "-" +
+    beforeDate.substring(5, 7) +
+    "-" +
+    beforeDate.substring(8, 10)
+  );
+};
+
+const toTenWords = (beforeWord) => {
+  const afterWord =
+    beforeWord.length <= 10 ? beforeWord : beforeWord.substring(0, 10) + "...";
+  return afterWord;
+};
 
 const updateColumns = (selected) => {
   switch (selected) {

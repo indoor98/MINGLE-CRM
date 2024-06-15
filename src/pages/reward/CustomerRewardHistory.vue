@@ -46,12 +46,12 @@ const rewardHistories = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 const columns = ref([
-  // {
-  //   name: "customerId",
-  //   label: "회원 ID",
-  //   align: "center",
-  //   field: "customerId",
-  // },
+  {
+    name: "rewardHistoryId",
+    label: "히스토리 ID",
+    align: "center",
+    field: "rewardHistoryId",
+  },
   {
     name: "amount",
     label: "금액",

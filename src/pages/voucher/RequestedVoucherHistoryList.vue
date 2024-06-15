@@ -10,6 +10,16 @@
           :loading="loading"
           :pagination="{ rowsPerPage: 10 }"
         >
+          <template v-slot:body-cell-createdReason="props">
+            <q-td :props="props">
+              {{ toTenWords(props.row.createdReason) }}
+            </q-td>
+          </template>
+          <template v-slot:body-cell-requestDate="props">
+            <q-td :props="props">
+              {{ toDate(props.row.requestDate) }}
+            </q-td>
+          </template>
           <template v-slot:body-cell-approve="props">
             <q-td :props="props">
               <q-btn
@@ -85,7 +95,6 @@ const columns = ref([
     label: "생성 사유",
     align: "center",
     field: "createdReason",
-    sortable: true,
   },
   {
     name: "requestDate",
@@ -101,8 +110,24 @@ const columns = ref([
     field: "amount",
     sortable: true,
   },
-  { name: "approve", label: "승인/거절", align: "center", sortable: false },
+  { name: "approve", label: "승인/거절", align: "center" },
 ]);
+
+const toTenWords = (beforeWord) => {
+  const afterword =
+    beforeWord.length <= 10 ? beforeWord : beforeWord.substring(0, 10) + "...";
+  return afterword;
+};
+
+const toDate = (beforeDate) => {
+  return (
+    beforeDate.substring(0, 4) +
+    "-" +
+    beforeDate.substring(5, 7) +
+    "-" +
+    beforeDate.substring(8, 10)
+  );
+};
 
 const fetchVouchers = async () => {
   try {

@@ -76,10 +76,16 @@ const linksList = [
     to: "/review",
   },
   {
-    title: "바우처",
+    title: "바우처 - 매니저",
     caption: "바우처 탭",
     icon: "school",
-    to: "/voucher",
+    to: "/voucher-manager",
+  },
+  {
+    title: "바우처 - 마케터",
+    caption: "바우처 탭",
+    icon: "school",
+    to: "/voucher-marketer",
   },
   {
     title: "리워드",

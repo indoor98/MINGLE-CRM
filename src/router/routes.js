@@ -6,8 +6,12 @@ const routes = [
       { path: "", component: () => import("pages/IndexPage.vue") },
       { path: "review", component: () => import("pages/ReviewPage.vue") },
       {
-        path: "voucher",
+        path: "voucher-manager",
         component: () => import("src/pages/voucher/ManagerVoucherPage.vue"),
+      },
+      {
+        path: "voucher-marketer",
+        component: () => import("src/pages/voucher/MarketerVoucherPage.vue"),
       },
       {
         path: "reward",

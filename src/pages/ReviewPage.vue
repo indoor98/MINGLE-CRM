@@ -187,6 +187,16 @@ const startDate = ref("");
 const endDate = ref("");
 const customerName = ref("");
 
+const dateToLocalDateTime = (beforeDate) => {
+  return (
+    beforeDate.substring(0, 4) +
+    "-" +
+    beforeDate.substring(5, 7) +
+    "-" +
+    beforeDate.substring(8, 10)
+  );
+};
+
 const getHotelReviews = async () => {
   try {
     const searchCondition = ref({});
