@@ -22,43 +22,20 @@
         <q-space />
         <div class="search row items-center"></div>
         <q-space />
-        <div v-if="atk">
-          <q-btn
-            outline
-            rounded
-            color="accent"
-            icon="account_circle"
-            label="로그아웃 "
-            to="/"
-            @click="logout"
-          />
-          <q-btn
-            outline
-            rounded
-            color="accent"
-            icon="account_circle"
-            label="마이페이지"
-            to="/mypage"
-          />
-        </div>
-        <div v-else>
-          <q-btn
-            outline
-            rounded
-            color="accent"
-            icon="account_circle"
-            label="회원가입 "
-            href="#/signup"
-          />
-          <q-btn
-            outline
-            rounded
-            color="accent"
-            icon="account_circle"
-            label="로그인"
-            href="#/signin"
-          />
-        </div>
+        <q-btn
+          outline
+          rounded
+          color="accent"
+          icon="account_circle"
+          label="회원가입 "
+        />
+        <q-btn
+          outline
+          rounded
+          color="accent"
+          icon="account_circle"
+          label="로그인"
+        />
       </q-toolbar>
     </q-header>
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
@@ -104,7 +81,13 @@ const linksList = [
     title: "바우처",
     caption: "바우처 탭",
     icon: "school",
-    to: "/voucher",
+    to: "/voucher-marketer",
+  },
+  {
+    title: "리워드",
+    caption: "리워드 탭",
+    icon: "school",
+    to: "/reward",
   },
   {
     title: "상담",

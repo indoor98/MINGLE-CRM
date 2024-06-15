@@ -9,8 +9,16 @@ const routes = [
         component: () => import("pages/review/ReviewPage.vue"),
       },
       {
-        path: "voucher",
-        component: () => import("src/pages/voucher/VoucherPage.vue"),
+        path: "voucher-manager",
+        component: () => import("src/pages/voucher/ManagerVoucherPage.vue"),
+      },
+      {
+        path: "voucher-marketer",
+        component: () => import("src/pages/voucher/MarketerVoucherPage.vue"),
+      },
+      {
+        path: "reward",
+        component: () => import("src/pages/reward/RewardPage.vue"),
       },
       { path: "inquiry", component: () => import("pages/InquiryPage.vue") },
       {
