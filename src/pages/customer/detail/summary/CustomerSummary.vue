@@ -1,18 +1,49 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md customer-detail-container">
+    <div class="text-h6">고객 상세</div>
     <q-separator class="q-my-md" />
-
     <div v-if="customer">
-      <q-card>
-        <q-card-section>고객 ID: {{ customer.id }}</q-card-section>
-        <q-card-section>고객 이름: {{ customer.name }}</q-card-section>
-        <q-card-section>고객 등급: {{ customer.grade }}</q-card-section>
-        <q-card-section>전화번호: {{ customer.phone }}</q-card-section>
-        <q-card-section>주소: {{ customer.address }}</q-card-section>
-        <q-card-section>직원 ID: {{ customer.employee_id }}</q-card-section>
-        <q-card-section>메모: {{ customer.memo }}</q-card-section>
-        <q-card-section>성별: {{ customer.gender }}</q-card-section>
-        <q-card-section>생일: {{ customer.birth }}</q-card-section>
+      <q-card class="customer-card">
+        <q-card-section>
+          <table class="customer-table">
+            <tr>
+              <th>고객 ID</th>
+              <td>{{ customer.id }}</td>
+            </tr>
+            <tr>
+              <th>고객 이름</th>
+              <td>{{ customer.name }}</td>
+            </tr>
+            <tr>
+              <th>고객 등급</th>
+              <td>{{ customer.grade }}</td>
+            </tr>
+            <tr>
+              <th>전화번호</th>
+              <td>{{ customer.phone }}</td>
+            </tr>
+            <tr>
+              <th>주소</th>
+              <td>{{ customer.address }}</td>
+            </tr>
+            <tr>
+              <th>직원 ID</th>
+              <td>{{ customer.employee_id }}</td>
+            </tr>
+            <tr>
+              <th>메모</th>
+              <td class="memo-cell">{{ customer.memo }}</td>
+            </tr>
+            <tr>
+              <th>성별</th>
+              <td>{{ customer.gender }}</td>
+            </tr>
+            <tr>
+              <th>생일</th>
+              <td>{{ customer.birth }}</td>
+            </tr>
+          </table>
+        </q-card-section>
       </q-card>
     </div>
 
@@ -42,3 +73,46 @@ const fetchCustomerDetail = async () => {
 
 onMounted(fetchCustomerDetail);
 </script>
+
+<style scoped>
+.customer-detail-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.customer-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.customer-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.customer-table th,
+.customer-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top; /* 상단 정렬 */
+}
+
+.customer-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.customer-table td {
+  background-color: #ffffff;
+}
+
+.memo-cell {
+  max-width: 400px; /* 필요에 따라 너비 조정 */
+  white-space: pre-wrap; /* 줄바꿈을 유지하고, 긴 텍스트는 줄바꿈 처리 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>

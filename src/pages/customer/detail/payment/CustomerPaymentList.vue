@@ -2,12 +2,20 @@
   <div class="q-pa-md">
     <q-separator class="q-my-md" />
 
+    <!-- SearchInput 컴포넌트 사용 -->
+    <SearchInput
+      v-model="search"
+      label="검색어를 입력해주세요"
+      :searchFields="['customerName', 'number', 'type', 'paymentSpot']"
+      @search="handleSearch"
+    />
+
     <!-- 테이블로 결제 목록 표시 -->
     <q-table
       flat
       bordered
       title=""
-      :rows="payments"
+      :rows="filteredPayments"
       :columns="paymentColumns"
       row-key="paymentId"
       v-model:pagination="paymentPagination"
@@ -34,15 +42,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import CustomerPaymentDetail from './CustomerPaymentDetail.vue';
+import SearchInput from 'src/components/SearchInput.vue'; // SearchInput 컴포넌트 임포트
 import { formatPrice } from 'src/utils/utils.js'; // 유틸리티 함수 불러오기
 
 const route = useRoute();
 const customerId = route.params.id;
 const payments = ref([]);
+const search = ref('');
 const paymentPagination = ref({
   rowsPerPage: 10,
   page: 1,
@@ -85,6 +95,22 @@ const fetchPayments = async () => {
 const showPaymentDetail = (payment) => {
   selectedPayment.value = payment;
   showDialog.value = true;
+};
+
+const filteredPayments = computed(() => {
+  if (!search.value) {
+    return payments.value;
+  }
+  const lowerCaseSearch = search.value.toLowerCase();
+  return payments.value.filter(payment =>
+    ['customerName', 'number', 'type', 'paymentSpot'].some(field =>
+      payment[field].toString().toLowerCase().includes(lowerCaseSearch)
+    )
+  );
+});
+
+const handleSearch = (searchTerm, searchFields) => {
+  search.value = searchTerm;
 };
 
 onMounted(() => {
