@@ -10,7 +10,7 @@
           :loading="loading"
           :dense="true"
           class="q-table--dense"
-          :pagination="{ rowsPerPage: 10 }"
+          :pagination="{ rowsPerPage: 50 }"
         >
           <template v-slot:no-data>
             <q-tr>

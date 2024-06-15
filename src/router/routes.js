@@ -44,6 +44,15 @@ const routes = [
         path: "signin",
         component: () => import("pages/auth/SignInPage.vue"),
       },
+      {
+        path: "email",
+        component: () => import("pages/email/EmailPage.vue"),
+      },
+      {
+        path: "email/:eventId",
+        name: "emailDetailPage",
+        component: () => import("pages/email/EmailLogDetailPage.vue"),
+      },
     ],
   },
   {

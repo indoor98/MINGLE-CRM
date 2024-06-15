@@ -112,6 +112,12 @@ const linksList = [
     icon: "school",
     to: "/inquiry",
   },
+  {
+    title: "이메일",
+    caption: "이메일 탭",
+    icon: "email",
+    to: "/email",
+  },
 ];
 
 const logout = async () => {
