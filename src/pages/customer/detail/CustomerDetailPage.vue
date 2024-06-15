@@ -2,7 +2,7 @@
   <q-page class="q-pa-xl">
     <q-card class="my-card" flat bordered>
       <q-card-section>
-        <div class="text-h5">고객 상세</div>
+<!--        <div class="text-h5">고객 상세</div>-->
         <CustomerSummary />
       </q-card-section>
 
