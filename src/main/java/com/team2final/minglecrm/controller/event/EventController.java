@@ -5,6 +5,7 @@ import com.team2final.minglecrm.controller.ResultResponse;
 import com.team2final.minglecrm.controller.employee.vo.Subject;
 import com.team2final.minglecrm.controller.event.request.EventEmailSendRequest;
 import com.team2final.minglecrm.controller.event.request.PersonalEmailSendRequest;
+import com.team2final.minglecrm.controller.event.response.EmailLogResponse;
 import com.team2final.minglecrm.controller.event.response.EventLogResponse;
 import com.team2final.minglecrm.entity.employee.Employee;
 import com.team2final.minglecrm.service.email.EmailSendService;
@@ -12,6 +13,7 @@ import com.team2final.minglecrm.service.email.EmailService;
 import com.team2final.minglecrm.service.event.EventService;
 
 import com.team2final.minglecrm.service.jwt.JwtProvider;
+import com.team2final.minglecrm.service.log.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ public class EventController {
     private final EmailSendService emailSendService;
     private final EmailService emailService;
     private final JwtProvider jwtProvider;
+    private final LogService logService;
 
     @PostMapping("/api/event/email")
     public ResultResponse<Void> sendEventEmail(@RequestBody EventEmailSendRequest request) throws Exception {
@@ -56,5 +59,25 @@ public class EventController {
     @GetMapping("/api/events/{pageno}")
     public ResultResponse<List<EventLogResponse>> getAllEvents(@PathVariable(name="pageno") int pageNo) {
         return new ResultResponse<>(HttpStatus.OK.value(), "success", eventService.getAllEvents(pageNo));
+    }
+
+    @GetMapping("/api/emaillog/{eventid}/{pageno}")
+    public ResultResponse<List<EmailLogResponse>> getEmailLogsByEventId(
+            @PathVariable(name="eventid") Long eventId,
+            @PathVariable(name="pageno") int pageNo) {
+        List<EmailLogResponse> response = eventService.getEmailLogsByEventId(pageNo, eventId);
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", response);
+    }
+
+    @GetMapping("/api/event/pagesnumber")
+    public ResultResponse<Long> getEventPagesNumber() {
+        Long pagesNumber = eventService.getPagesNumber();
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", pagesNumber);
+    }
+
+    @GetMapping("/api/emaillog/pagesnumber/{eventid}")
+    public ResultResponse<Long> getEmailLogPagesNumberByEventId(@PathVariable(name="eventid") Long eventId) {
+        Long pagesNumber = logService.getPagesNumberByEventId(eventId);
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", pagesNumber);
     }
 }

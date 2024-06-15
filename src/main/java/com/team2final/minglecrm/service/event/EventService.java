@@ -4,6 +4,7 @@ import com.team2final.minglecrm.controller.event.request.CreateEventRequest;
 import com.team2final.minglecrm.controller.event.request.EventEmailSendRequest;
 import com.team2final.minglecrm.controller.event.request.PersonalEmailSendRequest;
 import com.team2final.minglecrm.controller.event.request.ToEmailRequest;
+import com.team2final.minglecrm.controller.event.response.EmailLogResponse;
 import com.team2final.minglecrm.controller.event.response.EventLogResponse;
 import com.team2final.minglecrm.controller.hotel.review.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.entity.customer.Customer;
@@ -15,6 +16,7 @@ import com.team2final.minglecrm.persistence.repository.employee.EmployeeReposito
 import com.team2final.minglecrm.persistence.repository.event.EventRepository;
 import com.team2final.minglecrm.persistence.repository.event.queryDsl.EventRespositoryCustom;
 import com.team2final.minglecrm.persistence.repository.log.EmailLogRepository;
+import com.team2final.minglecrm.persistence.repository.log.queryDsl.EmailLogRepositoryCustom;
 import com.team2final.minglecrm.service.email.EmailSendService;
 import com.team2final.minglecrm.service.log.LogService;
 import jakarta.mail.MessagingException;
@@ -41,6 +43,7 @@ public class EventService {
     private final CustomerRepository customerRepository;
     private final LogService logService;
     private final EventRespositoryCustom eventRespositoryCustom;
+    private final EmailLogRepositoryCustom emailLogRepositoryCustom;
 
     public void sendEventEmail(EventEmailSendRequest request) throws Exception {
 
@@ -104,7 +107,7 @@ public class EventService {
     }
 
     @Transactional
-    public List<EventLogResponse>  getAllEvents(int pageNo) {
+    public List<EventLogResponse> getAllEvents(int pageNo) {
 
         Page<EventLogResponse> page =  eventRespositoryCustom.findAll(PageRequest.of(pageNo, 50));
         List<EventLogResponse> response = new ArrayList<>();
@@ -114,5 +117,22 @@ public class EventService {
         }
 
         return response;
+    }
+
+    @Transactional
+    public List<EmailLogResponse> getEmailLogsByEventId(int pageNo, Long eventId) {
+        Page<EmailLogResponse> page = emailLogRepositoryCustom.findByEventId(PageRequest.of(pageNo, 50), eventId);
+        List<EmailLogResponse> response = new ArrayList<>();
+
+        for (EmailLogResponse emailLogResponse : page.getContent()) {
+            response.add(emailLogResponse);
+        }
+
+        return response;
+    }
+
+    @Transactional
+    public Long getPagesNumber() {
+        return eventRepository.count();
     }
 }
