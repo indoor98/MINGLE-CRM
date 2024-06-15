@@ -77,6 +77,13 @@ public class VoucherHistory {
         this.voucherCode = generatedUniqueVoucherCode;
     }
 
+    public void rejectVoucher(String rejectedReason, Employee employeeManager) {
+        this.status = VoucherStatusType.REJECTED;
+        this.rejectedReason = rejectedReason;
+        this.confirmDate = LocalDateTime.now();
+        this.employeeManager = employeeManager;
+    }
+
     public void rejectVoucher(String rejectedReason) {
         this.status = VoucherStatusType.REJECTED;
         this.rejectedReason = rejectedReason;

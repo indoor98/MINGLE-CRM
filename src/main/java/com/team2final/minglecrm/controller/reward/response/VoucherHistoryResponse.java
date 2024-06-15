@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor
 public class VoucherHistoryResponse {
+
+    private final Long voucherHistoryId;
     private final Long voucherId;
 
     private final VoucherStatusType status;
@@ -43,6 +45,7 @@ public class VoucherHistoryResponse {
 
 
         return new VoucherHistoryResponse(
+                voucherHistory.getId(),
                 voucherHistory.getVoucher().getId(),
                 voucherHistory.getStatus(),
                 voucherHistory.getRequestDate(),

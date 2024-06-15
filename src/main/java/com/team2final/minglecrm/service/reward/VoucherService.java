@@ -53,6 +53,7 @@ public class VoucherService {
                 .createdDate(LocalDateTime.now())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
+                .isRequested(false)
                 .build();
 
         voucherRepository.save(voucher);
@@ -155,6 +156,7 @@ public class VoucherService {
         return VoucherHistoryResponse.of(voucherHistory);
     }
 
+    @Transactional
     public List<VoucherHistoryResponse> getApprovedVouchersByManager() {
         List<VoucherHistory> approvedVouchers = voucherHistoryRepository.findAllByStatus(VoucherStatusType.APPROVED);
 
@@ -163,20 +165,21 @@ public class VoucherService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public VoucherHistoryResponse rejectVoucher(Long voucherId, String rejectReason) {
         //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String userEmail = authentication.getName();
 
-//        Employee approver = employeeRepository.findByEmail(userEmail)
+//        Employee rejector = employeeRepository.findByEmail(userEmail)
 //                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
 
         VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId);
 //                orElseThrow(() -> new RuntimeException("해당 ID의 바우처의 히스토리를 찾을 수 없습니다."));
 
-//        voucherHistory.approveVoucher(approver);
+//        voucherHistory.rejectVoucher(rejectReason,rejector);
         voucherHistory.rejectVoucher(rejectReason);
+
 //        voucherHistoryRepository.save(voucherHistory);
-        voucherHistoryRepository.save(voucherHistory);
 
         return VoucherHistoryResponse.of(voucherHistory);
     }
@@ -196,9 +199,9 @@ public class VoucherService {
     }
 
     public List<VoucherResponse> getNotRequestedVouchers() {
-        List<Voucher> rejectedVouchers = voucherRepository.findAllByIsRequested(false);
+        List<Voucher> notRequestedVouchers = voucherRepository.findAllByIsRequested(false);
 
-        return rejectedVouchers.stream()
+        return notRequestedVouchers.stream()
                 .map(VoucherResponse::of)
                 .collect(Collectors.toList());
     }

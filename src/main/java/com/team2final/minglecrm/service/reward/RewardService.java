@@ -42,4 +42,11 @@ public class RewardService {
                 .map(RewardHistoryResponse::of)
                 .collect(Collectors.toList());
     }
+
+    public List<RewardHistoryResponse> getAllRewardHistories() {
+        List<RewardHistory> rewardHistories = rewardHistoryRepository.findAll();
+        return rewardHistories.stream()
+                .map(RewardHistoryResponse::of)
+                .collect(Collectors.toList());
+    }
 }
