@@ -14,7 +14,10 @@
         <EmailSendPage />
       </div>
       <div v-else-if="selectedTab === 'log'">
-        <EmailLogPage />
+        <EmailLogPage @row-click="handleRowClick" />
+      </div>
+      <div v-else-if="selectedTab === 'detail'">
+        <EmailLogDetailPage :eventId="selectedEventId" @back="handleBack" />
       </div>
     </div>
   </q-page>
@@ -24,8 +27,19 @@
 import { ref } from "vue";
 import EmailSendPage from "./EmailSendPage.vue";
 import EmailLogPage from "./EmailLogPage.vue";
+import EmailLogDetailPage from "./EmailLogDetailPage.vue";
 
-const selectedTab = ref("send");
+const selectedTab = ref("log");
+const selectedEventId = ref(null);
+
+const handleRowClick = (eventId) => {
+  selectedEventId.value = eventId;
+  selectedTab.value = "detail";
+};
+
+const handleBack = () => {
+  selectedTab.value = "log";
+};
 </script>
 
 <style lang="scss"></style>

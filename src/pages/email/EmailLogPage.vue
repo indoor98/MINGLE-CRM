@@ -1,22 +1,35 @@
 <template>
-  <div class="q-pa-md">
+  <div>
     <q-table
-      flat
-      bordered
-      title="발송 내역"
-      :rows="rows"
+      :rows="events"
       :columns="columns"
-      row-key="eventId"
-      :pagination="{ page: currentPage, rowsPerPage: rowsPerPage }"
+      row-key="id"
+      :loading="loading"
+      v-model:pagination="pagination"
       hide-pagination
-      @row-click="onRowClick"
-    />
-
+    >
+      <template v-slot:body="props">
+        <q-tr :props="props" @click="rowClicked(props.row)">
+          <q-td v-for="col in columns" :key="col.name" :props="props">
+            {{ props.row[col.field] }}
+          </q-td>
+        </q-tr>
+      </template>
+      <template v-slot:no-data>
+        <q-tr>
+          <q-td :colspan="columns.length" class="text-center"
+            >로그가 없습니다.</q-td
+          >
+        </q-tr>
+      </template>
+    </q-table>
     <div class="row justify-center q-mt-md">
       <q-pagination
-        v-model="currentPage"
+        v-model="pagination.page"
         color="grey-8"
         :max="pagesNumber"
+        :max-pages="6"
+        :boundary-numbers="false"
         size="sm"
       />
     </div>
@@ -24,97 +37,107 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, onMounted, defineEmits, computed } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
 
-const currentPage = ref(0);
-const rows = ref([]);
-const rowsPerPage = 3;
-const pagesNumber = ref(5);
+const events = ref([]);
+const errorMessage = ref("");
+const loading = ref(true);
+const pagesNumber = ref(0);
+const pagination = ref({
+  sortBy: "desc",
+  descending: false,
+  page: 1,
+  rowsPerPage: 50,
+});
 
-const router = useRouter();
-
-const columns = [
+const columns = ref([
   {
-    name: "desc",
-    required: true,
+    name: "eventId",
     label: "이벤트 ID",
     align: "center",
-    field: (row) => `${row.eventId}`,
-    format: (val) => `${val}`,
+    field: "eventId",
     sortable: true,
-    style: "max-width: 10px;",
   },
   {
     name: "employeeId",
+    label: "담당자 ID",
     align: "center",
-    label: "직원 ID",
     field: "employeeId",
     sortable: true,
   },
   {
     name: "employeeName",
-    label: "직원 이름",
-    field: "employeeName",
+    label: "담당자 명",
     align: "center",
+    field: "employeeName",
     sortable: true,
   },
   {
-    name: "eventTitle",
+    name: "emailTitle",
     label: "이메일 제목",
     align: "center",
     field: "emailTitle",
+    sortable: true,
   },
   {
-    name: "eventContent",
+    name: "emailContent",
     label: "이메일 내용",
     align: "center",
     field: "emailContent",
+    sortable: true,
   },
   {
     name: "sentDate",
     label: "발송 시간",
     align: "center",
-    field: (row) => `${row.sentDate}`,
-    format: (val) => `${val.slice(0, 10) + " " + val.slice(11, 16)}`,
+    field: "sentDate",
+    sortable: true,
   },
   {
     name: "sendCount",
-    label: "발신자 수",
+    label: "총 수신자 수",
     align: "center",
     field: "sendCount",
+    sortable: true,
   },
-  { name: "readCount", label: "열람 수", align: "center", field: "readCount" },
-];
+  {
+    name: "readCount",
+    label: "열람자 수",
+    align: "center",
+    field: "readCount",
+    sortable: true,
+  },
+]);
 
-const onRowClick = (event, row) => {
-  console.log(event, row);
-  router.push({ name: "emailDetailPage", params: { eventId: row.eventId } });
-};
-
-const getEventByPage = async (pageNo) => {
+const fetchRewards = async () => {
   try {
-    const response = await axios.get(
-      `http://localhost:8080/api/events/${currentPage.value}`,
-      {
-        withCredentials: true,
-      }
+    const response = await axios.get("http://localhost:8080/api/events/0");
+    events.value = response.data.data;
+
+    const pagesNumberResponse = await axios.get(
+      "http://localhost:8080/api/event/pagesnumber"
     );
-    rows.value = response.data.data;
-    pagesNumber.value = Math.ceil(response.data.total / rowsPerPage);
+    pagesNumber.value = Math.ceil(
+      pagesNumberResponse.data.data / pagination.value.rowsPerPage
+    );
+    console.log(pagesNumber);
+    errorMessage.value = "";
   } catch (error) {
-    console.log(error);
+    console.log("이벤트 목록 불러오기 실패 " + error);
+    errorMessage.value = "이벤트 목록을 불러오는 중 실패하였습니다";
+  } finally {
+    loading.value = false;
   }
 };
 
-// Fetch data when currentPage changes
-watch(currentPage, (newPage) => {
-  getEventByPage(newPage);
-});
+const emit = defineEmits(["row-click"]);
+const rowClicked = (row) => {
+  console.log("Clicked Row: " + row.eventId);
+  emit("row-click", row.eventId);
+};
 
-// Initial data fetch
 onMounted(() => {
-  getEventByPage(currentPage.value);
+  fetchRewards();
 });
 </script>
