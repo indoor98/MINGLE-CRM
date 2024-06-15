@@ -30,13 +30,13 @@
           <q-tab-panels v-model="activeReservationTab">
             <q-tab-panel name="hotel">
               <q-card>
-                <q-card-section>검색</q-card-section>
+<!--                <q-card-section>검색</q-card-section>-->
                 <HotelReservationList></HotelReservationList>
               </q-card>
             </q-tab-panel>
             <q-tab-panel name="dining">
               <q-card>
-                <q-card-section>검색</q-card-section>
+<!--                <q-card-section>검색</q-card-section>-->
                 <DiningReservationList></DiningReservationList>
               </q-card>
             </q-tab-panel>
@@ -45,28 +45,28 @@
 
         <q-tab-panel name="consultation">
           <q-card>
-            <q-card-section>검색</q-card-section>
+<!--            <q-card-section>검색</q-card-section>-->
             <CustomerConsultationList></CustomerConsultationList>
           </q-card>
         </q-tab-panel>
 
         <q-tab-panel name="payment">
           <q-card>
-            <q-card-section>검색</q-card-section>
+<!--            <q-card-section>검색</q-card-section>-->
             <CustomerPaymentList></CustomerPaymentList>
           </q-card>
         </q-tab-panel>
 
         <q-tab-panel name="voucher">
           <q-card>
-            <q-card-section>검색</q-card-section>
+<!--            <q-card-section>검색</q-card-section>-->
             <CustomerVoucherList></CustomerVoucherList>
           </q-card>
         </q-tab-panel>
 
         <q-tab-panel name="reward">
           <q-card>
-            <q-card-section>검색</q-card-section>
+<!--            <q-card-section>검색</q-card-section>-->
             <CustomerRewardList></CustomerRewardList>
           </q-card>
         </q-tab-panel>

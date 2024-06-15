@@ -23,12 +23,12 @@
       <template v-slot:body="props">
         <q-tr :props="props" @click="showPaymentDetail(props.row)">
           <q-td v-for="col in paymentColumns" :key="col.name" :props="props">
-            <template v-if="['amountBeforeDiscount', 'discountAmount', 'paymentAmount', 'createdReward'].includes(col.name)">
-              {{ formatPrice(props.row[col.field]) }}
-            </template>
-            <template v-else>
+            <span v-if="shouldHighlight(props.row[col.field])" class="highlighted-text">
               {{ props.row[col.field] }}
-            </template>
+            </span>
+            <span v-else>
+              {{ props.row[col.field] }}
+            </span>
           </q-td>
         </q-tr>
       </template>
@@ -45,6 +45,7 @@
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import Fuse from 'fuse.js';
 import CustomerPaymentDetail from './CustomerPaymentDetail.vue';
 import SearchInput from 'src/components/SearchInput.vue'; // SearchInput 컴포넌트 임포트
 import { formatPrice } from 'src/utils/utils.js'; // 유틸리티 함수 불러오기
@@ -62,6 +63,7 @@ const paymentPagination = ref({
 });
 const showDialog = ref(false);
 const selectedPayment = ref({});
+let fuse; // fuse.js 인스턴스
 
 const fetchPayments = async () => {
   try {
@@ -80,6 +82,12 @@ const fetchPayments = async () => {
       createdReward: payment.createdReward,
       paymentSpot: payment.paymentSpot
     }));
+
+    // fuse.js 설정
+    fuse = new Fuse(payments.value, {
+      keys: ['customerName', 'number', 'type', 'paymentSpot'],
+      threshold: 0.4 // 유사도 설정 (0.0 - 1.0, 낮을수록 엄격)
+    });
 
     // 페이지네이션 설정
     paymentPagination.value.pagesNumber = Math.ceil(payments.value.length / paymentPagination.value.rowsPerPage);
@@ -101,16 +109,16 @@ const filteredPayments = computed(() => {
   if (!search.value) {
     return payments.value;
   }
-  const lowerCaseSearch = search.value.toLowerCase();
-  return payments.value.filter(payment =>
-    ['customerName', 'number', 'type', 'paymentSpot'].some(field =>
-      payment[field].toString().toLowerCase().includes(lowerCaseSearch)
-    )
-  );
+  return fuse.search(search.value).map(result => result.item);
 });
 
-const handleSearch = (searchTerm, searchFields) => {
+const handleSearch = (searchTerm) => {
   search.value = searchTerm;
+};
+
+const shouldHighlight = (value) => {
+  if (!search.value) return false;
+  return value.toString().toLowerCase().includes(search.value.toLowerCase());
 };
 
 onMounted(() => {
@@ -134,5 +142,7 @@ const paymentColumns = [
 </script>
 
 <style scoped>
-/* 필요한 스타일을 추가할 수 있습니다. */
+.highlighted-text {
+  color: red; /* 원하는 텍스트 색상으로 설정 */
+}
 </style>

@@ -1,13 +1,22 @@
+<!-- VoucherList.vue -->
 <template>
   <div class="q-pa-md">
     <q-separator class="q-my-md" />
+
+    <!-- SearchInput 컴포넌트 사용 -->
+    <SearchInput
+      v-model="search"
+      label="검색어를 입력해주세요"
+      :searchFields="['voucherId', 'requestDate', 'isAuth', 'authDate', 'isConvertedYn', 'conversionDate', 'issuerId', 'approverId', 'customerId', 'amount']"
+      @search="handleSearch"
+    />
 
     <!-- 테이블로 고객 바우처 목록 표시 -->
     <q-table
       flat
       bordered
       title=""
-      :rows="vouchers"
+      :rows="filteredVouchers"
       :columns="voucherColumns"
       row-key="voucherId"
       v-model:pagination="voucherPagination"
@@ -34,15 +43,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import Fuse from 'fuse.js';
 import CustomerVoucherDetail from './CustomerVoucherDetail.vue';
+import SearchInput from 'src/components/SearchInput.vue'; // SearchInput 컴포넌트 임포트
 import { formatPrice } from 'src/utils/utils.js'; // 유틸리티 함수 불러오기
 
 const route = useRoute();
 const customerId = route.params.id;
 const vouchers = ref([]);
+const search = ref('');
 const voucherPagination = ref({
   rowsPerPage: 10,
   page: 1,
@@ -52,6 +64,7 @@ const voucherPagination = ref({
 });
 const showDialog = ref(false);
 const selectedVoucher = ref({});
+let fuse; // fuse.js 인스턴스
 
 const fetchVouchers = async () => {
   try {
@@ -69,6 +82,12 @@ const fetchVouchers = async () => {
       amount: voucher.amount
     }));
 
+    // fuse.js 설정
+    fuse = new Fuse(vouchers.value, {
+      keys: ['voucherId', 'requestDate', 'isAuth', 'authDate', 'isConvertedYn', 'conversionDate', 'issuerId', 'approverId', 'customerId', 'amount'],
+      threshold: 0.3 // 유사도 설정 (0.0 - 1.0, 낮을수록 엄격)
+    });
+
     // 페이지네이션 설정
     voucherPagination.value.pagesNumber = Math.ceil(response.data.data.length / voucherPagination.value.rowsPerPage);
     voucherPagination.value.isFirstPage = voucherPagination.value.page === 1;
@@ -81,6 +100,17 @@ const fetchVouchers = async () => {
 const showVoucherDetail = (voucher) => {
   selectedVoucher.value = voucher;
   showDialog.value = true;
+};
+
+const filteredVouchers = computed(() => {
+  if (!search.value) {
+    return vouchers.value;
+  }
+  return fuse.search(search.value).map(result => result.item);
+});
+
+const handleSearch = (searchTerm, searchFields) => {
+  search.value = searchTerm;
 };
 
 onMounted(() => {
