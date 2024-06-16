@@ -13,6 +13,10 @@ permissions:
 
 hooks:
   ApplicationStart:
-    - location: /scripts/deploy.sh
+    - location: /scripts/deploy.ps1
+      timeout: 60
+      runas: ubuntu
+  ApplicationStop:
+    - location: /scripts/stop.ps1
       timeout: 60
       runas: ubuntu

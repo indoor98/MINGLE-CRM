@@ -84,6 +84,14 @@ jobs:
       - name: Code Deploy
         run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
 
+      - name: Deploy Application
+        run: |
+          powershell -Command "& 'C:\BE05-FIN-2TEAM-MINGLECRM-BACKEND\scripts\deploy.ps1'"
+
+      - name: Stop Application
+        run: |
+          powershell -Command "& 'C:\BE05-FIN-2TEAM-MINGLECRM-BACKEND\scripts\stop.ps1'"
+
       # 빌드가 완료되면 슬랙으로 알림
       - name: Slack Notification
         uses: 8398a7/action-slack@v3
