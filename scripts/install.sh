@@ -3,8 +3,17 @@
 REPOSITORY="/home/ubuntu/mingle"
 cd $REPOSITORY
 
-echo "> Install: 파일 복사 중..."
-# 예시로 필요한 파일을 복사합니다.
-cp /tmp/deployment.zip $REPOSITORY
-unzip $REPOSITORY/deployment.zip -d $REPOSITORY
-echo "> Install: 파일 복사 완료."
+echo "> Install: 서비스 유닛 파일 복사 및 등록"
+
+# 서비스 유닛 파일 복사
+SERVICE_FILE="/etc/systemd/system/cicd-test.service"
+cp $REPOSITORY/scripts/cicd-test.service $SERVICE_FILE
+
+# 시스템d 데몬 리로드
+sudo systemctl daemon-reload
+
+# 서비스 등록 및 시작
+sudo systemctl enable cicd-test.service
+sudo systemctl start cicd-test.service
+
+echo "> Install: cicd-test 서비스 등록 완료"
