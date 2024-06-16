@@ -18,7 +18,6 @@
       :columns="columns"
       row-key="id"
       v-model:pagination="pagination"
-
     >
       <template v-slot:body="props">
         <q-tr :props="props" @click="rowClicked(props.row)">
@@ -27,19 +26,13 @@
           </q-td>
         </q-tr>
       </template>
-
-      <!-- 페이지네이션 컨트롤 버튼 -->
-      <template v-slot:top-right>
-
-      </template>
     </q-table>
   </div>
 </template>
 
 <script setup>
-import {ref, computed, onMounted} from 'vue';
-import {useRouter} from 'vue-router';
-// import { api as axios } from "src/boot/axios";
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
@@ -59,11 +52,10 @@ const fetchCustomers = async () => {
     customers.value = response.data.map((customer) => ({
       id: customer.id,
       name: customer.name,
-      grade: customer.grade,
       phone: customer.phone,
+      grade: customer.grade,
       address: customer.address,
-      employee_id: customer.employee_id,
-      memo: customer.memo,
+      employeeName: customer.employeeName,
       gender: customer.gender,
       birth: customer.birth,
     }));
@@ -83,7 +75,7 @@ const rowClicked = (row) => {
   console.log('Clicked row:', row);
   console.log('Clicked row id:', row.id);
   if (row && row.id) {
-    router.push({path: `/customer-detail/${row.id}`});
+    router.push({ path: `/customer-detail/${row.id}` });
   } else {
     console.error('Invalid row data:', row);
   }
@@ -95,34 +87,6 @@ const filteredRows = computed(() => {
   );
 });
 
-const firstPage = () => {
-  pagination.value.page = 1;
-  pagination.value.isFirstPage = true;
-  pagination.value.isLastPage = pagination.value.page === pagination.value.pagesNumber;
-};
-
-const prevPage = () => {
-  if (pagination.value.page > 1) {
-    pagination.value.page--;
-    pagination.value.isFirstPage = pagination.value.page === 1;
-    pagination.value.isLastPage = pagination.value.page === pagination.value.pagesNumber;
-  }
-};
-
-const nextPage = () => {
-  if (pagination.value.page < pagination.value.pagesNumber) {
-    pagination.value.page++;
-    pagination.value.isFirstPage = pagination.value.page === 1;
-    pagination.value.isLastPage = pagination.value.page === pagination.value.pagesNumber;
-  }
-};
-
-const lastPage = () => {
-  pagination.value.page = pagination.value.pagesNumber;
-  pagination.value.isFirstPage = pagination.value.page === 1;
-  pagination.value.isLastPage = true;
-};
-
 onMounted(() => {
   fetchCustomers();
 });
@@ -132,9 +96,7 @@ const columns = [
   {name: 'name', label: '이름', align: 'left', field: 'name', sortable: true},
   {name: 'grade', label: '등급', align: 'center', field: 'grade', sortable: true},
   {name: 'phone', label: '전화번호', align: 'center', field: 'phone', sortable: true},
-  {name: 'address', label: '주소', align: 'left', field: 'address'},
-  {name: 'employee_id', label: '직원 ID', align: 'center', field: 'employee_id'},
-  {name: 'memo', label: '메모', align: 'left', field: 'memo'},
+  {name: 'employeeName', label: '직원 이름', align: 'center', field: 'employeeName'},
   {name: 'gender', label: '성별', align: 'center', field: 'gender'},
   {name: 'birth', label: '생년월일', align: 'center', field: 'birth'},
 ];
