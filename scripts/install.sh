@@ -15,7 +15,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/java -jar $REPOSITORY/build/libs/SNAPSHOT.jar
+ExecStart=/usr/bin/java -jar /home/ubuntu/mingle/build/libs/minglecrm-0.0.1-SNAPSHOT.jar
 User=ubuntu
 Restart=always
 
