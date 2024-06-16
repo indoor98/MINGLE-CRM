@@ -263,29 +263,29 @@ public class InquiryService {
             return convertToDTO(inquiry, reply, action);
         });
     }
-    public Page<Inquiry> searchInquiries(String keyword, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        return inquiryRepository.searchByKeyword(keyword, startDate, endDate, pageable);
-    }
-
-    public Page<Inquiry> searchByCustomerName(String customerName, Pageable pageable) {
-        return inquiryRepository.findByCustomerName(customerName, pageable);
-    }
-
-    public Page<Inquiry> searchByCustomerPhone(String customerPhone, Pageable pageable) {
-        return inquiryRepository.findByCustomerPhone(customerPhone, pageable);
-    }
-
-    public Page<Inquiry> searchByInquiryTitle(String inquiryTitle, Pageable pageable) {
-        return inquiryRepository.findByInquiryTitle(inquiryTitle, pageable);
-    }
-
-    public Page<Inquiry> searchByInquiryContent(String inquiryContent, Pageable pageable) {
-        return inquiryRepository.findByInquiryContent(inquiryContent, pageable);
-    }
-
-    public Page<Inquiry> searchByDateRange(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        return inquiryRepository.findByDateRange(startDate, endDate, pageable);
-    }
+//    public Page<Inquiry> searchInquiries(String keyword, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+//        return inquiryRepository.searchByKeyword(keyword, startDate, endDate, pageable);
+//    }
+//
+//    public Page<Inquiry> searchByCustomerName(String customerName, Pageable pageable) {
+//        return inquiryRepository.findByCustomerName(customerName, pageable);
+//    }
+//
+//    public Page<Inquiry> searchByCustomerPhone(String customerPhone, Pageable pageable) {
+//        return inquiryRepository.findByCustomerPhone(customerPhone, pageable);
+//    }
+//
+//    public Page<Inquiry> searchByInquiryTitle(String inquiryTitle, Pageable pageable) {
+//        return inquiryRepository.findByInquiryTitle(inquiryTitle, pageable);
+//    }
+//
+//    public Page<Inquiry> searchByInquiryContent(String inquiryContent, Pageable pageable) {
+//        return inquiryRepository.findByInquiryContent(inquiryContent, pageable);
+//    }
+//
+//    public Page<Inquiry> searchByDateRange(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+//        return inquiryRepository.findByDateRange(startDate, endDate, pageable);
+//    }
 
     private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
         String employName = null;
