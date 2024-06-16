@@ -1,6 +1,6 @@
 package com.team2final.minglecrm.controller.payment;
 
-import com.team2final.minglecrm.controller.payment.response.PaymentResponse;
+import com.team2final.minglecrm.controller.payment.response.PaymentDetailResponse;
 import com.team2final.minglecrm.service.payment.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +20,15 @@ public class PaymentApi {
 
     // 결제 내역 전체 조회
     @GetMapping()
-    public ResponseEntity<List<PaymentResponse>> getPaymentList(@PathVariable Long customerId) {
-        List<PaymentResponse> paymentResponses = paymentService.findById(customerId);
-        return ResponseEntity.ok(paymentResponses);
+    public ResponseEntity<List<PaymentDetailResponse>> getPaymentList(@PathVariable Long customerId) {
+        List<PaymentDetailResponse> paymentDetailRespons = paymentService.findById(customerId);
+        return ResponseEntity.ok(paymentDetailRespons);
     }
 
     // 결제 내역 상세 조회
     @GetMapping("/{paymentId}")
-    public ResponseEntity<PaymentResponse> getPayment(@PathVariable Long customerId, @PathVariable Long paymentId) {
-        PaymentResponse paymentResponse = paymentService.findPaymentById(customerId, paymentId);
-        return ResponseEntity.ok(paymentResponse);
+    public ResponseEntity<PaymentDetailResponse> getPayment(@PathVariable Long customerId, @PathVariable Long paymentId) {
+        PaymentDetailResponse paymentDetailResponse = paymentService.findPaymentById(customerId, paymentId);
+        return ResponseEntity.ok(paymentDetailResponse);
     }
 }

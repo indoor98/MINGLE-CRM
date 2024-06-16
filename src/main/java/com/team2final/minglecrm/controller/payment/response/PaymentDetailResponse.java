@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class PaymentResponse {
+public class PaymentDetailResponse {
 
     // 고객명, 전화번호
     private final String customerName;
@@ -30,8 +30,8 @@ public class PaymentResponse {
     private final String paymentSpot;
 
 
-    public static PaymentResponse of(Payment payment) {
-        return new PaymentResponse(
+    public static PaymentDetailResponse from(Payment payment) {
+        return new PaymentDetailResponse(
                 payment.getCustomer().getName(),
                 payment.getCustomer().getPhone(),
                 payment.getType(),
