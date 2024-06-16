@@ -32,7 +32,7 @@ hooks:
     - location: /scripts/stop.sh
       timeout: 300
       runas: ubuntu
-#  ValidateService:
-#    - location: scripts/validate_service.sh
-#      timeout: 300
-#      runas: ubuntu
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 300
+      runas: ubuntu
