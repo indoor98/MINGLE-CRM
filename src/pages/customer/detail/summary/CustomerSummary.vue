@@ -27,8 +27,8 @@
               <td>{{ customer.address }}</td>
             </tr>
             <tr>
-              <th>직원 ID</th>
-              <td>{{ customer.employee_id }}</td>
+              <th>직원 이름</th>
+              <td>{{ customer.employeeName }}</td>
             </tr>
             <tr>
               <th>메모</th>
@@ -41,6 +41,10 @@
             <tr>
               <th>생일</th>
               <td>{{ customer.birth }}</td>
+            </tr>
+            <tr>
+              <th>나이</th>
+              <td>{{ customer.age }}</td>
             </tr>
           </table>
         </q-card-section>
