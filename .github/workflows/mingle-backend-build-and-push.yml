@@ -84,14 +84,6 @@ jobs:
       - name: Code Deploy
         run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
 
-      - name: Deploy Application
-        run: |
-          ssh -i /c/Users/Playdata/mingle.pem -o StrictHostKeyChecking=no ubuntu@43.201.102.140 'bash -s' < ./scripts/deploy.sh
-
-      - name: Stop Application
-        run: |
-          ssh -i /c/Users/Playdata/mingle.pem -o StrictHostKeyChecking=no ubuntu@43.201.102.140 'bash -s' < ./scripts/stop.sh
-
       # 빌드가 완료되면 슬랙으로 알림
       - name: Slack Notification
         uses: 8398a7/action-slack@v3
@@ -103,3 +95,4 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: always()
+
