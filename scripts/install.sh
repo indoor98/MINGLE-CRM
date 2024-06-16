@@ -7,8 +7,8 @@ cd $REPOSITORY
 
 echo "> Install: 서비스 유닛 파일 생성 및 등록"
 
-# 서비스 유닛 파일 내용 작성
-cat <<EOL | sudo tee $SERVICE_FILE
+# 서비스 유닛 파일 내용 작성 및 등록
+sudo tee $SERVICE_FILE <<EOL
 [Unit]
 Description=cicd-test service
 After=network.target
@@ -23,10 +23,8 @@ Restart=always
 WantedBy=multi-user.target
 EOL
 
-# 시스템d 데몬 리로드
+# 시스템d 데몬 리로드 및 서비스 등록/시작
 sudo systemctl daemon-reload
-
-# 서비스 등록 및 시작
 sudo systemctl enable cicd-test.service
 sudo systemctl start cicd-test.service
 
