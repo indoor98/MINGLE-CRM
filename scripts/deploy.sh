@@ -17,5 +17,6 @@ else
   sleep 5
 fi
 
-echo "> $JAR_PATH 배포"
-nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
+echo "> $JAR_PATH 배포 및 실행"
+nohup java -jar $JAR_PATH > /home/ubuntu/mingle/application.log 2>&1 &
+echo "> 애플리케이션이 시작되었습니다."

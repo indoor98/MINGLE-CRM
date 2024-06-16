@@ -12,9 +12,25 @@ permissions:
     group: ubuntu
 
 hooks:
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 300
+      runas: ubuntu
+  Install:
+    - location: scripts/install.sh
+      timeout: 300
+      runas: ubuntu
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
+      runas: ubuntu
   ApplicationStart:
     - location: /scripts/deploy.sh
       timeout: 60
+      runas: ubuntu
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 300
       runas: ubuntu
   ApplicationStop:
     - location: /scripts/stop.sh
