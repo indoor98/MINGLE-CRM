@@ -86,11 +86,11 @@ jobs:
 
       - name: Deploy Application
         run: |
-          powershell -Command "& 'C:\BE05-FIN-2TEAM-MINGLECRM-BACKEND\scripts\deploy.ps1'"
+          ssh -i /c/Users/Playdata/Desktop/mingle.pem ubuntu@43.201.102.140 'bash -s' < ./scripts/deploy.sh
 
       - name: Stop Application
         run: |
-          powershell -Command "& 'C:\BE05-FIN-2TEAM-MINGLECRM-BACKEND\scripts\stop.ps1'"
+          ssh -i /c/Users/Playdata/Desktop/mingle.pem ubuntu@43.201.102.140 'bash -s' < ./scripts/stop.sh
 
       # 빌드가 완료되면 슬랙으로 알림
       - name: Slack Notification
