@@ -1,68 +1,11 @@
 <template>
   <div class="q-pa-md">
-    <q-input
-      clearable
-      filled
-      color="purple-12"
-      v-model="search"
-      label="고객명을 입력해주세요"
-    />
-
-    <q-table
-      flat
-      bordered
-      title="Customers"
-      :rows="filteredRows"
-      :columns="columns"
-      row-key="id"
-      v-model:pagination="pagination"
-      @row-click="goToDetails"
-    >
-      <template v-slot:pagination="scope">
-        <q-btn
-          v-if="scope.pagesNumber > 2"
-          icon="first_page"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="scope.isFirstPage"
-          @click="scope.firstPage"
-        />
-        <q-btn
-          icon="chevron_left"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="scope.isFirstPage"
-          @click="scope.prevPage"
-        />
-        <q-btn
-          icon="chevron_right"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="scope.isLastPage"
-          @click="scope.nextPage"
-        />
-        <q-btn
-          v-if="scope.pagesNumber > 2"
-          icon="last_page"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="scope.isLastPage"
-          @click="scope.lastPage"
-        />
-      </template>
-    </q-table>
+    <CustomerList />
   </div>
 </template>
 
 <script>
+import CustomerList from './CustomerList.vue';
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -98,6 +41,9 @@ const columns = [
 ];
 
 export default {
+  components: {
+    CustomerList,
+  },
   setup() {
     const router = useRouter();
     const search = ref("");
