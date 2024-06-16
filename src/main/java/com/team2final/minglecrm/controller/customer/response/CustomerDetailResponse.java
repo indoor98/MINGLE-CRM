@@ -1,35 +1,43 @@
 package com.team2final.minglecrm.controller.customer.response;
 
-
 import com.team2final.minglecrm.entity.customer.Customer;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Getter
 @RequiredArgsConstructor
-public class CustomerResponse {
+public class CustomerDetailResponse {
 
     private final Long id;
     private final String name;
     private final String phone;
     private final String employeeName;
+    private final String memo;
     private final String grade;
+    private final String address;
     private final String gender;
     private final LocalDate birth;
+    private final int age;
 
-    public static CustomerResponse from(Customer customer) {
-        return new CustomerResponse(
+    public static CustomerDetailResponse of(Customer customer) {
+        return new CustomerDetailResponse(
                 customer.getId(),
                 customer.getName(),
                 customer.getPhone(),
                 customer.getEmployee().getName(),
+                customer.getMemo(),
                 customer.getGrade(),
+                customer.getAddress(),
                 customer.getGender(),
-                customer.getBirth()
+                customer.getBirth(),
+                calculateAge(customer.getBirth())
         );
+    }
+
+    private static int calculateAge(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 }
