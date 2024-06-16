@@ -45,8 +45,7 @@
 
 <script setup>
 import { ref, onMounted, defineProps, watch } from "vue";
-import axios from "axios";
-import { Notify, Dialog } from "quasar";
+import { api as axios } from "src/boot/axios";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
@@ -79,9 +78,16 @@ const defaultColumns = [
   },
   {
     name: "creatorName",
-    label: "생성 직원 이름",
+    label: "요청 직원 이름",
     align: "center",
     field: "creatorName",
+    sortable: true,
+  },
+  {
+    name: "customerName",
+    label: "고객 이름",
+    align: "center",
+    field: "customerName",
     sortable: true,
   },
   {
@@ -97,16 +103,16 @@ const approvedColumns = [
   ...defaultColumns,
   {
     name: "confirmDate",
-    label: "승인 일시",
+    label: "승인 일자",
     align: "center",
     field: "confirmDate",
     sortable: true,
   },
   {
-    name: "approverName",
-    label: "승인 매니저 이름",
+    name: "confirmerName",
+    label: "검토 매니저 이름",
     align: "center",
-    field: "approverName",
+    field: "confirmerName",
     sortable: true,
   },
   {
@@ -121,9 +127,16 @@ const rejectedColumns = [
   ...defaultColumns,
   {
     name: "confirmDate",
-    label: "거절 일시",
+    label: "거절 일자",
     align: "center",
     field: "confirmDate",
+    sortable: true,
+  },
+  {
+    name: "confirmerName",
+    label: "검토 매니저 이름",
+    align: "center",
+    field: "confirmerName",
     sortable: true,
   },
   {

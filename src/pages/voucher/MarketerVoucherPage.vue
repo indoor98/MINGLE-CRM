@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-tabs v-model="selectedTab" dense>
+      <q-tabs v-model="selectedTab">
         <q-tab name="not-requested" label="승인 요청전 바우처" />
         <q-tab name="requested" label="승인 요청한 바우처" />
       </q-tabs>
@@ -10,7 +10,20 @@
         <VoucherList />
       </div>
       <div v-else-if="selectedTab === 'requested'">
-        <RequestedVoucherHistoryList auth="marketer" />
+        <q-tabs v-model="selectedTab2">
+          <q-tab name="approved" label="승인 완료된 바우처" />
+          <q-tab name="rejected" label="승인 거절된 바우처" />
+        </q-tabs>
+        <q-separator />
+        <div v-if="selectedTab2 === 'approved' && !showVoucherEmailSend">
+          <VoucherHistoryListMarketer selected="approved-marketer" />
+        </div>
+        <div v-if="selectedTab2 === 'approved' && showVoucherEmailSend">
+          <VoucherEmailSend />
+        </div>
+        <div v-else-if="selectedTab2 === 'rejected'">
+          <VoucherHistoryListMarketer selected="rejected-marketer" />
+        </div>
       </div>
     </div>
   </q-page>
@@ -18,11 +31,13 @@
 
 <script setup>
 import { ref } from "vue";
-import RequestedVoucherHistoryList from "./RequestedVoucherHistoryList.vue";
 import VoucherList from "./VoucherList.vue";
-import VoucherHistoryList from "../../components/VoucherHistoryList.vue";
+import VoucherHistoryListMarketer from "../../components/VoucherHistoryListMarketer.vue";
+import VoucherEmailSend from "./voucherEmailSend.vue";
 
 const selectedTab = ref("not-requested");
+const selectedTab2 = ref("approved");
+const showVoucherEmailSend = ref(false);
 </script>
 
 <style></style>

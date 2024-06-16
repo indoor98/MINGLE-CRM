@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-h6">승인 요청된 바우처 목록</h2>
+    <h2 class="text-h6">{{ title }}</h2>
     <q-card class="q-mt-md">
       <q-card-section>
         <q-table
@@ -20,17 +20,22 @@
               {{ toDate(props.row.requestDate) }}
             </q-td>
           </template>
-          <template v-slot:body-cell-approve="props">
+          <template v-slot:body-cell-confirmDate="props">
+            <q-td :props="props">
+              {{ toDate(props.row.confirmDate) }}
+            </q-td>
+          </template>
+          <template v-slot:body-cell-sendOrCancel="props">
             <q-td :props="props">
               <q-btn
-                label="승인"
+                label="발송"
                 color="primary"
-                @click="approveVoucher(props.row.voucherId)"
+                @click="sendVoucher(props.row.voucherId)"
               ></q-btn>
               <q-btn
-                label="거절"
+                label="취소"
                 color="secondary"
-                @click="rejectVoucher(props.row.voucherId)"
+                @click="cancelVoucher(props.row.voucherId)"
               ></q-btn>
             </q-td>
           </template>
@@ -57,11 +62,21 @@ import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Notify, Dialog } from "quasar";
 
+const props = defineProps({
+  selected: {
+    type: String,
+    required: true,
+  },
+});
+
 const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
+const title = ref("");
 
-const columns = ref([
+const columns = ref([]);
+
+const defaultColumns = [
   {
     name: "voucherId",
     label: "바우처 ID",
@@ -69,25 +84,11 @@ const columns = ref([
     field: "voucherId",
     sortable: true,
   },
-  // {
-  //   name: "customerId",
-  //   label: "고객 ID",
-  //   align: "center",
-  //   field: "customerId",
-  //   sortable: true,
-  // },
   {
     name: "customerName",
     label: "고객 이름",
     align: "center",
     field: "customerName",
-    sortable: true,
-  },
-  {
-    name: "creatorName",
-    label: "발급 직원 이름",
-    align: "center",
-    field: "creatorName",
     sortable: true,
   },
   {
@@ -110,8 +111,54 @@ const columns = ref([
     field: "amount",
     sortable: true,
   },
-  { name: "approve", label: "승인/거절", align: "center" },
-]);
+  {
+    name: "confirmerName",
+    label: "검토 매니저 이름",
+    align: "center",
+    field: "confirmerName",
+    sortable: true,
+  },
+];
+
+const approvedColumns = [
+  ...defaultColumns,
+  {
+    name: "confirmDate",
+    label: "승인 일자",
+    align: "center",
+    field: "confirmDate",
+    sortable: true,
+  },
+  {
+    name: "voucherCode",
+    label: "바우처 코드",
+    align: "center",
+    field: "voucherCode",
+  },
+  {
+    name: "sendOrCancel",
+    label: "발송 / 발급취소",
+    align: "center",
+    field: "sendOrCancel",
+  },
+];
+
+const rejectedColumns = [
+  ...defaultColumns,
+  {
+    name: "confirmDate",
+    label: "거절 일자",
+    align: "center",
+    field: "confirmDate",
+    sortable: true,
+  },
+  {
+    name: "rejectedReason",
+    label: "거절 사유",
+    align: "center",
+    field: "rejectedReason",
+  },
+];
 
 const toTenWords = (beforeWord) => {
   const afterword =
@@ -129,10 +176,23 @@ const toDate = (beforeDate) => {
   );
 };
 
+const updateColumns = (selected) => {
+  switch (selected) {
+    case "approved-marketer":
+      title.value = "승인된 바우처 목록";
+      columns.value = approvedColumns;
+      break;
+    case "rejected-marketer":
+      title.value = "승인 거절된 바우처 목록";
+      columns.value = rejectedColumns;
+      break;
+  }
+};
+
 const fetchVouchers = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8080/api/v1/vouchers/requested"
+      `http://localhost:8080/api/v1/vouchers/${props.selected}`
     );
     vouchers.value = response.data.data;
     console.log(vouchers.value);
@@ -146,7 +206,7 @@ const fetchVouchers = async () => {
   }
 };
 
-const approveVoucher = async (voucherId) => {
+const sendVoucher = async (voucherId) => {
   Dialog.create({
     title: "확인",
     message: `${voucherId}번 바우처 발급을 승인하시겠습니까?`,
@@ -173,41 +233,48 @@ const approveVoucher = async (voucherId) => {
   });
 };
 
-const rejectVoucher = async (voucherId) => {
+const cancelVoucher = async (voucherId) => {
   Dialog.create({
-    title: "거절 사유 입력",
-    message: "거절 사유를 입력해주세요:",
-    prompt: {
-      model: "",
-      type: "textarea",
-    },
+    title: "취소",
+    message: "바우처 발급을 취소하시겠습니까?",
     ok: "확인",
     cancel: "취소",
-  }).onOk(async (reason) => {
+  }).onOk(async () => {
     try {
       await axios.post(
-        `http://localhost:8080/api/v1/vouchers/rejection/${voucherId}`,
-        { reason }
+        `http://localhost:8080/api/v1/vouchers/cancel/${voucherId}`
       );
       Notify.create({
         type: "positive",
-        message: "바우처가 성공적으로 거절되었습니다.",
+        message: "바우처가 성공적으로 발급 취소되었습니다.",
       });
       // Refresh the voucher list after rejection
       fetchVouchers();
     } catch (error) {
-      console.error("바우처 거절 중 에러 발생:", error);
+      console.error("바우처 발급 취소 중 에러 발생:", error);
       Notify.create({
         type: "negative",
-        message: "바우처 거절 중 에러가 발생했습니다.",
+        message: "바우처 발급 취소 중 에러가 발생했습니다.",
       });
     }
   });
 };
 
 onMounted(() => {
+  updateColumns(props.selected);
   fetchVouchers();
 });
+
+watch(
+  () => props.selected,
+  (newSelected) => {
+    if (newSelected) {
+      loading.value = true;
+      updateColumns(newSelected);
+      fetchVouchers();
+    }
+  }
+);
 </script>
 
 <style scoped></style>
