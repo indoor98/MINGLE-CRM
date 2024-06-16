@@ -55,14 +55,12 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/mingle-backend:latest
 
-      - name: Grant execute permission for AWS CLI install script
-        run: chmod +x ./install-aws-cli.sh
-
-      - name: Install AWS CLI
+      - name: Set up AWS CLI
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip awscliv2.zip
           sudo ./aws/install
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
