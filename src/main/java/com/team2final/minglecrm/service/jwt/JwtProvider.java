@@ -46,12 +46,14 @@ public class JwtProvider {
 
         Subject atkSubject = Subject.atk(
                 employee.getId(),
+                employee.getName(),
                 employee.getEmail(),
                 employee.getAuthority()
         );
 
         Subject rtkSubject = Subject.rtk(
                 employee.getId(),
+                employee.getName(),
                 employee.getEmail(),
                 employee.getAuthority()
         );
@@ -132,11 +134,13 @@ public class JwtProvider {
 
         Subject atkSubject = Subject.atk(
                 subject.getId(),
+                subject.getName(),
                 subject.getEmail(),
                 subject.getAuthority());
 
         Subject rtkSubject = Subject.rtk(
                 subject.getId(),
+                subject.getName(),
                 subject.getEmail(),
                 subject.getAuthority());
 

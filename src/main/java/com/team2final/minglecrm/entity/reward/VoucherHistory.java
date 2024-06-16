@@ -66,13 +66,9 @@ public class VoucherHistory {
         this.rejectedReason = rejectedReason;
     }
 
-//    public void approveVoucher(Employee approver) {
-//        this.confirmDate = LocalDateTime.now();
-//        this.employeeManager = approver;
-//    }
-
-    public void approveVoucher(String generatedUniqueVoucherCode) {
+    public void approveVoucher(Employee approver, String generatedUniqueVoucherCode) {
         this.confirmDate = LocalDateTime.now();
+        this.employeeManager = approver;
         this.status = VoucherStatusType.APPROVED;
         this.voucherCode = generatedUniqueVoucherCode;
     }
@@ -82,12 +78,6 @@ public class VoucherHistory {
         this.rejectedReason = rejectedReason;
         this.confirmDate = LocalDateTime.now();
         this.employeeManager = employeeManager;
-    }
-
-    public void rejectVoucher(String rejectedReason) {
-        this.status = VoucherStatusType.REJECTED;
-        this.rejectedReason = rejectedReason;
-        this.confirmDate = LocalDateTime.now();
     }
 
 }
