@@ -69,7 +69,7 @@ const fetchPayments = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/payments`);
     payments.value = response.data.map((payment, index) => ({
-      paymentId: index + 1,
+      paymentId: payment.id,
       customerName: payment.customerName,
       number: payment.number,
       type: payment.type,
@@ -86,7 +86,7 @@ const fetchPayments = async () => {
     // fuse.js 설정
     fuse = new Fuse(payments.value, {
       keys: ['customerName', 'number', 'type', 'paymentSpot'],
-      threshold: 0.4 // 유사도 설정 (0.0 - 1.0, 낮을수록 엄격)
+      threshold: 0.5 // 유사도 설정 (0.0 - 1.0, 낮을수록 엄격)
     });
 
     // 페이지네이션 설정
@@ -130,14 +130,9 @@ const paymentColumns = [
   {name: 'customerName', label: '고객명', align: 'left', field: 'customerName', sortable: true},
   {name: 'number', label: '전화번호', align: 'center', field: 'number', sortable: true},
   {name: 'type', label: '결제 종류', align: 'center', field: 'type', sortable: true},
-  {name: 'amountBeforeDiscount', label: '할인 전 금액', align: 'center', field: 'amountBeforeDiscount', sortable: true},
-  {name: 'discountAmount', label: '할인 금액', align: 'center', field: 'discountAmount', sortable: true},
   {name: 'paymentAmount', label: '결제 금액', align: 'center', field: 'paymentAmount'},
   {name: 'paymentDate', label: '결제 날짜', align: 'center', field: 'paymentDate'},
   {name: 'isRefunded', label: '환불 여부', align: 'center', field: 'isRefunded'},
-  {name: 'refundDate', label: '환불 날짜', align: 'center', field: 'refundDate'},
-  {name: 'createdReward', label: '적립금', align: 'center', field: 'createdReward'},
-  {name: 'paymentSpot', label: '결제 지점', align: 'center', field: 'paymentSpot'}
 ];
 </script>
 

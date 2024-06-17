@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-separator class="q-my-md" />
+    <q-separator class="q-my-md"/>
 
     <!-- SearchInput 컴포넌트 사용 -->
     <SearchInput
@@ -31,15 +31,15 @@
 
     <!-- 문의 상세 정보 다이얼로그 -->
     <q-dialog v-model="showDialog">
-      <customer-consultation-detail :inquiry="selectedInquiry" />
+      <customer-consultation-detail :inquiry="selectedInquiry"/>
     </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import {useRoute} from 'vue-router';
 import Fuse from 'fuse.js';
 import CustomerConsultationDetail from './CustomerConsultationDetail.vue';
 import SearchInput from 'src/components/SearchInput.vue'; // SearchInput 컴포넌트 임포트
@@ -112,11 +112,11 @@ onMounted(() => {
 });
 
 const inquiryColumns = [
-  { name: 'id', label: '#', align: 'left', field: 'id' },
-  { name: 'customerName', label: '고갹명', align: 'left', field: 'customerName' },
-  { name: 'customerPhone', label: '전화번호', align: 'center', field: 'customerPhone' },
-  { name: 'date', label: '문의 날짜', align: 'center', field: 'date' },
-  { name: 'type', label: '종류', align: 'center', field: 'type'},
+  {name: 'id', label: '#', align: 'left', field: 'id'},
+  {name: 'customerName', label: '고갹명', align: 'left', field: 'customerName'},
+  {name: 'customerPhone', label: '전화번호', align: 'center', field: 'customerPhone'},
+  {name: 'date', label: '문의 날짜', align: 'center', field: 'date'},
+  {name: 'type', label: '종류', align: 'center', field: 'type'},
   {name: 'isReply', label: '답변여부', align: 'center', field: 'isReply'},
   {name: 'employName', label: '고객명', align: 'center', field: 'employName'},
   {name: 'inquiryTitle', label: '조치 제목', align: 'center', field: 'inquiryTitle'},

@@ -1,17 +1,12 @@
-<!-- DiningReservationList.vue -->
 <template>
   <div class="q-pa-md">
     <q-separator class="q-my-md" />
-
-    <!-- SearchInput 컴포넌트 사용 -->
     <SearchInput
       v-model="search"
       label="검색어를 입력해주세요"
       :search-fields="['reservationId', 'reservationDate', 'visitDate', 'totalPrice', 'dishes']"
       @search="handleSearch"
     />
-
-    <!-- 테이블로 다이닝 예약 목록 표시 -->
     <q-table
       flat
       bordered
@@ -22,9 +17,8 @@
       v-model:pagination="reservationPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props" @click="showReservationDetail(props)">
+        <q-tr :props="props" @click="showReservationDetail(props.row)">
           <q-td v-for="col in reservationColumns" :key="col.name" :props="props">
-            <!-- totalPrice 필드 포맷 처리 -->
             <template v-if="col.name === 'totalPrice'">
               {{ formatPrice(props.row[col.field]) }}
             </template>
@@ -36,9 +30,8 @@
       </template>
     </q-table>
 
-    <!-- 예약 상세 정보 다이얼로그 -->
     <q-dialog v-model="showDialog" persistent>
-      <dining-reservation-detail :reservation="selectedReservation" @close="closeReservationDetail" />
+      <DiningReservationDetail :reservation="selectedReservation" @close="closeReservationDetail" />
     </q-dialog>
   </div>
 </template>
@@ -48,9 +41,9 @@ import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import DiningReservationDetail from './DiningReservationDetail.vue';
-import SearchInput from 'src/components/SearchInput.vue'; // SearchInput 컴포넌트 임포트
-import { formatPrice } from '/src/utils/utils'; // 유틸리티 함수 불러오기
-import Fuse from 'fuse.js'; // fuse.js 임포트
+import SearchInput from 'src/components/SearchInput.vue';
+import { formatPrice } from '/src/utils/utils';
+import Fuse from 'fuse.js';
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -65,50 +58,42 @@ const reservationPagination = ref({
 });
 const showDialog = ref(false);
 const selectedReservation = ref(null);
-let fuse; // fuse.js 인스턴스
+let fuse;
 
-// 예약 목록 가져오기
 const fetchReservations = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/dish/reservations`);
-    reservations.value = response.data.map((reservation, index) => ({
-      reservationId: index + 1,
+    reservations.value = response.data.map((reservation) => ({
+      reservationId: reservation.reservationId,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),
       visitDate: new Date(reservation.visitDate).toLocaleDateString(),
       totalPrice: reservation.totalPrice,
       dishes: reservation.dishes.map(dish => `${dish.name} ($${dish.price})`).join(', ')
     }));
 
-    // fuse.js 설정
     fuse = new Fuse(reservations.value, {
       keys: ['reservationId', 'reservationDate', 'visitDate', 'totalPrice', 'dishes'],
-      threshold: 0.3 // 유사도 설정 (0.0 - 1.0, 낮을수록 엄격)
+      threshold: 0.3
     });
 
-    // 페이지네이션 설정
     reservationPagination.value.pagesNumber = Math.ceil(reservations.value.length / reservationPagination.value.rowsPerPage);
     reservationPagination.value.isFirstPage = reservationPagination.value.page === 1;
     reservationPagination.value.isLastPage = reservationPagination.value.page === reservationPagination.value.pagesNumber;
-
-    console.log(reservations.value); // 데이터 확인용 콘솔 출력
   } catch (error) {
     console.error('Error fetching reservations:', error);
   }
 };
 
-// 예약 상세 정보 보기
-const showReservationDetail = (props) => {
-  selectedReservation.value = props.row;
+const showReservationDetail = (row) => {
+  selectedReservation.value = row;
   showDialog.value = true;
 };
 
-// 예약 상세 정보 닫기
 const closeReservationDetail = () => {
   showDialog.value = false;
   selectedReservation.value = null;
 };
 
-// 검색 필터링 처리
 const filteredReservations = computed(() => {
   if (!search.value) {
     return reservations.value;
@@ -116,7 +101,6 @@ const filteredReservations = computed(() => {
   return fuse.search(search.value).map(result => result.item);
 });
 
-// 검색어 처리
 const handleSearch = (searchTerm) => {
   search.value = searchTerm;
 };
