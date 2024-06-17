@@ -174,8 +174,10 @@
     </section>
     <section class="flex flex-center q-mt-xl">
       <q-pagination
-        v-model="current"
-        max="5"
+        v-model="pagination.page"
+        :max="pagination.pagesNumber"
+        :max-pages="1"
+        :boundary-numbers="true"
         direction-links
         flat
         color="grey"
@@ -203,6 +205,14 @@ const endDate = ref("");
 const positiveReviewSummary = ref("");
 const negativeReviewSummary = ref("");
 const seletedSummaryTap = ref("positive");
+
+const pagination = ref({
+  sortBy: "desc",
+  descending: false,
+  page: 1,
+  rowsPerPage: 9,
+  pagesNumber: 0,
+});
 
 const customerName = ref("");
 
@@ -237,7 +247,7 @@ const getDiningReviews = async () => {
     console.log(searchCondition.value);
 
     const response = await axios.post(
-      `http://localhost:8080/api/dining/reviews/${current.value - 1}`,
+      `http://localhost:8080/api/dining/reviews/${pagination.value.page - 1}`,
       searchCondition.value
     );
     reviews.value = response.data.data;
@@ -270,16 +280,31 @@ const getDiningNegativeReviewSummary = async () => {
   negativeReviewSummary.value = response.data.data.summary;
 };
 
+const getPagesNumber = async () => {
+  const response = await axios.get(
+    "http://localhost:8080/api/dining/review/pagesnumber"
+  );
+
+  pagination.value.pagesNumber = Math.ceil(
+    response.data.data / pagination.value.rowsPerPage
+  );
+  console.log("page : ", pagination.value.pagesNumber);
+};
+
 // 페이지네이션 값이 변경될 때마다 getHotelReviews 함수 호출
-watch(current, () => {
-  getDiningReviews();
-});
+watch(
+  () => pagination.value.page,
+  () => {
+    getDiningReviews();
+  }
+);
 
 // 컴포넌트가 마운트될 때 getHotelReviews 함수 호출
 onMounted(() => {
   getDiningReviews();
   getDiningPositiveReviewSummary();
   getDiningNegativeReviewSummary();
+  getPagesNumber();
 });
 </script>
 
