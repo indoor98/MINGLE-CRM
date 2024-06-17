@@ -30,7 +30,9 @@
               <q-btn
                 label="발송"
                 color="primary"
-                @click="sendVoucher(props.row.voucherId)"
+                @click="
+                  sendVoucher(props.row.customerEmail, props.row.voucherCode)
+                "
               ></q-btn>
               <q-btn
                 label="취소"
@@ -58,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineEmits, watch } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Notify, Dialog } from "quasar";
 
@@ -68,6 +70,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emits = defineEmits(["send-voucher"]);
 
 const vouchers = ref([]);
 const errorMessage = ref("");
@@ -198,39 +202,16 @@ const fetchVouchers = async () => {
     console.log(vouchers.value);
     errorMessage.value = "";
   } catch (error) {
-    console.error("승인 요청된 바우처 목록을 불러오는 중 에러 발생:", error);
+    console.error("승인 요청한 바우처 목록을 불러오는 중 에러 발생:", error);
     errorMessage.value =
-      "승인 요청된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
+      "승인 요청한 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
   }
 };
 
-const sendVoucher = async (voucherId) => {
-  Dialog.create({
-    title: "확인",
-    message: `${voucherId}번 바우처 발급을 승인하시겠습니까?`,
-    ok: "예",
-    cancel: "아니오",
-  }).onOk(async () => {
-    try {
-      await axios.post(
-        `http://localhost:8080/api/v1/vouchers/approval/${voucherId}`
-      );
-      Notify.create({
-        type: "positive",
-        message: "바우처가 성공적으로 승인되었습니다.",
-      });
-      // Refresh the voucher list after approval
-      fetchVouchers();
-    } catch (error) {
-      console.error("바우처 승인 중 에러 발생:", error);
-      Notify.create({
-        type: "negative",
-        message: "바우처 승인 중 에러가 발생했습니다.",
-      });
-    }
-  });
+const sendVoucher = (customerEmail, voucherCode) => {
+  emits("send-voucher", customerEmail, voucherCode);
 };
 
 const cancelVoucher = async (voucherId) => {

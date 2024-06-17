@@ -16,10 +16,17 @@
         </q-tabs>
         <q-separator />
         <div v-if="selectedTab2 === 'approved' && !showVoucherEmailSend">
-          <VoucherHistoryListMarketer selected="approved-marketer" />
+          <VoucherHistoryListMarketer
+            @send-voucher="showEmailSendPage"
+            selected="approved-marketer"
+          />
         </div>
         <div v-if="selectedTab2 === 'approved' && showVoucherEmailSend">
-          <VoucherEmailSend />
+          <VoucherEmailSend
+            :customerEmail="selectedCustomerEmail"
+            :voucherCode="selectedVoucherCode"
+            @go-back="hideEmailSendPage"
+          />
         </div>
         <div v-else-if="selectedTab2 === 'rejected'">
           <VoucherHistoryListMarketer selected="rejected-marketer" />
@@ -38,6 +45,18 @@ import VoucherEmailSend from "./voucherEmailSend.vue";
 const selectedTab = ref("not-requested");
 const selectedTab2 = ref("approved");
 const showVoucherEmailSend = ref(false);
+const selectedCustomerEmail = ref("");
+const selectedVoucherCode = ref("");
+
+const showEmailSendPage = (customerEmail, voucherCode) => {
+  selectedCustomerEmail.value = customerEmail;
+  selectedVoucherCode.value = voucherCode;
+  showVoucherEmailSend.value = true;
+};
+
+const hideEmailSendPage = () => {
+  showVoucherEmailSend.value = false;
+};
 </script>
 
 <style></style>

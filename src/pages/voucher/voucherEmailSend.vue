@@ -1,31 +1,11 @@
 <template>
   <q-page class="q-gutter-sm">
-    <q-tabs
-      v-model="selectedTab"
-      narrow-indicator
-      densealign="justify"
-      dense
-      align="left"
-      class="text-primary"
-    >
-      <q-tab name="개인" label="개인" />
-      <q-tab name="그룹" label="그룹" />
-    </q-tabs>
+    <q-btn flat icon="arrow_back" @click="goBack"> 뒤로</q-btn>
 
     <div class="row">
-      <div v-if="selectedTab === '개인'" class="row">
+      <div class="row">
         <q-input v-model="toEmails" filled label="받는 사람" />
         <q-btn flat icon="send" @click="sendPersonalEmail"></q-btn>
-      </div>
-      <div v-else-if="selectedTab === '그룹'" class="row">
-        <q-select
-          filled
-          v-model="group"
-          :options="GroupOptions"
-          label="고객 그룹"
-          style="min-width: 216px"
-        />
-        <q-btn flat icon="send" @click="sendGroupEmail"></q-btn>
       </div>
     </div>
     <q-input v-model="title" filled label="제목" />
@@ -36,21 +16,31 @@
       v-model="content"
       min-height="5rem"
     />
-
-    <q-btn class=""> </q-btn>
   </q-page>
 </template>
 
 <script setup>
-import { ref } from "vue";
-// import axios from "axios";
+import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { useRouter } from "vue-router";
 
+const props = defineProps({
+  customerEmail: {
+    type: String,
+    required: true,
+  },
+  voucherCode: {
+    type: String,
+    required: true,
+  },
+});
+
+const emits = defineEmits(["go-back"]);
+
 const router = useRouter();
 
-const content = ref("");
-const toEmails = ref("");
+const content = ref(`Voucher Code: ${props.voucherCode}`);
+const toEmails = ref(props.customerEmail);
 const title = ref("");
 const selectedTab = ref("개인");
 const group = ref("전체");
@@ -76,4 +66,10 @@ const sendPersonalEmail = async () => {
     console.log(error);
   }
 };
+
+const goBack = () => {
+  emits("go-back");
+};
 </script>
+
+<style scoped></style>
