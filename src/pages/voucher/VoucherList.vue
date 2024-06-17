@@ -15,8 +15,6 @@
           :columns="columns"
           row-key="id"
           :loading="loading"
-          :dense="true"
-          class="q-table--dense"
           :pagination="{ rowsPerPage: 50 }"
         >
           <template v-slot:body-cell-createdReason="props">
@@ -175,6 +173,13 @@ const toDate = (beforeDate) => {
 };
 
 const columns = ref([
+  {
+    name: "voucherId",
+    label: "바우처 ID",
+    align: "center",
+    field: "voucherId",
+    sortable: true,
+  },
   {
     name: "customerId",
     label: "회원 ID",
