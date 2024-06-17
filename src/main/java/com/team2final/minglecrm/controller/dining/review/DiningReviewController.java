@@ -23,4 +23,10 @@ public class DiningReviewController {
         System.out.println(condition);
         return new ResultResponse<>(HttpStatus.OK.value(), "success", diningReviewService.searchDiningReviews(pageNo, condition));
     }
+
+    @GetMapping("/api/dining/review/pagesnumber")
+    public ResultResponse<Long> getPagesNumber() {
+        Long reviewsNumber = diningReviewService.getReviewsNumber();
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", reviewsNumber);
+    }
 }

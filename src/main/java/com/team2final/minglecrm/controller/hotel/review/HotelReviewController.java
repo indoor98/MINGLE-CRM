@@ -6,10 +6,7 @@ import com.team2final.minglecrm.controller.hotel.review.response.HotelReviewCond
 import com.team2final.minglecrm.service.hotel.review.HotelReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +25,11 @@ public class HotelReviewController {
     @PostMapping("/api/hotel/reviews/{pageno}")
     public ResultResponse<List<HotelReviewConditionSearchResponse>> searchReviews(@PathVariable("pageno") int pageNo, @RequestBody HotelReviewConditionSearchRequest request) {
         return new ResultResponse<>(HttpStatus.OK.value(), "success" ,hotelReviewService.searchReviews(request, pageNo));
+    }
+
+    @GetMapping("/api/hotel/review/pagesnumber")
+    public ResultResponse<Long> getPagesNumber() {
+        Long reviewsNumber = hotelReviewService.getReviewsNumber();
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", reviewsNumber);
     }
 }
