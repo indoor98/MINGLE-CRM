@@ -54,10 +54,11 @@ public class JWTTokenAuthenticationFilter extends OncePerRequestFilter {
                     throw new JwtException("토큰을 확인하세요");
                 }
 
+                String userRealName = subject.getName();
                 String username = subject.getEmail();
                 String authorities = subject.getAuthority();
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        username, null, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
+                        username, userRealName, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (JwtException e) {
                 request.setAttribute("exception", e.getMessage());

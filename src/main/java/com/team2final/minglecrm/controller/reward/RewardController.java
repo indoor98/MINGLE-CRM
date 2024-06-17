@@ -5,7 +5,6 @@ import com.team2final.minglecrm.controller.reward.response.RewardHistoryResponse
 import com.team2final.minglecrm.controller.reward.response.RewardResponse;
 import com.team2final.minglecrm.service.reward.RewardService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;

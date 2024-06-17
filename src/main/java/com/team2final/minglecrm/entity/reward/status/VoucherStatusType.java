@@ -7,5 +7,7 @@ public enum VoucherStatusType {
     REQUESTED,
     APPROVED,
     REJECTED,
+    SENDED,
+    CANCELED,
     CONVERTED
 }
