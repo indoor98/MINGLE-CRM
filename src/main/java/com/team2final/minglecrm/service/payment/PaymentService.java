@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.service.payment;
 
+import com.team2final.minglecrm.controller.payment.response.PaymentDetailResponse;
 import com.team2final.minglecrm.controller.payment.response.PaymentResponse;
 import com.team2final.minglecrm.entity.payment.Payment;
 import com.team2final.minglecrm.persistence.repository.payment.PaymentRepository;
@@ -19,12 +20,12 @@ public class PaymentService {
         List<Payment> payments = paymentRepository.findByCustomerId(customerId);
 
         return payments.stream()
-                .map(PaymentResponse::of)
+                .map(PaymentResponse::from)
                 .collect(Collectors.toList());
     }
 
-    public PaymentResponse findPaymentById(Long customerId, Long paymentId) {
+    public PaymentDetailResponse findPaymentById(Long customerId, Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId).orElseThrow();
-        return PaymentResponse.of(payment);
+        return PaymentDetailResponse.from(payment);
     }
 }

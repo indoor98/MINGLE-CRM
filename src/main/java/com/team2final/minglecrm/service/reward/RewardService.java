@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +19,14 @@ import java.util.stream.Collectors;
 public class RewardService {
     private final RewardRepository rewardRepository;
     private final RewardHistoryRepository rewardHistoryRepository;
+
+    @Transactional
+    public List<RewardResponse> getAllRewards() {
+        List<Reward> rewards = rewardRepository.findAll();
+        return rewards.stream()
+                .map(RewardResponse::of)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public RewardResponse getReward(Long customerId) {
@@ -29,6 +38,13 @@ public class RewardService {
     public List<RewardHistoryResponse> getRewardHistories(Long customerId) {
         List<RewardHistory> rewardHistories = rewardHistoryRepository.findRewardHistoriesByCustomerId(customerId);
 
+        return rewardHistories.stream()
+                .map(RewardHistoryResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    public List<RewardHistoryResponse> getAllRewardHistories() {
+        List<RewardHistory> rewardHistories = rewardHistoryRepository.findAll();
         return rewardHistories.stream()
                 .map(RewardHistoryResponse::of)
                 .collect(Collectors.toList());

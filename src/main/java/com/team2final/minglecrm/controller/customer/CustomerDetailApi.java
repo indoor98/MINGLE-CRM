@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.controller.customer;
 
 import com.team2final.minglecrm.controller.customer.request.CustomerUpdateRequest;
+import com.team2final.minglecrm.controller.customer.response.CustomerDetailResponse;
 import com.team2final.minglecrm.controller.customer.response.CustomerResponse;
 import com.team2final.minglecrm.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,9 @@ public class CustomerDetailApi {
 
     // 고객 단건 조회
     @GetMapping("/{customerId}")
-    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
-    public ResponseEntity<CustomerResponse> customerDetail(@PathVariable Long customerId) {
-        CustomerResponse customerResponse = customerService.findById(customerId);
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+    public ResponseEntity<CustomerDetailResponse> customerDetail(@PathVariable Long customerId) {
+        CustomerDetailResponse customerResponse = customerService.findById(customerId);
         return ResponseEntity.ok(customerResponse);
     }
 

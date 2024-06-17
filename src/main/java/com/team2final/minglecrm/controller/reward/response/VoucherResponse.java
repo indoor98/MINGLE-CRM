@@ -15,21 +15,26 @@ public class VoucherResponse {
     private final Long employeeId;
     private final String employeeName;
     private final Long amount;
-    private final LocalDateTime createDate;
-    private final LocalDateTime expireDate;
-    private final String voucherCode;
+    private final LocalDateTime createdDate;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
+    private final String createdReason;
 
 
     public static VoucherResponse of(Voucher voucher) {
+        Long employeeId = voucher.getEmployee() != null ? voucher.getEmployee().getId() : null;
+        String employeeName = voucher.getEmployee() != null ? voucher.getEmployee().getName() : null;
+
         return new VoucherResponse(
                 voucher.getId(),
                 voucher.getCustomer().getId(),
                 voucher.getCustomer().getName(),
-                voucher.getEmployee().getId(),
-                voucher.getEmployee().getName(),
+                employeeId,
+                employeeName,
                 voucher.getAmount(),
                 voucher.getCreatedDate(),
-                voucher.getExpiredDate(),
-                voucher.getVoucherCode());
+                voucher.getStartDate(),
+                voucher.getEndDate(),
+                voucher.getCreatedReason());
     }
 }

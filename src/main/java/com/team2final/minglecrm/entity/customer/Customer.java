@@ -3,6 +3,7 @@ package com.team2final.minglecrm.entity.customer;
 
 import com.team2final.minglecrm.controller.customer.request.CustomerUpdateRequest;
 import com.team2final.minglecrm.entity.employee.Employee;
+import com.team2final.minglecrm.entity.hotel.RoomReservation;
 import com.team2final.minglecrm.entity.reward.Reward;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -50,6 +52,9 @@ public class Customer {
     private Boolean isDeleted;
 
     private Integer visitCnt;
+
+    @OneToMany(mappedBy = "customer")
+    private List<RoomReservation> roomReservations;
 
     public void updateCustomerDetail(CustomerUpdateRequest customerUpdateRequest) {
         this.name = customerUpdateRequest.getName();

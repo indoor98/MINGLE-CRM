@@ -24,7 +24,7 @@ public class HotelReservationDetailApi {
 
     // 호텔 전체 예약 내역
     @GetMapping()
-    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<List<RoomReservationResponse>> getReservationsList(
             @PathVariable Long customerId) {
         List<RoomReservationResponse> responses = hotelReservationService.findById(customerId);
@@ -33,7 +33,7 @@ public class HotelReservationDetailApi {
 
     // 호텔 내역 상세보기
     @GetMapping("/{reservationId}")
-    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<RoomReservationResponse> getRoomReservation(
             @PathVariable Long customerId, @PathVariable Long reservationId) {
         RoomReservationResponse roomReservationResponse = hotelReservationService.findReservationById(

@@ -19,7 +19,7 @@ public class CustomerApi {
 
     // TODO : paging 처리 -> 컨텐츠 총 개수 뽑기
     @GetMapping()
-    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<List<CustomerResponse>> getAllCustomers(Pageable pageable) {
         List<CustomerResponse> customers = customerService.getAllCustomer(pageable);
         return ResponseEntity.ok(customers);

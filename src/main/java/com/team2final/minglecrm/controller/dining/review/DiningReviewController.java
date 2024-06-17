@@ -1,12 +1,14 @@
 package com.team2final.minglecrm.controller.dining.review;
 
 import com.team2final.minglecrm.controller.ResultResponse;
+import com.team2final.minglecrm.controller.dining.review.request.DiningReviewConditionSearchRequest;
+import com.team2final.minglecrm.controller.dining.review.response.DiningReviewConditionSearchResponse;
 import com.team2final.minglecrm.controller.dining.review.response.DiningReviewResponse;
 import com.team2final.minglecrm.service.dining.review.DiningReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,9 +18,9 @@ public class DiningReviewController {
 
     private final DiningReviewService diningReviewService;
 
-    @GetMapping("/api/dining/reviews/{pageno}")
-    public ResultResponse<List<DiningReviewResponse>> findAllDiningReview(@PathVariable("pageno") int pageNo){
-        List<DiningReviewResponse> response = diningReviewService.findAllDiningReviewsWithPaging(pageNo);
-        return null;
+    @PostMapping("/api/dining/reviews/{pageno}")
+    public ResultResponse<List<DiningReviewConditionSearchResponse>> searchDiningReviews(@PathVariable("pageno") Integer pageNo, @RequestBody DiningReviewConditionSearchRequest condition){
+        System.out.println(condition);
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", diningReviewService.searchDiningReviews(pageNo, condition));
     }
 }

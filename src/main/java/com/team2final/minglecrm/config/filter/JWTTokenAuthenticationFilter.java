@@ -5,6 +5,7 @@ import com.team2final.minglecrm.controller.employee.vo.Subject;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,23 @@ public class JWTTokenAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String authorization = request.getHeader("Authorization"); // 요청 헤더 중 Authorizaion: Bearer '토큰'
 
+
+        Cookie[] cookies = request.getCookies();
+        String rtk = null;
+
+        if (cookies != null ) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("rtk")) {
+                    // 해당 쿠키의 값 반환
+                    rtk = cookie.getValue();
+                    System.out.println(rtk);
+                }
+            }
+        } else {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if(authorization!=null) {
             String atk = authorization.substring(7); // Bearer 이후
             try {
@@ -36,10 +54,11 @@ public class JWTTokenAuthenticationFilter extends OncePerRequestFilter {
                     throw new JwtException("토큰을 확인하세요");
                 }
 
+                String userRealName = subject.getName();
                 String username = subject.getEmail();
                 String authorities = subject.getAuthority();
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        username, null, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
+                        username, userRealName, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (JwtException e) {
                 request.setAttribute("exception", e.getMessage());
