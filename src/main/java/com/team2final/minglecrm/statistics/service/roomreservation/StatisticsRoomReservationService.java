@@ -1,8 +1,8 @@
 package com.team2final.minglecrm.statistics.service.roomreservation;
 
-import com.team2final.minglecrm.statistics.controller.reservation.response.StatisticsRoomReservationResponse;
+import com.team2final.minglecrm.statistics.dto.response.reservation.StatisticsRoomReservationResponse;
 import com.team2final.minglecrm.reservation.domain.hotel.RoomReservation;
-import com.team2final.minglecrm.statistics.persistance.StatisticsRoomReservationRepository;
+import com.team2final.minglecrm.statistics.domain.repository.StatisticsRoomReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

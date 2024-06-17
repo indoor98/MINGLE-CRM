@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.entity;
+package com.team2final.minglecrm.statistics.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -8,18 +8,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class WeeklyReservationCount {
+public class DailyReservationCount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer reservationYear;
-    private Integer reservationWeek;
+    private Integer reservationMonth;
+    private Integer reservationDay;
     private Long reservationCount;
 
     @Builder
-    public WeeklyReservationCount(Integer reservationYear, Integer reservationWeek, Long reservationCount) {
+    public DailyReservationCount(Integer reservationYear, Integer reservationMonth, Integer reservationDay, Long reservationCount) {
         this.reservationYear = reservationYear;
-        this.reservationWeek = reservationWeek;
+        this.reservationMonth = reservationMonth;
+        this.reservationDay = reservationDay;
         this.reservationCount = reservationCount;
     }
 }

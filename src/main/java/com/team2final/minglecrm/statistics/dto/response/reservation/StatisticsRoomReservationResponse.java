@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.controller.reservation.response;
+package com.team2final.minglecrm.statistics.dto.response.reservation;
 
 import lombok.Builder;
 import lombok.Getter;

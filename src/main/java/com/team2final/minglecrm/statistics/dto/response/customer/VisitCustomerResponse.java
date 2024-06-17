@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.controller.customer.response;
+package com.team2final.minglecrm.statistics.dto.response.customer;
 
 import lombok.Builder;
 import lombok.Getter;

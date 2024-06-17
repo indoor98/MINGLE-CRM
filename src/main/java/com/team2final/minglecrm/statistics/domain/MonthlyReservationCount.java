@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.entity;
+package com.team2final.minglecrm.statistics.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;

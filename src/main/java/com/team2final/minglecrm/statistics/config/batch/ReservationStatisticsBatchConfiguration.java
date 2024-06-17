@@ -2,10 +2,10 @@ package com.team2final.minglecrm.statistics.config.batch;
 
 import com.team2final.minglecrm.statistics.config.support.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.config.support.RunIdIncrementer;
-import com.team2final.minglecrm.statistics.entity.ByYearReservationCount;
-import com.team2final.minglecrm.statistics.entity.DailyReservationCount;
-import com.team2final.minglecrm.statistics.entity.MonthlyReservationCount;
-import com.team2final.minglecrm.statistics.entity.WeeklyReservationCount;
+import com.team2final.minglecrm.statistics.domain.ByYearReservationCount;
+import com.team2final.minglecrm.statistics.domain.DailyReservationCount;
+import com.team2final.minglecrm.statistics.domain.MonthlyReservationCount;
+import com.team2final.minglecrm.statistics.domain.WeeklyReservationCount;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;

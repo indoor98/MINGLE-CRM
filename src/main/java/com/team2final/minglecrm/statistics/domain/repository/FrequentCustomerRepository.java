@@ -1,10 +1,8 @@
-package com.team2final.minglecrm.statistics.persistance;
+package com.team2final.minglecrm.statistics.domain.repository;
 
-import com.team2final.minglecrm.statistics.entity.FrequentCustomer;
+import com.team2final.minglecrm.statistics.domain.FrequentCustomer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface FrequentCustomerRepository extends JpaRepository<FrequentCustomer, Long> {

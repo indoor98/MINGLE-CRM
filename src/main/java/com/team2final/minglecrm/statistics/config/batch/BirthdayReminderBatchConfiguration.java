@@ -3,7 +3,7 @@ package com.team2final.minglecrm.statistics.config.batch;
 import com.team2final.minglecrm.customer.domain.Customer;
 import com.team2final.minglecrm.statistics.config.support.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.config.support.RunIdIncrementer;
-import com.team2final.minglecrm.statistics.entity.BirthdayReminderCustomers;
+import com.team2final.minglecrm.statistics.domain.BirthdayReminderCustomers;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;

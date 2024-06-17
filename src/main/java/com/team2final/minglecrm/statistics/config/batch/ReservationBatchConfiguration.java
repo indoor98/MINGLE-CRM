@@ -3,7 +3,7 @@ package com.team2final.minglecrm.statistics.config.batch;
 import com.team2final.minglecrm.reservation.domain.hotel.RoomReservation;
 import com.team2final.minglecrm.statistics.config.support.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.config.support.RunIdIncrementer;
-import com.team2final.minglecrm.statistics.entity.StatisticsRoomReservation;
+import com.team2final.minglecrm.statistics.domain.StatisticsRoomReservation;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;

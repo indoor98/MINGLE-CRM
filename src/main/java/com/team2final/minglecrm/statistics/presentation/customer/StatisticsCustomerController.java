@@ -1,7 +1,7 @@
-package com.team2final.minglecrm.statistics.controller.customer;
+package com.team2final.minglecrm.statistics.presentation.customer;
 
-import com.team2final.minglecrm.statistics.controller.customer.response.VisitCustomerResponse;
-import com.team2final.minglecrm.statistics.controller.customer.response.StatisticsCustomerResponse;
+import com.team2final.minglecrm.statistics.dto.response.customer.VisitCustomerResponse;
+import com.team2final.minglecrm.statistics.dto.response.customer.StatisticsCustomerResponse;
 import com.team2final.minglecrm.statistics.service.customer.StatisticsCustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/statistics")
-public class StatisticsCustomerApi {
+public class StatisticsCustomerController {
 
     private final StatisticsCustomerService statisticsCustomerService;
 
