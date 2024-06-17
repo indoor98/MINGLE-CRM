@@ -30,6 +30,21 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     Optional<Inquiry> findByIdAndCustomerId(Long inquiryId, Long customerId);
 
+    @Query("SELECT i FROM Inquiry i WHERE i.customer.name LIKE %:customerName%")
+    Page<Inquiry> findByCustomerName(@Param("customerName") String customerName, Pageable pageable);
+
+    @Query("SELECT i FROM Inquiry i WHERE i.customer.phone LIKE %:customerPhone%")
+    Page<Inquiry> findByCustomerPhone(@Param("customerPhone") String customerPhone, Pageable pageable);
+
+    @Query("SELECT i FROM Inquiry i WHERE i.inquiryTitle LIKE %:inquiryTitle%")
+    Page<Inquiry> findByInquiryTitle(@Param("inquiryTitle") String inquiryTitle, Pageable pageable);
+
+    @Query("SELECT i FROM Inquiry i WHERE i.inquiryContent LIKE %:inquiryContent%")
+    Page<Inquiry> findByInquiryContent(@Param("inquiryContent") String inquiryContent, Pageable pageable);
+
+    @Query("SELECT i FROM Inquiry i WHERE i.date BETWEEN :startDate AND :endDate")
+    Page<Inquiry> findByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, Pageable pageable);
+
     @Query("SELECT i FROM Inquiry i " +
             "JOIN i.customer c " +
             "WHERE (i.inquiryTitle LIKE %:keyword% OR i.inquiryContent LIKE %:keyword% OR c.name LIKE %:keyword%) " +
