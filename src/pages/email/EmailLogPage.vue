@@ -112,7 +112,9 @@ const columns = ref([
 
 const fetchRewards = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/events/0");
+    const response = await axios.get(
+      `http://localhost:8080/api/events/${pagination.value.page - 1}`
+    );
     events.value = response.data.data;
 
     const pagesNumberResponse = await axios.get(
@@ -121,7 +123,7 @@ const fetchRewards = async () => {
     pagesNumber.value = Math.ceil(
       pagesNumberResponse.data.data / pagination.value.rowsPerPage
     );
-    console.log(pagesNumber);
+    console.log("event 불러오기 : " + response.data.data);
     errorMessage.value = "";
   } catch (error) {
     console.log("이벤트 목록 불러오기 실패 " + error);
