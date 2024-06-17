@@ -2,9 +2,7 @@ package com.team2final.minglecrm.controller.customer.response;
 
 
 import com.team2final.minglecrm.entity.customer.Customer;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;

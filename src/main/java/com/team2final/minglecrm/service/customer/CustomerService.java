@@ -23,6 +23,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final EmployeeRepository employeeRepository;
 
+    //TODO : 권한
     // 고객 조회
     @Transactional(readOnly = true)
     public List<CustomerResponse> getAllCustomer(Pageable pageable) {
