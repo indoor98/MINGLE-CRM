@@ -10,57 +10,58 @@
       <q-separator />
 
       <q-card-section>
-        <q-list>
-          <q-item>
-            <q-item-section>Customer Name</q-item-section>
-            <q-item-section>{{ loadedPayment.customerName }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Number</q-item-section>
-            <q-item-section>{{ loadedPayment.number }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Type</q-item-section>
-            <q-item-section>{{ loadedPayment.type }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Amount Before Discount</q-item-section>
-            <q-item-section>{{ loadedPayment.amountBeforeDiscount }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Discount Amount</q-item-section>
-            <q-item-section>{{ loadedPayment.discountAmount }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Payment Amount</q-item-section>
-            <q-item-section>{{ loadedPayment.paymentAmount }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Payment Date</q-item-section>
-            <q-item-section>{{ loadedPayment.paymentDate }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Is Refunded</q-item-section>
-            <q-item-section>{{ loadedPayment.isRefunded }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Refund Date</q-item-section>
-            <q-item-section>{{ loadedPayment.refundDate }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Created Reward</q-item-section>
-            <q-item-section>{{ loadedPayment.createdReward }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Payment Spot</q-item-section>
-            <q-item-section>{{ loadedPayment.paymentSpot }}</q-item-section>
-          </q-item>
-        </q-list>
+        <table class="payment-table">
+          <tbody>
+          <tr>
+            <th>Customer Name</th>
+            <td>{{ loadedPayment.customerName }}</td>
+          </tr>
+          <tr>
+            <th>Number</th>
+            <td>{{ loadedPayment.number }}</td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td>{{ loadedPayment.type }}</td>
+          </tr>
+          <tr>
+            <th>Amount Before Discount</th>
+            <td>{{ loadedPayment.amountBeforeDiscount }}</td>
+          </tr>
+          <tr>
+            <th>Discount Amount</th>
+            <td>{{ loadedPayment.discountAmount }}</td>
+          </tr>
+          <tr>
+            <th>Payment Amount</th>
+            <td>{{ loadedPayment.paymentAmount }}</td>
+          </tr>
+          <tr>
+            <th>Payment Date</th>
+            <td>{{ loadedPayment.paymentDate }}</td>
+          </tr>
+          <tr>
+            <th>Is Refunded</th>
+            <td>{{ loadedPayment.isRefunded }}</td>
+          </tr>
+          <tr>
+            <th>Refund Date</th>
+            <td>{{ loadedPayment.refundDate }}</td>
+          </tr>
+          <tr>
+            <th>Created Reward</th>
+            <td>{{ loadedPayment.createdReward }}</td>
+          </tr>
+          <tr>
+            <th>Payment Spot</th>
+            <td>{{ loadedPayment.paymentSpot }}</td>
+          </tr>
+          </tbody>
+        </table>
       </q-card-section>
     </q-card>
 
     <div v-else class="q-mt-md text-h6 text-center">Loading...</div>
-
   </div>
 </template>
 
@@ -91,5 +92,25 @@ const fetchPayment = async (customerId, paymentId) => {
 </script>
 
 <style scoped>
-/* 필요한 스타일 추가 */
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.payment-table th,
+.payment-table td {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.payment-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.q-card-section {
+  padding: 16px;
+}
 </style>

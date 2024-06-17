@@ -86,7 +86,7 @@ const fetchPayments = async () => {
     // fuse.js 설정
     fuse = new Fuse(payments.value, {
       keys: ['customerName', 'number', 'type', 'paymentSpot'],
-      threshold: 0.4 // 유사도 설정 (0.0 - 1.0, 낮을수록 엄격)
+      threshold: 0.5 // 유사도 설정 (0.0 - 1.0, 낮을수록 엄격)
     });
 
     // 페이지네이션 설정
