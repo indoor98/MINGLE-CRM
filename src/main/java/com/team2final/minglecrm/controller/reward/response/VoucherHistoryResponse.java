@@ -31,6 +31,7 @@ public class VoucherHistoryResponse {
 
     private final Long customerId;
     private final String customerName;
+    private final String customerEmail;
 
     private final Long amount;
     private final String rejectedReason;
@@ -61,6 +62,7 @@ public class VoucherHistoryResponse {
 
                 voucherHistory.getCustomer().getId(),
                 voucherHistory.getCustomer().getName(),
+                voucherHistory.getCustomer().getEmail(),
 
                 voucherHistory.getVoucher().getAmount(),
                 voucherHistory.getRejectedReason(),
