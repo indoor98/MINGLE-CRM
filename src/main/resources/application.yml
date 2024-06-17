@@ -50,7 +50,7 @@ spring:
   batch:
     job:
       enabled: false
-      name: importCustomerJob,visitCustomerJob, monthlyReservationJob
+      name: importFrequentCustomerJob, reservationStatisticsJob, birthdayReminderJob
     jdbc:
       initialize-schema: always
 
