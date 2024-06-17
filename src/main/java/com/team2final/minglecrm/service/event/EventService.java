@@ -77,6 +77,7 @@ public class EventService {
         }
     }
 
+    @Transactional
     public Long createEvent(CreateEventRequest request) {
 
         Employee employee = employeeRepository.findByEmail(request.getEmployeeEmail()).orElseThrow( () -> new IllegalArgumentException("없는 직원 입니다."));
