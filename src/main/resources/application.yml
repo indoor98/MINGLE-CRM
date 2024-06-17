@@ -45,3 +45,19 @@ spring:
           timeout: 5000
           write timeout: 5000
     auth-code-expiration-millis: 300000
+
+
+  batch:
+    job:
+      enabled: false
+      name: importCustomerJob,visitCustomerJob, monthlyReservationJob
+    jdbc:
+      initialize-schema: always
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-3.5-turbo
+          temperature: 0.7

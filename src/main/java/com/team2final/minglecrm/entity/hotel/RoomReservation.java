@@ -5,6 +5,7 @@ import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.payment.Payment;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -36,9 +37,9 @@ public class RoomReservation {
     private Customer customer;
     private LocalDateTime reservationDate;
 
-    private Date startDate;
+    private LocalDate startDate;
 
-    private Date endDate;
+    private LocalDate endDate;
 
     private Long price;
 

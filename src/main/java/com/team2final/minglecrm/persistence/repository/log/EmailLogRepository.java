@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface EmailLogRepository extends JpaRepository<EmailLog, Long> {
 
     EmailLog findByEventAndCustomer(Event event, Customer customer);
+    Long countByEventId(Long eventId);
 }

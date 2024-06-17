@@ -11,6 +11,7 @@ import com.team2final.minglecrm.controller.employee.vo.Subject;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -60,7 +61,12 @@ public class JwtProvider {
 
         redisDao.setValues(employee.getEmail(), rtk, Duration.ofMillis(rtkLive));
 
-        return new TokenResponse("success", atk, rtk);
+        return TokenResponse.builder()
+                .atk(atk)
+                .rtk(rtk)
+                .atkExpiration(getTokenExpiration(atk))
+                .rtkExpiration(getTokenExpiration(rtk))
+                .build();
     }
 
     // 토큰 생성 로직
@@ -88,6 +94,27 @@ public class JwtProvider {
                 .getBody()
                 .getSubject();
         return objectMapper.readValue(subjectStr, Subject.class);
+    }
+
+    // HttpServeltRequest에 담긴 atk를 사용해 현재 로그인한 유저 정보 반환
+    public Employee getEmployeeFromHttpServletRequest(HttpServletRequest request) throws Exception {
+        String atk = request.getHeader("Authorization").substring(7);
+        Subject subject = this.getSubject(atk);
+        Employee employee = employeeRepository.findByEmail(subject.getEmail()).orElseThrow(Exception::new);
+        return employee;
+
+    }
+
+
+    public Date getTokenExpiration(String token) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody().getExpiration();
+        return expiration;
+
     }
 
     /**
@@ -118,6 +145,13 @@ public class JwtProvider {
 
         // RefreshToken 갱신
         redisDao.setValues(subject.getEmail(), newRtk, Duration.ofMillis(rtkLive));
-        return new TokenResponse("success", newAtk, newRtk);
+        return TokenResponse.builder()
+                .atk(newAtk)
+                .rtk(newRtk)
+                .atkExpiration(getTokenExpiration(newAtk))
+                .rtkExpiration(getTokenExpiration(newRtk))
+                .build();
     }
+
+
 }
