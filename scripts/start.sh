@@ -25,7 +25,7 @@ echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
 nohup java -jar $PROJECT_ROOT/minglecrm-0.0.1-SNAPSHOT.jar > $APP_LOG 2> $ERROR_LOG &
 
 # 서비스 등록
-SERVICE_NAME="mingle-service"
+SERVICE_NAME="mingle.service"
 sudo systemctl enable $SERVICE_NAME
 sudo systemctl start $SERVICE_NAME
 
