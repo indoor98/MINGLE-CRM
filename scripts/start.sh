@@ -8,6 +8,10 @@ DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
 TIME_NOW=$(date +%c)
 
+# 환경 변수 설정
+export SMTP_EMAIL=minglecrm@gmail.com
+export SMTP_PASSWORD=mqpfjvaxsffkvsfc
+
 # build 파일 복사
 echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
 cp $JAR_FILE $PROJECT_ROOT/minglecrm-0.0.1-SNAPSHOT.jar
