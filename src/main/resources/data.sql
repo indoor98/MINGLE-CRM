@@ -5870,6 +5870,10 @@ VALUES (1, 1, '이벤트1', '이벤트 이메일 내용1', '2024-05-13 0:00:00',
 --        (4, 4, '이벤트4', '이벤트 이메일 내용4', '2024-05-16 0:00:00', 8),
 --        (5, 5, '이벤트5', '이벤트 이메일 내용5', '2024-05-17 0:00:00', 9);
 
+ALTER TABLE event ALTER COLUMN id RESTART WITH 3;
+
+
+
 
 INSERT INTO email_log (ID, EVENT_ID, CUSTOMER_ID, IS_OPENED, OPENED_TIME)
 VALUES (1, 1, 1, true, '2024-05-13 2:00:00'),
@@ -5883,4 +5887,7 @@ VALUES (1, 1, 1, true, '2024-05-13 2:00:00'),
        (9, 2, 9, true, '2024-05-14 5:00:00'),
        (10, 2, 10, false, null),
        (11, 2, 11, false, null);
+
+ALTER TABLE email_log ALTER COLUMN id RESTART WITH 12;
+
 

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class EventRepositoryCustomImpl implements EventRespositoryCustom {
     }
 
     @Override
+    @Transactional
     public Page<EventLogResponse> findAll(Pageable pageable) {
         QEvent event = QEvent.event;
         QEmployee employee = QEmployee.employee;
@@ -42,12 +44,11 @@ public class EventRepositoryCustomImpl implements EventRespositoryCustom {
                         event.content,
                         event.sentDate,
                         event.sendCount,
-                        emailLog.id.count()
+                        emailLog.isOpened.eq(true).count()
                 ))
                 .from(event)
                 .innerJoin(event.employee, employee)
                 .innerJoin(emailLog).on(emailLog.event.eq(event))
-                .where(emailLog.isOpened.eq(true))
                 .groupBy(event.id)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
