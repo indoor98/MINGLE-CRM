@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
@@ -22,6 +24,7 @@ public class DiningReview {
     private Double cleanlinessRating;
     private Double atmosphereRating;
 
+    @Column(length = 1000)
     private String review;
 
     @ManyToOne(fetch = LAZY)
@@ -32,8 +35,10 @@ public class DiningReview {
     @JoinColumn(name = "dish_reservation_id")
     private DishReservation dishReservation;
 
+    private LocalDateTime createdDate;
+
     @Builder
-    public DiningReview(Double tasteRating, Double kindnessRating, Double cleanlinessRating, Double atmosphereRating, String review, Customer customer, DishReservation dishReservation) {
+    public DiningReview(Double tasteRating, Double kindnessRating, Double cleanlinessRating, Double atmosphereRating, String review, Customer customer, DishReservation dishReservation, LocalDateTime createdDate) {
         this.tasteRating = tasteRating;
         this.kindnessRating = kindnessRating;
         this.cleanlinessRating = cleanlinessRating;
@@ -41,6 +46,7 @@ public class DiningReview {
         this.review = review;
         this.customer = customer;
         this.dishReservation = dishReservation;
+        this.createdDate = createdDate;
     }
 
 }

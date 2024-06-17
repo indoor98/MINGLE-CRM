@@ -8,6 +8,7 @@ import com.team2final.minglecrm.persistence.repository.event.EventRepository;
 import com.team2final.minglecrm.persistence.repository.log.EmailLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,11 @@ public class LogService {
                 .build();
 
         emailLogRepository.save(emailLog);
+    }
+
+    @Transactional
+    public Long getPagesNumberByEventId(Long eventId) {
+        return emailLogRepository.countByEventId(eventId);
     }
 
 }

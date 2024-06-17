@@ -40,7 +40,7 @@ public class EmployeeService {
         }
 
         String encodedPassword = passwordEncoder.encode(password);
-        com.team2final.minglecrm.entity.employee.Employee employee = com.team2final.minglecrm.entity.employee.Employee.builder()
+        Employee employee = Employee.builder()
                 .email(signUpRequest.getEmail())
                 .password(encodedPassword)
                 .name(signUpRequest.getName())
@@ -93,8 +93,8 @@ public class EmployeeService {
 
 
     @Transactional
-    public Void logout(String atk) throws JsonProcessingException {
-        Subject subject = jwtProvider.getSubject(atk);
+    public Void logout(String rtk) throws JsonProcessingException {
+        Subject subject = jwtProvider.getSubject(rtk);
         redisDao.getValues(subject.getEmail());
         redisDao.deleteValues(subject.getEmail());
         System.out.println(subject.getEmail() + "로그아웃이요");

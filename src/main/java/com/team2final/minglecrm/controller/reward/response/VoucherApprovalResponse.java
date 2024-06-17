@@ -10,14 +10,12 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class VoucherApprovalResponse {
     private final Long voucherId;
-    private final Boolean isAuth;
     private final LocalDateTime authDate;
 
     public static VoucherApprovalResponse of(VoucherHistory voucherHistory){
         return new VoucherApprovalResponse(
                 voucherHistory.getVoucher().getId(),
-                voucherHistory.getIsAuth(),
-                voucherHistory.getAuthDate()
+                voucherHistory.getConfirmDate()
         );
     }
 }

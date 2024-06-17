@@ -11,6 +11,7 @@ import com.team2final.minglecrm.controller.employee.vo.Subject;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -45,12 +46,14 @@ public class JwtProvider {
 
         Subject atkSubject = Subject.atk(
                 employee.getId(),
+                employee.getName(),
                 employee.getEmail(),
                 employee.getAuthority()
         );
 
         Subject rtkSubject = Subject.rtk(
                 employee.getId(),
+                employee.getName(),
                 employee.getEmail(),
                 employee.getAuthority()
         );
@@ -60,7 +63,12 @@ public class JwtProvider {
 
         redisDao.setValues(employee.getEmail(), rtk, Duration.ofMillis(rtkLive));
 
-        return new TokenResponse("success", atk, rtk);
+        return TokenResponse.builder()
+                .atk(atk)
+                .rtk(rtk)
+                .atkExpiration(getTokenExpiration(atk))
+                .rtkExpiration(getTokenExpiration(rtk))
+                .build();
     }
 
     // 토큰 생성 로직
@@ -90,6 +98,27 @@ public class JwtProvider {
         return objectMapper.readValue(subjectStr, Subject.class);
     }
 
+    // HttpServeltRequest에 담긴 atk를 사용해 현재 로그인한 유저 정보 반환
+    public Employee getEmployeeFromHttpServletRequest(HttpServletRequest request) throws Exception {
+        String atk = request.getHeader("Authorization").substring(7);
+        Subject subject = this.getSubject(atk);
+        Employee employee = employeeRepository.findByEmail(subject.getEmail()).orElseThrow(Exception::new);
+        return employee;
+
+    }
+
+
+    public Date getTokenExpiration(String token) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody().getExpiration();
+        return expiration;
+
+    }
+
     /**
      * 토큰 재발급 함수
      * AccessToken 만료시 AccessToken과 RefreshToken을 재발급(갱신)함
@@ -105,11 +134,13 @@ public class JwtProvider {
 
         Subject atkSubject = Subject.atk(
                 subject.getId(),
+                subject.getName(),
                 subject.getEmail(),
                 subject.getAuthority());
 
         Subject rtkSubject = Subject.rtk(
                 subject.getId(),
+                subject.getName(),
                 subject.getEmail(),
                 subject.getAuthority());
 
@@ -118,6 +149,13 @@ public class JwtProvider {
 
         // RefreshToken 갱신
         redisDao.setValues(subject.getEmail(), newRtk, Duration.ofMillis(rtkLive));
-        return new TokenResponse("success", newAtk, newRtk);
+        return TokenResponse.builder()
+                .atk(newAtk)
+                .rtk(newRtk)
+                .atkExpiration(getTokenExpiration(newAtk))
+                .rtkExpiration(getTokenExpiration(newRtk))
+                .build();
     }
+
+
 }
