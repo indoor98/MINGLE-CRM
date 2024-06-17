@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.service.customer;
 
 import com.team2final.minglecrm.controller.customer.request.CustomerUpdateRequest;
+import com.team2final.minglecrm.controller.customer.response.CustomerDetailResponse;
 import com.team2final.minglecrm.controller.customer.response.CustomerResponse;
 import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.persistence.repository.customer.CustomerRepository;
@@ -22,6 +23,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final EmployeeRepository employeeRepository;
 
+    //TODO : 권한
     // 고객 조회
     @Transactional(readOnly = true)
     public List<CustomerResponse> getAllCustomer(Pageable pageable) {
@@ -30,39 +32,25 @@ public class CustomerService {
                 .map(customer -> new CustomerResponse(
                         customer.getId(),
                         customer.getName(),
-                        customer.getGrade(),
                         customer.getPhone(),
-                        customer.getAddress(),
                         customer.getEmployee().getName(),
-                        customer.getMemo(),
+                        customer.getGrade(),
                         customer.getGender(),
-                        customer.getBirth(),
-                        customer.getReward().getAmount()
+                        customer.getBirth()
                 ))
                 .collect(Collectors.toList());
 
         return result;
     }
 
-    public CustomerResponse findById(Long customerId) {
+    public CustomerDetailResponse findById(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow();
 
         if (customer.getIsDeleted()) {
             throw new RuntimeException("없슴둥");
         }
 
-        return CustomerResponse.builder()
-                .id(customer.getId())
-                .address(customer.getAddress())
-                .amount(customer.getReward().getAmount())
-                .grade(customer.getGrade())
-                .memo(customer.getMemo())
-                .birth(customer.getBirth())
-                .employeeName(customer.getEmployee().getName())
-                .phone(customer.getPhone())
-                .name(customer.getName())
-                .gender(customer.getGender())
-                .build();
+        return CustomerDetailResponse.of(customer);
     }
 
     public void updateCustomer(Long customerId, CustomerUpdateRequest customerUpdateRequest) {

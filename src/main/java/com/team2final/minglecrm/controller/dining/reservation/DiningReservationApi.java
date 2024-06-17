@@ -23,7 +23,7 @@ public class DiningReservationApi {
 
     // 다이닝(디시) 전체 예약 내역
     @GetMapping()
-    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<List<DiningReservationResponse>> getReservationsList(
             @PathVariable Long customerId) {
         List<DiningReservationResponse> responses = dishReservationService.findById(customerId);
@@ -32,7 +32,7 @@ public class DiningReservationApi {
 
     // 다이닝(디시) 상세 예약 내역
     @GetMapping("/{reservationId}")
-    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<DiningReservationResponse> getRoomReservation(
             @PathVariable Long customerId, @PathVariable Long reservationId) {
         DiningReservationResponse diningReservationResponse = dishReservationService.findReservationById(
