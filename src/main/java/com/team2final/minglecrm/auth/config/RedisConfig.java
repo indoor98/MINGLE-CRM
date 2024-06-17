@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.common.config.redis;
+package com.team2final.minglecrm.auth.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

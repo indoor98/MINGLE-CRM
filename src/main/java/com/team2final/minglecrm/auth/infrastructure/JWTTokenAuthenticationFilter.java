@@ -1,6 +1,5 @@
-package com.team2final.minglecrm.common.config.filter;
+package com.team2final.minglecrm.auth.infrastructure;
 
-import com.team2final.minglecrm.service.jwt.JwtProvider;
 import com.team2final.minglecrm.employee.dto.vo.Subject;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

@@ -9,7 +9,7 @@ import com.team2final.minglecrm.employee.dto.vo.Subject;
 import com.team2final.minglecrm.employee.domain.Employee;
 import com.team2final.minglecrm.employee.domain.repository.dao.RedisDao;
 import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
-import com.team2final.minglecrm.service.jwt.JwtProvider;
+import com.team2final.minglecrm.auth.infrastructure.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

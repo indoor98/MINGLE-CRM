@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.service.jwt;
+package com.team2final.minglecrm.auth.infrastructure;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

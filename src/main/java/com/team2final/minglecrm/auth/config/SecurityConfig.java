@@ -1,7 +1,7 @@
-package com.team2final.minglecrm.common.config.security;
+package com.team2final.minglecrm.auth.config;
 
-import com.team2final.minglecrm.common.config.filter.JWTTokenAuthenticationFilter;
-import com.team2final.minglecrm.service.jwt.JwtProvider;
+import com.team2final.minglecrm.auth.infrastructure.JWTTokenAuthenticationFilter;
+import com.team2final.minglecrm.auth.infrastructure.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,43 +28,30 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
-        requestHandler.setCsrfRequestAttributeName("_csrf");
-
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-                    @Override
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {@Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
+                        /* 배포 시 수정 필요합니다 */
                         config.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
                         config.setAllowedMethods(Collections.singletonList("*"));
-                        config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
                         config.setExposedHeaders(Arrays.asList("Authorization"));
+                        config.setAllowCredentials(true);
                         config.setMaxAge(3600L);
                         return config;
                     }
                 }))
-                .csrf((csrf) ->
-                        csrf.disable())
-//                        csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/contact", "/register")
-//                                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-//                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-//                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
-                  .addFilterBefore(new JWTTokenAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .csrf((csrf) -> csrf.disable())
+                .addFilterBefore(new JWTTokenAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> {
-                    requests
-//                            .requestMatchers("/user").authenticated()
-//                            .requestMatchers("/api/v1/auth/signup", "/api/v1/auth/signin", "/h2-console/**", "/api/v1/auth/signup/emailauth",
-//                                    "/api/v1/auth/**").permitAll()
-                            .anyRequest().permitAll();
+                    requests.anyRequest().permitAll();
                 });
-        // h2-콘솔 접속 에러
+        /* h2-콘솔 접속 에러 해결 */
         http.headers(options -> options.frameOptions( frame -> frame.disable()));
         http.formLogin( s -> s.disable() );
-        return (SecurityFilterChain)http.build();
+        return (SecurityFilterChain) http.build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

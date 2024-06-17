@@ -11,7 +11,7 @@ import com.team2final.minglecrm.service.email.EmailSendService;
 import com.team2final.minglecrm.service.email.EmailService;
 import com.team2final.minglecrm.event.service.EventService;
 
-import com.team2final.minglecrm.service.jwt.JwtProvider;
+import com.team2final.minglecrm.auth.infrastructure.JwtProvider;
 import com.team2final.minglecrm.log.service.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
