@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 public class InquiryActionResponse {
     private Long id;
     private Long inquiryId;
-    private ActionStatus actionStatus;
+    private String actionStatus;
     private String actionContent;
     private String email;
     private LocalDateTime date;
 
     @Builder
-    public InquiryActionResponse(Long id, Long inquiryId, ActionStatus actionStatus, String actionContent, String email, LocalDateTime date){
+    public InquiryActionResponse(Long id, Long inquiryId, String actionStatus, String actionContent, String email, LocalDateTime date){
         this.id = id;
         this.inquiryId = inquiryId;
         this.actionStatus = actionStatus;

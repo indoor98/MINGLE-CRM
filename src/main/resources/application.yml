@@ -46,7 +46,6 @@ spring:
           write timeout: 5000
     auth-code-expiration-millis: 300000
 
-
   batch:
     job:
       enabled: false
@@ -61,3 +60,6 @@ spring:
         options:
           model: gpt-3.5-turbo
           temperature: 0.7
+
+server:
+  port: 8080

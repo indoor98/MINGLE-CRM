@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.entity.inquiry;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team2final.minglecrm.entity.customer.Customer;
 import jakarta.persistence.*;
 
@@ -23,6 +24,7 @@ public class Inquiry {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
+    @JsonIgnore
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
