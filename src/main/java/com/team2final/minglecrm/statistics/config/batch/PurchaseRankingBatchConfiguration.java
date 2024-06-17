@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.config.batch.config;
+package com.team2final.minglecrm.statistics.config.batch;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;

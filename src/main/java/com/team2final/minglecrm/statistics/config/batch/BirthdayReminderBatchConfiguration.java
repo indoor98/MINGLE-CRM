@@ -1,8 +1,8 @@
-package com.team2final.minglecrm.statistics.config.batch.config;
+package com.team2final.minglecrm.statistics.config.batch;
 
 import com.team2final.minglecrm.customer.domain.Customer;
-import com.team2final.minglecrm.statistics.config.batch.JobCompletionNotificationListener;
-import com.team2final.minglecrm.statistics.config.batch.RunIdIncrementer;
+import com.team2final.minglecrm.statistics.config.support.JobCompletionNotificationListener;
+import com.team2final.minglecrm.statistics.config.support.RunIdIncrementer;
 import com.team2final.minglecrm.statistics.entity.BirthdayReminderCustomers;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
-package com.team2final.minglecrm.statistics.config.batch.config;
+package com.team2final.minglecrm.statistics.config.batch;
 
-import com.team2final.minglecrm.statistics.config.batch.JobCompletionNotificationListener;
-import com.team2final.minglecrm.statistics.config.batch.RunIdIncrementer;
+import com.team2final.minglecrm.statistics.config.support.JobCompletionNotificationListener;
+import com.team2final.minglecrm.statistics.config.support.RunIdIncrementer;
 import com.team2final.minglecrm.statistics.entity.ByYearReservationCount;
 import com.team2final.minglecrm.statistics.entity.DailyReservationCount;
 import com.team2final.minglecrm.statistics.entity.MonthlyReservationCount;

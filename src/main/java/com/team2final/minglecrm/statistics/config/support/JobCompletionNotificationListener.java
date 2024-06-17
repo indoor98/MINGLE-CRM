@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.config.batch;
+package com.team2final.minglecrm.statistics.config.support;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;

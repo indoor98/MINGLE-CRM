@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.config.batch;
+package com.team2final.minglecrm.statistics.config.support;
 
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
