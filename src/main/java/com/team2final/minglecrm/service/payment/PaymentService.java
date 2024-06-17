@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.service.payment;
 
 import com.team2final.minglecrm.controller.payment.response.PaymentDetailResponse;
+import com.team2final.minglecrm.controller.payment.response.PaymentResponse;
 import com.team2final.minglecrm.entity.payment.Payment;
 import com.team2final.minglecrm.persistence.repository.payment.PaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +16,11 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
-    public List<PaymentDetailResponse> findById(Long customerId) {
+    public List<PaymentResponse> findById(Long customerId) {
         List<Payment> payments = paymentRepository.findByCustomerId(customerId);
 
         return payments.stream()
-                .map(PaymentDetailResponse::from)
+                .map(PaymentResponse::from)
                 .collect(Collectors.toList());
     }
 
