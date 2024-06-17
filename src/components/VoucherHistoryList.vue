@@ -121,6 +121,13 @@ const approvedColumns = [
     align: "center",
     field: "voucherCode",
   },
+  {
+    name: "status",
+    label: "상태",
+    align: "center",
+    field: "status",
+    sortable: true,
+  },
 ];
 
 const rejectedColumns = [
