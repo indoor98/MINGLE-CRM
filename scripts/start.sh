@@ -14,6 +14,7 @@ echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
 cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
 
 #codedeploy bashrc를 읽어오지 못해 해당 파일 로드하게 작업 - 환경변수 사용 시 추가
+sudo vim ~/.bash_profile
 source ~/.bash_profile
 
 # jar 파일 실행
