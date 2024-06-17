@@ -1,22 +1,19 @@
 #!/bin/bash
 
-REPOSITORY="/home/ubuntu/mingle"
-cd $REPOSITORY
+PROJECT_ROOT="/home/ec2-user/mingle"
+JAR_FILE="$PROJECT_ROOT/spring-webapp.jar"
 
-APP_NAME="cicd-test"
-CURRENT_PID=$(pgrep -f $APP_NAME)
+DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
-if [ -z "$CURRENT_PID" ]; then
-  echo "> 종료할 것 없음."
+TIME_NOW=$(date +%c)
+
+# 현재 구동 중인 애플리케이션 pid 확인
+CURRENT_PID=$(pgrep -f $JAR_FILE)
+
+# 프로세스가 켜져 있으면 종료
+if [ -z $CURRENT_PID ]; then
+  echo "$TIME_NOW > 현재 실행중인 애플리케이션이 없습니다" >> $DEPLOY_LOG
 else
-  echo "> 프로세스를 종료합니다. PID: $CURRENT_PID"
+  echo "$TIME_NOW > 실행중인 $CURRENT_PID 애플리케이션 종료 " >> $DEPLOY_LOG
   kill -15 $CURRENT_PID
-  sleep 5
-
-  # 프로세스가 종료되지 않을 경우 강제 종료
-  if ps -p $CURRENT_PID > /dev/null; then
-    echo "> 프로세스가 여전히 종료되지 않았습니다. 강제 종료합니다."
-    kill -9 $CURRENT_PID
-  fi
 fi
-echo "> 애플리케이션이 종료되었습니다."
