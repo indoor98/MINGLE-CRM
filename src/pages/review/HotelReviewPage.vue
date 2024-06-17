@@ -91,18 +91,46 @@
     <section class="row q-gutter-md q-pa-md flex flex-center">
       <!-- First Scroll Area -->
 
-      <div class="col-4 q-pa-md scroll" style="max-height: 200px">
-        <div v-for="n in 100" :key="`second-${n}`" class="q-py-xs">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      <q-card class="my-card">
+        <q-card-section class="bg-accent">
+          <div class="text-h6">최근 리뷰 요약</div>
+        </q-card-section>
+
+        <div v-if="seletedSummaryTap === 'positive'">
+          <q-card-section>
+            {{ positiveReviewSummary }}
+          </q-card-section>
         </div>
-      </div>
-      <div class="col-4 q-pa-md scroll" style="max-height: 200px">
-        <div v-for="n in 100" :key="`second-${n}`" class="q-py-xs">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        <div v-if="seletedSummaryTap === 'negative'">
+          <q-card-section>
+            {{ negativeReviewSummary }}
+          </q-card-section>
         </div>
-      </div>
+        <q-separator dark />
+
+        <q-card-actions>
+          <q-btn
+            flat
+            @click="
+              () => {
+                seletedSummaryTap = 'positive';
+              }
+            "
+          >
+            긍정적인 리뷰 요약</q-btn
+          >
+          <q-btn
+            flat
+            @click="
+              () => {
+                console.log(seletedSummaryTap);
+                seletedSummaryTap = 'negative';
+              }
+            "
+            >부정적인 리뷰 요약</q-btn
+          >
+        </q-card-actions>
+      </q-card>
     </section>
 
     <section class="q-mt-xl">
@@ -204,6 +232,10 @@ const roomTypeOptions = ref([
 const startDate = ref("");
 const endDate = ref("");
 
+const positiveReviewSummary = ref("");
+const negativeReviewSummary = ref("");
+const seletedSummaryTap = ref("positive");
+
 const customerName = ref("");
 
 const dateToLocalDateTime = (beforeDate) => {
@@ -251,6 +283,30 @@ const getHotelReviews = async () => {
   }
 };
 
+const getHotelPositiveReviewSummary = async () => {
+  const response = await axios.get(
+    "http://localhost:8080/api/hotel/review/summary",
+    {
+      params: {
+        summaryType: "POSITIVE",
+      },
+    }
+  );
+  positiveReviewSummary.value = response.data.data.summary;
+};
+
+const getHotelNegativeReviewSummary = async () => {
+  const response = await axios.get(
+    "http://localhost:8080/api/hotel/review/summary",
+    {
+      params: {
+        summaryType: "NEGATIVE",
+      },
+    }
+  );
+  negativeReviewSummary.value = response.data.data.summary;
+};
+
 // 페이지네이션 값이 변경될 때마다 getHotelReviews 함수 호출
 watch(current, () => {
   getHotelReviews();
@@ -259,6 +315,8 @@ watch(current, () => {
 // 컴포넌트가 마운트될 때 getHotelReviews 함수 호출
 onMounted(() => {
   getHotelReviews();
+  getHotelPositiveReviewSummary();
+  getHotelNegativeReviewSummary();
 });
 </script>
 
