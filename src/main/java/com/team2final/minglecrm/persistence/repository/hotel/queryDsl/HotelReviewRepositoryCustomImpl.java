@@ -2,10 +2,13 @@ package com.team2final.minglecrm.persistence.repository.hotel.queryDsl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.team2final.minglecrm.controller.ai.vo.HotelReviewForSummary;
+import com.team2final.minglecrm.controller.ai.vo.QHotelReviewForSummary;
 import com.team2final.minglecrm.controller.hotel.review.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.controller.hotel.review.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.controller.hotel.review.response.QHotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.entity.customer.QCustomer;
+import com.team2final.minglecrm.entity.hotel.HotelReview;
 import com.team2final.minglecrm.entity.hotel.QHotelReview;
 import com.team2final.minglecrm.entity.hotel.QHotelRoom;
 import com.team2final.minglecrm.entity.hotel.QRoomReservation;
@@ -16,13 +19,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class HotelReviewRepositoryCustomImpl implements HotelReviewRepositoryCustom {
 
     private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
+
+    public HotelReviewRepositoryCustomImpl(EntityManager em) {
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
     @Override
     public Page<HotelReviewConditionSearchResponse> searchByExpression(HotelReviewConditionSearchRequest condition, Pageable pageable) {
@@ -71,5 +80,18 @@ public class HotelReviewRepositoryCustomImpl implements HotelReviewRepositoryCus
 
 
         return new PageImpl<>(response, pageable, response.size());
+    }
+
+    public List<HotelReviewForSummary> findAllByStartDateCondition(LocalDateTime startDate) {
+
+        QHotelReview hotelReview = QHotelReview.hotelReview;
+
+        return queryFactory
+                .select(new QHotelReviewForSummary(
+                        hotelReview.comment
+                ))
+                .from(hotelReview)
+                .where(hotelReview.createdTime.after(startDate))
+                .fetch();
     }
 }

@@ -13,6 +13,8 @@ java {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
 }
 
 dependencies {
@@ -69,6 +71,12 @@ dependencies {
 
 	// slf4j
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+
+	// Ai
+	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+	implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
+	// Replace the following with the starter dependencies of specific modules you wish to use
+	implementation 'org.springframework.ai:spring-ai-openai'
 }
 
 tasks.named('test') {

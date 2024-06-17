@@ -2,6 +2,8 @@ package com.team2final.minglecrm.persistence.repository.dining.queryDsl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.team2final.minglecrm.controller.ai.vo.DiningReviewForSummary;
+import com.team2final.minglecrm.controller.ai.vo.QDiningReviewForSummary;
 import com.team2final.minglecrm.controller.dining.review.request.DiningReviewConditionSearchRequest;
 import com.team2final.minglecrm.controller.dining.review.response.DiningReviewConditionSearchResponse;
 import com.team2final.minglecrm.controller.dining.review.response.QDiningReviewConditionSearchResponse;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -69,5 +72,17 @@ public class DiningReviewRepositoryCustomImpl implements DiningReviewRepositoryC
                 .fetch();
 
         return new PageImpl<>(response, pageable, response.size());
+    }
+
+    public List<DiningReviewForSummary> findAllByStartDateCondition(LocalDateTime startDate) {
+        QDiningReview diningReview = QDiningReview.diningReview;
+
+        return queryFactory
+                .select(new QDiningReviewForSummary(
+                        diningReview.review
+                ))
+                .from(diningReview)
+                .where(diningReview.createdDate.after(startDate))
+                .fetch();
     }
 }
