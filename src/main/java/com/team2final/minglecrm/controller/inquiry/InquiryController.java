@@ -9,6 +9,7 @@ import com.team2final.minglecrm.controller.inquiry.response.InquiryActionRespons
 import com.team2final.minglecrm.controller.inquiry.response.InquiryDetailResponse;
 import com.team2final.minglecrm.controller.inquiry.response.InquiryReplyResponse;
 import com.team2final.minglecrm.controller.inquiry.response.InquiryResponse;
+import com.team2final.minglecrm.entity.inquiry.Inquiry;
 import com.team2final.minglecrm.service.inquiry.InquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,10 +23,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/inquiries")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:8081")
 public class InquiryController {
 
     private final InquiryService inquiryService;
@@ -82,14 +85,14 @@ public class InquiryController {
     }
 
     @PostMapping("/reply")
-    @PreAuthorize("hasRole('CONSULTANT')")
+//    @PreAuthorize("hasRole('CONSULTANT')")
     public ResponseEntity<ResultResponse<InquiryReplyResponse>> replyToInquiry(@RequestBody InquiryReplyRequest request) {
         InquiryReplyResponse replyResponse = inquiryService.replyToInquiry(request);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 답변 등록 성공", replyResponse));
     }
 
     @PostMapping("/reply/{inquiryReplyId}")
-    @PreAuthorize("hasRole('CONSULTANT')")
+//    @PreAuthorize("hasRole('CONSULTANT')")
     public ResponseEntity<ResultResponse<InquiryReplyResponse>> updateInquiryReply(@PathVariable Long inquiryReplyId,
                                                                    @RequestBody UpdateInquiryReplyRequest request) {
         InquiryReplyResponse updatedReply = inquiryService.updateInquiryReply(inquiryReplyId, request.getUpdatedReply());
@@ -97,14 +100,15 @@ public class InquiryController {
     }
 
     @PostMapping("/action")
-    @PreAuthorize("hasRole('CONSULTANT')")
+//    @PreAuthorize("hasRole('CONSULTANT')")
     public ResponseEntity<ResultResponse<InquiryActionResponse>> actionToInquiry(@RequestBody InquiryActionRequest request) {
+        System.out.println("Received action status: " + request.getActionStatus());  // 추가된 디버깅 로그
         InquiryActionResponse actionResponse = inquiryService.actionToInquiry(request);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "조치 내용 등록 성공", actionResponse));
     }
 
     @PostMapping("/action/{inquiryActionId}")
-    @PreAuthorize("hasRole('CONSULTANT')")
+//    @PreAuthorize("hasRole('CONSULTANT')")
     public ResponseEntity<ResultResponse<InquiryActionResponse>> updateInquiryAction(@PathVariable Long inquiryActionId,
                                                                      @RequestBody UpdateInquiryActionRequest request) {
         InquiryActionResponse updateAction = inquiryService.updateInquiryAction(inquiryActionId, request.getUpdateActionContent(), request.getActionStatus());
@@ -139,6 +143,38 @@ public class InquiryController {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> inquiries = inquiryService.searchInquiries(keyword, startDate, endDate, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 전체 목록 검색 성공", inquiries));
+    }
+
+    @GetMapping("/search2")
+    public ResponseEntity<Page<Inquiry>> searchInquiries(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String customerName,
+            @RequestParam(required = false) String customerPhone,
+            @RequestParam(required = false) String inquiryTitle,
+            @RequestParam(required = false) String inquiryContent,
+            @RequestParam(required = false) LocalDateTime startDate,
+            @RequestParam(required = false) LocalDateTime endDate,
+            Pageable pageable) {
+
+        Page<Inquiry> inquiries;
+
+        if (keyword != null && !keyword.isEmpty()) {
+            inquiries = inquiryService.searchInquiries(keyword, startDate, endDate, pageable);
+        } else if (customerName != null && !customerName.isEmpty()) {
+            inquiries = inquiryService.searchByCustomerName(customerName, pageable);
+        } else if (customerPhone != null && !customerPhone.isEmpty()) {
+            inquiries = inquiryService.searchByCustomerPhone(customerPhone, pageable);
+        } else if (inquiryTitle != null && !inquiryTitle.isEmpty()) {
+            inquiries = inquiryService.searchByInquiryTitle(inquiryTitle, pageable);
+        } else if (inquiryContent != null && !inquiryContent.isEmpty()) {
+            inquiries = inquiryService.searchByInquiryContent(inquiryContent, pageable);
+        } else if (startDate != null && endDate != null) {
+            inquiries = inquiryService.searchByDateRange(startDate, endDate, pageable);
+        } else {
+            inquiries = inquiryService.searchInquiries("", (LocalDateTime) null, null, pageable);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(inquiries);
     }
 
 }

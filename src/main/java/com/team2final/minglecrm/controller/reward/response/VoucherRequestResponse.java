@@ -12,14 +12,12 @@ public class VoucherRequestResponse {
     private final Long customerId;
     private final Long employeeId;
     private final LocalDateTime requestDate;
-    private final String voucherCode;
 
     public static VoucherRequestResponse of(VoucherHistory voucherHistory) {
         return new VoucherRequestResponse(
                 voucherHistory.getCustomer().getId(),
                 voucherHistory.getEmployeeStaff().getId(),
-                voucherHistory.getRequestDate(),
-                voucherHistory.getVoucher().getVoucherCode()
+                voucherHistory.getRequestDate()
         );
     }
 

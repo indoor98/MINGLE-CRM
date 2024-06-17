@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 public class InquiryActionRequest {
     private Long inquiryId;
-    private ActionStatus actionStatus;
+    private String actionStatus;
     private String actionContent;
 }

@@ -122,15 +122,15 @@ public class InquiryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        Employee employee = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+//        Employee employee = employeeRepository.findByEmail(userEmail)
+//                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         Inquiry inquiry = inquiryRepository.findById(request.getInquiryId())
                 .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다."));
 
         InquiryReply inquiryReply = InquiryReply.builder()
                 .inquiry(inquiry)
-                .employee(employee)
+                .employee(null)
                 .reply(request.getReply())
                 .date(LocalDateTime.now())
                 .build();
@@ -145,14 +145,14 @@ public class InquiryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        Employee employee = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+//        Employee employee = employeeRepository.findByEmail(userEmail)
+//                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         InquiryReply inquiryReply = inquiryReplyRepository.findById(inquiryReplyId)
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다."));
 
         // 엔티티 메서드 호출
-        inquiryReply.updateReply(updatedReply, LocalDateTime.now(), employee);
+        inquiryReply.updateReply(updatedReply, LocalDateTime.now(), null);
 
         return convertToDTO(inquiryReply);
     }
@@ -162,16 +162,18 @@ public class InquiryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        Employee employee = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+//        Employee employee = employeeRepository.findByEmail(userEmail)
+//                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         Inquiry inquiry = inquiryRepository.findById(request.getInquiryId())
                 .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다."));
 
+        System.out.println("Received action status: " + request.getActionStatus());  // 받은 값 로그
+
         InquiryAction inquiryAction = InquiryAction.builder()
                 .inquiry(inquiry)
-                .employee(employee)
-                .actionStatus(request.getActionStatus())
+                .employee(null)
+                .actionStatus(ActionStatus.fromValue(request.getActionStatus()))
                 .actionContent(request.getActionContent())
                 .date(LocalDateTime.now())
                 .build();
@@ -186,15 +188,33 @@ public class InquiryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        Employee employee = employeeRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+//        Employee employee = employeeRepository.findByEmail(userEmail)
+//                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+
+        System.out.println("Service layer: Updating action with ID: " + inquiryActionId);
+        System.out.println("Service layer: Received action status: " + actionStatus);
+        System.out.println("Service layer: Received action content: " + updateAction);
 
         InquiryAction inquiryAction = inquiryActionRepository.findById(inquiryActionId)
                 .orElseThrow(() -> new IllegalArgumentException("조치 내용을 찾을 수 없습니다."));
 
-        inquiryAction.updateAction(updateAction, LocalDateTime.now(), employee, actionStatus);
+        if (actionStatus == null) {
+            actionStatus = inquiryAction.getActionStatus(); // 기존 상태 유지
+        }
 
-        return convertToActionDTO(inquiryAction);
+        System.out.println("Updating action: " + updateAction);  // 추가 로그
+        System.out.println("Updating action status: " + actionStatus);  // 추가 로그
+
+        inquiryAction.updateAction(updateAction, LocalDateTime.now(), null, actionStatus);
+
+        InquiryActionResponse response = convertToActionDTO(inquiryAction);
+
+        System.out.println("Updated InquiryAction:");
+        System.out.println("ID: " + response.getId());
+        System.out.println("Action Content: " + response.getActionContent());
+        System.out.println("Action Status: " + response.getActionStatus());
+
+        return response;
     }
 
     @Transactional
@@ -243,9 +263,35 @@ public class InquiryService {
             return convertToDTO(inquiry, reply, action);
         });
     }
+    public Page<Inquiry> searchInquiries(String keyword, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+        return inquiryRepository.searchByKeyword(keyword, startDate, endDate, pageable);
+    }
+
+    public Page<Inquiry> searchByCustomerName(String customerName, Pageable pageable) {
+        return inquiryRepository.findByCustomerName(customerName, pageable);
+    }
+
+    public Page<Inquiry> searchByCustomerPhone(String customerPhone, Pageable pageable) {
+        return inquiryRepository.findByCustomerPhone(customerPhone, pageable);
+    }
+
+    public Page<Inquiry> searchByInquiryTitle(String inquiryTitle, Pageable pageable) {
+        return inquiryRepository.findByInquiryTitle(inquiryTitle, pageable);
+    }
+
+    public Page<Inquiry> searchByInquiryContent(String inquiryContent, Pageable pageable) {
+        return inquiryRepository.findByInquiryContent(inquiryContent, pageable);
+    }
+
+    public Page<Inquiry> searchByDateRange(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+        return inquiryRepository.findByDateRange(startDate, endDate, pageable);
+    }
 
     private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
-        String employName = (inquiryReply != null) ? inquiryReply.getEmployee().getName() : null;
+        String employName = null;
+        if (inquiryReply != null && inquiryReply.getEmployee() != null) {
+            employName = inquiryReply.getEmployee().getName();
+        }
         boolean isReply = (inquiryReply != null); // 답변이 있으면 true
 
         ActionStatus actionStatus = (inquiryAction != null) ? inquiryAction.getActionStatus() : null;
@@ -269,19 +315,22 @@ public class InquiryService {
         return InquiryReplyResponse.builder()
                 .id(inquiryReply.getId())
                 .inquiryId(inquiryReply.getInquiry().getId())
-                .email(inquiryReply.getEmployee().getEmail())
+                .email(inquiryReply.getEmployee() != null ? inquiryReply.getEmployee().getEmail() : null)
                 .reply(inquiryReply.getReply())
                 .date(inquiryReply.getDate())
                 .build();
     }
 
     private InquiryActionResponse convertToActionDTO(InquiryAction inquiryAction) {
+        System.out.println("Converting InquiryAction to InquiryActionResponse");
+        System.out.println("Action Status: " + inquiryAction.getActionStatus());  // 로그 추가
+
         return InquiryActionResponse.builder()
                 .id(inquiryAction.getId())
                 .inquiryId(inquiryAction.getInquiry().getId())
                 .actionContent(inquiryAction.getActionContent())
-                .actionStatus(inquiryAction.getActionStatus())
-                .email(inquiryAction.getEmployee().getEmail())
+                .actionStatus(inquiryAction.getActionStatus().getValue())
+                .email(inquiryAction.getEmployee() != null ? inquiryAction.getEmployee().getEmail() : null)
                 .date(inquiryAction.getDate())
                 .build();
     }

@@ -4,11 +4,12 @@ import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.entity.employee.Employee;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -23,7 +24,7 @@ public class Voucher {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "issuer_id")
+    @JoinColumn(name = "creator_id")
     private Employee employee;
 
 
@@ -32,17 +33,28 @@ public class Voucher {
     private Customer customer;
 
     private Long amount;
+    private String createdReason;
     private LocalDateTime createdDate;
-    private LocalDateTime expiredDate;
-    private String voucherCode;
+
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+
+    private Boolean isRequested;
 
     @Builder
-    public Voucher(Employee employee, Customer customer, Long amount, LocalDateTime createdDate, LocalDateTime expiredDate, String voucherCode) {
+    public Voucher(Employee employee, Customer customer, Long amount, String createdReason, Boolean isRequested, LocalDateTime createdDate, LocalDateTime startDate, LocalDateTime endDate) {
         this.employee = employee;
         this.customer = customer;
         this.amount = amount;
-        this.createdDate = createdDate;
-        this.expiredDate = expiredDate;
-        this.voucherCode = voucherCode;
+        this.createdReason = createdReason;
+        this.isRequested = isRequested;
+        this.createdDate = LocalDateTime.now();
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public void requestVoucher(Voucher voucher) {
+        this.isRequested = Boolean.TRUE;
+
     }
 }
