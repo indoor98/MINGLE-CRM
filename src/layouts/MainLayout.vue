@@ -97,7 +97,7 @@ const linksList = [
     title: "고객",
     caption: "고객 탭",
     icon: "school",
-    to: "/customer",
+    to: "/customers",
   },
   {
     title: "리뷰",
