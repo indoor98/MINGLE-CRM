@@ -1,6 +1,6 @@
 package com.team2final.minglecrm.statistics.config.batch.config;
 
-import com.team2final.minglecrm.entity.hotel.RoomReservation;
+import com.team2final.minglecrm.reservation.domain.hotel.RoomReservation;
 import com.team2final.minglecrm.statistics.config.batch.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.config.batch.RunIdIncrementer;
 import com.team2final.minglecrm.statistics.entity.StatisticsRoomReservation;

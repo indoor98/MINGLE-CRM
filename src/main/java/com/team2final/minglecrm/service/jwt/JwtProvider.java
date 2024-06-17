@@ -2,12 +2,11 @@ package com.team2final.minglecrm.service.jwt;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.team2final.minglecrm.controller.employee.response.SignInResponse;
-import com.team2final.minglecrm.controller.employee.response.TokenResponse;
-import com.team2final.minglecrm.entity.employee.Employee;
-import com.team2final.minglecrm.persistence.repository.employee.EmployeeRepository;
-import com.team2final.minglecrm.persistence.dao.RedisDao;
-import com.team2final.minglecrm.controller.employee.vo.Subject;
+import com.team2final.minglecrm.employee.dto.response.TokenResponse;
+import com.team2final.minglecrm.employee.domain.Employee;
+import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
+import com.team2final.minglecrm.employee.domain.repository.dao.RedisDao;
+import com.team2final.minglecrm.employee.dto.vo.Subject;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

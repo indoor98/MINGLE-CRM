@@ -1,6 +1,5 @@
 package com.team2final.minglecrm.statistics.config.batch.config;
 
-import com.team2final.minglecrm.entity.hotel.RoomReservation;
 import com.team2final.minglecrm.statistics.config.batch.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.config.batch.RunIdIncrementer;
 import com.team2final.minglecrm.statistics.entity.ByYearReservationCount;
@@ -26,9 +25,6 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import java.time.LocalDate;
-import java.time.temporal.IsoFields;
 
 @Configuration
 @RequiredArgsConstructor

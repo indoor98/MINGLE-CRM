@@ -1,13 +1,5 @@
 package com.team2final.minglecrm.entity.customer;
 
-import com.team2final.minglecrm.controller.customer.request.CustomerUpdateRequest;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class CustomerTest {
 
 //    @Test

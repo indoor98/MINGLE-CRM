@@ -2,14 +2,13 @@ package com.team2final.minglecrm.statistics.service.customer;
 
 import com.team2final.minglecrm.statistics.controller.customer.response.StatisticsCustomerResponse;
 import com.team2final.minglecrm.statistics.controller.customer.response.VisitCustomerResponse;
-import com.team2final.minglecrm.entity.customer.Customer;
+import com.team2final.minglecrm.customer.domain.Customer;
 import com.team2final.minglecrm.statistics.persistance.FrequentCustomerRepository;
 import com.team2final.minglecrm.statistics.persistance.StatisticsCustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

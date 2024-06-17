@@ -1,6 +1,6 @@
 package com.team2final.minglecrm.statistics.persistance;
 
-import com.team2final.minglecrm.entity.customer.Customer;
+import com.team2final.minglecrm.customer.domain.Customer;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

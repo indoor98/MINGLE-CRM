@@ -1,6 +1,6 @@
 package com.team2final.minglecrm.statistics.persistance;
 
-import com.team2final.minglecrm.entity.hotel.RoomReservation;
+import com.team2final.minglecrm.reservation.domain.hotel.RoomReservation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

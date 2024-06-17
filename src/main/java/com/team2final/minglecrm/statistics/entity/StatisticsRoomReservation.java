@@ -1,6 +1,5 @@
 package com.team2final.minglecrm.statistics.entity;
 
-import com.team2final.minglecrm.entity.hotel.HotelRoom;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

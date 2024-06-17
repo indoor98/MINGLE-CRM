@@ -1,6 +1,6 @@
 package com.team2final.minglecrm.statistics.config.batch.config;
 
-import com.team2final.minglecrm.entity.customer.Customer;
+import com.team2final.minglecrm.customer.domain.Customer;
 import com.team2final.minglecrm.statistics.config.batch.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.entity.FrequentCustomer;
 import jakarta.persistence.EntityManagerFactory;
