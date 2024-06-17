@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec-user2/mingle
+    destination: /home/ec2-user/mingle
     overwrite: yes
 
 permissions:
