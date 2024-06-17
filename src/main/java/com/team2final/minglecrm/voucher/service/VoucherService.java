@@ -286,4 +286,8 @@ public class VoucherService {
         return VoucherHistoryResponse.of(voucherHistory);
     }
 
+//    public VoucherHistoryResponse sendVoucherEmail(Long voucherId) {
+//        VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId);
+//        voucherHistory.
+//    }
 }

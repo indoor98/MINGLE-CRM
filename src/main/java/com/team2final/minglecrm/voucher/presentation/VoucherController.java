@@ -132,6 +132,12 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 거절된 바우처 목록 조회 성공", voucherList));
     }
 
+//    // 8. 이메일 발송
+//    @PostMapping("/send/{voucherId}") //@PreAuthorize("hasRole('MARKETER')")
+//    public ResponseEntity<ResultResponse<VoucherHistoryResponse>> sendVoucherEmail(@PathVariable Long voucherId) {
+//        VoucherHistoryResponse voucherEmailSended = voucherService.sendVoucherEmail(voucherId);
+//    }
+
 
 
 
