@@ -3,9 +3,7 @@
     <q-card-section>
       <div class="text-h6">Reservation Details</div>
     </q-card-section>
-
     <q-separator />
-
     <q-card-section>
       <q-list>
         <q-item>
@@ -30,7 +28,6 @@
         </q-item>
       </q-list>
     </q-card-section>
-
     <q-card-actions align="right">
       <q-btn flat label="Close" color="primary" @click="$emit('close')" />
     </q-card-actions>
@@ -40,8 +37,12 @@
 <script setup>
 import { defineProps } from 'vue';
 
-const props = defineProps(['reservation']);
-
+const props = defineProps({
+  reservation: {
+    type: Object,
+    default: () => ({})
+  }
+});
 </script>
 
 <style scoped>
