@@ -22,7 +22,10 @@
         <q-space />
         <div class="search row items-center"></div>
         <q-space />
-        <div v-if="atk">
+        <div v-if="atk" class="row items-center">
+          <div v-if="userName" class="q-mr-md">
+            {{ userName }}님 환영합니다! :)
+          </div>
           <q-btn
             outline
             rounded
@@ -78,14 +81,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import { useTokenStore } from "src/stores/token-store";
 import { storeToRefs } from "pinia";
 import axios from "axios";
+import { useUserStore } from "src/stores/user-store";
 
 const store = useTokenStore();
 const { atk } = storeToRefs(store);
+const userStore = useUserStore();
 
 const linksList = [
   {
@@ -143,7 +148,7 @@ const logout = async () => {
     );
     console.log(response.status);
     store.setAtk("");
-    atkExpiration = "";
+    // atkExpiration 변수는 사용하지 않는 것으로 보이므로 삭제하거나 적절히 수정해야 합니다.
   } catch (error) {
     console.log(error);
   }
@@ -177,8 +182,17 @@ const renewToken = async () => {
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
-  //
 }
 
-onMounted(renewToken);
+// userEmail computed 속성 정의
+const userName = computed(() => {
+  return userStore.name;
+});
+
+// onMounted 훅 사용
+onMounted(async () => {
+  await renewToken();
+  userStore.loadUserInfo();
+  console.log("Mounted. Current name state:", userStore.name);
+});
 </script>

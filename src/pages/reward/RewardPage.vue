@@ -12,6 +12,7 @@
       <div v-else-if="selectedTab === 'all' && showCustomerRewardHistory">
         <CustomerRewardHistory
           :customerId="selectedCustomerId"
+          :customerName="selectedCustomerName"
           @back="handleBack"
         />
       </div>
@@ -31,9 +32,11 @@ import CustomerRewardHistory from "./CustomerRewardHistory.vue";
 const selectedTab = ref("all");
 const showCustomerRewardHistory = ref(false);
 const selectedCustomerId = ref(null);
+const selectedCustomerName = ref("");
 
-const handleRowClick = (customerId) => {
+const handleRowClick = (customerId, customerName) => {
   selectedCustomerId.value = customerId;
+  selectedCustomerName.value = customerName;
   showCustomerRewardHistory.value = true;
 };
 

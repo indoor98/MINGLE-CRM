@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-btn flat icon="arrow_back" @click="goBack"> 뒤로</q-btn>
-    <h2 class="text-h6">{{ customerId }} 리워드 히스토리</h2>
+    <h2 class="text-h6">{{ customerName }}님의 리워드 히스토리</h2>
     <q-card class="q-mt-md">
       <q-card-section>
         <q-table
@@ -34,6 +34,10 @@ import { ref, onMounted, watch, defineProps, defineEmits } from "vue";
 import axios from "axios";
 
 const props = defineProps({
+  customerName: {
+    type: String,
+    required: true,
+  },
   customerId: {
     type: Number,
     required: true,

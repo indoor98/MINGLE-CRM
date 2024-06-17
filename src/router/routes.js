@@ -62,6 +62,15 @@ const routes = [
         name: "emailDetailPage",
         component: () => import("pages/email/EmailLogDetailPage.vue"),
       },
+      {
+        path: "voucher-email",
+        name: "voucherEmailSendPage",
+        component: () => import("pages/voucher/voucherEmailSend.vue"),
+        props: (route) => ({
+          customerId: route.query.customerId,
+          voucherCode: route.query.voucherCode,
+        }),
+      },
     ],
   },
   {
