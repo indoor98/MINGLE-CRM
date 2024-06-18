@@ -35,7 +35,6 @@ public class SecurityConfig {
                         config.setAllowedOrigins(Collections.singletonList("http://mingle-front-bucket.s3-website.ap-northeast-2.amazonaws.com/"));
                         config.setAllowedOrigins(Collections.singletonList("*"));
                         /* 배포 시 수정 필요합니다 */
-                        config.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
                         config.setAllowedMethods(Collections.singletonList("*"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
