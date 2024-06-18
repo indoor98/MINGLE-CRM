@@ -32,12 +32,13 @@ public class SecurityConfig {
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {@Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
+                        config.setAllowedOrigins(Collections.singletonList("http://mingle-front-bucket.s3-website.ap-northeast-2.amazonaws.com/"));
                         /* 배포 시 수정 필요합니다 */
                         config.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
                         config.setAllowedMethods(Collections.singletonList("*"));
+                        config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
                         config.setExposedHeaders(Arrays.asList("Authorization"));
-                        config.setAllowCredentials(true);
                         config.setMaxAge(3600L);
                         return config;
                     }
@@ -52,6 +53,7 @@ public class SecurityConfig {
         http.formLogin( s -> s.disable() );
         return (SecurityFilterChain) http.build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
