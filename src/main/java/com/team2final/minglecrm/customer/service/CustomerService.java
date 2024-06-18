@@ -1,7 +1,7 @@
 package com.team2final.minglecrm.customer.service;
 
-import com.team2final.minglecrm.common.exception.ErrorCode;
-import com.team2final.minglecrm.common.exception.NotFoundException;
+//import com.team2final.minglecrm.common.exception.ErrorCode;
+//import com.team2final.minglecrm.common.exception.NotFoundException;
 import com.team2final.minglecrm.customer.dto.request.CustomerUpdateRequest;
 import com.team2final.minglecrm.customer.dto.response.CustomerDetailResponse;
 import com.team2final.minglecrm.customer.dto.response.CustomerResponse;
