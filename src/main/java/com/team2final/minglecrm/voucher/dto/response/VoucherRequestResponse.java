@@ -17,7 +17,7 @@ public class VoucherRequestResponse {
         return new VoucherRequestResponse(
                 voucherHistory.getCustomer().getId(),
                 voucherHistory.getEmployeeStaff().getId(),
-                voucherHistory.getRequestDate()
+                voucherHistory.getRequestedDate()
         );
     }
 

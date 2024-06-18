@@ -49,10 +49,10 @@ public class VoucherHistoryResponse {
                 voucherHistory.getId(),
                 voucherHistory.getVoucher().getId(),
                 voucherHistory.getStatus(),
-                voucherHistory.getRequestDate(),
+                voucherHistory.getRequestedDate(),
                 voucherHistory.getVoucher().getCreatedReason(),
-                voucherHistory.getConfirmDate(),
-                voucherHistory.getConversionDate(),
+                voucherHistory.getConfirmedDate(),
+                voucherHistory.getConvertedDate(),
 
                 employeeStaffId,
                 employeeStaffName,

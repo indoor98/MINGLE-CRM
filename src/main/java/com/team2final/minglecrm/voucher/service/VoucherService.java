@@ -125,7 +125,7 @@ public class VoucherService {
                 .employeeStaff(employee)
                 .customer(voucher.getCustomer())
                 .status(VoucherStatusType.REQUESTED)
-                .requestDate(LocalDateTime.now())
+                .requestedDate(LocalDateTime.now())
                 .build();
 
         voucherHistoryRepository.save(voucherHistory);
