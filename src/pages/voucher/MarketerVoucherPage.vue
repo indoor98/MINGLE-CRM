@@ -13,6 +13,7 @@
         <q-tabs v-model="selectedTab2">
           <q-tab name="approved" label="승인 완료된 바우처" />
           <q-tab name="rejected" label="승인 거절된 바우처" />
+          <q-tab name="requested" label="승인 검토 전 바우처" />
         </q-tabs>
         <q-separator />
         <div v-if="selectedTab2 === 'approved' && !showVoucherEmailSend">
@@ -30,6 +31,9 @@
         </div>
         <div v-else-if="selectedTab2 === 'rejected'">
           <VoucherHistoryListMarketer selected="rejected-marketer" />
+        </div>
+        <div v-else-if="selectedTab2 === 'requested'">
+          <VoucherHistoryListMarketer selected="requested-marketer" />
         </div>
       </div>
     </div>

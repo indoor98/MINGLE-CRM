@@ -58,6 +58,8 @@ const sendPersonalEmail = async () => {
     );
 
     window.alert("이메일이 발송되었습니다!");
+
+    // await axios.post("전송 저장 api");
     content.value = "";
     title.value = "";
     toEmails.value = "";

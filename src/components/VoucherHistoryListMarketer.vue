@@ -115,13 +115,6 @@ const defaultColumns = [
     field: "amount",
     sortable: true,
   },
-  {
-    name: "confirmerName",
-    label: "검토 매니저 이름",
-    align: "center",
-    field: "confirmerName",
-    sortable: true,
-  },
 ];
 
 const approvedColumns = [
@@ -138,6 +131,13 @@ const approvedColumns = [
     label: "바우처 코드",
     align: "center",
     field: "voucherCode",
+  },
+  {
+    name: "confirmerName",
+    label: "검토 매니저 이름",
+    align: "center",
+    field: "confirmerName",
+    sortable: true,
   },
   {
     name: "sendOrCancel",
@@ -161,6 +161,13 @@ const rejectedColumns = [
     label: "거절 사유",
     align: "center",
     field: "rejectedReason",
+  },
+  {
+    name: "confirmerName",
+    label: "검토 매니저 이름",
+    align: "center",
+    field: "confirmerName",
+    sortable: true,
   },
 ];
 
@@ -189,6 +196,10 @@ const updateColumns = (selected) => {
     case "rejected-marketer":
       title.value = "승인 거절된 바우처 목록";
       columns.value = rejectedColumns;
+      break;
+    case "requested-marketer":
+      title.value = "승인 검토 전 바우처 목록";
+      columns.value = defaultColumns;
       break;
   }
 };
