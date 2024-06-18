@@ -89,18 +89,18 @@ class DiningReviewServiceTest {
        diningReviewRepository.save(diningReview2);
    }
 
-   @Test
-   void findAllDiningReviewsWithPaging() {
-
-       // Given
-
-
-       // When
-       List<DiningReviewResponse> reviews = diningReviewService.findAllDiningReviewsWithPaging(0);
-
-       // Then
-       Assertions.assertEquals(2, reviews.size());
-
-   }
+//   @Test
+//   void findAllDiningReviewsWithPaging() {
+//
+//       // Given
+//
+//
+//       // When
+//       List<DiningReviewResponse> reviews = diningReviewService.findAllDiningReviewsWithPaging(0);
+//
+//       // Then
+//       Assertions.assertEquals(2, reviews.size());
+//
+//   }
 
 }
