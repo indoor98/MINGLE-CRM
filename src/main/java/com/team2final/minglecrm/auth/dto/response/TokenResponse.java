@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.employee.dto.response;
+package com.team2final.minglecrm.auth.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

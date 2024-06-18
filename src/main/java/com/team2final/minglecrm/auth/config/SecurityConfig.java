@@ -1,7 +1,7 @@
 package com.team2final.minglecrm.auth.config;
 
 import com.team2final.minglecrm.auth.infrastructure.JWTTokenAuthenticationFilter;
-import com.team2final.minglecrm.auth.infrastructure.JwtProvider;
+import com.team2final.minglecrm.auth.infrastructure.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -24,7 +23,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtProvider jwtProvider;
+    private final JwtUtil jwtUtil;
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -43,7 +42,7 @@ public class SecurityConfig {
                     }
                 }))
                 .csrf((csrf) -> csrf.disable())
-                .addFilterBefore(new JWTTokenAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTTokenAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> {
                     requests.anyRequest().permitAll();
                 });

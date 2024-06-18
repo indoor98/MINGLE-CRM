@@ -19,7 +19,7 @@ spring:
       port: 6379
 
   jwt:
-    key: asd@asdklasdghj@wg@dhjgadhasgdd@wgSDAwSadsbdjhA@SDwdSADSAWwdwasDWDASdwdaSDWdasdwdas@DNwdASNdAdawdjkahsdjkhwuadhwkdh2djkhdajksd
+    key: ${JWT_SECRET_KEY}
     live:
       atk: 300000
       rtk: 3000000
