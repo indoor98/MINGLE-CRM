@@ -19,7 +19,7 @@ public class JobCommandLineRunner implements CommandLineRunner {
     public void run(String ... args) throws Exception {
         jobRunner.runImportFrequentCustomerJob(importFrequentCustomerJob);
         jobRunner.runReservationRoomJob(reservationRoomJob);
-//        jobRunner.runReservationStatisticsJob(reservationStatisticsJob);
+        jobRunner.runReservationStatisticsJob(reservationStatisticsJob);
         jobRunner.runBirthdayReminderJob(birthdayReminderJob);
     }
 
