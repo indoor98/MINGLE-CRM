@@ -286,8 +286,52 @@ public class VoucherService {
         return VoucherHistoryResponse.of(voucherHistory);
     }
 
-//    public VoucherHistoryResponse sendVoucherEmail(Long voucherId) {
-//        VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId);
-//        voucherHistory.
-//    }
+    @Transactional
+    public VoucherHistoryResponse sendVoucherEmail(Long voucherId) {
+        VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId);
+        voucherHistory.sendVoucherEmail();
+        voucherHistoryRepository.save(voucherHistory);
+
+        return VoucherHistoryResponse.of(voucherHistory);
+    }
+
+    @Transactional
+    public VoucherHistoryResponse cancelVoucher(Long voucherId) {
+        VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId);
+        voucherHistory.cancelVoucher();
+        voucherHistoryRepository.save(voucherHistory);
+
+        return VoucherHistoryResponse.of(voucherHistory);
+    }
+
+    @Transactional
+    public List<VoucherHistoryResponse> getSendedVouchersByMarketer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Employee creator = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+        List<VoucherHistory> requestedVouchers = voucherHistoryRepository
+                .findAllByEmployeeStaffAndStatusOrStatus(creator, VoucherStatusType.SENDED, VoucherStatusType.CONVERTED);
+
+        return requestedVouchers.stream()
+                .map(VoucherHistoryResponse::of)
+                .toList();
+    }
+
+    public List<VoucherHistoryResponse> getCanceledVouchersByMarketer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Employee creator = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+        List<VoucherHistory> requestedVouchers = voucherHistoryRepository
+                .findAllByEmployeeStaffAndStatus(creator, VoucherStatusType.CANCELED);
+
+        return requestedVouchers.stream()
+                .map(VoucherHistoryResponse::of)
+                .toList();
+    }
 }

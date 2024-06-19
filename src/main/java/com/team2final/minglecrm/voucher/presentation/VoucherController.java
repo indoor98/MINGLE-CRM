@@ -132,12 +132,34 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 거절된 바우처 목록 조회 성공", voucherList));
     }
 
-//    // 8. 이메일 발송
-//    @PostMapping("/send/{voucherId}") //@PreAuthorize("hasRole('MARKETER')")
-//    public ResponseEntity<ResultResponse<VoucherHistoryResponse>> sendVoucherEmail(@PathVariable Long voucherId) {
-//        VoucherHistoryResponse voucherEmailSended = voucherService.sendVoucherEmail(voucherId);
-//    }
+    // 8. 이메일 발송 (완료)
+    @PostMapping("/send/{voucherId}") //@PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<ResultResponse<VoucherHistoryResponse>> sendVoucherEmail(@PathVariable Long voucherId) {
+        VoucherHistoryResponse voucherEmailSended = voucherService.sendVoucherEmail(voucherId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "이메일 발송 성공", voucherEmailSended));
 
+    }
+
+    // 9. 발급 취소
+    @PostMapping("/cancel/{voucherId}") //@PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<ResultResponse<VoucherHistoryResponse>> cancelVoucher(@PathVariable Long voucherId) {
+        VoucherHistoryResponse voucherCanceled = voucherService.cancelVoucher(voucherId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "이메일 발급 취소 성공", voucherCanceled));
+    }
+
+    // 10. 전송된 이메일 목록
+    @GetMapping("/sended-marketer") //@PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getSendedVouchers() {
+        List<VoucherHistoryResponse> voucherList = voucherService.getSendedVouchersByMarketer();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "발송된 바우처 목록 조회 성공", voucherList));
+    }
+
+    // 10. 취소한 바우처 목록
+    @GetMapping("/canceled-marketer") //@PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getCanceledVouchers() {
+        List<VoucherHistoryResponse> voucherList = voucherService.getCanceledVouchersByMarketer();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "발송 취소한 바우처 목록 조회 성공", voucherList));
+    }
 
 
 

@@ -31,7 +31,7 @@ public class VoucherHistory {
     private VoucherStatusType status;
     private LocalDateTime requestedDate; // 승인 요청 일시
     private LocalDateTime confirmedDate; // 승인/거절 일시
-    private LocalDateTime sendedDate; // 이메일 발송 일시
+    private LocalDateTime issueOrCancelDate; // 이메일 발송 일시
     private LocalDateTime convertedDate; // 리워드 전환 일시
 
     @ManyToOne(fetch = LAZY)
@@ -50,14 +50,14 @@ public class VoucherHistory {
     private String rejectedReason;
 
     @Builder
-    public VoucherHistory(Voucher voucher, VoucherStatusType status, LocalDateTime requestedDate, LocalDateTime sendedDate, LocalDateTime confirmedDate, LocalDateTime convertedDate, Employee employeeManager, Employee employeeStaff, Customer customer, String voucherCode, String rejectedReason) {
+    public VoucherHistory(Voucher voucher, VoucherStatusType status, LocalDateTime requestedDate, LocalDateTime issueOrCancelDate, LocalDateTime confirmedDate, LocalDateTime convertedDate, Employee employeeManager, Employee employeeStaff, Customer customer, String voucherCode, String rejectedReason) {
         this.voucher = voucher;
 
         this.status = status;
 
         this.requestedDate = requestedDate;
         this.confirmedDate = confirmedDate;
-        this.sendedDate = sendedDate;
+        this.issueOrCancelDate = issueOrCancelDate;
         this.convertedDate = convertedDate;
 
         this.employeeManager = employeeManager;
@@ -84,7 +84,11 @@ public class VoucherHistory {
 
     public void sendVoucherEmail() {
         this.status = VoucherStatusType.SENDED;
-        this.sendedDate = LocalDateTime.now();
+        this.issueOrCancelDate = LocalDateTime.now();
     }
 
+    public void cancelVoucher() {
+        this.status = VoucherStatusType.CANCELED;
+        this.issueOrCancelDate = LocalDateTime.now();
+    }
 }
