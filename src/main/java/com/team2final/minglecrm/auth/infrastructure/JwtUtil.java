@@ -1,4 +1,5 @@
 package com.team2final.minglecrm.auth.infrastructure;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -7,8 +8,7 @@ import com.team2final.minglecrm.employee.domain.Employee;
 import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
 import com.team2final.minglecrm.employee.domain.repository.dao.RedisDao;
 import com.team2final.minglecrm.auth.dto.Subject;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,6 +29,7 @@ public class JwtUtil {
     private final Long accessTokenExpirationTime;
     private final Long refreshTokenExpirationTime;
     private final SecretKey SECRET_KEY;
+
     public JwtUtil(
             ObjectMapper objectMapper,
             RedisDao redisDao,
@@ -47,7 +48,7 @@ public class JwtUtil {
 
     public TokenResponse createTokensBySignIn(String email) throws JsonProcessingException {
 
-        Employee employee = employeeRepository.findByEmail(email).orElseThrow( () -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Employee employee = employeeRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
         return createTokenResponse(employee);
     }
@@ -98,7 +99,8 @@ public class JwtUtil {
 
         String rtkInRedis = redisDao.getValues(subject.getEmail());
 
-        if (Objects.isNull(rtkInRedis) || !subject.getType().equals("RTK")) throw new BadCredentialsException("만료된 RefreshToken입니다.");
+        if (Objects.isNull(rtkInRedis) || !subject.getType().equals("RTK"))
+            throw new BadCredentialsException("만료된 RefreshToken입니다.");
 
         redisDao.deleteValues(subject.getEmail()); // 갱신을 위해 RefreshToken 제거
 
@@ -108,11 +110,8 @@ public class JwtUtil {
     }
 
     /* 토큰에 담긴 유저 정보(Subject)를 추출하는 함수 */
-    public Subject getSubject(String atk) throws JsonProcessingException{
-        String subjectStr = Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
-                .build()
-                .parseClaimsJws(atk)
+    public Subject getSubject(String atk) throws JsonProcessingException {
+        String subjectStr = parseToken(atk)
                 .getBody()
                 .getSubject();
         return objectMapper.readValue(subjectStr, Subject.class);
@@ -125,4 +124,35 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody().getExpiration();
     }
+
+    public Jws<Claims> parseToken(final String atk) {
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(atk);
+    }
+
+    /* 추후 예외 처리를 위해 추가하였습니다 */
+    public void validateAccessToken(final String atk) {
+        try {
+            parseToken(atk);
+        } catch (final ExpiredJwtException e ) {
+            System.out.println(new BadCredentialsException("만료된 토큰입니다.").getMessage());
+        } catch (final JwtException | IllegalArgumentException e) {
+            System.out.println(new BadCredentialsException("잘못된 토큰입니다.").getMessage());
+        }
+    }
+
+    /* 추후 예외 처리를 위해 추가하였습니다 */
+    public void validateRefreshToken(final String rtk) {
+        try {
+            parseToken(rtk);
+        } catch (final ExpiredJwtException e ) {
+            throw new BadCredentialsException("만료된 토큰입니다.");
+        } catch (final JwtException | IllegalArgumentException e) {
+            throw new BadCredentialsException("잘못된 토큰입니다.");
+        }
+    }
+
+
 }
