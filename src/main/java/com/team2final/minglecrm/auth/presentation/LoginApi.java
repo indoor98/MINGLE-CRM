@@ -1,7 +1,7 @@
 package com.team2final.minglecrm.auth.presentation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.team2final.minglecrm.auth.infrastructure.JwtProvider;
+import com.team2final.minglecrm.auth.infrastructure.JwtUtil;
 import com.team2final.minglecrm.common.exception.ResultResponse;
 import com.team2final.minglecrm.employee.dto.request.SignInCheckRequest;
 import com.team2final.minglecrm.employee.dto.request.SignInEmailAuthRequest;
@@ -9,7 +9,7 @@ import com.team2final.minglecrm.employee.dto.request.SignInRequest;
 import com.team2final.minglecrm.employee.dto.response.AccessTokenResponse;
 import com.team2final.minglecrm.employee.dto.response.SignInEmailAuthResponse;
 import com.team2final.minglecrm.employee.dto.response.SignInValidResponse;
-import com.team2final.minglecrm.employee.dto.response.TokenResponse;
+import com.team2final.minglecrm.auth.dto.response.TokenResponse;
 import com.team2final.minglecrm.employee.service.EmployeeService;
 import com.team2final.minglecrm.service.email.EmailAuthService;
 import jakarta.mail.MessagingException;
@@ -19,10 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -30,7 +27,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class LoginApi {
 
-    private final JwtProvider jwtProvider;
+    private final JwtUtil jwtUtil;
     private final EmployeeService employeeService;
     private final EmailAuthService emailAuthService;
 
@@ -71,26 +68,6 @@ public class LoginApi {
         return cookie;
     }
 
-    @GetMapping("/api/v1/auth/renew")
-    public ResultResponse<AccessTokenResponse> reNew(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
-
-        String rtk = getRefreshTokenFromCookie(request);
-
-        if (rtk == null) {
-            return new ResultResponse<>(HttpStatus.UNAUTHORIZED.value(), "fail", null);
-        }
-
-        TokenResponse tokenResponse = jwtProvider.renewToken(rtk);
-        Cookie cookie = createRefreshTokenCookie(tokenResponse);
-        response.addCookie(cookie);
-        System.out.println(cookie);
-
-        return new ResultResponse<>(HttpStatus.OK.value(), "success", AccessTokenResponse.builder()
-                .atk(tokenResponse.getAtk())
-                .atkExpiration(tokenResponse.getAtkExpiration())
-                .build());
-    }
-
 
     @PostMapping("/api/v1/auth/signin/valid")
     public ResponseEntity<SignInValidResponse> signInValid(@RequestBody SignInRequest request) {
@@ -118,25 +95,8 @@ public class LoginApi {
         if (!isValidAuthCode) {
             return new ResultResponse<>(HttpStatus.BAD_REQUEST.value(), "fail", null);
         }
-        TokenResponse tokenResponse = jwtProvider.createTokensBySignIn(request.getEmail());
+        TokenResponse tokenResponse = jwtUtil.createTokensBySignIn(request.getEmail());
         return new ResultResponse<>(HttpStatus.OK.value(), "success", tokenResponse);
-    }
-
-    @PostMapping("/api/v1/auth/signintest")
-    public ResultResponse<AccessTokenResponse> singInTest(@RequestBody SignInRequest request, HttpServletResponse response) throws JsonProcessingException {
-        if(employeeService.isValidEmailAndPassword(request)) {
-            TokenResponse tokenResponse = jwtProvider.createTokensBySignIn(request.getEmail());
-
-            Cookie cookie = createRefreshTokenCookie(tokenResponse);
-            response.addCookie(cookie);
-
-            return new ResultResponse<>(HttpStatus.OK.value(), "success", AccessTokenResponse.builder()
-                    .atk(tokenResponse.getAtk())
-                    .atkExpiration(tokenResponse.getAtkExpiration())
-                    .build());
-        } else {
-            return new ResultResponse<>(HttpStatus.BAD_REQUEST.value(), "fail", null);
-        }
     }
 
 
@@ -154,5 +114,47 @@ public class LoginApi {
         employeeService.logout(rtk);
 
         return new ResultResponse<>(HttpStatus.OK.value(), "success", null);
+    }
+
+    /* 이메일 투팩터 인증 도입 전 로그인 APIs */
+
+
+    @GetMapping("/api/v1/auth/renew")
+    public ResultResponse<AccessTokenResponse> reNew(HttpServletRequest request,
+                                                     HttpServletResponse response,
+                                                     @CookieValue(value="rtk", defaultValue = "") String rtk
+    ) throws JsonProcessingException {
+
+        if (rtk == null) {
+            return new ResultResponse<>(HttpStatus.UNAUTHORIZED.value(), "fail", null);
+        }
+
+        TokenResponse tokenResponse = jwtUtil.renewToken(rtk);
+        Cookie cookie = createRefreshTokenCookie(tokenResponse);
+
+        response.addCookie(cookie);
+
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", AccessTokenResponse.builder()
+                .atk(tokenResponse.getAtk())
+                .atkExpiration(tokenResponse.getAtkExpiration())
+                .build());
+    }
+
+
+    @PostMapping("/api/v1/auth/signintest")
+    public ResultResponse<AccessTokenResponse> singInTest(@RequestBody SignInRequest request, HttpServletResponse response) throws JsonProcessingException {
+        if(employeeService.isValidEmailAndPassword(request)) {
+            TokenResponse tokenResponse = jwtUtil.createTokensBySignIn(request.getEmail());
+
+            Cookie cookie = createRefreshTokenCookie(tokenResponse);
+            response.addCookie(cookie);
+
+            return new ResultResponse<>(HttpStatus.OK.value(), "success", AccessTokenResponse.builder()
+                    .atk(tokenResponse.getAtk())
+                    .atkExpiration(tokenResponse.getAtkExpiration())
+                    .build());
+        } else {
+            return new ResultResponse<>(HttpStatus.BAD_REQUEST.value(), "fail", null);
+        }
     }
 }

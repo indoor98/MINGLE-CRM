@@ -1,25 +1,16 @@
 package com.team2final.minglecrm.employee.presentation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.team2final.minglecrm.common.exception.ResultResponse;
 import com.team2final.minglecrm.employee.dto.request.*;
 import com.team2final.minglecrm.employee.dto.response.*;
 import com.team2final.minglecrm.service.email.EmailAuthService;
-import com.team2final.minglecrm.auth.infrastructure.JwtProvider;
 import com.team2final.minglecrm.employee.service.EmployeeService;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor

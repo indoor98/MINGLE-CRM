@@ -11,11 +11,12 @@ import com.team2final.minglecrm.service.email.EmailSendService;
 import com.team2final.minglecrm.service.email.EmailService;
 import com.team2final.minglecrm.event.service.EventService;
 
-import com.team2final.minglecrm.auth.infrastructure.JwtProvider;
+import com.team2final.minglecrm.auth.infrastructure.JwtUtil;
 import com.team2final.minglecrm.log.service.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class EventController {
     private final EventService eventService;
     private final EmailSendService emailSendService;
     private final EmailService emailService;
-    private final JwtProvider jwtProvider;
+    private final JwtUtil jwtUtil;
     private final LogService logService;
 
     @PostMapping("/api/event/email")
@@ -47,10 +48,10 @@ public class EventController {
     }
 
     @PostMapping("/api/email/personal")
-    public ResultResponse<Void> sendPersonalEmail(HttpServletRequest httpRequest, @RequestBody PersonalEmailSendRequest request) throws Exception {
-        Employee employee = jwtProvider.getEmployeeFromHttpServletRequest(httpRequest);
+    public ResultResponse<Void> sendPersonalEmail(@RequestBody PersonalEmailSendRequest request) throws Exception {
+        String EmployeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        emailService.sendPersonalEmail(request, employee.getEmail());
+        emailService.sendPersonalEmail(request, EmployeeEmail);
 
         return new ResultResponse<>(HttpStatus.OK.value(), "success", null);
     }
