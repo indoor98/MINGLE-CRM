@@ -25,13 +25,22 @@
               {{ toDate(props.row.confirmDate) }}
             </q-td>
           </template>
+          <template v-slot:body-cell-sendOrCancelDate="props">
+            <q-td :props="props">
+              {{ toDate(props.row.sendOrCancelDate) }}
+            </q-td>
+          </template>
           <template v-slot:body-cell-sendOrCancel="props">
             <q-td :props="props">
               <q-btn
                 label="발송"
                 color="primary"
                 @click="
-                  sendVoucher(props.row.customerEmail, props.row.voucherCode)
+                  sendVoucher(
+                    props.row.voucherId,
+                    props.row.customerEmail,
+                    props.row.voucherCode
+                  )
                 "
               ></q-btn>
               <q-btn
@@ -171,6 +180,28 @@ const rejectedColumns = [
   },
 ];
 
+const sendedColumns = [
+  ...defaultColumns,
+  {
+    name: "status",
+    label: "전환 여부",
+    align: "center",
+    field: "status",
+    sortable: true,
+  },
+];
+
+const canceledColumns = [
+  ...defaultColumns,
+  {
+    name: "sendOrCancelDate",
+    label: "취소 일자",
+    align: "center",
+    field: "sendOrCancelDate",
+    sortable: true,
+  },
+];
+
 const toTenWords = (beforeWord) => {
   const afterword =
     beforeWord.length <= 10 ? beforeWord : beforeWord.substring(0, 10) + "...";
@@ -201,6 +232,14 @@ const updateColumns = (selected) => {
       title.value = "승인 검토 전 바우처 목록";
       columns.value = defaultColumns;
       break;
+    case "sended-marketer":
+      title.value = "발송한 바우처 목록";
+      columns.value = sendedColumns;
+      break;
+    case "canceled-marketer":
+      title.value = "발송 취소한 바우처 목록";
+      columns.value = canceledColumns;
+      break;
   }
 };
 
@@ -221,8 +260,8 @@ const fetchVouchers = async () => {
   }
 };
 
-const sendVoucher = (customerEmail, voucherCode) => {
-  emits("send-voucher", customerEmail, voucherCode);
+const sendVoucher = (voucherId, customerEmail, voucherCode) => {
+  emits("send-voucher", voucherId, customerEmail, voucherCode);
 };
 
 const cancelVoucher = async (voucherId) => {

@@ -11,7 +11,7 @@
 
 <script setup>
 import { api as axios } from "src/boot/axios";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { Bar, Doughnut } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -36,16 +36,13 @@ ChartJS.register(
   ArcElement
 );
 
-const data = ref(null);
-const loaded = ref(false); // 데이터 로딩 상태
-
 const overallChartData = ref({
   labels: ["Overall"],
   datasets: [
     {
       label: "Overall Revisit Rate",
       backgroundColor: "#42A5F5",
-      data: [data.value ? data.value.overallRevisitRate : 0],
+      data: [0], // 초기값 설정
     },
   ],
 });
@@ -56,10 +53,7 @@ const genderChartData = ref({
     {
       label: "Revisit Rate By Gender",
       backgroundColor: ["#FF6384", "#36A2EB"],
-      data: [
-        data.value ? data.value.revisitRateByGender.Male : 0,
-        data.value ? data.value.revisitRateByGender.Female : 0,
-      ],
+      data: [0, 0], // 초기값 설정
     },
   ],
 });
@@ -70,12 +64,7 @@ const gradeChartData = ref({
     {
       label: "Revisit Rate By Grade",
       backgroundColor: ["#FFCE56", "#FF6384", "#36A2EB", "#4BC0C0"],
-      data: [
-        data.value ? data.value.revisitRateByGrade.NEW : 0,
-        data.value ? data.value.revisitRateByGrade.VIP : 0,
-        data.value ? data.value.revisitRateByGrade.BASIC : 0,
-        data.value ? data.value.revisitRateByGrade.VVIP : 0,
-      ],
+      data: [0, 0, 0, 0], // 초기값 설정
     },
   ],
 });
@@ -93,22 +82,7 @@ const chartOptions = ref({
   },
 });
 
-// 데이터가 변경될 때마다 차트 데이터 업데이트
-watch(data, (newValue, oldValue) => {
-  if (newValue) {
-    overallChartData.value.datasets[0].data = [newValue.overallRevisitRate];
-    genderChartData.value.datasets[0].data = [
-      newValue.revisitRateByGender.Male,
-      newValue.revisitRateByGender.Female,
-    ];
-    gradeChartData.value.datasets[0].data = [
-      newValue.revisitRateByGrade.NEW,
-      newValue.revisitRateByGrade.VIP,
-      newValue.revisitRateByGrade.BASIC,
-      newValue.revisitRateByGrade.VVIP,
-    ];
-  }
-});
+const loaded = ref(false); // 데이터 로딩 상태
 
 onMounted(async () => {
   try {
@@ -116,7 +90,19 @@ onMounted(async () => {
       "http://localhost:8080/api/v1/statistics/revisit-rate"
     );
 
-    data.value = response.data;
+    const responseData = response.data;
+
+    overallChartData.value.datasets[0].data = [responseData.overallRevisitRate];
+    genderChartData.value.datasets[0].data = [
+      responseData.revisitRateByGender.Male,
+      responseData.revisitRateByGender.Female,
+    ];
+    gradeChartData.value.datasets[0].data = [
+      responseData.revisitRateByGrade.NEW,
+      responseData.revisitRateByGrade.VIP,
+      responseData.revisitRateByGrade.BASIC,
+      responseData.revisitRateByGrade.VVIP,
+    ];
 
     loaded.value = true; // 데이터 로딩이 완료되면 true로 설정
   } catch (error) {

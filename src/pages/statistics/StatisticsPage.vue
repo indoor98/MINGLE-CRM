@@ -10,9 +10,9 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import BarChart from "../../components/BarChart.vue";
-import DoughnutChart from "../../components/DoughnutChart.vue";
-import ReuseChart from "../../components/ReuseChart.vue";
+import BarChart from "../../components/statistics/BarChart.vue";
+import DoughnutChart from "../../components/statistics/DoughnutChart.vue";
+import ReuseChart from "../../components/statistics/ReuseChart.vue";
 import RevisitRate from "../../components/statistics/RevisitRate.vue";
 
 const updatedata = ref([10, 20, 30, 40, 50]);
