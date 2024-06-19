@@ -5,8 +5,6 @@ package com.team2final.minglecrm.customer.service;
 import com.team2final.minglecrm.customer.dto.request.CustomerUpdateRequest;
 import com.team2final.minglecrm.customer.dto.response.CustomerDetailResponse;
 import com.team2final.minglecrm.customer.dto.response.CustomerResponse;
-import com.team2final.minglecrm.customer.domain.Customer;
-import com.team2final.minglecrm.customer.domain.repository.CustomerRepository;
 import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
