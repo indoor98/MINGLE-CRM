@@ -135,6 +135,12 @@ const linksList = [
     icon: "email",
     to: "/email",
   },
+  {
+    title: "통계",
+    caption: "통계 탭",
+    icon: "map",
+    to: "/statistics",
+  },
 ];
 
 const logout = async () => {
