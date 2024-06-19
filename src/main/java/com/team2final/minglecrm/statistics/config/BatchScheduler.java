@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 package com.team2final.minglecrm.statistics.config;
 
 import com.team2final.minglecrm.service.email.EmailSendService;
@@ -66,7 +66,7 @@ public class BatchScheduler {
         }
     }
 }
-=======
+
 //package com.team2final.minglecrm.statistics.config;
 //
 //import com.team2final.minglecrm.service.email.EmailSendService;
@@ -163,4 +163,4 @@ public class BatchScheduler {
 //        }
 //    }
 //}
->>>>>>> 1a2706291ffbc56c876d2bbef6123a115a9a43cf
+
