@@ -46,12 +46,11 @@ public class HotelReviewService {
 
     public HotelReviewMetaDataResponse getHotelReviewMetaData() {
         long rowsNumber = hotelReviewRepository.count();
-        HotelReviewMetaDataResponse hotelReviewMetaDataResponse =
-                HotelReviewMetaDataResponse.builder()
+        return HotelReviewMetaDataResponse.builder()
                         .rowsNumber(rowsNumber)
-                        .pagesNumber((long) Math.ceil(rowsNumber/ROWS_PER_PAGE))
+                        .pagesNumber((long) Math.ceil((double) rowsNumber /ROWS_PER_PAGE))
                         .build();
-        return hotelReviewMetaDataResponse;
+
     }
 
 

@@ -41,12 +41,10 @@ public class DiningReviewService {
 
     public DiningReviewMetaDataResponse getDiningReviewMetaData() {
         long rowsNumber = diningReviewRepository.count();
-        DiningReviewMetaDataResponse diningReviewMetaDataResponse =
-                DiningReviewMetaDataResponse.builder()
+        return DiningReviewMetaDataResponse.builder()
                         .rowsNumber(rowsNumber)
-                        .pagesNumber((long) Math.ceil(rowsNumber/ROWS_PER_PAGE))
+                        .pagesNumber((long) Math.ceil((double) rowsNumber /ROWS_PER_PAGE))
                         .build();
-        return diningReviewMetaDataResponse;
     }
 
 }
