@@ -47,7 +47,7 @@
 
 <script setup>
 import { ref, defineEmits, onMounted, watch } from "vue";
-import axios from "axios";
+import { api as axios } from "/src/boot/axios";
 
 const pagesNumber = ref(0);
 const pagination = ref({

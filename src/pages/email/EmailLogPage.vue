@@ -38,7 +38,7 @@
 
 <script setup>
 import { ref, onMounted, defineEmits, computed } from "vue";
-import axios from "axios";
+import { api as axios } from "/src/boot/axios";
 
 const events = ref([]);
 const errorMessage = ref("");
