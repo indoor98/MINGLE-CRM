@@ -68,8 +68,6 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 전/후 바우처 목록 조회 성공", voucherList));
     }
 
-    // 7. 리워드 전환된 바우처 목록 ?
-
     // 8. 바우처 히스토리 상세
     @GetMapping("/histories/{voucherId}") //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResultResponse<VoucherHistoryResponse>> getVoucher(@PathVariable Long voucherId){
@@ -95,8 +93,6 @@ public class VoucherController {
     }
 
     // 3. 바우처 승인 요청
-    // voucher - isRequested : True로
-    // voucherHistory - requestedDate : now로
     @PostMapping("/request/{voucherId}") //@PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<ResultResponse<VoucherHistoryResponse>> requestVoucher(@PathVariable Long voucherId) {
         VoucherHistoryResponse voucherRequestResponse = voucherService.requestVoucher(voucherId);
@@ -159,6 +155,13 @@ public class VoucherController {
     public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getCanceledVouchers() {
         List<VoucherHistoryResponse> voucherList = voucherService.getCanceledVouchersByMarketer();
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "발송 취소한 바우처 목록 조회 성공", voucherList));
+    }
+
+    // 사용자별 바우처 리스트 조회
+    @GetMapping("/{customerId}")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getVouchers(@PathVariable("customerId") Long customerId){
+        List<VoucherHistoryResponse> customerVoucherList = voucherService.getCustomerVouchers(customerId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 사용 가능 바우처 목록 조회 성공", customerVoucherList));
     }
 
 
