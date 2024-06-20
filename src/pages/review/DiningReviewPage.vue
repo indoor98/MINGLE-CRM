@@ -134,6 +134,7 @@
                     v-model="review.tasteRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                   <div>청결도</div>
                   <q-rating
@@ -141,6 +142,7 @@
                     v-model="review.cleanlinessRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                 </div>
                 <div class="col">
@@ -150,6 +152,7 @@
                     v-model="review.kindnessRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                   <div>분위기</div>
                   <q-rating
@@ -157,6 +160,7 @@
                     v-model="review.atmosphereRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                 </div>
               </div>
@@ -188,7 +192,7 @@
 </template>
 <script setup>
 import { ref, watch, onMounted } from "vue";
-import axios from "axios"; // axios 모듈을 기본 내보내기로 임포트
+import { api as axios } from "/src/boot/axios"; // axios 모듈을 기본 내보내기로 임포트
 
 const current = ref(1);
 const reviews = ref([]);
@@ -280,15 +284,12 @@ const getDiningNegativeReviewSummary = async () => {
   negativeReviewSummary.value = response.data.data.summary;
 };
 
-const getPagesNumber = async () => {
+const getDiningReviewMetaData = async () => {
   const response = await axios.get(
-    "http://localhost:8080/api/dining/review/pagesnumber"
+    "http://localhost:8080/api/dining/review/meta"
   );
 
-  pagination.value.pagesNumber = Math.ceil(
-    response.data.data / pagination.value.rowsPerPage
-  );
-  console.log("page : ", pagination.value.pagesNumber);
+  pagination.value.pagesNumber = response.data.data.pagesNumber;
 };
 
 // 페이지네이션 값이 변경될 때마다 getHotelReviews 함수 호출
@@ -304,7 +305,7 @@ onMounted(() => {
   getDiningReviews();
   getDiningPositiveReviewSummary();
   getDiningNegativeReviewSummary();
-  getPagesNumber();
+  getDiningReviewMetaData();
 });
 </script>
 
