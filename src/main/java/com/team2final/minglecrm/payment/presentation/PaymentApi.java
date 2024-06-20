@@ -1,14 +1,12 @@
 package com.team2final.minglecrm.payment.presentation;
 
+import com.team2final.minglecrm.payment.dto.request.PaymentSearchCondition;
 import com.team2final.minglecrm.payment.dto.response.PaymentDetailResponse;
 import com.team2final.minglecrm.payment.dto.response.PaymentResponse;
 import com.team2final.minglecrm.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +29,12 @@ public class PaymentApi {
     public ResponseEntity<PaymentDetailResponse> getPayment(@PathVariable Long customerId, @PathVariable Long paymentId) {
         PaymentDetailResponse paymentDetailResponse = paymentService.findPaymentById(customerId, paymentId);
         return ResponseEntity.ok(paymentDetailResponse);
+    }
+
+    @GetMapping("/search")
+    // 결제 내역 다중 검색
+    public ResponseEntity<List<PaymentResponse>> getPaymentListByCustomerId(@PathVariable Long customerId, @RequestBody PaymentSearchCondition condition) {
+        List<PaymentResponse> paymentResponses = paymentService.searchPaymentDetail(customerId, condition);
+        return ResponseEntity.ok(paymentResponses);
     }
 }

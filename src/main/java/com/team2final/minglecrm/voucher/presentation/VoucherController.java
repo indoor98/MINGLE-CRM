@@ -4,6 +4,7 @@ package com.team2final.minglecrm.voucher.presentation;
 import com.team2final.minglecrm.common.exception.ResultResponse;
 import com.team2final.minglecrm.voucher.dto.request.VoucherCreateRequest;
 import com.team2final.minglecrm.voucher.dto.request.VoucherRejectRequest;
+import com.team2final.minglecrm.voucher.dto.request.VoucherSearchCondition;
 import com.team2final.minglecrm.voucher.dto.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.voucher.dto.response.VoucherResponse;
 import com.team2final.minglecrm.voucher.service.VoucherService;
@@ -132,6 +133,12 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 거절된 바우처 목록 조회 성공", voucherList));
     }
 
+    // 다중검색
+    @GetMapping("/search")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> search(@RequestBody VoucherSearchCondition condition) {
+        List<VoucherHistoryResponse> searchVoucher = voucherService.search(condition);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "다중 검색 바우처 목록 조회 성공", searchVoucher));
+    }
 
 
 
