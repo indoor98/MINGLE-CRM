@@ -11,39 +11,39 @@
         <table class="inquiry-table">
           <tbody>
           <tr>
-            <th>Customer Name</th>
+            <th>고객명</th>
             <td>{{ inquiryDetails.customerName }}</td>
           </tr>
           <tr>
-            <th>Phone Number</th>
+            <th>전화번호</th>
             <td>{{ inquiryDetails.customerPhone }}</td>
           </tr>
           <tr>
-            <th>Date</th>
+            <th>문의 날짜</th>
             <td>{{ inquiryDetails.date }}</td>
           </tr>
           <tr>
-            <th>Type</th>
+            <th>문의 타입</th>
             <td>{{ inquiryDetails.type }}</td>
           </tr>
           <tr>
-            <th>Replied</th>
+            <th>답변 여부</th>
             <td>{{ inquiryDetails.isReply ? 'Yes' : 'No' }}</td>
           </tr>
           <tr>
-            <th>Employee</th>
+            <th>담당 직원명</th>
             <td>{{ inquiryDetails.employName }}</td>
           </tr>
           <tr>
-            <th>Inquiry Title</th>
+            <th>문의 제목</th>
             <td>{{ inquiryDetails.inquiryTitle }}</td>
           </tr>
           <tr>
-            <th>Inquiry Content</th>
+            <th>문의 내용</th>
             <td>{{ inquiryDetails.inquiryContent }}</td>
           </tr>
           <tr>
-            <th>Action Status</th>
+            <th>문의 상태</th>
             <td>{{ inquiryDetails.actionStatus }}</td>
           </tr>
           </tbody>

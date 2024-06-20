@@ -113,15 +113,11 @@ onMounted(() => {
 
 const inquiryColumns = [
   {name: 'id', label: '#', align: 'left', field: 'id'},
-  {name: 'customerName', label: '고갹명', align: 'left', field: 'customerName'},
+  {name: 'customerName', label: '고객명', align: 'left', field: 'customerName'},
   {name: 'customerPhone', label: '전화번호', align: 'center', field: 'customerPhone'},
   {name: 'date', label: '문의 날짜', align: 'center', field: 'date'},
   {name: 'type', label: '종류', align: 'center', field: 'type'},
   {name: 'isReply', label: '답변여부', align: 'center', field: 'isReply'},
-  {name: 'employName', label: '고객명', align: 'center', field: 'employName'},
-  {name: 'inquiryTitle', label: '조치 제목', align: 'center', field: 'inquiryTitle'},
-  {name: 'inquiryContent', label: '조치 내용', align: 'center', field: 'inquiryContent'},
-  {name: 'actionStatus', label: '조치 상태', align: 'center', field: 'actionStatus'}
 ];
 </script>
 
