@@ -18,9 +18,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { api as axios } from 'src/boot/axios';
-import { useRoute } from 'vue-router';
+import {ref, onMounted} from 'vue';
+import {api as axios} from 'src/boot/axios';
+import {useRoute} from 'vue-router';
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -32,15 +32,15 @@ const rewardInfo = ref({
 const columns = [
   {
     name: 'customerId',
-    label: 'Customer ID',
+    label: '고객 ID',
     align: 'left',
     field: row => row.customerId
   },
   {
     name: 'amount',
-    label: 'Amount',
+    label: '리워드 총 금액',
     align: 'left',
-    field: row => row.amount
+    field: row => formatAmount(row.amount) // Use formatAmount function here
   }
 ];
 
@@ -53,6 +53,14 @@ const fetchRewardInfo = async () => {
     console.error('Error fetching reward info:', error);
   }
 };
+
+// Function to format amount with thousand separators
+function formatAmount(amount) {
+  if (typeof amount !== 'number') {
+    return amount;
+  }
+  return amount.toLocaleString('en-US'); // Example: Formats with comma separators (,)
+}
 
 onMounted(() => {
   fetchRewardInfo();
