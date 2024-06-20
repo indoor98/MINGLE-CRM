@@ -17,17 +17,5 @@ public class StatisticsRoomReservationService {
 
     private final StatisticsRoomReservationRepository statisticsRoomReservationRepository;
 
-    List<StatisticsRoomReservationResponse> findReservationsByMonthAndYear(Integer year, Integer month, Pageable pageable) {
-        Page<RoomReservation> reservations = statisticsRoomReservationRepository.findReservationsByMonthAndYear(year, month, pageable);
-        return reservations.stream()
-                .map(reservation -> new StatisticsRoomReservationResponse(
-                        reservation.getId(),
-                        reservation.getHotelRoom().getId(),
-                        reservation.getCustomer().getId(),
-                        reservation.getReservationDate(),
-                        reservation.getStartDate(),
-                        reservation.getEndDate()
-                ))
-                .collect(Collectors.toList());
-    }
+
 }

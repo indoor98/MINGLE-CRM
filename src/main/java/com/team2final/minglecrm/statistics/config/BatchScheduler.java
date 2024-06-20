@@ -24,11 +24,39 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final Job reservationStatisticsJob;
     private final Job birthdayReminderJob;
+    private final Job importFrequentCustomerJob;
+    private final Job reservationRoomJob;
+    private final Job purchaseItemJob;
     private final EmailSendService emailSendService;
 
-    @Scheduled(fixedDelay = 10000)
+    //    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 0/1 * * *")
+    public void runImportFrequentCustomerJob() {
+        try {
+            jobLauncher.run(importFrequentCustomerJob, new JobParametersBuilder()
+                    .addLong("time", System.currentTimeMillis())
+                    .toJobParameters());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 0/1 * * *")
+    public void runReservationRoomJob() {
+        try {
+            jobLauncher.run(reservationRoomJob, new JobParametersBuilder()
+                    .addLong("time", System.currentTimeMillis())
+                    .toJobParameters());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //    @Scheduled(fixedDelay = 10000)
 //    @Scheduled(cron = "0 * * * * ?")
-    public void runJob() {
+    @Scheduled(cron = "0 0 0/1 * * *")
+    public void runReservationStatisticsJob() {
         try {
             jobLauncher.run(reservationStatisticsJob, new JobParametersBuilder()
                     .addLong("time", System.currentTimeMillis())
@@ -38,7 +66,18 @@ public class BatchScheduler {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    //    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 0/1 * * *")
+    public void runPurchaseItemJob() {
+        try {
+            jobLauncher.run(purchaseItemJob, new JobParametersBuilder()
+                    .addLong("time", System.currentTimeMillis())
+                    .toJobParameters());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Scheduled(cron = "0 0 0/1 * * *")
     public void runBirthdayReminderJob() {
         try {
             jobLauncher.run(birthdayReminderJob, new JobParametersBuilder()
@@ -49,7 +88,9 @@ public class BatchScheduler {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
+
+    //    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 0/1 * * *")
     public void birthdayReminderCustomersSendEmail() {
         List<BirthdayReminderCustomers> customers = entityManager.createQuery(
                         "SELECT b FROM BirthdayReminderCustomers b", BirthdayReminderCustomers.class)

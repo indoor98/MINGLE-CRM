@@ -2,6 +2,7 @@ package com.team2final.minglecrm.auth.config;
 
 import com.team2final.minglecrm.auth.infrastructure.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -79,6 +80,7 @@ public class SecurityConfig {
                 .authenticationProvider(jwtAuthenticationProvider)
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers("/api/v1/auth/signintest", "/api/v1/auth/signup", "/api/v1/auth/renew").permitAll()
+                            .requestMatchers(PathRequest.toH2Console()).permitAll()
                             .anyRequest().authenticated();
                 });
 

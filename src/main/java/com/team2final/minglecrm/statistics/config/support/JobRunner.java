@@ -28,11 +28,15 @@ public class JobRunner {
         runJob(reservationRoomJob);
     }
 
-//    public void runReservationStatisticsJob(Job reservationStatisticsJob) throws Exception {
-//        runJob(reservationStatisticsJob);
-//    }
+    public void runReservationStatisticsJob(Job reservationStatisticsJob) throws Exception {
+        runJob(reservationStatisticsJob);
+    }
 
     public void runBirthdayReminderJob(Job birthdayReminderJob) throws Exception {
         runJob(birthdayReminderJob);
+    }
+
+    public void runPurchaseItemJob(Job purchaseItemJob) throws Exception {
+        runJob(purchaseItemJob);
     }
 }
