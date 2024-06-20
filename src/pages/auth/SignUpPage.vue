@@ -104,13 +104,10 @@ const signUp = async () => {
     request.value.authority = authority.value;
     console.log(request.value);
 
-    const response = await axios.post(
-      "http://localhost:8080/api/v1/auth/signup",
-      request.value
-    );
+    const response = await axios.post("/api/v1/auth/signup", request.value);
 
     console.log(response.data);
-    router("/");
+    window.location.href = "/#/";
   } catch (error) {
     console.log(error);
   }

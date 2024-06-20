@@ -9,6 +9,7 @@
           row-key="id"
           :loading="loading"
           :pagination="{ rowsPerPage: 10 }"
+          style="cursor: pointer"
         >
           <template v-slot:body-cell-createdReason="props">
             <q-td :props="props">
@@ -54,7 +55,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
+import { api as axios } from "src/boot/axios";
 import { Notify, Dialog } from "quasar";
 
 const vouchers = ref([]);

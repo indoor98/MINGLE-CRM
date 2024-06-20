@@ -20,12 +20,29 @@ const routes = [
         path: "reward",
         component: () => import("src/pages/reward/RewardPage.vue"),
       },
-      { path: "inquiry", component: () => import("pages/InquiryPage.vue") },
+      {
+        path: "inquiry",
+        component: () => import("src/pages/inquiry/InquiryPage.vue"),
+      },
       {
         path: "inquiry/:inquiryId",
         name: "InquiryDetailPage",
-        component: () => import("pages/InquiryDetailPage.vue"),
+        component: () => import("src/pages/inquiry/InquiryDetailPage.vue"),
         props: true,
+        children: [
+          {
+            path: "reply",
+            component: () => import("src/pages/inquiry/InquiryReply.vue"),
+          },
+        ],
+      },
+      {
+        path: "customers/:customerId/hotel/reservations",
+        component: () => import("pages/reservation/ReservationPage.vue"),
+      },
+      {
+        path: "customers/:customerId/hotel/reservations/:reservationId",
+        component: () => import("pages/reservation/ReservationPage.vue"),
       },
       {
         path: "customers/:customerId/hotel/reservations",
@@ -61,6 +78,20 @@ const routes = [
         path: "email/:eventId",
         name: "emailDetailPage",
         component: () => import("pages/email/EmailLogDetailPage.vue"),
+      },
+      {
+        path: "voucher-email",
+        name: "voucherEmailSendPage",
+        component: () => import("pages/voucher/voucherEmailSend.vue"),
+        props: (route) => ({
+          customerId: route.query.customerId,
+          voucherCode: route.query.voucherCode,
+        }),
+      },
+      {
+        path: "/statistics",
+        name: "statisticsPage",
+        component: () => import("pages/statistics/StatisticsPage.vue"),
       },
     ],
   },

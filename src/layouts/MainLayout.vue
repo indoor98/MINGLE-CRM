@@ -22,7 +22,10 @@
         <q-space />
         <div class="search row items-center"></div>
         <q-space />
-        <div v-if="atk">
+        <div v-if="atk" class="row items-center">
+          <div v-if="userName" class="q-mr-md">
+            {{ userName }}님 환영합니다! :)
+          </div>
           <q-btn
             outline
             rounded
@@ -64,7 +67,7 @@
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <q-list>
         <EssentialLink
-          v-for="link in linksList"
+          v-for="link in filteredLinks"
           :key="link.title"
           v-bind="link"
         />
@@ -78,14 +81,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import { useTokenStore } from "src/stores/token-store";
 import { storeToRefs } from "pinia";
 import axios from "axios";
+import { api as customAxios } from "/src/boot/axios";
+import { useUserStore } from "src/stores/user-store";
 
 const store = useTokenStore();
 const { atk } = storeToRefs(store);
+const userStore = useUserStore();
 
 const linksList = [
   {
@@ -101,16 +107,18 @@ const linksList = [
     to: "/review",
   },
   {
-    title: "바우처-매니저",
+    title: "바우처",
     caption: "바우처 탭",
     icon: "school",
     to: "/voucher-manager",
+    roles: ["ROLE_MANAGER"],
   },
   {
-    title: "바우처-마케터",
+    title: "바우처",
     caption: "바우처 탭",
     icon: "school",
     to: "/voucher-marketer",
+    roles: ["ROLE_MARKETER"],
   },
   {
     title: "리워드",
@@ -130,12 +138,18 @@ const linksList = [
     icon: "email",
     to: "/email",
   },
+  {
+    title: "통계",
+    caption: "통계 탭",
+    icon: "map",
+    to: "/statistics",
+  },
 ];
 
 const logout = async () => {
   try {
     console.log("로그아웃");
-    const response = await axios.get(
+    const response = await customAxios.get(
       "http://localhost:8080/api/v1/auth/logout",
       {
         withCredentials: true,
@@ -143,7 +157,6 @@ const logout = async () => {
     );
     console.log(response.status);
     store.setAtk("");
-    atkExpiration = "";
   } catch (error) {
     console.log(error);
   }
@@ -177,8 +190,28 @@ const renewToken = async () => {
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
-  //
 }
 
-onMounted(renewToken);
+const userName = computed(() => userStore.name);
+const userRole = computed(() => userStore.role);
+
+const filteredLinks = computed(() => {
+  if (userRole.value === "ROLE_MANAGER") {
+    return linksList.filter((link) =>
+      link.roles ? link.roles.includes("ROLE_MANAGER") : true
+    );
+  } else if (userRole.value === "ROLE_MARKETER") {
+    return linksList.filter((link) =>
+      link.roles ? link.roles.includes("ROLE_MARKETER") : true
+    );
+  } else {
+    return linksList;
+  }
+});
+
+onMounted(async () => {
+  await renewToken();
+  userStore.loadUserInfo();
+  console.log("Mounted. Current name state:", userStore.name);
+});
 </script>

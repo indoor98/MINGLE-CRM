@@ -15,9 +15,8 @@
           :columns="columns"
           row-key="id"
           :loading="loading"
-          :dense="true"
-          class="q-table--dense"
           :pagination="{ rowsPerPage: 50 }"
+          style="cursor: pointer"
         >
           <template v-slot:body-cell-createdReason="props">
             <q-td :props="props">
@@ -176,6 +175,13 @@ const toDate = (beforeDate) => {
 
 const columns = ref([
   {
+    name: "voucherId",
+    label: "바우처 ID",
+    align: "center",
+    field: "voucherId",
+    sortable: true,
+  },
+  {
     name: "customerId",
     label: "회원 ID",
     align: "center",
@@ -329,5 +335,8 @@ onMounted(() => {
 }
 .items-center {
   align-items: center;
+}
+q-table {
+  cursor: pointer;
 }
 </style>

@@ -82,7 +82,7 @@ const fetchRewards = async () => {
 const emit = defineEmits(["row-click"]);
 const rowClicked = (row) => {
   console.log("Clicked Row: " + row.customerId);
-  emit("row-click", row.customerId);
+  emit("row-click", row.customerId, row.customerName);
 };
 
 onMounted(() => {

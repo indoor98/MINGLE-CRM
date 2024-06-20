@@ -91,18 +91,46 @@
     <section class="row q-gutter-md q-pa-md flex flex-center">
       <!-- First Scroll Area -->
 
-      <div class="col-4 q-pa-md scroll" style="max-height: 200px">
-        <div v-for="n in 100" :key="`second-${n}`" class="q-py-xs">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      <q-card class="my-card">
+        <q-card-section class="bg-accent">
+          <div class="text-h6">최근 리뷰 요약</div>
+        </q-card-section>
+
+        <div v-if="seletedSummaryTap === 'positive'">
+          <q-card-section>
+            {{ positiveReviewSummary }}
+          </q-card-section>
         </div>
-      </div>
-      <div class="col-4 q-pa-md scroll" style="max-height: 200px">
-        <div v-for="n in 100" :key="`second-${n}`" class="q-py-xs">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        <div v-if="seletedSummaryTap === 'negative'">
+          <q-card-section>
+            {{ negativeReviewSummary }}
+          </q-card-section>
         </div>
-      </div>
+        <q-separator dark />
+
+        <q-card-actions>
+          <q-btn
+            flat
+            @click="
+              () => {
+                seletedSummaryTap = 'positive';
+              }
+            "
+          >
+            긍정적인 리뷰 요약</q-btn
+          >
+          <q-btn
+            flat
+            @click="
+              () => {
+                console.log(seletedSummaryTap);
+                seletedSummaryTap = 'negative';
+              }
+            "
+            >부정적인 리뷰 요약</q-btn
+          >
+        </q-card-actions>
+      </q-card>
     </section>
 
     <section class="q-mt-xl">
@@ -132,6 +160,7 @@
                     v-model="review.kindnessRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                   <div>청결도</div>
                   <q-rating
@@ -139,6 +168,7 @@
                     v-model="review.cleanlinessRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                 </div>
                 <div class="col">
@@ -148,6 +178,7 @@
                     v-model="review.convenienceRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                   <div>위치 만족도</div>
                   <q-rating
@@ -155,12 +186,16 @@
                     v-model="review.locationRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                 </div>
               </div>
             </q-card-section>
 
-            <q-card-section class="scroll" style="max-height: 300px">
+            <q-card-section
+              class="scroll"
+              style="min-width: 100px; max-height: 100px"
+            >
               {{ review.comment }}
             </q-card-section>
           </q-card>
@@ -169,8 +204,10 @@
     </section>
     <section class="flex flex-center q-mt-xl">
       <q-pagination
-        v-model="current"
-        max="5"
+        v-model="pagination.page"
+        :max="pagination.pagesNumber"
+        :max-pages="6"
+        :boundary-numbers="false"
         direction-links
         flat
         color="grey"
@@ -204,7 +241,19 @@ const roomTypeOptions = ref([
 const startDate = ref("");
 const endDate = ref("");
 
+const positiveReviewSummary = ref("");
+const negativeReviewSummary = ref("");
+const seletedSummaryTap = ref("positive");
+
 const customerName = ref("");
+
+const pagination = ref({
+  sortBy: "desc",
+  descending: false,
+  page: 1,
+  rowsPerPage: 9,
+  pagesNumber: 0,
+});
 
 const dateToLocalDateTime = (beforeDate) => {
   return (
@@ -240,7 +289,7 @@ const getHotelReviews = async () => {
     console.log(searchCondition.value);
 
     const response = await axios.post(
-      `http://localhost:8080/api/hotel/reviews/${current.value - 1}`,
+      `http://localhost:8080/api/hotel/reviews/${pagination.value.page - 1}`,
       searchCondition.value,
       { withCredentials: true }
     );
@@ -251,14 +300,52 @@ const getHotelReviews = async () => {
   }
 };
 
+const getHotelPositiveReviewSummary = async () => {
+  const response = await axios.get(
+    "http://localhost:8080/api/hotel/review/summary",
+    {
+      params: {
+        summaryType: "POSITIVE",
+      },
+    }
+  );
+  positiveReviewSummary.value = response.data.data.summary;
+};
+
+const getHotelNegativeReviewSummary = async () => {
+  const response = await axios.get(
+    "http://localhost:8080/api/hotel/review/summary",
+    {
+      params: {
+        summaryType: "NEGATIVE",
+      },
+    }
+  );
+  negativeReviewSummary.value = response.data.data.summary;
+};
+
+const getHotelReviewMetaData = async () => {
+  const response = await axios.get(
+    "http://localhost:8080/api/hotel/review/meta"
+  );
+
+  pagination.value.pagesNumber = response.data.data.pagesNumber;
+};
+
 // 페이지네이션 값이 변경될 때마다 getHotelReviews 함수 호출
-watch(current, () => {
-  getHotelReviews();
-});
+watch(
+  () => pagination.value.page,
+  () => {
+    getHotelReviews();
+  }
+);
 
 // 컴포넌트가 마운트될 때 getHotelReviews 함수 호출
 onMounted(() => {
   getHotelReviews();
+  getHotelPositiveReviewSummary();
+  getHotelNegativeReviewSummary();
+  getHotelReviewMetaData();
 });
 </script>
 
