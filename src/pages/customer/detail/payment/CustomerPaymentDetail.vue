@@ -13,47 +13,47 @@
         <table class="payment-table">
           <tbody>
           <tr>
-            <th>Customer Name</th>
+            <th>고객명</th>
             <td>{{ loadedPayment.customerName }}</td>
           </tr>
           <tr>
-            <th>Number</th>
+            <th>전화번호</th>
             <td>{{ loadedPayment.number }}</td>
           </tr>
           <tr>
-            <th>Type</th>
+            <th>결제 종류</th>
             <td>{{ loadedPayment.type }}</td>
           </tr>
           <tr>
-            <th>Amount Before Discount</th>
+            <th>할인 전 금액</th>
             <td>{{ loadedPayment.amountBeforeDiscount }}</td>
           </tr>
           <tr>
-            <th>Discount Amount</th>
+            <th>할인 금액</th>
             <td>{{ loadedPayment.discountAmount }}</td>
           </tr>
           <tr>
-            <th>Payment Amount</th>
+            <th>결제 금액</th>
             <td>{{ loadedPayment.paymentAmount }}</td>
           </tr>
           <tr>
-            <th>Payment Date</th>
+            <th>결제 날짜</th>
             <td>{{ loadedPayment.paymentDate }}</td>
           </tr>
           <tr>
-            <th>Is Refunded</th>
+            <th>환불 여부</th>
             <td>{{ loadedPayment.isRefunded }}</td>
           </tr>
           <tr>
-            <th>Refund Date</th>
+            <th>환불 날짜</th>
             <td>{{ loadedPayment.refundDate }}</td>
           </tr>
           <tr>
-            <th>Created Reward</th>
+            <th>리워드 생성 금액</th>
             <td>{{ loadedPayment.createdReward }}</td>
           </tr>
           <tr>
-            <th>Payment Spot</th>
+            <th>결제 지점</th>
             <td>{{ loadedPayment.paymentSpot }}</td>
           </tr>
           </tbody>
