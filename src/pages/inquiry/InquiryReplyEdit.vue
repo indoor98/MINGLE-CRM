@@ -19,7 +19,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
+import { api as axios } from "src/boot/axios";
 import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({

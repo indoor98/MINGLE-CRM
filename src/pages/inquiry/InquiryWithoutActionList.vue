@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import axios from "axios";
+import { api as axios } from "src/boot/axios";
 import { useRouter } from "vue-router";
 
 const inquiries = ref([]);

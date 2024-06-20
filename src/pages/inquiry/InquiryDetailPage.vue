@@ -202,7 +202,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import axios from "axios";
+import { api as axios } from "src/boot/axios";
 import InquiryReply from "src/pages/inquiry/InquiryReply.vue";
 import InquiryReplyEdit from "src/pages/inquiry/InquiryReplyEdit.vue";
 import InquiryAction from "src/pages/inquiry/InquiryAction.vue";

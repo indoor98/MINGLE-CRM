@@ -29,7 +29,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import axios from "axios";
+import { api as axios } from "src/boot/axios";
 import { useRouter } from "vue-router";
 
 const inquiries = ref([]); // 데이터를 저장하는 반응형 변수
