@@ -196,7 +196,9 @@ const userName = computed(() => userStore.name);
 const userRole = computed(() => userStore.role);
 
 const filteredLinks = computed(() => {
-  if (userRole.value === "ROLE_MANAGER") {
+  if (!atk.value) {
+    return linksList.filter((link) => !link.roles);
+  } else if (userRole.value === "ROLE_MANAGER") {
     return linksList.filter((link) =>
       link.roles ? link.roles.includes("ROLE_MANAGER") : true
     );
