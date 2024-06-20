@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.hotel.repository.queryDsl;
+package com.team2final.minglecrm.review.domain.hotel.repository;
 
 import com.team2final.minglecrm.review.domain.hotel.HotelReviewSummary;
 import com.team2final.minglecrm.review.domain.hotel.SummaryType;

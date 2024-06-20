@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.hotel.repository.queryDsl;
+package com.team2final.minglecrm.review.domain.hotel.repository;
 
 import com.team2final.minglecrm.ai.dto.vo.HotelReviewForSummary;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface HotelReviewRepositoryCustom {
+public interface HotelReviewQueryDslRepository {
     Page<HotelReviewConditionSearchResponse> searchByExpression(HotelReviewConditionSearchRequest condition, Pageable pageable);
     List<HotelReviewForSummary> findAllByStartDateCondition(LocalDateTime startDate);
 
