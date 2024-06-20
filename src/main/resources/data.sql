@@ -3761,16 +3761,16 @@ VALUES
 --        ( 13, 15, 10000, '2022-05-29 00:00:00',  'Birthday Gift', TRUE);
 
 -- Inserting data into the voucher_history table
-INSERT INTO voucher_history (voucher_id, manager_id, staff_id, customer_id, request_date, confirm_date, status, conversion_date, rejected_reason, voucher_code)
-VALUES
-    (1, 1, 7, 85, '2019-07-13 00:00:00', NULL, 'REQUESTED', '2019-07-21 00:00:00', '말이 안됨', NULL),
+-- INSERT INTO voucher_history (voucher_id, manager_id, staff_id, customer_id, request_date, confirm_date, status, conversion_date, rejected_reason, voucher_code)
+-- VALUES
+--     (1, 1, 7, 85, '2019-07-13 00:00:00', NULL, 'REQUESTED', '2019-07-21 00:00:00', '말이 안됨', NULL),
 --     (2, 2, 12, 40, '2021-05-09 00:00:00', '2021-05-12 00:00:00', 'APPROVED', NULL, NULL, 'VCODE002'),
-    (3, 3, 14, 65, '2022-03-15 00:00:00', '2022-03-18 00:00:00', 'REJECTED', NULL, 'Insufficient funds', NULL),
+--     (3, 3, 14, 65, '2022-03-15 00:00:00', '2022-03-18 00:00:00', 'REJECTED', NULL, 'Insufficient funds', NULL),
 --     (4, 4, 8, 23, '2020-10-05 00:00:00', '2020-10-07 00:00:00', 'APPROVED', '2020-10-08 00:00:00', NULL, 'VCODE004'),
-    (5, 5, 9, 78, '2023-01-20 00:00:00', NULL, 'REQUESTED', '2023-01-25 00:00:00', 'Invalid request', NULL),
-    (6, 6, 11, 34, '2021-06-30 00:00:00', '2021-07-02 00:00:00', 'APPROVED', '2021-07-05 00:00:00', NULL, 'VCODE006'),
+--     (5, 5, 9, 78, '2023-01-20 00:00:00', NULL, 'REQUESTED', '2023-01-25 00:00:00', 'Invalid request', NULL),
+--     (6, 6, 11, 34, '2021-06-30 00:00:00', '2021-07-02 00:00:00', 'APPROVED', '2021-07-05 00:00:00', NULL, 'VCODE006'),
 --     (7, 7, 10, 92, '2018-11-11 00:00:00', NULL, 'REQUESTED', '2018-11-20 00:00:00', 'Expired', NULL),
-    (8, 8, 13, 56, '2019-09-15 00:00:00', '2019-09-17 00:00:00', 'APPROVED', NULL, NULL, 'VCODE008');
+--     (8, 8, 13, 56, '2019-09-15 00:00:00', '2019-09-17 00:00:00', 'APPROVED', NULL, NULL, 'VCODE008');
 --        (11, 11, 3, 5, 1, '2019-01-15 00:00:00', '2019-01-18 00:00:00', TRUE, TRUE, '2019-01-23 00:00:00'),
 --        (12, 12, 2, 13, 88, '2018-12-09 00:00:00', '2018-12-12 00:00:00', TRUE, TRUE, '2018-12-17 00:00:00'),
 --        (13, 13, 2, 10, 175, '2024-07-31 00:00:00', '2024-08-03 00:00:00', TRUE, TRUE, '2024-08-08 00:00:00'),

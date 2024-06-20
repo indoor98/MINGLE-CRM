@@ -15,7 +15,7 @@ public class VoucherApprovalResponse {
     public static VoucherApprovalResponse of(VoucherHistory voucherHistory){
         return new VoucherApprovalResponse(
                 voucherHistory.getVoucher().getId(),
-                voucherHistory.getConfirmDate()
+                voucherHistory.getConfirmedDate()
         );
     }
 }

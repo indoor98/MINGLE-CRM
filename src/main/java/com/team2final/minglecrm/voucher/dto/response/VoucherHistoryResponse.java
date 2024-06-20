@@ -36,6 +36,7 @@ public class VoucherHistoryResponse {
     private final Long amount;
     private final String rejectedReason;
     private final String voucherCode;
+    private final LocalDateTime sendOrCancelDate;
 
 
     public static VoucherHistoryResponse of(VoucherHistory voucherHistory){
@@ -49,10 +50,10 @@ public class VoucherHistoryResponse {
                 voucherHistory.getId(),
                 voucherHistory.getVoucher().getId(),
                 voucherHistory.getStatus(),
-                voucherHistory.getRequestDate(),
+                voucherHistory.getRequestedDate(),
                 voucherHistory.getVoucher().getCreatedReason(),
-                voucherHistory.getConfirmDate(),
-                voucherHistory.getConversionDate(),
+                voucherHistory.getConfirmedDate(),
+                voucherHistory.getConvertedDate(),
 
                 employeeStaffId,
                 employeeStaffName,
@@ -66,7 +67,8 @@ public class VoucherHistoryResponse {
 
                 voucherHistory.getVoucher().getAmount(),
                 voucherHistory.getRejectedReason(),
-                voucherHistory.getVoucherCode()
+                voucherHistory.getVoucherCode(),
+                voucherHistory.getIssueOrCancelDate()
         );
     }
 
