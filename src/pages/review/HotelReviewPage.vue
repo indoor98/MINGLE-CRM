@@ -160,6 +160,7 @@
                     v-model="review.kindnessRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                   <div>청결도</div>
                   <q-rating
@@ -167,6 +168,7 @@
                     v-model="review.cleanlinessRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                 </div>
                 <div class="col">
@@ -176,6 +178,7 @@
                     v-model="review.convenienceRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                   <div>위치 만족도</div>
                   <q-rating
@@ -183,12 +186,16 @@
                     v-model="review.locationRating"
                     :max="5"
                     color="primary"
+                    readonly
                   />
                 </div>
               </div>
             </q-card-section>
 
-            <q-card-section class="scroll" style="max-height: 300px">
+            <q-card-section
+              class="scroll"
+              style="min-width: 100px; max-height: 100px"
+            >
               {{ review.comment }}
             </q-card-section>
           </q-card>
@@ -317,15 +324,12 @@ const getHotelNegativeReviewSummary = async () => {
   negativeReviewSummary.value = response.data.data.summary;
 };
 
-const getPagesNumber = async () => {
+const getHotelReviewMetaData = async () => {
   const response = await axios.get(
-    "http://localhost:8080/api/hotel/review/pagesnumber"
+    "http://localhost:8080/api/hotel/review/meta"
   );
 
-  pagination.value.pagesNumber = Math.ceil(
-    response.data.data / pagination.value.rowsPerPage
-  );
-  console.log("page : ", pagination.value.pagesNumber);
+  pagination.value.pagesNumber = response.data.data.pagesNumber;
 };
 
 // 페이지네이션 값이 변경될 때마다 getHotelReviews 함수 호출
@@ -341,7 +345,7 @@ onMounted(() => {
   getHotelReviews();
   getHotelPositiveReviewSummary();
   getHotelNegativeReviewSummary();
-  getPagesNumber();
+  getHotelReviewMetaData();
 });
 </script>
 
