@@ -336,9 +336,10 @@ public class VoucherService {
         return requestedVouchers.stream()
                 .map(VoucherHistoryResponse::of)
                 .toList();
-    // 다중 검색
+    }
+
+        // 다중 검색
     public List<VoucherHistoryResponse> search(VoucherSearchCondition condition) {
         return voucherSearchRepository.search(condition);
-
     }
 }

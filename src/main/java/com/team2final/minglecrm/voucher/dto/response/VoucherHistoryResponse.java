@@ -73,7 +73,7 @@ public class VoucherHistoryResponse {
     }
 
     @QueryProjection
-    public VoucherHistoryResponse(Long voucherHistoryId, Long voucherId, VoucherStatusType status, LocalDateTime requestDate, String createdReason, LocalDateTime confirmDate, LocalDateTime conversionDate, Long creatorId, String creatorName, Long confirmerId, String confirmerName, Long customerId, String customerName, String customerEmail, Long amount, String rejectedReason, String voucherCode) {
+    public VoucherHistoryResponse(Long voucherHistoryId, Long voucherId, VoucherStatusType status, LocalDateTime requestDate, String createdReason, LocalDateTime confirmDate, LocalDateTime conversionDate, Long creatorId, String creatorName, Long confirmerId, String confirmerName, Long customerId, String customerName, String customerEmail, Long amount, String rejectedReason, String voucherCode, LocalDateTime sendOrCancelDate) {
         this.voucherHistoryId = voucherHistoryId;
         this.voucherId = voucherId;
         this.status = status;
@@ -91,5 +91,6 @@ public class VoucherHistoryResponse {
         this.amount = amount;
         this.rejectedReason = rejectedReason;
         this.voucherCode = voucherCode;
+        this.sendOrCancelDate = sendOrCancelDate;
     }
 }

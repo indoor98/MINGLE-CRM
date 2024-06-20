@@ -29,10 +29,10 @@ public class VoucherSearchRepository {
                         voucherHistory.id,
                         voucherHistory.voucher.id,
                         voucherHistory.status,
-                        voucherHistory.requestDate,
+                        voucherHistory.requestedDate,
                         voucherHistory.voucher.createdReason,
-                        voucherHistory.confirmDate,
-                        voucherHistory.conversionDate,
+                        voucherHistory.confirmedDate,
+                        voucherHistory.convertedDate,
                         voucherHistory.employeeStaff.id,
                         voucherHistory.employeeStaff.name,
                         voucherHistory.employeeManager.id,
@@ -42,7 +42,8 @@ public class VoucherSearchRepository {
                         voucherHistory.customer.email,
                         voucherHistory.voucher.amount,
                         voucherHistory.rejectedReason,
-                        voucherHistory.voucherCode
+                        voucherHistory.voucherCode,
+                        voucherHistory.issueOrCancelDate
                 ))
                 .from(voucherHistory)
                 .where(
@@ -64,7 +65,7 @@ public class VoucherSearchRepository {
     }
 
     private BooleanExpression requestDateEq(LocalDateTime requestDate) {
-        return requestDate != null ? QVoucherHistory.voucherHistory.requestDate.eq(requestDate) : null;
+        return requestDate != null ? QVoucherHistory.voucherHistory.requestedDate.eq(requestDate) : null;
     }
 
     private BooleanExpression createdReasonContains(String createdReason) {
@@ -72,11 +73,11 @@ public class VoucherSearchRepository {
     }
 
     private BooleanExpression confirmDateEq(LocalDateTime confirmDate) {
-        return confirmDate != null ? QVoucherHistory.voucherHistory.confirmDate.eq(confirmDate) : null;
+        return confirmDate != null ? QVoucherHistory.voucherHistory.confirmedDate.eq(confirmDate) : null;
     }
 
     private BooleanExpression conversionDateEq(LocalDateTime conversionDate) {
-        return conversionDate != null ? QVoucherHistory.voucherHistory.conversionDate.eq(conversionDate) : null;
+        return conversionDate != null ? QVoucherHistory.voucherHistory.convertedDate.eq(conversionDate) : null;
     }
 
     private BooleanExpression creatorNameContains(String creatorName) {
@@ -113,11 +114,11 @@ public class VoucherSearchRepository {
 
     private BooleanExpression dateBetween(LocalDateTime startDate, LocalDateTime endDate) {
         if (startDate != null && endDate != null) {
-            return QVoucherHistory.voucherHistory.confirmDate.between(startDate, endDate);
+            return QVoucherHistory.voucherHistory.confirmedDate.between(startDate, endDate);
         } else if (startDate != null) {
-            return QVoucherHistory.voucherHistory.confirmDate.goe(startDate);
+            return QVoucherHistory.voucherHistory.confirmedDate.goe(startDate);
         } else if (endDate != null) {
-            return QVoucherHistory.voucherHistory.confirmDate.loe(endDate);
+            return QVoucherHistory.voucherHistory.confirmedDate.loe(endDate);
         } else {
             return null;
         }
