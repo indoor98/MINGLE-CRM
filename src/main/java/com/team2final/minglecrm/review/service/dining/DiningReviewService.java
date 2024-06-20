@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.review.service.dining;
 
+import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
 import com.team2final.minglecrm.review.domain.hotel.HotelReview;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
@@ -35,7 +36,7 @@ public class DiningReviewService {
         return response;
     }
 
-    public String getConcatenatedHotelReviews(LocalDateTime startDate, LocalDateTime endDate) {
+    public JoinedReviews getJoinedDiningReviews (LocalDateTime startDate, LocalDateTime endDate) {
         List<DiningReview> diningReviewList = diningReviewRepository.findDiningReviewByCreatedDateBetween(startDate, endDate);
 
         StringBuilder response = new StringBuilder();
@@ -45,7 +46,12 @@ public class DiningReviewService {
                     .append(diningReviewList.get(i).getReview())
                     .append("\n");
         }
-        return response.toString();
+
+        return  JoinedReviews.builder()
+                .joinedReviews(response.toString())
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
     }
 
     public List<DiningReviewConditionSearchResponse> searchDiningReviews(Integer pageNo, DiningReviewConditionSearchRequest condition) {

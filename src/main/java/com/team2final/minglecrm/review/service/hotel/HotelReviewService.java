@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.review.service.hotel;
 
+import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.domain.hotel.HotelReview;
@@ -34,7 +35,7 @@ public class HotelReviewService {
         return response;
     }
 
-    public String getConcatenatedHotelReviews(LocalDateTime startDate, LocalDateTime endDate) {
+    public JoinedReviews getJoinedHotelReviews (LocalDateTime startDate, LocalDateTime endDate) {
         List<HotelReview> hotelReviewList = hotelReviewRepository.findHotelReviewByCreatedTimeBetween(startDate, endDate);
         StringBuilder response = new StringBuilder();
         for (int i=0; i < hotelReviewList.size() ; i++) {
@@ -43,7 +44,11 @@ public class HotelReviewService {
                     .append(hotelReviewList.get(i).getComment())
                     .append("\n");
         }
-        return response.toString();
+        return JoinedReviews.builder()
+                .joinedReviews(response.toString())
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
     }
 
     public HotelReviewMetaDataResponse getHotelReviewMetaData() {

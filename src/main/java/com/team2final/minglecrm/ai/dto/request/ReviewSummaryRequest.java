@@ -8,5 +8,6 @@ import java.time.LocalDateTime;
 @Getter
 public class ReviewSummaryRequest {
     private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private SummaryType summaryType;
 }
