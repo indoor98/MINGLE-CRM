@@ -4,7 +4,8 @@ import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSea
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.domain.hotel.HotelReview;
 import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.queryDsl.HotelReviewRepositoryCustom;
+import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewQueryDslRepository;
+import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewMetaDataResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,23 +19,11 @@ import java.util.List;
 public class HotelReviewService {
 
     private final HotelReviewRepository hotelReviewRepository;
-    private final HotelReviewRepositoryCustom hotelReviewRepositoryCustom;
-
-//    public List<HotelReviewResponse> findAllHotelReviewsWithPaging(int pageNo) {
-//        Page<HotelReview> hotelReviewPage = hotelReviewRepository.findAll(PageRequest.of(pageNo, 9));
-//
-//
-//        List<HotelReviewResponse> response = new ArrayList<>();
-//
-//        for(HotelReview hotelReview: hotelReviewPage.getContent()) {
-//            response.add(HotelReviewResponse.of(hotelReview));
-//        }
-//        return response;
-//    }
+    private final int ROWS_PER_PAGE = 9;
 
     public List<HotelReviewConditionSearchResponse> searchReviews(HotelReviewConditionSearchRequest condition, int pageNo) {
 
-        Page<HotelReviewConditionSearchResponse> page =  hotelReviewRepositoryCustom.searchByExpression(condition, PageRequest.of(pageNo, 9));
+        Page<HotelReviewConditionSearchResponse> page =  hotelReviewRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
         List<HotelReviewConditionSearchResponse> response = new ArrayList<>();
 
         for(HotelReviewConditionSearchResponse hotelReview : page.getContent() ) {
@@ -43,10 +32,6 @@ public class HotelReviewService {
 
         return response;
     }
-
-//    public void createHotelReviewSummary(LocalDateTime startDate, SummaryType summaryType) {
-//        List<HotelReview> hotelReviewList =
-//    }
 
     public String getEmbeddedReviews() {
         List<HotelReview> hotelReviewList = hotelReviewRepository.findAll();
@@ -58,4 +43,16 @@ public class HotelReviewService {
 
         return response;
     }
+
+    public HotelReviewMetaDataResponse getHotelReviewMetaData() {
+        long rowsNumber = hotelReviewRepository.count();
+        HotelReviewMetaDataResponse hotelReviewMetaDataResponse =
+                HotelReviewMetaDataResponse.builder()
+                        .rowsNumber(rowsNumber)
+                        .pagesNumber((long) Math.ceil(rowsNumber/ROWS_PER_PAGE))
+                        .build();
+        return hotelReviewMetaDataResponse;
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.dining.repository.queryDsl;
+package com.team2final.minglecrm.review.domain.dining.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,13 +19,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
-public class DiningReviewRepositoryCustomImpl implements DiningReviewRepositoryCustom {
+public class DiningReviewQueryDslRepositoryImpl implements DiningReviewQueryDslRepository {
 
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
-    public DiningReviewRepositoryCustomImpl(EntityManager em) {
+    public DiningReviewQueryDslRepositoryImpl(EntityManager em) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }

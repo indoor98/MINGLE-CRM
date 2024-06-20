@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.hotel.repository.queryDsl;
+package com.team2final.minglecrm.review.domain.hotel.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,12 +21,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class HotelReviewRepositoryCustomImpl implements HotelReviewRepositoryCustom {
+public class HotelReviewQueryDslRepositoryImpl implements HotelReviewQueryDslRepository {
 
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
-    public HotelReviewRepositoryCustomImpl(EntityManager em) {
+    public HotelReviewQueryDslRepositoryImpl(EntityManager em) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
