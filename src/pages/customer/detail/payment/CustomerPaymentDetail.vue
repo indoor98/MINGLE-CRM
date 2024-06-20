@@ -67,7 +67,7 @@
 
 <script setup>
 import { ref, onMounted, defineProps } from 'vue';
-import axios from 'axios';
+import { api as axios } from "src/boot/axios";
 import { useRoute } from 'vue-router';
 
 const props = defineProps(['payment']);
