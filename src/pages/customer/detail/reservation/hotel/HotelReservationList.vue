@@ -127,8 +127,7 @@ const hotelReservationColumns = [
   { name: 'name', label: '고객명', align: 'center', field: 'name' },
   { name: 'phoneNumber', label: '전화번호', align: 'center', field: 'phoneNumber' },
   { name: 'hotelName', label: '호텔명', align: 'center', field: 'hotelName' },
-  { name: 'reservationType', label: '방 유형', align: 'center', field: 'reservationType' },
-  { name: 'memo', label: '메모', align: 'center', field: 'memo' }
+  { name: 'reservationType', label: '방 유형', align: 'center', field: 'reservationType' }
 ];
 </script>
 

@@ -1,42 +1,44 @@
 <template>
   <q-card class="custom-card">
     <q-card-section>
-      <div class="text-h6">Reservation Details</div>
+      <div class="text-h6">호텔 상세 예약 정보</div>
     </q-card-section>
 
     <q-separator />
 
     <q-card-section>
-      <q-list>
-        <q-item>
-          <q-item-label>Reservation ID</q-item-label>
-          <q-item-section>{{ reservation.reservationId }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Reservation Date</q-item-label>
-          <q-item-section>{{ reservation.reservationDate }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Customer Name</q-item-label>
-          <q-item-section>{{ reservation.name }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Phone Number</q-item-label>
-          <q-item-section>{{ reservation.phoneNumber }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Hotel Name</q-item-label>
-          <q-item-section>{{ reservation.hotelName }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Room Type</q-item-label>
-          <q-item-section>{{ reservation.reservationType }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Memo</q-item-label>
-          <q-item-section>{{ reservation.memo }}</q-item-section>
-        </q-item>
-      </q-list>
+      <table class="reservation-table">
+        <tbody>
+        <tr>
+          <th>예약 ID</th>
+          <td>{{ reservation.reservationId }}</td>
+        </tr>
+        <tr>
+          <th>예약 날짜</th>
+          <td>{{ reservation.reservationDate }}</td>
+        </tr>
+        <tr>
+          <th>고객명</th>
+          <td>{{ reservation.name }}</td>
+        </tr>
+        <tr>
+          <th>전화번호</th>
+          <td>{{ reservation.phoneNumber }}</td>
+        </tr>
+        <tr>
+          <th>호텔 이름</th>
+          <td>{{ reservation.hotelName }}</td>
+        </tr>
+        <tr>
+          <th>방 종류</th>
+          <td>{{ reservation.reservationType }}</td>
+        </tr>
+        <tr>
+          <th>고객 메모</th>
+          <td>{{ reservation.memo }}</td>
+        </tr>
+        </tbody>
+      </table>
     </q-card-section>
 
     <q-card-actions align="right">
@@ -53,7 +55,8 @@ const props = defineProps(['reservation']);
 
 <style scoped>
 .custom-card {
-  max-width: 600px;
+  width: 100%;
+  max-width: 800px;
   margin: auto;
 }
 
@@ -62,11 +65,21 @@ const props = defineProps(['reservation']);
   font-weight: bold;
 }
 
-.q-item {
-  padding: 10px 0;
+.reservation-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
 }
 
-.q-item-label {
+.reservation-table th,
+.reservation-table td {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.reservation-table th {
+  background-color: #f5f5f5;
   font-weight: bold;
 }
 </style>
