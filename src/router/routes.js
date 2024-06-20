@@ -88,6 +88,11 @@ const routes = [
           voucherCode: route.query.voucherCode,
         }),
       },
+      {
+        path: "/statistics",
+        name: "statisticsPage",
+        component: () => import("pages/statistics/StatisticsPage.vue"),
+      },
     ],
   },
   {

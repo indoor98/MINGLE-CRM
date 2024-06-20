@@ -9,6 +9,7 @@
           row-key="id"
           :loading="loading"
           :pagination="{ rowsPerPage: 10 }"
+          style="cursor: pointer"
         >
           <template v-slot:body-cell-createdReason="props">
             <q-td :props="props">
@@ -25,13 +26,22 @@
               {{ toDate(props.row.confirmDate) }}
             </q-td>
           </template>
+          <template v-slot:body-cell-sendOrCancelDate="props">
+            <q-td :props="props">
+              {{ toDate(props.row.sendOrCancelDate) }}
+            </q-td>
+          </template>
           <template v-slot:body-cell-sendOrCancel="props">
             <q-td :props="props">
               <q-btn
                 label="발송"
                 color="primary"
                 @click="
-                  sendVoucher(props.row.customerEmail, props.row.voucherCode)
+                  sendVoucher(
+                    props.row.voucherId,
+                    props.row.customerEmail,
+                    props.row.voucherCode
+                  )
                 "
               ></q-btn>
               <q-btn
@@ -115,13 +125,6 @@ const defaultColumns = [
     field: "amount",
     sortable: true,
   },
-  {
-    name: "confirmerName",
-    label: "검토 매니저 이름",
-    align: "center",
-    field: "confirmerName",
-    sortable: true,
-  },
 ];
 
 const approvedColumns = [
@@ -138,6 +141,13 @@ const approvedColumns = [
     label: "바우처 코드",
     align: "center",
     field: "voucherCode",
+  },
+  {
+    name: "confirmerName",
+    label: "검토 매니저 이름",
+    align: "center",
+    field: "confirmerName",
+    sortable: true,
   },
   {
     name: "sendOrCancel",
@@ -161,6 +171,35 @@ const rejectedColumns = [
     label: "거절 사유",
     align: "center",
     field: "rejectedReason",
+  },
+  {
+    name: "confirmerName",
+    label: "검토 매니저 이름",
+    align: "center",
+    field: "confirmerName",
+    sortable: true,
+  },
+];
+
+const sendedColumns = [
+  ...defaultColumns,
+  {
+    name: "status",
+    label: "전환 여부",
+    align: "center",
+    field: "status",
+    sortable: true,
+  },
+];
+
+const canceledColumns = [
+  ...defaultColumns,
+  {
+    name: "sendOrCancelDate",
+    label: "취소 날짜",
+    align: "center",
+    field: "sendOrCancelDate",
+    sortable: true,
   },
 ];
 
@@ -190,6 +229,18 @@ const updateColumns = (selected) => {
       title.value = "승인 거절된 바우처 목록";
       columns.value = rejectedColumns;
       break;
+    case "requested-marketer":
+      title.value = "승인 검토 전 바우처 목록";
+      columns.value = defaultColumns;
+      break;
+    case "sended-marketer":
+      title.value = "발송한 바우처 목록";
+      columns.value = sendedColumns;
+      break;
+    case "canceled-marketer":
+      title.value = "발송 취소한 바우처 목록";
+      columns.value = canceledColumns;
+      break;
   }
 };
 
@@ -210,8 +261,8 @@ const fetchVouchers = async () => {
   }
 };
 
-const sendVoucher = (customerEmail, voucherCode) => {
-  emits("send-voucher", customerEmail, voucherCode);
+const sendVoucher = (voucherId, customerEmail, voucherCode) => {
+  emits("send-voucher", voucherId, customerEmail, voucherCode);
 };
 
 const cancelVoucher = async (voucherId) => {

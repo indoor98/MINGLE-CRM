@@ -33,6 +33,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  voucherId: {
+    type: Number,
+    required: true,
+  },
 });
 
 const emits = defineEmits(["go-back"]);
@@ -58,6 +62,13 @@ const sendPersonalEmail = async () => {
     );
 
     window.alert("이메일이 발송되었습니다!");
+
+    const sendResponse = await axios.post(
+      `http://localhost:8080/api/v1/vouchers/send/${props.voucherId}`
+    );
+
+    console.log("요청 성공:", sendResponse);
+
     content.value = "";
     title.value = "";
     toEmails.value = "";

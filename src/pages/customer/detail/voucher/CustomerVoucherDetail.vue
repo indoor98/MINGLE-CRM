@@ -1,7 +1,5 @@
 <template>
   <q-card class="custom-card">
-
-
     <q-separator />
 
     <q-card-section>
@@ -11,32 +9,32 @@
           <q-item-section>{{ voucherDetails.voucherId }}</q-item-section>
         </q-item>
         <q-item>
-          <q-item-label>Request Date</q-item-label>
+          <q-item-label>Status</q-item-label>
+          <q-item-section>{{ voucherDetails.status }}</q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-label>요청 일자</q-item-label>
           <q-item-section>{{ voucherDetails.requestDate }}</q-item-section>
         </q-item>
         <q-item>
-          <q-item-label>Authorized</q-item-label>
-          <q-item-section>{{ voucherDetails.isAuth }}</q-item-section>
+          <q-item-label>매니저 승인/거절 일자</q-item-label>
+          <q-item-section>{{ voucherDetails.confirmDate }}</q-item-section>
         </q-item>
         <q-item>
-          <q-item-label>Authorization Date</q-item-label>
-          <q-item-section>{{ voucherDetails.authDate }}</q-item-section>
+          <q-item-label>전송/취소 일자</q-item-label>
+          <q-item-section>{{ voucherDetails.sendOrCancelDate }}</q-item-section>
         </q-item>
         <q-item>
-          <q-item-label>Converted</q-item-label>
-          <q-item-section>{{ voucherDetails.isConvertedYn }}</q-item-section>
+          <q-item-label>리워드 전환 일자</q-item-label>
+          <q-item-section>{{ voucherDetails.convertsionDate }}</q-item-section>
         </q-item>
         <q-item>
-          <q-item-label>Conversion Date</q-item-label>
-          <q-item-section>{{ voucherDetails.conversionDate }}</q-item-section>
+          <q-item-label>생성 마케터 ID</q-item-label>
+          <q-item-section>{{ voucherDetails.creatorId }}</q-item-section>
         </q-item>
         <q-item>
-          <q-item-label>Issuer ID</q-item-label>
-          <q-item-section>{{ voucherDetails.issuerId }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Approver ID</q-item-label>
-          <q-item-section>{{ voucherDetails.approverId }}</q-item-section>
+          <q-item-label>승인 매니저 ID</q-item-label>
+          <q-item-section>{{ voucherDetails.confirmerId }}</q-item-section>
         </q-item>
         <q-item>
           <q-item-label>Customer ID</q-item-label>
@@ -56,18 +54,20 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, watch, onMounted } from "vue";
+import axios from "axios";
 
-const props = defineProps(['voucher']);
+const props = defineProps(["voucher"]);
 const voucherDetails = ref({});
 
 const fetchVoucherDetail = async (customerId, voucherId) => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/voucher/${voucherId}`);
+    const response = await axios.get(
+      `http://localhost:8080/api/v1/vouchers/histories/${voucherId}`
+    );
     voucherDetails.value = response.data.data;
   } catch (error) {
-    console.error('Error fetching voucher detail:', error);
+    console.error("Error fetching voucher detail:", error);
   }
 };
 

@@ -7,6 +7,7 @@ export const useUserStore = defineStore("user", () => {
   const email = ref("");
   const name = ref("");
   const id = ref();
+  const role = ref("");
 
   const tokenStore = useTokenStore();
 
@@ -18,12 +19,15 @@ export const useUserStore = defineStore("user", () => {
     email.value = sub.email ? sub.email : "";
     name.value = sub.name ? sub.name : "";
     id.value = sub.id ? sub.id : null;
+    role.value = sub.authority ? sub.authority : "";
+    console.log(role.value);
   };
 
   return {
     email,
     name,
     id,
+    role,
     loadUserInfo,
   };
 });
