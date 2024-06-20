@@ -1,7 +1,7 @@
 <template>
   <q-card class="custom-card">
     <q-card-section>
-      <div class="text-h6">Reservation Details</div>
+      <div class="text-h6">다이닝 상세 예약 정보</div>
     </q-card-section>
 
     <q-separator />
