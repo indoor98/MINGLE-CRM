@@ -64,7 +64,7 @@ const fetchReservations = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/dish/reservations`);
     reservations.value = response.data.map((reservation) => ({
-      reservationId: reservation.reservationId,
+      reservationId: reservation.id,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),
       visitDate: new Date(reservation.visitDate).toLocaleDateString(),
       totalPrice: reservation.totalPrice,

@@ -5,13 +5,13 @@
     <!-- 리워드 정보 표시 -->
     <q-card class="q-mt-md">
       <q-card-section class="q-pa-md">
-        <q-list>
+        <q-list bordered>
           <q-item>
-            <q-item-section>Customer ID</q-item-section>
+            <q-item-section header>Customer ID</q-item-section>
             <q-item-section>{{ rewardInfo.customerId }}</q-item-section>
           </q-item>
           <q-item>
-            <q-item-section>Amount</q-item-section>
+            <q-item-section header>Amount</q-item-section>
             <q-item-section>{{ rewardInfo.amount }}</q-item-section>
           </q-item>
         </q-list>
@@ -48,5 +48,13 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 필요한 스타일을 추가할 수 있습니다. */
+.q-mt-md {
+  margin-top: 16px;
+}
+.q-pa-md {
+  padding: 16px;
+}
+.q-my-md {
+  margin: 16px 0;
+}
 </style>
