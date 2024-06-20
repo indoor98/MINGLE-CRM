@@ -158,7 +158,7 @@ public class VoucherController {
     }
 
     // 사용자별 바우처 리스트 조회
-    @GetMapping("/{customerId}")
+    @GetMapping("/customer/{customerId}")
     public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getVouchers(@PathVariable("customerId") Long customerId){
         List<VoucherHistoryResponse> customerVoucherList = voucherService.getCustomerVouchers(customerId);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 사용 가능 바우처 목록 조회 성공", customerVoucherList));
