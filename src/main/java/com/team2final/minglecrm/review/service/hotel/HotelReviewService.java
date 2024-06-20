@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,15 +34,16 @@ public class HotelReviewService {
         return response;
     }
 
-    public String getEmbeddedReviews() {
-        List<HotelReview> hotelReviewList = hotelReviewRepository.findAll();
-        String response = "";
-
+    public String getConcatenatedHotelReviews(LocalDateTime startDate, LocalDateTime endDate) {
+        List<HotelReview> hotelReviewList = hotelReviewRepository.findHotelReviewByCreatedTimeBetween(startDate, endDate);
+        StringBuilder response = new StringBuilder();
         for (int i=0; i < hotelReviewList.size() ; i++) {
-            response += i + " 번째 리뷰 : " + hotelReviewList.get(i).getComment() + "\n";
+            response.append(i)
+                    .append(" 번째 리뷰 : ")
+                    .append(hotelReviewList.get(i).getComment())
+                    .append("\n");
         }
-
-        return response;
+        return response.toString();
     }
 
     public HotelReviewMetaDataResponse getHotelReviewMetaData() {

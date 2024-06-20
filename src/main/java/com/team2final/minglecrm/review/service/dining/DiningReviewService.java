@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.review.service.dining;
 
+import com.team2final.minglecrm.review.domain.hotel.HotelReview;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewResponse;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,19 @@ public class DiningReviewService {
             response.add(DiningReviewResponse.of(diningReview));
         }
         return response;
+    }
+
+    public String getConcatenatedHotelReviews(LocalDateTime startDate, LocalDateTime endDate) {
+        List<DiningReview> diningReviewList = diningReviewRepository.findDiningReviewByCreatedDateBetween(startDate, endDate);
+
+        StringBuilder response = new StringBuilder();
+        for (int i=0; i < diningReviewList.size() ; i++) {
+            response.append(i)
+                    .append(" 번째 리뷰 : ")
+                    .append(diningReviewList.get(i).getReview())
+                    .append("\n");
+        }
+        return response.toString();
     }
 
     public List<DiningReviewConditionSearchResponse> searchDiningReviews(Integer pageNo, DiningReviewConditionSearchRequest condition) {
