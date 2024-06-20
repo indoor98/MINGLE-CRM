@@ -32,7 +32,25 @@
             </tr>
             <tr>
               <th>메모</th>
-              <td class="memo-cell">{{ customer.memo }}</td>
+              <td class="memo-cell">
+                <div v-if="editingMemo">
+                  <q-input
+                    v-model="editedMemo"
+                    type="textarea"
+                    autofocus
+                    dense
+                    placeholder="메모를 입력하세요..."
+                  />
+                  <div class="q-mt-md q-mb-sm text-right">
+                    <q-btn label="저장" color="primary" @click="saveMemo" />
+                  </div>
+                </div>
+                <div v-else>
+                  {{ customer.memo }}
+                  <q-btn v-if="!editingMemo" label="메모 편집" color="primary" @click="editMemo" />
+                  <q-btn v-if="!editingMemo" label="메모 수정하기" color="primary" @click="editMemo" />
+                </div>
+              </td>
             </tr>
             <tr>
               <th>성별</th>
@@ -44,7 +62,7 @@
             </tr>
             <tr>
               <th>나이</th>
-              <td>{{ customer.age }}</td>
+              <td>{{ calculateAge(customer.birth) }}</td>
             </tr>
           </table>
         </q-card-section>
@@ -63,8 +81,10 @@ import { useRoute } from 'vue-router';
 import { api as axios } from "src/boot/axios";
 
 const route = useRoute();
-const customerId = route.params.id;  // URL 파라미터에서 ID를 가져옴
+const customerId = route.params.id;
 const customer = ref(null);
+const editedMemo = ref('');
+const editingMemo = ref(false);
 
 const fetchCustomerDetail = async () => {
   try {
@@ -73,6 +93,33 @@ const fetchCustomerDetail = async () => {
   } catch (error) {
     console.error('고객 상세 정보를 불러오는 데 실패했습니다:', error);
   }
+};
+
+const editMemo = () => {
+  editedMemo.value = customer.value.memo;
+  editingMemo.value = true;
+};
+
+const saveMemo = async () => {
+  try {
+    const response = await axios.put(`http://localhost:8080/api/v1/customers/${customerId}/memo`, {
+      memo: editedMemo.value
+    });
+    customer.value.memo = editedMemo.value;
+    editingMemo.value = false;
+  } catch (error) {
+    console.error('메모 저장에 실패했습니다:', error);
+    // 실패 처리 로직 추가
+  }
+};
+
+const calculateAge = (birthdate) => {
+  if (!birthdate) return '';
+
+  const birthYear = new Date(birthdate).getFullYear();
+  const currentYear = new Date().getFullYear();
+
+  return currentYear - birthYear;
 };
 
 onMounted(fetchCustomerDetail);
@@ -118,5 +165,12 @@ onMounted(fetchCustomerDetail);
   white-space: pre-wrap; /* 줄바꿈을 유지하고, 긴 텍스트는 줄바꿈 처리 */
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative; /* 버튼을 오른쪽에 정렬하기 위해 position 사용 */
+}
+
+.memo-cell .q-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 </style>
