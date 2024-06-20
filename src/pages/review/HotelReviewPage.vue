@@ -1,6 +1,6 @@
 <template>
-  <q-page padding>
-    <section class="row q-col-gutter-xl flex flex-center q-pa-xs">
+  <q-page>
+    <section class="row q-col-gutter-xl flex flex-center q-mt-xs">
       <q-input v-model="startDate" mask="date" :rules="['date']" label="시작일">
         <template v-slot:append>
           <q-icon name="event" class="cursor-pointer">
@@ -47,27 +47,11 @@
         :options="roomTypeOptions"
         label="룸 타입"
       />
-      <!-- <q-input
-        bottom-slots
-        v-model="customerName"
-        label="작성자"
-        maxlength="20"
-      >
-        <template v-slot:append>
-          <q-icon
-            v-if="text !== ''"
-            name="close"
-            @click="text = ''"
-            class="cursor-pointer"
-          />
-          <q-icon name="search" />
-        </template>
-      </q-input> -->
 
       <q-input
         bottom-slots
         v-model="customerName"
-        label="Label"
+        label="고객 명"
         counter
         maxlength="12"
         :dense="dense"
@@ -88,58 +72,9 @@
       </q-input>
     </section>
 
-    <section class="row q-gutter-md q-pa-md flex flex-center">
-      <!-- First Scroll Area -->
-
-      <q-card class="my-card">
-        <q-card-section class="bg-accent">
-          <div class="text-h6">최근 리뷰 요약</div>
-        </q-card-section>
-
-        <div v-if="seletedSummaryTap === 'positive'">
-          <q-card-section>
-            {{ positiveReviewSummary }}
-          </q-card-section>
-        </div>
-        <div v-if="seletedSummaryTap === 'negative'">
-          <q-card-section>
-            {{ negativeReviewSummary }}
-          </q-card-section>
-        </div>
-        <q-separator dark />
-
-        <q-card-actions>
-          <q-btn
-            flat
-            @click="
-              () => {
-                seletedSummaryTap = 'positive';
-              }
-            "
-          >
-            긍정적인 리뷰 요약</q-btn
-          >
-          <q-btn
-            flat
-            @click="
-              () => {
-                console.log(seletedSummaryTap);
-                seletedSummaryTap = 'negative';
-              }
-            "
-            >부정적인 리뷰 요약</q-btn
-          >
-        </q-card-actions>
-      </q-card>
-    </section>
-
     <section class="q-mt-xl">
       <div class="row q-col-gutter-xl">
-        <div
-          v-for="(review, index) in reviews"
-          :key="index"
-          class="col-12 col-sm-6 col-md-4 col-lg-4"
-        >
+        <div v-for="(review, index) in reviews" :key="index" class="col-12">
           <q-card class="my-card">
             <q-card-section>
               <div class="row">
@@ -243,7 +178,6 @@ const endDate = ref("");
 
 const positiveReviewSummary = ref("");
 const negativeReviewSummary = ref("");
-const seletedSummaryTap = ref("positive");
 
 const customerName = ref("");
 
