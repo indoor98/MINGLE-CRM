@@ -5,16 +5,13 @@
     <!-- 리워드 정보 표시 -->
     <q-card class="q-mt-md">
       <q-card-section class="q-pa-md">
-        <q-list bordered>
-          <q-item>
-            <q-item-section header>Customer ID</q-item-section>
-            <q-item-section>{{ rewardInfo.customerId }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section header>Amount</q-item-section>
-            <q-item-section>{{ rewardInfo.amount }}</q-item-section>
-          </q-item>
-        </q-list>
+        <q-table
+          :rows="[rewardInfo]"
+          :columns="columns"
+          row-key="customerId"
+          flat
+          bordered
+        />
       </q-card-section>
     </q-card>
   </div>
@@ -22,7 +19,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { api as axios } from "src/boot/axios";
+import { api as axios } from 'src/boot/axios';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -31,6 +28,21 @@ const rewardInfo = ref({
   customerId: null,
   amount: null
 });
+
+const columns = [
+  {
+    name: 'customerId',
+    label: 'Customer ID',
+    align: 'left',
+    field: row => row.customerId
+  },
+  {
+    name: 'amount',
+    label: 'Amount',
+    align: 'left',
+    field: row => row.amount
+  }
+];
 
 const fetchRewardInfo = async () => {
   try {
@@ -51,9 +63,11 @@ onMounted(() => {
 .q-mt-md {
   margin-top: 16px;
 }
+
 .q-pa-md {
   padding: 16px;
 }
+
 .q-my-md {
   margin: 16px 0;
 }
