@@ -35,4 +35,8 @@ public class JobRunner {
     public void runBirthdayReminderJob(Job birthdayReminderJob) throws Exception {
         runJob(birthdayReminderJob);
     }
+
+    public void runPurchaseItemJob(Job purchaseItemJob) throws Exception {
+        runJob(purchaseItemJob);
+    }
 }

@@ -4,18 +4,22 @@ import com.team2final.minglecrm.entity.hotel.RoomReservation;
 import com.team2final.minglecrm.statistics.config.batch.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.config.batch.RunIdIncrementer;
 import com.team2final.minglecrm.statistics.entity.StatisticsRoomReservation;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -45,6 +49,32 @@ public class ReservationBatchConfiguration {
                 .processor(reservationRoomProcessor())
                 .writer(reservationRoomWriter())
                 .build();
+    }
+
+    @Bean
+    public Step reservationRoomDeleteStep() {
+        return new StepBuilder("reservationRoomDeleteStep", jobRepository)
+                .tasklet(reservationRoomDeleteTasklet(), platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Tasklet reservationRoomDeleteTasklet() {
+        return (contribution, chunkContext) -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            EntityTransaction transaction = entityManager.getTransaction();
+            try {
+                transaction.begin();
+                entityManager.createQuery("DELETE FROM StatisticsRoomReservation").executeUpdate();
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            } finally {
+                entityManager.close();
+            }
+            return RepeatStatus.FINISHED;
+        };
     }
 
     @Bean

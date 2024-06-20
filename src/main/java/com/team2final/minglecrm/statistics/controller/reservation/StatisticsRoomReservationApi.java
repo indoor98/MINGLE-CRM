@@ -12,14 +12,5 @@ public class StatisticsRoomReservationApi {
 
     private final StatisticsRoomReservationService statisticsRoomReservationService;
 
-//    @GetMapping("/monthly-reserved")
-//    public List<StatisticsRoomReservationResponse> getMonthlyReservations(@RequestParam("year") Integer year,
-//                                                                          @RequestParam("month") Integer month,
-//                                                                          @PageableDefault(sort = "id") Pageable pageable) {
-//        try {
-//            return statisticsRoomReservationService.findReservationsByMonthAndYear(year, month, pageable);
-//        } catch (Exception e) {
-//             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "정보를 조회할 수 없습니다.");
-//        }
-//    }
+
 }

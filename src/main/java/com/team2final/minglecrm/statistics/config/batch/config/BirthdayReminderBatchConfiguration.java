@@ -4,18 +4,23 @@ import com.team2final.minglecrm.entity.customer.Customer;
 import com.team2final.minglecrm.statistics.config.batch.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.config.batch.RunIdIncrementer;
 import com.team2final.minglecrm.statistics.entity.BirthdayReminderCustomers;
+import com.team2final.minglecrm.statistics.entity.ByYearReservationCount;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -34,11 +39,12 @@ public class BirthdayReminderBatchConfiguration {
     private final EntityManagerFactory entityManagerFactory;
 
     @Bean
-    public Job birthdayReminderJob(JobCompletionNotificationListener listener, Step birthdayReminderStep) {
+    public Job birthdayReminderJob(JobCompletionNotificationListener listener, Step birthdayReminderStep, Step birthdayReminderDeleteStep) {
         return new JobBuilder("birthdayReminderJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
-                .start(birthdayReminderStep)
+                .start(birthdayReminderDeleteStep)
+                .next(birthdayReminderStep)
                 .build();
     }
 
@@ -50,6 +56,32 @@ public class BirthdayReminderBatchConfiguration {
                 .processor(birthdayReminderProcessor())
                 .writer(birthdayReminderWriter())
                 .build();
+    }
+
+    @Bean
+    public Step birthdayReminderDeleteStep() {
+        return new StepBuilder("birthdayReminderDeleteStep", jobRepository)
+                .tasklet(birthdayReminderDeleteTasklet(), platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Tasklet birthdayReminderDeleteTasklet() {
+        return (contribution, chunkContext) -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            EntityTransaction transaction = entityManager.getTransaction();
+            try {
+                transaction.begin();
+                entityManager.createQuery("DELETE FROM BirthdayReminderCustomers").executeUpdate();
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            } finally {
+                entityManager.close();
+            }
+            return RepeatStatus.FINISHED;
+        };
     }
 
     @Bean
