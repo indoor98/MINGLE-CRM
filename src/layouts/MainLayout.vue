@@ -86,6 +86,7 @@ import EssentialLink from "components/EssentialLink.vue";
 import { useTokenStore } from "src/stores/token-store";
 import { storeToRefs } from "pinia";
 import axios from "axios";
+import { api as customAxios } from "/src/boot/axios";
 import { useUserStore } from "src/stores/user-store";
 
 const store = useTokenStore();
@@ -148,7 +149,7 @@ const linksList = [
 const logout = async () => {
   try {
     console.log("로그아웃");
-    const response = await axios.get(
+    const response = await customAxios.get(
       "http://localhost:8080/api/v1/auth/logout",
       {
         withCredentials: true,
