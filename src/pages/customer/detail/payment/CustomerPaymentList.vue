@@ -35,8 +35,8 @@
     </q-table>
 
     <!-- 결제 상세 정보 다이얼로그 -->
-    <q-dialog v-model="showDialog">
-      <customer-payment-detail :payment="selectedPayment" />
+    <q-dialog v-model="showDialog" persistent>
+      <customer-payment-detail :payment="selectedPayment" @close="closeReservationDetail" />
     </q-dialog>
   </div>
 </template>
@@ -119,6 +119,11 @@ const handleSearch = (searchTerm) => {
 const shouldHighlight = (value) => {
   if (!search.value) return false;
   return value.toString().toLowerCase().includes(search.value.toLowerCase());
+};
+
+const closeReservationDetail = () => {
+  showDialog.value = false;
+  selectedPayment.value = null;
 };
 
 onMounted(() => {
