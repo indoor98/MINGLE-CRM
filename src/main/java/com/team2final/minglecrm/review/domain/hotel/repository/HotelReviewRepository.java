@@ -19,4 +19,5 @@ public interface HotelReviewRepository extends JpaRepository<HotelReview, Long>,
 
     List<HotelReview> findHotelReviewByCreatedTimeBetween(LocalDateTime startDate, LocalDateTime endDate);
 
+    Long countHotelReviewByCreatedTimeBetween(LocalDateTime startDate, LocalDateTime endDate);
 }

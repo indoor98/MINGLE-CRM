@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,27 @@ public class HotelReviewService {
                         .pagesNumber((long) Math.ceil((double) rowsNumber /ROWS_PER_PAGE))
                         .build();
 
+    }
+
+    public Double getHotelReviewAverageRatingByPeriod(LocalDateTime startDate, LocalDateTime endDate) {
+        List<HotelReview> hotelReviews = hotelReviewRepository.findHotelReviewByCreatedTimeBetween(startDate, endDate);
+        double numberOfReviews = (double) hotelReviews.size();
+        double averageRating = 0;
+        for(HotelReview hotelReview : hotelReviews) {
+            averageRating += getAverageRating(hotelReview);
+        }
+        return averageRating / numberOfReviews;
+    }
+
+    public Long getHotelReviewsNumberByPeriod(LocalDateTime startDate, LocalDateTime endDate) {
+        return hotelReviewRepository.countHotelReviewByCreatedTimeBetween(startDate, endDate);
+    }
+
+    public Double getAverageRating(HotelReview hotelReview) {
+        return (hotelReview.getCleanlinessRating() +
+                hotelReview.getConvenienceRating() +
+                hotelReview.getKindnessRating() +
+                hotelReview.getLocationRating())/4;
     }
 
 
