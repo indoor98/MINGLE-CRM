@@ -1,85 +1,75 @@
 <template>
-  <div class="q-pa-md">
-    <q-card class="q-mt-md">
-      <q-card-section class="q-pa-md">
-        <div class="text-h6">Customer Inquiry Details</div>
-      </q-card-section>
+  <q-card class="custom-card">
+    <q-card-section class="q-pa-md">
+      <div class="text-h6">고객 문의 상세</div>
+    </q-card-section>
 
-      <q-separator />
+    <q-separator />
 
-      <q-card-section>
-        <table class="inquiry-table">
-          <tbody>
-          <tr>
-            <th>Customer Name</th>
-            <td>{{ inquiryDetails.customerName }}</td>
-          </tr>
-          <tr>
-            <th>Phone Number</th>
-            <td>{{ inquiryDetails.customerPhone }}</td>
-          </tr>
-          <tr>
-            <th>Date</th>
-            <td>{{ inquiryDetails.date }}</td>
-          </tr>
-          <tr>
-            <th>Type</th>
-            <td>{{ inquiryDetails.type }}</td>
-          </tr>
-          <tr>
-            <th>Replied</th>
-            <td>{{ inquiryDetails.isReply ? 'Yes' : 'No' }}</td>
-          </tr>
-          <tr>
-            <th>Employee</th>
-            <td>{{ inquiryDetails.employName }}</td>
-          </tr>
-          <tr>
-            <th>Inquiry Title</th>
-            <td>{{ inquiryDetails.inquiryTitle }}</td>
-          </tr>
-          <tr>
-            <th>Inquiry Content</th>
-            <td>{{ inquiryDetails.inquiryContent }}</td>
-          </tr>
-          <tr>
-            <th>Action Status</th>
-            <td>{{ inquiryDetails.actionStatus }}</td>
-          </tr>
-          </tbody>
-        </table>
-      </q-card-section>
-    </q-card>
-  </div>
+    <q-card-section>
+      <table class="inquiry-table">
+        <tbody>
+        <tr>
+          <th>고객명</th>
+          <td>{{ inquiry.customerName }}</td>
+        </tr>
+        <tr>
+          <th>전화번호</th>
+          <td>{{ inquiry.customerPhone }}</td>
+        </tr>
+        <tr>
+          <th>문의 날짜</th>
+          <td>{{ inquiry.date }}</td>
+        </tr>
+        <tr>
+          <th>문의 타입</th>
+          <td>{{ inquiry.type }}</td>
+        </tr>
+        <tr>
+          <th>답변 여부</th>
+          <td>{{ inquiry.isReply ? 'Yes' : 'No' }}</td>
+        </tr>
+        <tr>
+          <th>담당 직원명</th>
+          <td>{{ inquiry.employName }}</td>
+        </tr>
+        <tr>
+          <th>문의 제목</th>
+          <td>{{ inquiry.inquiryTitle }}</td>
+        </tr>
+        <tr>
+          <th>문의 내용</th>
+          <td>{{ inquiry.inquiryContent }}</td>
+        </tr>
+        <tr>
+          <th>문의 상태</th>
+          <td>{{ inquiry.actionStatus }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </q-card-section>
+
+    <q-card-actions align="right">
+      <q-btn flat label="닫기" color="primary" @click="closeModal" />
+    </q-card-actions>
+  </q-card>
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
-import { api as axios } from "src/boot/axios";
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps(['inquiry']);
-const inquiryDetails = ref({});
+const emit = defineEmits(['close']);
 
-const fetchInquiryDetail = async (customerId, inquiryId) => {
-  try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/inquiries/${inquiryId}`);
-    inquiryDetails.value = response.data.data.inquiryResponse;
-  } catch (error) {
-    console.error('Error fetching inquiry detail:', error);
-  }
+const closeModal = () => {
+  emit('close');
 };
-
-watchEffect(() => {
-  if (props.inquiry.customerId && props.inquiry.id) {
-    fetchInquiryDetail(props.inquiry.customerId, props.inquiry.id);
-  }
-});
 </script>
 
 <style scoped>
-.q-card {
+.custom-card {
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
 }
 

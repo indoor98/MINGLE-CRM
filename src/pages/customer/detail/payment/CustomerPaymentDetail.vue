@@ -1,78 +1,77 @@
 <template>
-  <div class="q-pa-md">
-    <q-separator class="q-my-md" />
+  <q-card class="custom-card">
+    <q-card-section>
+      <div class="text-h6">결제 상세 정보</div>
+    </q-card-section>
 
-    <q-card class="q-mt-md" v-if="loadedPayment">
-      <q-card-section class="q-pa-md">
-        <div class="text-h6">Payment Details</div>
-      </q-card-section>
+    <q-separator />
 
-      <q-separator />
+    <q-card-section v-if="paymentDetail">
+      <table class="payment-table">
+        <tbody>
+        <tr>
+          <th>고객명</th>
+          <td>{{ paymentDetail.customerName }}</td>
+        </tr>
+        <tr>
+          <th>전화번호</th>
+          <td>{{ paymentDetail.number }}</td>
+        </tr>
+        <tr>
+          <th>결제 종류</th>
+          <td>{{ paymentDetail.type }}</td>
+        </tr>
+        <tr>
+          <th>할인 전 금액</th>
+          <td>{{ paymentDetail.amountBeforeDiscount }}</td>
+        </tr>
+        <tr>
+          <th>할인 금액</th>
+          <td>{{ paymentDetail.discountAmount }}</td>
+        </tr>
+        <tr>
+          <th>결제 금액</th>
+          <td>{{ paymentDetail.paymentAmount }}</td>
+        </tr>
+        <tr>
+          <th>결제 날짜</th>
+          <td>{{ paymentDetail.paymentDate }}</td>
+        </tr>
+        <tr>
+          <th>환불 여부</th>
+          <td>{{ paymentDetail.isRefunded }}</td>
+        </tr>
+        <tr>
+          <th>환불 날짜</th>
+          <td>{{ paymentDetail.refundDate }}</td>
+        </tr>
+        <tr>
+          <th>리워드 생성 금액</th>
+          <td>{{ paymentDetail.createdReward }}</td>
+        </tr>
+        <tr>
+          <th>결제 지점</th>
+          <td>{{ paymentDetail.paymentSpot }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </q-card-section>
 
-      <q-card-section>
-        <table class="payment-table">
-          <tbody>
-          <tr>
-            <th>Customer Name</th>
-            <td>{{ loadedPayment.customerName }}</td>
-          </tr>
-          <tr>
-            <th>Number</th>
-            <td>{{ loadedPayment.number }}</td>
-          </tr>
-          <tr>
-            <th>Type</th>
-            <td>{{ loadedPayment.type }}</td>
-          </tr>
-          <tr>
-            <th>Amount Before Discount</th>
-            <td>{{ loadedPayment.amountBeforeDiscount }}</td>
-          </tr>
-          <tr>
-            <th>Discount Amount</th>
-            <td>{{ loadedPayment.discountAmount }}</td>
-          </tr>
-          <tr>
-            <th>Payment Amount</th>
-            <td>{{ loadedPayment.paymentAmount }}</td>
-          </tr>
-          <tr>
-            <th>Payment Date</th>
-            <td>{{ loadedPayment.paymentDate }}</td>
-          </tr>
-          <tr>
-            <th>Is Refunded</th>
-            <td>{{ loadedPayment.isRefunded }}</td>
-          </tr>
-          <tr>
-            <th>Refund Date</th>
-            <td>{{ loadedPayment.refundDate }}</td>
-          </tr>
-          <tr>
-            <th>Created Reward</th>
-            <td>{{ loadedPayment.createdReward }}</td>
-          </tr>
-          <tr>
-            <th>Payment Spot</th>
-            <td>{{ loadedPayment.paymentSpot }}</td>
-          </tr>
-          </tbody>
-        </table>
-      </q-card-section>
-    </q-card>
-
-    <div v-else class="q-mt-md text-h6 text-center">Loading...</div>
-  </div>
+    <q-card-actions align="right">
+      <q-btn flat label="닫기" color="primary" @click="emit('close')" />
+    </q-card-actions>
+  </q-card>
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps } from 'vue';
+import { ref, onMounted, defineProps, defineEmits } from 'vue';
 import { api as axios } from "src/boot/axios";
 import { useRoute } from 'vue-router';
 
 const props = defineProps(['payment']);
-const loadedPayment = ref(null);
-const route = useRoute(); // Vue Router 사용
+const emit = defineEmits(['close']);
+const paymentDetail = ref(null);
+const route = useRoute();
 
 onMounted(async () => {
   const customerId = route.params.id;
@@ -84,7 +83,7 @@ onMounted(async () => {
 const fetchPayment = async (customerId, paymentId) => {
   try {
     const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/payments/${paymentId}`);
-    loadedPayment.value = response.data;
+    paymentDetail.value = response.data;
   } catch (error) {
     console.error('결제 정보를 가져오는 중 에러 발생:', error);
   }
@@ -92,6 +91,17 @@ const fetchPayment = async (customerId, paymentId) => {
 </script>
 
 <style scoped>
+.custom-card {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+.text-h6 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
 .payment-table {
   width: 100%;
   border-collapse: collapse;
@@ -108,9 +118,5 @@ const fetchPayment = async (customerId, paymentId) => {
 .payment-table th {
   background-color: #f5f5f5;
   font-weight: bold;
-}
-
-.q-card-section {
-  padding: 16px;
 }
 </style>

@@ -1,35 +1,40 @@
 <template>
   <q-card class="custom-card">
     <q-card-section>
-      <div class="text-h6">Reservation Details</div>
+      <div class="text-h6">다이닝 상세 예약 정보</div>
     </q-card-section>
+
     <q-separator />
+
     <q-card-section>
-      <q-list>
-        <q-item>
-          <q-item-label>Reservation ID</q-item-label>
-          <q-item-section>{{ reservation.reservationId }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Reservation Date</q-item-label>
-          <q-item-section>{{ reservation.reservationDate }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Visit Date</q-item-label>
-          <q-item-section>{{ reservation.visitDate }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Total Price</q-item-label>
-          <q-item-section>{{ reservation.totalPrice }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Dishes</q-item-label>
-          <q-item-section>{{ reservation.dishes }}</q-item-section>
-        </q-item>
-      </q-list>
+      <table class="reservation-table">
+        <tbody>
+        <tr>
+          <th>예약 ID</th>
+          <td>{{ reservation.reservationId }}</td>
+        </tr>
+        <tr>
+          <th>예약 날짜</th>
+          <td>{{ reservation.reservationDate }}</td>
+        </tr>
+        <tr>
+          <th>방문 날짜</th>
+          <td>{{ reservation.visitDate }}</td>
+        </tr>
+        <tr>
+          <th>총 소비 금액</th>
+          <td>{{ reservation.totalPrice }}</td>
+        </tr>
+        <tr>
+          <th>주문 요리(가격)</th>
+          <td>{{ reservation.dishes }}</td>
+        </tr>
+        </tbody>
+      </table>
     </q-card-section>
+
     <q-card-actions align="right">
-      <q-btn flat label="Close" color="primary" @click="$emit('close')" />
+      <q-btn flat label="닫기" color="primary" @click="$emit('close')" />
     </q-card-actions>
   </q-card>
 </template>
@@ -47,7 +52,8 @@ const props = defineProps({
 
 <style scoped>
 .custom-card {
-  max-width: 600px;
+  width: 100%;
+  max-width: 800px;
   margin: auto;
 }
 
@@ -56,11 +62,21 @@ const props = defineProps({
   font-weight: bold;
 }
 
-.q-item {
-  padding: 10px 0;
+.reservation-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
 }
 
-.q-item-label {
+.reservation-table th,
+.reservation-table td {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.reservation-table th {
+  background-color: #f5f5f5;
   font-weight: bold;
 }
 </style>

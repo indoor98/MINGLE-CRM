@@ -1,8 +1,6 @@
 <template>
   <div class="q-pa-md">
     <q-separator class="q-my-md"/>
-
-    <!-- SearchInput 컴포넌트 사용 -->
     <SearchInput
       v-model="search"
       label="검색어를 입력해주세요"
@@ -10,14 +8,13 @@
       @search="handleSearch"
     />
 
-    <!-- 테이블로 고객 문의 목록 표시 -->
     <q-table
       flat
       bordered
       title=""
       :rows="filteredInquiries"
       :columns="inquiryColumns"
-      row-key="id"
+      row-key="inquiryId"
       v-model:pagination="inquiryPagination"
     >
       <template v-slot:body="props">
@@ -29,9 +26,8 @@
       </template>
     </q-table>
 
-    <!-- 문의 상세 정보 다이얼로그 -->
-    <q-dialog v-model="showDialog">
-      <customer-consultation-detail :inquiry="selectedInquiry"/>
+    <q-dialog v-model="showDialog" persistent>
+      <customer-consultation-detail :inquiry="selectedInquiry" @close="closeReservationDetail"/>
     </q-dialog>
   </div>
 </template>
@@ -96,6 +92,11 @@ const showInquiryDetail = (inquiry) => {
   showDialog.value = true;
 };
 
+const closeReservationDetail = () => {
+  showDialog.value = false;
+  selectedInquiry.value = null;
+};
+
 const filteredInquiries = computed(() => {
   if (!search.value) {
     return inquiries.value;
@@ -103,7 +104,8 @@ const filteredInquiries = computed(() => {
   return fuse.search(search.value).map(result => result.item);
 });
 
-const handleSearch = (searchTerm, searchFields) => {
+
+const handleSearch = (searchTerm) => {
   search.value = searchTerm;
 };
 
@@ -113,15 +115,11 @@ onMounted(() => {
 
 const inquiryColumns = [
   {name: 'id', label: '#', align: 'left', field: 'id'},
-  {name: 'customerName', label: '고갹명', align: 'left', field: 'customerName'},
+  {name: 'customerName', label: '고객명', align: 'left', field: 'customerName'},
   {name: 'customerPhone', label: '전화번호', align: 'center', field: 'customerPhone'},
   {name: 'date', label: '문의 날짜', align: 'center', field: 'date'},
   {name: 'type', label: '종류', align: 'center', field: 'type'},
   {name: 'isReply', label: '답변여부', align: 'center', field: 'isReply'},
-  {name: 'employName', label: '고객명', align: 'center', field: 'employName'},
-  {name: 'inquiryTitle', label: '조치 제목', align: 'center', field: 'inquiryTitle'},
-  {name: 'inquiryContent', label: '조치 내용', align: 'center', field: 'inquiryContent'},
-  {name: 'actionStatus', label: '조치 상태', align: 'center', field: 'actionStatus'}
 ];
 </script>
 
