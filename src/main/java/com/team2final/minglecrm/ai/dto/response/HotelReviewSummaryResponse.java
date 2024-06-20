@@ -11,12 +11,14 @@ import java.time.LocalDateTime;
 public class HotelReviewSummaryResponse {
 
     private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private SummaryType summaryType;
     private String summary;
 
     @Builder
-    HotelReviewSummaryResponse(LocalDateTime startDate, SummaryType summaryType, String summary) {
+    HotelReviewSummaryResponse(LocalDateTime startDate, LocalDateTime endDate, SummaryType summaryType, String summary) {
         this.startDate = startDate;
+        this.endDate = endDate;
         this.summaryType = summaryType;
         this.summary = summary;
     }
@@ -25,6 +27,7 @@ public class HotelReviewSummaryResponse {
         return HotelReviewSummaryResponse
                 .builder()
                 .startDate(hotelReviewSummary.getStartDate())
+                .endDate(hotelReviewSummary.getEndDate())
                 .summaryType(hotelReviewSummary.getSummaryType())
                 .summary(hotelReviewSummary.getSummary())
                 .build();

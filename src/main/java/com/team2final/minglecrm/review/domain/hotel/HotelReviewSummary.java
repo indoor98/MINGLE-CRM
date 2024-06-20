@@ -17,6 +17,7 @@ public class HotelReviewSummary {
     private Long id;
 
     private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     private SummaryType summaryType;
 
@@ -26,10 +27,12 @@ public class HotelReviewSummary {
     @Builder
     public HotelReviewSummary(
             LocalDateTime startDate,
+            LocalDateTime endDate,
             String summary,
             SummaryType summaryType) {
 
         this.startDate = startDate;
+        this.endDate = endDate;
         this.summary = summary;
         this.summaryType = summaryType;
     }

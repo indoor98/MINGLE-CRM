@@ -18,6 +18,7 @@ public class DiningReviewSummary {
     private Long id;
 
     private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     private SummaryType summaryType;
 
@@ -27,10 +28,12 @@ public class DiningReviewSummary {
     @Builder
     public DiningReviewSummary(
             LocalDateTime startDate,
+            LocalDateTime endDate,
             String summary,
             SummaryType summaryType) {
 
         this.startDate = startDate;
+        this.endDate = endDate;
         this.summary = summary;
         this.summaryType = summaryType;
     }

@@ -11,12 +11,14 @@ import java.time.LocalDateTime;
 public class DiningReviewSummaryResponse {
 
     private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private SummaryType summaryType;
     private String summary;
 
     @Builder
-    DiningReviewSummaryResponse(LocalDateTime startDate, SummaryType summaryType, String summary) {
+    DiningReviewSummaryResponse(LocalDateTime startDate, LocalDateTime endDate,  SummaryType summaryType, String summary) {
         this.startDate = startDate;
+        this.endDate = endDate;
         this.summaryType = summaryType;
         this.summary = summary;
     }
@@ -25,6 +27,7 @@ public class DiningReviewSummaryResponse {
         return DiningReviewSummaryResponse
                 .builder()
                 .startDate(diningReviewSummary.getStartDate())
+                .endDate(diningReviewSummary.getEndDate())
                 .summaryType(diningReviewSummary.getSummaryType())
                 .summary(diningReviewSummary.getSummary())
                 .build();
