@@ -9,6 +9,7 @@
           row-key="id"
           :loading="loading"
           :pagination="{ rowsPerPage: 10 }"
+          style="cursor: pointer"
         >
           <template v-slot:body-cell-createdReason="props">
             <q-td :props="props">

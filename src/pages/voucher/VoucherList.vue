@@ -16,6 +16,7 @@
           row-key="id"
           :loading="loading"
           :pagination="{ rowsPerPage: 50 }"
+          style="cursor: pointer"
         >
           <template v-slot:body-cell-createdReason="props">
             <q-td :props="props">
@@ -334,5 +335,8 @@ onMounted(() => {
 }
 .items-center {
   align-items: center;
+}
+q-table {
+  cursor: pointer;
 }
 </style>

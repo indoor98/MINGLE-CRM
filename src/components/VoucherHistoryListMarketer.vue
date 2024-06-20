@@ -9,6 +9,7 @@
           row-key="id"
           :loading="loading"
           :pagination="{ rowsPerPage: 10 }"
+          style="cursor: pointer"
         >
           <template v-slot:body-cell-createdReason="props">
             <q-td :props="props">
@@ -195,7 +196,7 @@ const canceledColumns = [
   ...defaultColumns,
   {
     name: "sendOrCancelDate",
-    label: "취소 일자",
+    label: "취소 날짜",
     align: "center",
     field: "sendOrCancelDate",
     sortable: true,
