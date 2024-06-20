@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.voucher.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.team2final.minglecrm.voucher.domain.VoucherHistory;
 import com.team2final.minglecrm.voucher.domain.status.VoucherStatusType;
 import lombok.Getter;
@@ -9,7 +10,6 @@ import java.time.LocalDateTime;
 
 
 @Getter
-@RequiredArgsConstructor
 public class VoucherHistoryResponse {
 
     private final Long voucherHistoryId;
@@ -72,4 +72,24 @@ public class VoucherHistoryResponse {
         );
     }
 
+    @QueryProjection
+    public VoucherHistoryResponse(Long voucherHistoryId, Long voucherId, VoucherStatusType status, LocalDateTime requestDate, String createdReason, LocalDateTime confirmDate, LocalDateTime conversionDate, Long creatorId, String creatorName, Long confirmerId, String confirmerName, Long customerId, String customerName, String customerEmail, Long amount, String rejectedReason, String voucherCode) {
+        this.voucherHistoryId = voucherHistoryId;
+        this.voucherId = voucherId;
+        this.status = status;
+        this.requestDate = requestDate;
+        this.createdReason = createdReason;
+        this.confirmDate = confirmDate;
+        this.conversionDate = conversionDate;
+        this.creatorId = creatorId;
+        this.creatorName = creatorName;
+        this.confirmerId = confirmerId;
+        this.confirmerName = confirmerName;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+        this.amount = amount;
+        this.rejectedReason = rejectedReason;
+        this.voucherCode = voucherCode;
+    }
 }

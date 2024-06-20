@@ -1,6 +1,8 @@
 package com.team2final.minglecrm.voucher.service;
 
+import com.team2final.minglecrm.voucher.domain.repository.VoucherSearchRepository;
 import com.team2final.minglecrm.voucher.dto.request.VoucherCreateRequest;
+import com.team2final.minglecrm.voucher.dto.request.VoucherSearchCondition;
 import com.team2final.minglecrm.voucher.dto.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.voucher.dto.response.VoucherResponse;
 import com.team2final.minglecrm.customer.domain.Customer;
@@ -31,6 +33,7 @@ public class VoucherService {
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
     private final VoucherHistoryRepository voucherHistoryRepository;
+    private final VoucherSearchRepository voucherSearchRepository;
 
     @Transactional
     public VoucherResponse saveVoucher(VoucherCreateRequest request) {
@@ -333,5 +336,9 @@ public class VoucherService {
         return requestedVouchers.stream()
                 .map(VoucherHistoryResponse::of)
                 .toList();
+    // 다중 검색
+    public List<VoucherHistoryResponse> search(VoucherSearchCondition condition) {
+        return voucherSearchRepository.search(condition);
+
     }
 }

@@ -5,11 +5,11 @@ import com.team2final.minglecrm.employee.dto.request.SignInRequest;
 import com.team2final.minglecrm.employee.dto.request.SignUpRequest;
 import com.team2final.minglecrm.employee.dto.response.SignInResponse;
 import com.team2final.minglecrm.employee.dto.response.SignUpResponse;
-import com.team2final.minglecrm.employee.dto.vo.Subject;
+import com.team2final.minglecrm.auth.dto.Subject;
 import com.team2final.minglecrm.employee.domain.Employee;
 import com.team2final.minglecrm.employee.domain.repository.dao.RedisDao;
 import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
-import com.team2final.minglecrm.auth.infrastructure.JwtProvider;
+import com.team2final.minglecrm.auth.infrastructure.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
+    private final JwtUtil jwtUtil;
     private final RedisDao redisDao;
 
     @Transactional
@@ -94,7 +94,7 @@ public class EmployeeService {
 
     @Transactional
     public Void logout(String rtk) throws JsonProcessingException {
-        Subject subject = jwtProvider.getSubject(rtk);
+        Subject subject = jwtUtil.getSubject(rtk);
         redisDao.getValues(subject.getEmail());
         redisDao.deleteValues(subject.getEmail());
         System.out.println(subject.getEmail() + "로그아웃이요");

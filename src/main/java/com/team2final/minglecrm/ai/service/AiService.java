@@ -5,12 +5,13 @@ import com.team2final.minglecrm.ai.dto.response.HotelReviewSummaryResponse;
 import com.team2final.minglecrm.ai.dto.vo.DiningReviewForSummary;
 import com.team2final.minglecrm.ai.dto.vo.HotelReviewForSummary;
 import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
+import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewRepository;
 import com.team2final.minglecrm.review.domain.hotel.HotelReviewSummary;
 import com.team2final.minglecrm.review.domain.hotel.SummaryType;
 import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewSummaryRepository;
-import com.team2final.minglecrm.review.domain.dining.repository.queryDsl.DiningReviewRepositoryCustom;
-import com.team2final.minglecrm.review.domain.hotel.repository.queryDsl.HotelReviewRepositoryCustom;
-import com.team2final.minglecrm.review.domain.hotel.repository.queryDsl.HotelReviewSummaryRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewQueryDslRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewSummaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -26,14 +27,14 @@ import java.util.List;
 public class AiService {
 
     private final ChatClient chatClient;
-    private final HotelReviewRepositoryCustom hotelReviewRepositoryCustom;
+    private final HotelReviewRepository hotelReviewRepository;
     private final HotelReviewSummaryRepository hotelReviewSummaryRepository;
-    private final DiningReviewRepositoryCustom diningReviewRepositoryCustom;
+    private final DiningReviewRepository diningReviewRepository;
     private final DiningReviewSummaryRepository diningReviewSummaryRepository;
 
     public String createHotelReviewSummary(LocalDateTime startDate, SummaryType summaryType) {
 
-        List<HotelReviewForSummary> reviews = hotelReviewRepositoryCustom.findAllByStartDateCondition(startDate);
+        List<HotelReviewForSummary> reviews = hotelReviewRepository.findAllByStartDateCondition(startDate);
         String question = "";
 
         for (int i=0; i < reviews.size() ; i++) {
@@ -67,7 +68,7 @@ public class AiService {
 
     public String createDiningReviewSummary(LocalDateTime startDate, SummaryType summaryType) {
 
-        List<DiningReviewForSummary> reviews = diningReviewRepositoryCustom.findAllByStartDateCondition(startDate);
+        List<DiningReviewForSummary> reviews = diningReviewRepository.findAllByStartDateCondition(startDate);
         String question = "";
 
         for (int i=0; i < reviews.size() ; i++) {

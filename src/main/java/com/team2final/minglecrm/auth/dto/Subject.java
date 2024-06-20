@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.employee.dto.vo;
+package com.team2final.minglecrm.auth.dto;
 import lombok.Getter;
 
 @Getter

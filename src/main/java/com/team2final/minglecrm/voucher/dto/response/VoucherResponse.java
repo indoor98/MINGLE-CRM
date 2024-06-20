@@ -1,13 +1,12 @@
 package com.team2final.minglecrm.voucher.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.team2final.minglecrm.voucher.domain.Voucher;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@RequiredArgsConstructor
 public class VoucherResponse {
     private final Long voucherId;
     private final Long customerId;
@@ -36,5 +35,19 @@ public class VoucherResponse {
                 voucher.getStartDate(),
                 voucher.getEndDate(),
                 voucher.getCreatedReason());
+    }
+
+    @QueryProjection
+    public VoucherResponse(Long voucherId, Long customerId, String customerName, Long employeeId, String employeeName, Long amount, LocalDateTime createdDate, LocalDateTime startDate, LocalDateTime endDate, String createdReason) {
+        this.voucherId = voucherId;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.employeeId = employeeId;
+        this.employeeName = employeeName;
+        this.amount = amount;
+        this.createdDate = createdDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.createdReason = createdReason;
     }
 }
