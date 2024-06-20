@@ -1,0 +1,14 @@
+package com.team2final.minglecrm.review.domain.dining.repository;
+
+import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
+import com.team2final.minglecrm.review.domain.hotel.SummaryType;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface DiningReviewSummaryRepository extends JpaRepository<DiningReviewSummary, Long> {
+
+    List<DiningReviewSummary> findDiningReviewSummariesBySummaryTypeOrderByStartDateDesc(SummaryType summaryType);
+}

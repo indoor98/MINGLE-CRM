@@ -1,7 +1,7 @@
 package com.team2final.minglecrm.statistics.config;
 
 import com.team2final.minglecrm.service.email.EmailSendService;
-import com.team2final.minglecrm.statistics.entity.BirthdayReminderCustomers;
+import com.team2final.minglecrm.statistics.domain.BirthdayReminderCustomers;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

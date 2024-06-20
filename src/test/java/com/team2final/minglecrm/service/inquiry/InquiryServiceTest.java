@@ -1,36 +1,19 @@
 package com.team2final.minglecrm.service.inquiry;
 
-import com.team2final.minglecrm.controller.inquiry.request.InquiryReplyRequest;
-import com.team2final.minglecrm.controller.inquiry.response.InquiryReplyResponse;
-import com.team2final.minglecrm.controller.inquiry.response.InquiryResponse;
-import com.team2final.minglecrm.entity.customer.Customer;
-import com.team2final.minglecrm.entity.employee.Employee;
-import com.team2final.minglecrm.entity.inquiry.ActionStatus;
-import com.team2final.minglecrm.entity.inquiry.Inquiry;
-import com.team2final.minglecrm.entity.inquiry.InquiryAction;
-import com.team2final.minglecrm.entity.inquiry.InquiryReply;
-import com.team2final.minglecrm.persistence.repository.inquiry.InquiryActionRepository;
-import com.team2final.minglecrm.persistence.repository.inquiry.InquiryReplyRepository;
-import com.team2final.minglecrm.persistence.repository.inquiry.InquiryRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.team2final.minglecrm.employee.domain.Employee;
+import com.team2final.minglecrm.inquiry.domain.Inquiry;
+import com.team2final.minglecrm.inquiry.domain.InquiryAction;
+import com.team2final.minglecrm.inquiry.domain.InquiryReply;
+import com.team2final.minglecrm.inquiry.service.InquiryService;
+import com.team2final.minglecrm.inquiry.domain.repository.InquiryActionRepository;
+import com.team2final.minglecrm.inquiry.domain.repository.InquiryReplyRepository;
+import com.team2final.minglecrm.inquiry.domain.repository.InquiryRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)

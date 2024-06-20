@@ -1,15 +1,15 @@
 package com.team2final.minglecrm.service.email;
 
-import com.team2final.minglecrm.controller.event.request.CreateEventRequest;
-import com.team2final.minglecrm.controller.event.request.PersonalEmailSendRequest;
-import com.team2final.minglecrm.entity.customer.Customer;
-import com.team2final.minglecrm.entity.event.Event;
-import com.team2final.minglecrm.entity.log.EmailLog;
-import com.team2final.minglecrm.persistence.repository.customer.CustomerRepository;
-import com.team2final.minglecrm.persistence.repository.employee.EmployeeRepository;
-import com.team2final.minglecrm.persistence.repository.event.EventRepository;
-import com.team2final.minglecrm.persistence.repository.log.EmailLogRepository;
-import com.team2final.minglecrm.service.event.EventService;
+import com.team2final.minglecrm.event.dto.request.CreateEventRequest;
+import com.team2final.minglecrm.event.dto.request.PersonalEmailSendRequest;
+import com.team2final.minglecrm.customer.domain.Customer;
+import com.team2final.minglecrm.event.domain.Event;
+import com.team2final.minglecrm.log.domain.EmailLog;
+import com.team2final.minglecrm.customer.domain.repository.CustomerRepository;
+import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
+import com.team2final.minglecrm.event.domain.repository.EventRepository;
+import com.team2final.minglecrm.log.domain.repository.EmailLogRepository;
+import com.team2final.minglecrm.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
