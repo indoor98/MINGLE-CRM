@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class DiningReservationResponse {
-
+    private final Long id;
     // 상태, 총 가격, 예약 날짜, 방문 일자
     private final Long totalPrice;
     private final LocalDateTime reservationDate;
@@ -26,6 +26,7 @@ public class DiningReservationResponse {
                 .collect(Collectors.toList());
 
         return new DiningReservationResponse(
+                dishReservation.getId(),
                 dishReservation.getTotalPrice(),
                 dishReservation.getReservationDate(),
                 dishReservation.getVisitDate(),
