@@ -57,7 +57,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import axios from 'axios';
+import { api as axios } from "src/boot/axios";
 
 const props = defineProps(['voucher']);
 const voucherDetails = ref({});

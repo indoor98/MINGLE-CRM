@@ -22,7 +22,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { api as axios } from "src/boot/axios";
 import { useRoute } from 'vue-router';
 
 const route = useRoute();

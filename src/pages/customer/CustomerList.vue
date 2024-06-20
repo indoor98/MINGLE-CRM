@@ -31,7 +31,8 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { api as axios } from "src/boot/axios";
+// import axios from 'axios';
 
 const router = useRouter();
 const search = ref('');

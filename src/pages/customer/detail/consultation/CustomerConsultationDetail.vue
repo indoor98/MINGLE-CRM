@@ -55,7 +55,7 @@
 
 <script setup>
 import { ref, watchEffect } from 'vue';
-import axios from 'axios';
+import { api as axios } from "src/boot/axios";
 
 const props = defineProps(['inquiry']);
 const inquiryDetails = ref({});

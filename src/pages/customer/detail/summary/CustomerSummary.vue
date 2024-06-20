@@ -60,7 +60,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import axios from 'axios';
+import { api as axios } from "src/boot/axios";
 
 const route = useRoute();
 const customerId = route.params.id;  // URL 파라미터에서 ID를 가져옴

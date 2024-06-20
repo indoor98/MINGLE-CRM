@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
+import { api as axios } from "src/boot/axios";
 import { useRoute } from 'vue-router';
 import HotelReservationDetail from './HotelReservationDetail.vue';
 import SearchInput from 'src/components/SearchInput.vue'; // SearchInput 컴포넌트 임포트
