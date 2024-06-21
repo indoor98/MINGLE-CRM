@@ -14,6 +14,7 @@ public class JobCommandLineRunner implements CommandLineRunner {
     private final Job reservationRoomJob;
     private final Job reservationStatisticsJob;
     private final Job birthdayReminderJob;
+    private final Job purchaseItemJob;
 
     @Override
     public void run(String ... args) throws Exception {
@@ -21,6 +22,7 @@ public class JobCommandLineRunner implements CommandLineRunner {
         jobRunner.runReservationRoomJob(reservationRoomJob);
         jobRunner.runReservationStatisticsJob(reservationStatisticsJob);
         jobRunner.runBirthdayReminderJob(birthdayReminderJob);
+        jobRunner.runPurchaseItemJob(purchaseItemJob);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.customer.domain;
 
 
+import com.team2final.minglecrm.customer.dto.request.CustomerMemoCreateAndUpdateRequest;
 import com.team2final.minglecrm.customer.dto.request.CustomerUpdateRequest;
 import com.team2final.minglecrm.employee.domain.Employee;
 import com.team2final.minglecrm.reservation.domain.hotel.RoomReservation;
@@ -92,5 +93,9 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void createAndUpdateMemo(CustomerMemoCreateAndUpdateRequest memoCreateAndUpdateRequest) {
+        this.memo = memoCreateAndUpdateRequest.getMemo();
     }
 }

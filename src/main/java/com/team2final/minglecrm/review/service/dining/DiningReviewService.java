@@ -5,7 +5,9 @@ import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewCond
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewResponse;
 import com.team2final.minglecrm.review.domain.dining.DiningReview;
 import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewRepository;
-import com.team2final.minglecrm.review.domain.dining.repository.queryDsl.DiningReviewRepositoryCustom;
+import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewQueryDslRepository;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewMetaDataResponse;
+import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewMetaDataResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +21,7 @@ import java.util.List;
 public class DiningReviewService {
 
     private final DiningReviewRepository diningReviewRepository;
-    private final DiningReviewRepositoryCustom diningReviewRepositoryCustom;
+    private final int ROWS_PER_PAGE = 9;
 
     public List<DiningReviewResponse> findAllDiningReviewsWithPaging(Integer pageNo) {
         Page<DiningReview> diningReviewPage = diningReviewRepository.findAll(PageRequest.of(pageNo, 9));
@@ -32,14 +34,17 @@ public class DiningReviewService {
     }
 
     public List<DiningReviewConditionSearchResponse> searchDiningReviews(Integer pageNo, DiningReviewConditionSearchRequest condition) {
-        Page<DiningReviewConditionSearchResponse> page =  diningReviewRepositoryCustom.searchByExpression(condition, PageRequest.of(pageNo, 9));
-        List<DiningReviewConditionSearchResponse> response = new ArrayList<>();
+        Page<DiningReviewConditionSearchResponse> page =  diningReviewRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
 
-        for(DiningReviewConditionSearchResponse diningReview : page.getContent() ) {
-            response.add(diningReview);
-        }
+        return new ArrayList<>(page.getContent());
+    }
 
-        return response;
+    public DiningReviewMetaDataResponse getDiningReviewMetaData() {
+        long rowsNumber = diningReviewRepository.count();
+        return DiningReviewMetaDataResponse.builder()
+                        .rowsNumber(rowsNumber)
+                        .pagesNumber((long) Math.ceil((double) rowsNumber /ROWS_PER_PAGE))
+                        .build();
     }
 
 }

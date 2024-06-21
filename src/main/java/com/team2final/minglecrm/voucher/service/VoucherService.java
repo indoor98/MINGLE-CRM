@@ -1,6 +1,8 @@
 package com.team2final.minglecrm.voucher.service;
 
+import com.team2final.minglecrm.voucher.domain.repository.VoucherSearchRepository;
 import com.team2final.minglecrm.voucher.dto.request.VoucherCreateRequest;
+import com.team2final.minglecrm.voucher.dto.request.VoucherSearchCondition;
 import com.team2final.minglecrm.voucher.dto.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.voucher.dto.response.VoucherResponse;
 import com.team2final.minglecrm.customer.domain.Customer;
@@ -31,6 +33,7 @@ public class VoucherService {
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
     private final VoucherHistoryRepository voucherHistoryRepository;
+    private final VoucherSearchRepository voucherSearchRepository;
 
     @Transactional
     public VoucherResponse saveVoucher(VoucherCreateRequest request) {
@@ -125,7 +128,7 @@ public class VoucherService {
                 .employeeStaff(employee)
                 .customer(voucher.getCustomer())
                 .status(VoucherStatusType.REQUESTED)
-                .requestDate(LocalDateTime.now())
+                .requestedDate(LocalDateTime.now())
                 .build();
 
         voucherHistoryRepository.save(voucherHistory);
@@ -286,4 +289,57 @@ public class VoucherService {
         return VoucherHistoryResponse.of(voucherHistory);
     }
 
+    @Transactional
+    public VoucherHistoryResponse sendVoucherEmail(Long voucherId) {
+        VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId);
+        voucherHistory.sendVoucherEmail();
+        voucherHistoryRepository.save(voucherHistory);
+
+        return VoucherHistoryResponse.of(voucherHistory);
+    }
+
+    @Transactional
+    public VoucherHistoryResponse cancelVoucher(Long voucherId) {
+        VoucherHistory voucherHistory = voucherHistoryRepository.findByVoucherId(voucherId);
+        voucherHistory.cancelVoucher();
+        voucherHistoryRepository.save(voucherHistory);
+
+        return VoucherHistoryResponse.of(voucherHistory);
+    }
+
+    @Transactional
+    public List<VoucherHistoryResponse> getSendedVouchersByMarketer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Employee creator = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+        List<VoucherHistory> requestedVouchers = voucherHistoryRepository
+                .findAllByEmployeeStaffAndStatusOrStatus(creator, VoucherStatusType.SENDED, VoucherStatusType.CONVERTED);
+
+        return requestedVouchers.stream()
+                .map(VoucherHistoryResponse::of)
+                .toList();
+    }
+
+    public List<VoucherHistoryResponse> getCanceledVouchersByMarketer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        Employee creator = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+        List<VoucherHistory> requestedVouchers = voucherHistoryRepository
+                .findAllByEmployeeStaffAndStatus(creator, VoucherStatusType.CANCELED);
+
+        return requestedVouchers.stream()
+                .map(VoucherHistoryResponse::of)
+                .toList();
+    }
+
+        // 다중 검색
+    public List<VoucherHistoryResponse> search(VoucherSearchCondition condition) {
+        return voucherSearchRepository.search(condition);
+    }
 }

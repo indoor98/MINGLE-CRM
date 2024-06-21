@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HotelReviewRepository extends JpaRepository<HotelReview, Long> {
+public interface HotelReviewRepository extends JpaRepository<HotelReview, Long>, HotelReviewQueryDslRepository {
 
     @EntityGraph(value = "HotelReview.withRoomReservationAndCustomer", type = EntityGraph.EntityGraphType.LOAD)
     Page<HotelReview> findAll(Pageable pageable);

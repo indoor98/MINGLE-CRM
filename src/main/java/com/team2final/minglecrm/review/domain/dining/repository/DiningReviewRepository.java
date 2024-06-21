@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DiningReviewRepository extends JpaRepository<DiningReview, Long> {
+public interface DiningReviewRepository extends JpaRepository<DiningReview, Long>, DiningReviewQueryDslRepository {
 
     Page<DiningReview> findAll(Pageable pageable);
 }

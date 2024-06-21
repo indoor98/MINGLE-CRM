@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.dining.repository.queryDsl;
+package com.team2final.minglecrm.review.domain.dining.repository;
 
 import com.team2final.minglecrm.ai.dto.vo.DiningReviewForSummary;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface DiningReviewRepositoryCustom {
+public interface DiningReviewQueryDslRepository {
 
     Page<DiningReviewConditionSearchResponse> searchByExpression(DiningReviewConditionSearchRequest condition, Pageable pageable);
 

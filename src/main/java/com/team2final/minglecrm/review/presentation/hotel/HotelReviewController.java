@@ -3,13 +3,11 @@ package com.team2final.minglecrm.review.presentation.hotel;
 import com.team2final.minglecrm.common.exception.ResultResponse;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewMetaDataResponse;
 import com.team2final.minglecrm.review.service.hotel.HotelReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +26,11 @@ public class HotelReviewController {
     @PostMapping("/api/hotel/reviews/{pageno}")
     public ResultResponse<List<HotelReviewConditionSearchResponse>> searchReviews(@PathVariable("pageno") int pageNo, @RequestBody HotelReviewConditionSearchRequest request) {
         return new ResultResponse<>(HttpStatus.OK.value(), "success" ,hotelReviewService.searchReviews(request, pageNo));
+    }
+
+    @GetMapping("/api/hotel/review/meta")
+    public ResultResponse<HotelReviewMetaDataResponse> getHotelReviewMetaData() {
+        HotelReviewMetaDataResponse response = hotelReviewService.getHotelReviewMetaData();
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", response);
     }
 }

@@ -1,5 +1,7 @@
 package com.team2final.minglecrm.event.domain.repository.queryDsl;
 
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team2final.minglecrm.employee.domain.QEmployee;
 import com.team2final.minglecrm.event.domain.QEvent;
@@ -42,8 +44,12 @@ public class EventRepositoryCustomImpl implements EventRespositoryCustom {
                         event.content,
                         event.sentDate,
                         event.sendCount,
-                        emailLog.isOpened.eq(true).count()
-                ))
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(emailLog.isOpened.eq(true)).then(1)
+                                        .otherwise(0).sum()
+                        ).longValue())
+                )
                 .from(event)
                 .innerJoin(event.employee, employee)
                 .innerJoin(emailLog).on(emailLog.event.eq(event))

@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -29,10 +30,10 @@ public class VoucherHistory {
 
     @Enumerated(value = EnumType.STRING)
     private VoucherStatusType status;
-    private LocalDateTime requestDate; // 승인 요청 일시
-    private LocalDateTime confirmDate; // 승인/거절 일시
-
-    private LocalDateTime conversionDate; // 리워드 전환 일시
+    private LocalDateTime requestedDate; // 승인 요청 일시
+    private LocalDateTime confirmedDate; // 승인/거절 일시
+    private LocalDateTime issueOrCancelDate; // 이메일 발송 일시
+    private LocalDateTime convertedDate; // 리워드 전환 일시
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "manager_id", nullable = true)
@@ -50,13 +51,15 @@ public class VoucherHistory {
     private String rejectedReason;
 
     @Builder
-    public VoucherHistory(Voucher voucher, LocalDateTime requestDate, VoucherStatusType status, LocalDateTime confirmDate, LocalDateTime conversionDate, Employee employeeManager, Employee employeeStaff, Customer customer, String voucherCode, String rejectedReason) {
+    public VoucherHistory(Voucher voucher, VoucherStatusType status, LocalDateTime requestedDate, LocalDateTime issueOrCancelDate, LocalDateTime confirmedDate, LocalDateTime convertedDate, Employee employeeManager, Employee employeeStaff, Customer customer, String voucherCode, String rejectedReason) {
         this.voucher = voucher;
-        this.requestDate = requestDate;
 
         this.status = status;
-        this.confirmDate = confirmDate;
-        this.conversionDate = conversionDate;
+
+        this.requestedDate = requestedDate;
+        this.confirmedDate = confirmedDate;
+        this.issueOrCancelDate = issueOrCancelDate;
+        this.convertedDate = convertedDate;
 
         this.employeeManager = employeeManager;
         this.employeeStaff = employeeStaff;
@@ -67,7 +70,7 @@ public class VoucherHistory {
     }
 
     public void approveVoucher(Employee approver, String generatedUniqueVoucherCode) {
-        this.confirmDate = LocalDateTime.now();
+        this.confirmedDate = LocalDateTime.now();
         this.employeeManager = approver;
         this.status = VoucherStatusType.APPROVED;
         this.voucherCode = generatedUniqueVoucherCode;
@@ -76,8 +79,17 @@ public class VoucherHistory {
     public void rejectVoucher(String rejectedReason, Employee employeeManager) {
         this.status = VoucherStatusType.REJECTED;
         this.rejectedReason = rejectedReason;
-        this.confirmDate = LocalDateTime.now();
+        this.confirmedDate = LocalDateTime.now();
         this.employeeManager = employeeManager;
     }
 
+    public void sendVoucherEmail() {
+        this.status = VoucherStatusType.SENDED;
+        this.issueOrCancelDate = LocalDateTime.now();
+    }
+
+    public void cancelVoucher() {
+        this.status = VoucherStatusType.CANCELED;
+        this.issueOrCancelDate = LocalDateTime.now();
+    }
 }

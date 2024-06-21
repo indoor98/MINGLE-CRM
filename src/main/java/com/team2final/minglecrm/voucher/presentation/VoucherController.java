@@ -4,6 +4,7 @@ package com.team2final.minglecrm.voucher.presentation;
 import com.team2final.minglecrm.common.exception.ResultResponse;
 import com.team2final.minglecrm.voucher.dto.request.VoucherCreateRequest;
 import com.team2final.minglecrm.voucher.dto.request.VoucherRejectRequest;
+import com.team2final.minglecrm.voucher.dto.request.VoucherSearchCondition;
 import com.team2final.minglecrm.voucher.dto.response.VoucherHistoryResponse;
 import com.team2final.minglecrm.voucher.dto.response.VoucherResponse;
 import com.team2final.minglecrm.voucher.service.VoucherService;
@@ -68,8 +69,6 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 전/후 바우처 목록 조회 성공", voucherList));
     }
 
-    // 7. 리워드 전환된 바우처 목록 ?
-
     // 8. 바우처 히스토리 상세
     @GetMapping("/histories/{voucherId}") //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ResultResponse<VoucherHistoryResponse>> getVoucher(@PathVariable Long voucherId){
@@ -95,8 +94,6 @@ public class VoucherController {
     }
 
     // 3. 바우처 승인 요청
-    // voucher - isRequested : True로
-    // voucherHistory - requestedDate : now로
     @PostMapping("/request/{voucherId}") //@PreAuthorize("hasRole('MARKETER')")
     public ResponseEntity<ResultResponse<VoucherHistoryResponse>> requestVoucher(@PathVariable Long voucherId) {
         VoucherHistoryResponse voucherRequestResponse = voucherService.requestVoucher(voucherId);
@@ -132,6 +129,48 @@ public class VoucherController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "승인 거절된 바우처 목록 조회 성공", voucherList));
     }
 
+    // 8. 이메일 발송 (완료)
+    @PostMapping("/send/{voucherId}") //@PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<ResultResponse<VoucherHistoryResponse>> sendVoucherEmail(@PathVariable Long voucherId) {
+        VoucherHistoryResponse voucherEmailSended = voucherService.sendVoucherEmail(voucherId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "이메일 발송 성공", voucherEmailSended));
+
+    }
+
+    // 9. 발급 취소
+    @PostMapping("/cancel/{voucherId}") //@PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<ResultResponse<VoucherHistoryResponse>> cancelVoucher(@PathVariable Long voucherId) {
+        VoucherHistoryResponse voucherCanceled = voucherService.cancelVoucher(voucherId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "이메일 발급 취소 성공", voucherCanceled));
+    }
+
+    // 10. 전송된 이메일 목록
+    @GetMapping("/sended-marketer") //@PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getSendedVouchers() {
+        List<VoucherHistoryResponse> voucherList = voucherService.getSendedVouchersByMarketer();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "발송된 바우처 목록 조회 성공", voucherList));
+    }
+
+    // 10. 취소한 바우처 목록
+    @GetMapping("/canceled-marketer") //@PreAuthorize("hasRole('MARKETER')")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getCanceledVouchers() {
+        List<VoucherHistoryResponse> voucherList = voucherService.getCanceledVouchersByMarketer();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "발송 취소한 바우처 목록 조회 성공", voucherList));
+    }
+
+    // 사용자별 바우처 리스트 조회
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> getVouchers(@PathVariable("customerId") Long customerId) {
+        List<VoucherHistoryResponse> customerVoucherList = voucherService.getCustomerVouchers(customerId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "사용자별 사용 가능 바우처 목록 조회 성공", customerVoucherList));
+    }
+
+    // 다중검색
+//    @GetMapping("/search")
+//    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> search(@RequestBody VoucherSearchCondition condition) {
+//        List<VoucherHistoryResponse> searchVoucher = voucherService.search(condition);
+//        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "다중 검색 바우처 목록 조회 성공", searchVoucher));
+//    }
 
 
 

@@ -25,4 +25,6 @@ public interface VoucherHistoryRepository extends JpaRepository<VoucherHistory, 
     // customer
     List<VoucherHistory> findAllByCustomer(Customer customer);
 
+    List<VoucherHistory> findAllByEmployeeStaffAndStatusOrStatus(Employee employee, VoucherStatusType status1, VoucherStatusType status2);
+
 }

@@ -1,13 +1,12 @@
 package com.team2final.minglecrm.payment.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.team2final.minglecrm.payment.domain.Payment;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@RequiredArgsConstructor
 public class PaymentResponse {
 
     private final Long id;
@@ -33,5 +32,16 @@ public class PaymentResponse {
                 payment.getPaymentDate(),
                 payment.getIsRefunded()
         );
+    }
+
+    @QueryProjection
+    public PaymentResponse(Long id, String customerName, String number, String type, Long paymentAmount, LocalDateTime paymentDate, Boolean isRefunded) {
+        this.id = id;
+        this.customerName = customerName;
+        this.number = number;
+        this.type = type;
+        this.paymentAmount = paymentAmount;
+        this.paymentDate = paymentDate;
+        this.isRefunded = isRefunded;
     }
 }

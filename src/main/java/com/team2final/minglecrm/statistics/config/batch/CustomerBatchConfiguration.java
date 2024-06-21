@@ -3,7 +3,9 @@ package com.team2final.minglecrm.statistics.config.batch;
 import com.team2final.minglecrm.customer.domain.Customer;
 import com.team2final.minglecrm.statistics.config.support.JobCompletionNotificationListener;
 import com.team2final.minglecrm.statistics.domain.FrequentCustomer;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -11,11 +13,13 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
@@ -31,11 +35,12 @@ public class CustomerBatchConfiguration {
     private final EntityManagerFactory entityManagerFactory;
 
     @Bean
-    public Job importFrequentCustomerJob(JobCompletionNotificationListener listener, Step importFrequentCustomerStep) {
+    public Job importFrequentCustomerJob(JobCompletionNotificationListener listener, Step importFrequentCustomerStep, Step frequentCustomerDeleteStep) {
         return new JobBuilder("importFrequentCustomerJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
-                .start(importFrequentCustomerStep)
+                .start(frequentCustomerDeleteStep)
+                .next(importFrequentCustomerStep)
                 .build();
     }
 
@@ -47,6 +52,32 @@ public class CustomerBatchConfiguration {
                 .processor(importFrequentCustomerProcessor())
                 .writer(importFrequentCustomerWriter())
                 .build();
+    }
+
+    @Bean
+    public Step frequentCustomerDeleteStep() {
+        return new StepBuilder("frequentCustomerDeleteStep", jobRepository)
+                .tasklet(frequentCustomerDeleteTasklet(), platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Tasklet frequentCustomerDeleteTasklet() {
+        return (contribution, chunkContext) -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            EntityTransaction transaction = entityManager.getTransaction();
+            try {
+                transaction.begin();
+                entityManager.createQuery("DELETE FROM FrequentCustomer").executeUpdate();
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            } finally {
+                entityManager.close();
+            }
+            return RepeatStatus.FINISHED;
+        };
     }
 
     @Bean

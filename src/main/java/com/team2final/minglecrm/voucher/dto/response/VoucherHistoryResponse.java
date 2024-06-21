@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.voucher.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.team2final.minglecrm.voucher.domain.VoucherHistory;
 import com.team2final.minglecrm.voucher.domain.status.VoucherStatusType;
 import lombok.Getter;
@@ -9,7 +10,6 @@ import java.time.LocalDateTime;
 
 
 @Getter
-@RequiredArgsConstructor
 public class VoucherHistoryResponse {
 
     private final Long voucherHistoryId;
@@ -36,6 +36,7 @@ public class VoucherHistoryResponse {
     private final Long amount;
     private final String rejectedReason;
     private final String voucherCode;
+    private final LocalDateTime sendOrCancelDate;
 
 
     public static VoucherHistoryResponse of(VoucherHistory voucherHistory){
@@ -49,10 +50,10 @@ public class VoucherHistoryResponse {
                 voucherHistory.getId(),
                 voucherHistory.getVoucher().getId(),
                 voucherHistory.getStatus(),
-                voucherHistory.getRequestDate(),
+                voucherHistory.getRequestedDate(),
                 voucherHistory.getVoucher().getCreatedReason(),
-                voucherHistory.getConfirmDate(),
-                voucherHistory.getConversionDate(),
+                voucherHistory.getConfirmedDate(),
+                voucherHistory.getConvertedDate(),
 
                 employeeStaffId,
                 employeeStaffName,
@@ -66,8 +67,30 @@ public class VoucherHistoryResponse {
 
                 voucherHistory.getVoucher().getAmount(),
                 voucherHistory.getRejectedReason(),
-                voucherHistory.getVoucherCode()
+                voucherHistory.getVoucherCode(),
+                voucherHistory.getIssueOrCancelDate()
         );
     }
 
+    @QueryProjection
+    public VoucherHistoryResponse(Long voucherHistoryId, Long voucherId, VoucherStatusType status, LocalDateTime requestDate, String createdReason, LocalDateTime confirmDate, LocalDateTime conversionDate, Long creatorId, String creatorName, Long confirmerId, String confirmerName, Long customerId, String customerName, String customerEmail, Long amount, String rejectedReason, String voucherCode, LocalDateTime sendOrCancelDate) {
+        this.voucherHistoryId = voucherHistoryId;
+        this.voucherId = voucherId;
+        this.status = status;
+        this.requestDate = requestDate;
+        this.createdReason = createdReason;
+        this.confirmDate = confirmDate;
+        this.conversionDate = conversionDate;
+        this.creatorId = creatorId;
+        this.creatorName = creatorName;
+        this.confirmerId = confirmerId;
+        this.confirmerName = confirmerName;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+        this.amount = amount;
+        this.rejectedReason = rejectedReason;
+        this.voucherCode = voucherCode;
+        this.sendOrCancelDate = sendOrCancelDate;
+    }
 }
