@@ -38,6 +38,7 @@ public class JwtUtil {
             @Value("${spring.jwt.live.atk}") final Long accessTokenExpirationTime,
             @Value("${spring.jwt.live.rtk}") final Long refreshTokenExpirationTime
     ) {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         this.objectMapper = objectMapper;
         this.redisDao = redisDao;
         this.employeeRepository = employeeRepository;
