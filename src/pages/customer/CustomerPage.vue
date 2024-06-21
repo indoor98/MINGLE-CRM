@@ -9,7 +9,6 @@ import CustomerList from './CustomerList.vue';
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { api as axios } from "src/boot/axios";
-// import axios from "axios";
 
 const columns = [
   {
