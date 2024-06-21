@@ -71,6 +71,31 @@
           :key="link.title"
           v-bind="link"
         />
+        <q-item clickable v-ripple @click="openLogMenu" @mouseover="openLogMenu">
+          <q-item-section avatar>
+            <q-icon name="map" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>로그</q-item-label>
+            <q-item-label caption>로그 탭</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-menu v-model="logMenu">
+          <q-list>
+            <EssentialLink
+              title="뷰로그"
+              caption="뷰로그 탭"
+              icon="visibility"
+              to="/view-log"
+            />
+            <EssentialLink
+              title="이메일로그"
+              caption="이메일로그 탭"
+              icon="email"
+              to="/email-log"
+            />
+          </q-list>
+        </q-menu>
       </q-list>
     </q-drawer>
 
@@ -81,16 +106,16 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import {ref, computed, onMounted} from "vue";
 import EssentialLink from "components/EssentialLink.vue";
-import { useTokenStore } from "src/stores/token-store";
-import { storeToRefs } from "pinia";
+import {useTokenStore} from "src/stores/token-store";
+import {storeToRefs} from "pinia";
 import axios from "axios";
-import { api as customAxios } from "/src/boot/axios";
-import { useUserStore } from "src/stores/user-store";
+import {api as customAxios} from "/src/boot/axios";
+import {useUserStore} from "src/stores/user-store";
 
 const store = useTokenStore();
-const { atk } = storeToRefs(store);
+const {atk} = storeToRefs(store);
 const userStore = useUserStore();
 
 const linksList = [
@@ -144,12 +169,6 @@ const linksList = [
     icon: "map",
     to: "/statistics",
   },
-  {
-    title: "로그",
-    caption: "로그 탭",
-    icon: "map",
-    to: "/view-log",
-  },
 ];
 
 const logout = async () => {
@@ -179,7 +198,7 @@ const renewToken = async () => {
     console.log(response.data);
     console.log("renewToken 실행 완료");
     if (response.data.code === 200) {
-      const { atk, atkExpiration } = response.data.data;
+      const {atk, atkExpiration} = response.data.data;
       store.setSigninResponse(atk, atkExpiration);
       console.log("갱신 완료");
     } else {
@@ -194,8 +213,14 @@ const renewToken = async () => {
 };
 
 const leftDrawerOpen = ref(false);
+const logMenu = ref(false);
+
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function openLogMenu() {
+  logMenu.value = true;
 }
 
 const userName = computed(() => userStore.name);
