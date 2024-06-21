@@ -84,13 +84,22 @@
         </div>
       </q-card-section>
     </q-card>
+
+    <!-- 맨 위로 가는 버튼 -->
+    <q-btn
+      class="back-to-top-btn"
+      fab
+      icon="arrow_upward"
+      @click="scrollToTop"
+      title="맨 위로 이동"
+    />
   </q-page>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue';
-import {useRouter} from 'vue-router';
-import {api as axios} from "src/boot/axios";
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { api as axios } from "src/boot/axios";
 
 const router = useRouter();
 const searchName = ref('');
@@ -231,6 +240,13 @@ const maskBirthdate = (birthdate) => {
 
   return `${birthdate.slice(0, 4)}${maskedPart}${visiblePart}`;
 };
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};
 </script>
 
 <style scoped>
@@ -260,4 +276,15 @@ const maskBirthdate = (birthdate) => {
 .q-mt-md {
   margin-top: 16px;
 }
+
+.back-to-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 60px; /* 버튼을 왼쪽으로 이동 */
+  transform: translateX(-70%); /* 정확한 가운데 정렬 */
+  width: 9px; /* 버튼 크기 조정 */
+  height: 9px; /* 버튼 크기 조정 */
+}
 </style>
+
+

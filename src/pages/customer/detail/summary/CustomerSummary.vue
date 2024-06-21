@@ -48,7 +48,6 @@
                 <div v-else>
                   {{ customer.memo }}
                   <q-btn v-if="!editingMemo" label="메모 편집" color="primary" @click="editMemo" />
-                  <q-btn v-if="!editingMemo" label="메모 수정하기" color="primary" @click="editMemo" />
                 </div>
               </td>
             </tr>
@@ -72,6 +71,15 @@
     <div v-else>
       <q-spinner size="50px" color="primary" />
     </div>
+
+    <!-- 맨 위로 가는 버튼 -->
+    <q-btn
+      class="back-to-top-btn"
+      fab
+      icon="arrow_upward"
+      @click="scrollToTop"
+      title="맨 위로 이동"
+    />
   </div>
 </template>
 
@@ -120,6 +128,13 @@ const calculateAge = (birthdate) => {
   const currentYear = new Date().getFullYear();
 
   return currentYear - birthYear;
+};
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
 };
 
 onMounted(fetchCustomerDetail);
@@ -172,5 +187,14 @@ onMounted(fetchCustomerDetail);
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.back-to-top-btn {
+  position: fixed;
+  bottom: 50px;
+  right: 60px; /* 버튼을 왼쪽으로 이동 */
+  transform: translateX(-70%); /* 정확한 가운데 정렬 */
+  width: 9px; /* 버튼 크기 조정 */
+  height: 9px; /* 버튼 크기 조정 */
 }
 </style>
