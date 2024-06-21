@@ -144,6 +144,12 @@ const linksList = [
     icon: "map",
     to: "/statistics",
   },
+  {
+    title: "로그",
+    caption: "로그 탭",
+    icon: "map",
+    to: "/view-log",
+  },
 ];
 
 const logout = async () => {
