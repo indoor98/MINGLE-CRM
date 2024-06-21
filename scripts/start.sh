@@ -11,8 +11,8 @@ TIME_NOW=$(date +%c)
 # 환경 변수 설정
 export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
 export JWT_SECRET_KEY="asd@asdklassddghj@wg@dhjgadhasgdd@wgSDAwSadsbdjhA@SDwdSADSAWwdwasDWDASdwdaSDWdasdwdas@DNwdASNdAdawdjkahsdjkhwuadhwkdh2djkhdajksd"
-export SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}
-export SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+export SMTP_EMAIL="minglecrm@gmail.com"
+export SMTP_PASSWORD="mqpfjvaxsffkvsfc"
 
 # build 파일 복사
 echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
