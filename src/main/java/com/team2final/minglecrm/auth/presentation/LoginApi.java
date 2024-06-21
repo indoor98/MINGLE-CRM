@@ -55,7 +55,7 @@ public class LoginApi {
         Date now = new Date();
         int age = (int) (tokenResponse.getRtkExpiration().getTime() - now.getTime()) / 1000;
         cookie.setMaxAge(age);
-
+        System.out.println("debug >>> createRefreshTokenCookie , "+cookie);
         return cookie;
     }
 
@@ -143,10 +143,15 @@ public class LoginApi {
 
     @PostMapping("/api/v1/auth/signintest")
     public ResultResponse<AccessTokenResponse> singInTest(@RequestBody SignInRequest request, HttpServletResponse response) throws JsonProcessingException {
+        System.out.println("debug >>>>>>>>>>>> signintest , "+request);
+
         if(employeeService.isValidEmailAndPassword(request)) {
             TokenResponse tokenResponse = jwtUtil.createTokensBySignIn(request.getEmail());
+            System.out.println("debug >>>>>>>>>>>> isValidEmailAndPassword true , "+tokenResponse);
 
             Cookie cookie = createRefreshTokenCookie(tokenResponse);
+            System.out.println("debug >>>>>>>>>>>> refresh cookie  , "+ cookie);
+
             response.addCookie(cookie);
 
             return new ResultResponse<>(HttpStatus.OK.value(), "success", AccessTokenResponse.builder()
@@ -154,6 +159,8 @@ public class LoginApi {
                     .atkExpiration(tokenResponse.getAtkExpiration())
                     .build());
         } else {
+            System.out.println("debug >>>>>>>>>>>> else  , ");
+
             return new ResultResponse<>(HttpStatus.BAD_REQUEST.value(), "fail", null);
         }
     }
