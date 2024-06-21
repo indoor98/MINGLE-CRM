@@ -1,6 +1,6 @@
 package com.team2final.minglecrm.statistics.presentation.reservation;
 
-import com.team2final.minglecrm.statistics.service.roomreservation.StatisticsRoomReservationService;
+import com.team2final.minglecrm.statistics.service.reservation.StatisticsReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/statistic")
 public class StatisticsRoomReservationController {
 
-    private final StatisticsRoomReservationService statisticsRoomReservationService;
+    private final StatisticsReservationService statisticsRoomReservationService;
 
 
 }

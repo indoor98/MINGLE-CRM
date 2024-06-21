@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.domain.repository;
+package com.team2final.minglecrm.statistics.domain.repository.reservation;
 
 import com.team2final.minglecrm.reservation.domain.hotel.RoomReservation;
 import org.springframework.data.domain.Page;
