@@ -8,11 +8,11 @@
 
       <q-tabs v-model="activeTab" class="text-teal">
         <q-tab label="고객 요약" name="summary" @click="changeTab('summary')" />
-        <q-tab label="예약" name="reservation" @click="changeTab('reservation')" />
-        <q-tab label="상담" name="consultation" @click="changeTab('consultation')" />
-        <q-tab label="결제" name="payment" @click="changeTab('payment')" />
-        <q-tab label="바우처" name="voucher" @click="changeTab('voucher')" />
-        <q-tab label="리워드" name="reward" @click="changeTab('reward')" />
+        <q-tab label="예약 내역" name="reservation" @click="changeTab('reservation')" />
+        <q-tab label="상담 내역" name="consultation" @click="changeTab('consultation')" />
+        <q-tab label="결제 내역" name="payment" @click="changeTab('payment')" />
+        <q-tab label="바우처 내역" name="voucher" @click="changeTab('voucher')" />
+        <q-tab label="리워드 내역" name="reward" @click="changeTab('reward')" />
       </q-tabs>
 
       <q-separator />
