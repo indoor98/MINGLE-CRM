@@ -22,12 +22,12 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/statistics")
+@RequestMapping("/api/v1/statistics/customers")
 public class StatisticsCustomerController {
 
     private final StatisticsCustomerService statisticsCustomerService;
 
-    // 기간별 신규 고객 조회
+    // 직원은 기간을 설정하여 고객 신규 유입자 수를 조회할 수 있다.
     @GetMapping("/new-customers")
     public List<StatisticsCustomerResponse> getNewCustomers(@RequestParam("start") String startDate,
                                                             @RequestParam("end") String endDate,
@@ -49,7 +49,7 @@ public class StatisticsCustomerController {
         }
     }
 
-    // 기간별 방문 고객 조회
+    // 직원은 기간을 설정하여 방문 고객을 조회할 수 있다.
     @GetMapping("/visit-customers")
     public List<VisitCustomerResponse> getVisitCustomers(@RequestParam("start") String startDateStr,
                                                          @RequestParam("end") String endDateStr,
@@ -71,7 +71,7 @@ public class StatisticsCustomerController {
         }
     }
 
-    // 방문 횟수별 고객 조회
+    // 직원은 특정 방문 횟수 이상인 고객을 조회할 수 있다.
     @GetMapping("/visit-cnt-customers")
     public List<StatisticsCustomerResponse> getCustomersVisitCnt(@RequestParam("visitCnt") Integer visitCnt,
                                                                  @PageableDefault(sort = "id") Pageable pageable) {
@@ -83,7 +83,7 @@ public class StatisticsCustomerController {
         }
     }
 
-    // 재방문율 조회
+    // 직원은 특정 그룹 별 고객 재방문율을 조회할 수 있다.
     @GetMapping("/revisit-rate")
     public Map<String, Object> getRevisitRates() {
         Map<String, Object> response = new HashMap<>();

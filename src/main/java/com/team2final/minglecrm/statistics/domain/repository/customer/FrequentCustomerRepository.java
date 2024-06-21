@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.domain.repository;
+package com.team2final.minglecrm.statistics.domain.repository.customer;
 
 import com.team2final.minglecrm.statistics.domain.FrequentCustomer;
 import org.springframework.data.jpa.repository.JpaRepository;
