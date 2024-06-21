@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +76,19 @@ public class StatisticsReservationService {
                         dailyReservationCount.getReservationYear(),
                         dailyReservationCount.getReservationMonth(),
                         dailyReservationCount.getReservationDay(),
+                        dailyReservationCount.getReservationCount()
+                ))
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    // 기간 설정해서 예약 수 조회
+    public List<DailyReservationResponse> getDailyReservationByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        pageable = pageable == null ? PageRequest.of(0, 3) : pageable;
+        List<DailyReservationResponse> result = dailyReservationCountRepository.findByReservationDateBetween(startDate, endDate, pageable).stream()
+                .map(dailyReservationCount -> new DailyReservationResponse(
+                        dailyReservationCount.getId(),
+                        dailyReservationCount.getReservationDate(),
                         dailyReservationCount.getReservationCount()
                 ))
                 .collect(Collectors.toList());

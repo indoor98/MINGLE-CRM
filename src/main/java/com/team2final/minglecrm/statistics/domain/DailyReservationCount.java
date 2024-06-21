@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -17,11 +19,15 @@ public class DailyReservationCount {
     private Integer reservationDay;
     private Long reservationCount;
 
+    private LocalDate reservationDate;
+
     @Builder
-    public DailyReservationCount(Integer reservationYear, Integer reservationMonth, Integer reservationDay, Long reservationCount) {
+    public DailyReservationCount(Long id, Integer reservationYear, Integer reservationMonth, Integer reservationDay, Long reservationCount) {
+        this.id = id;
         this.reservationYear = reservationYear;
         this.reservationMonth = reservationMonth;
         this.reservationDay = reservationDay;
         this.reservationCount = reservationCount;
+        this.reservationDate = LocalDate.of(reservationYear, reservationMonth, reservationDay);
     }
 }
