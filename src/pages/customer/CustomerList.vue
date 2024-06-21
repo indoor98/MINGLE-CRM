@@ -1,96 +1,94 @@
 <template>
   <q-page class="container">
+    <q-card class="my-card">
+      <q-card-section class="row justify-center q-pa-xs">
+        <div class="col-12 col-md-4 q-pa-sm">
+          <q-input
+            v-model="searchName"
+            clearable
+            filled
+            color="purple-12"
+            label="고객명"
+            dense
+            placeholder="고객명을 입력하세요"
+          />
+        </div>
 
-      <q-card class="my-card">
-        <q-card-section class="row justify-center q-pa-xs">
-          <div class="col-12 col-md-4 q-pa-sm">
-            <q-input
-              v-model="searchName"
-              clearable
-              filled
-              color="purple-12"
-              label="고객명"
-              dense
-              placeholder="고객명을 입력하세요"
-            />
-          </div>
+        <div class="col-12 col-md-3 q-pa-sm">
+          <q-select
+            v-model="selectedGrade"
+            filled
+            color="purple-12"
+            label="등급"
+            :options="gradeOptions"
+            emit-value
+            map-options
+            dense
+            placeholder="선택"
+          />
+        </div>
 
-          <div class="col-12 col-md-3 q-pa-sm">
-            <q-select
-              v-model="selectedGrade"
-              filled
-              color="purple-12"
-              label="등급"
-              :options="gradeOptions"
-              emit-value
-              map-options
-              dense
-              placeholder="선택"
-            />
-          </div>
+        <div class="col-12 col-md-3 q-pa-sm">
+          <q-select
+            v-model="selectedGender"
+            filled
+            color="purple-12"
+            label="성별"
+            :options="genderOptions"
+            emit-value
+            map-options
+            dense
+            placeholder="선택"
+          />
+        </div>
 
-          <div class="col-12 col-md-3 q-pa-sm">
-            <q-select
-              v-model="selectedGender"
-              filled
-              color="purple-12"
-              label="성별"
-              :options="genderOptions"
-              emit-value
-              map-options
-              dense
-              placeholder="선택"
-            />
-          </div>
+        <div class="col-12 col-md-2 q-pa-sm">
+          <q-btn
+            color="primary"
+            label="검색"
+            @click="executeSearch"
+            dense
+            class="full-width"
+          />
+        </div>
+      </q-card-section>
+    </q-card>
 
-          <div class="col-12 col-md-2 q-pa-sm">
-            <q-btn
-              color="primary"
-              label="검색"
-              @click="executeSearch"
-              dense
-              class="full-width"
-            />
-          </div>
-        </q-card-section>
-      </q-card>
-
-      <q-card class="q-mt-md my-card">
-        <q-card-section class="q-pa-none">
-          <div class="q-table-container">
-            <q-table
-              flat
-              bordered
-              title="고객 목록"
-              :rows="filteredRows"
-              :columns="columns"
-              row-key="id"
-              v-model:pagination="pagination"
-              @request="onRequest"
-            >
-              <template v-slot:body="props">
-                <q-tr :props="props" @click="rowClicked(props.row)">
-                  <q-td v-for="col in columns" :key="col.name" :props="props">
-                    <!-- 필드별로 적절한 마스킹 함수 적용 -->
-                    {{
-                      col.field === 'name' ? maskName(props.row[col.field]) :
-                        col.field === 'phone' ? maskPhoneNumber(props.row[col.field]) :
-                          col.field === 'birth' ? maskBirthdate(props.row[col.field]) :
-                            props.row[col.field]
-                    }}
-                  </q-td>
-                </q-tr>
-              </template>
-            </q-table>
-          </div>
-        </q-card-section>
-      </q-card>
-
+    <q-card class="q-mt-md my-card">
+      <q-card-section class="q-pa-none">
+        <div class="q-table-container">
+          <q-table
+            flat
+            bordered
+            title="고객 목록"
+            :rows="customers"
+            :columns="columns"
+            row-key="id"
+            v-model:pagination="pagination"
+            @request="onRequest"
+          >
+            <template v-slot:body="props">
+              <q-tr :props="props" @click="rowClicked(props.row)">
+                <q-td v-for="col in columns" :key="col.name" :props="props">
+                  <!-- 필드별로 적절한 마스킹 함수 적용 -->
+                  {{
+                    col.field === 'name' ? maskName(props.row[col.field]) :
+                      col.field === 'phone' ? maskPhoneNumber(props.row[col.field]) :
+                        col.field === 'birth' ? maskBirthdate(props.row[col.field]) :
+                          props.row[col.field]
+                  }}
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+        </div>
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 
 <script setup>
-import {ref, computed, onMounted} from 'vue';
+import {ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 import {api as axios} from "src/boot/axios";
 
@@ -125,13 +123,41 @@ const fetchCustomers = async () => {
   }
 };
 
+const searchCustomers = async () => {
+  try {
+    const params = {
+      page: pagination.value.page - 1,
+      size: pagination.value.rowsPerPage,
+    };
+
+    if (searchName.value) {
+      params.name = searchName.value;
+    }
+    if (selectedGrade.value) {
+      params.grade = selectedGrade.value;
+    }
+    if (selectedGender.value) {
+      params.gender = selectedGender.value;
+    }
+
+    const response = await axios.get('http://localhost:8080/api/v1/customers/search', {params});
+    customers.value = response.data.content;
+    pagination.value.page = response.data.number + 1;
+    pagination.value.rowsPerPage = response.data.size;
+    pagination.value.rowsNumber = response.data.totalElements;
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+  }
+};
+
+
 onMounted(() => {
   fetchCustomers();
 });
 
 const executeSearch = () => {
   pagination.value.page = 1; // 검색을 다시 시작할 때 페이지를 1로 초기화
-  fetchCustomers();
+  searchCustomers();
 };
 
 const rowClicked = (row) => {
@@ -141,17 +167,6 @@ const rowClicked = (row) => {
     console.error('Invalid row data:', row);
   }
 };
-
-const filteredRows = computed(() => {
-  if (searchName.value || selectedGrade.value || selectedGender.value) {
-    return customers.value.filter(row =>
-      (!searchName.value || row.name.toLowerCase().includes(searchName.value.toLowerCase())) &&
-      (!selectedGrade.value || row.grade === selectedGrade.value) &&
-      (!selectedGender.value || row.gender === selectedGender.value)
-    );
-  }
-  return customers.value;
-});
 
 const onRequest = (params) => {
   const {page, rowsPerPage} = params.pagination;
@@ -171,15 +186,17 @@ const columns = [
 ];
 
 const gradeOptions = [
-  {label: 'VIP', value: 'VIP'},
+  {label: '선택 안 함', value: ''},
   {label: 'NEW', value: 'NEW'},
   {label: 'BASIC', value: 'BASIC'},
+  {label: 'VIP', value: 'VIP'},
   {label: 'VVIP', value: 'VVIP'}
 ];
 
 const genderOptions = [
-  {label: '여성', value: 'FEMALE'},
-  {label: '남성', value: 'MALE'}
+  {label: '선택 안 함', value: ''},
+  {label: '여성', value: 'Female'},
+  {label: '남성', value: 'Male'}
 ];
 
 const maskName = (name) => {
@@ -214,7 +231,6 @@ const maskBirthdate = (birthdate) => {
 
   return `${birthdate.slice(0, 4)}${maskedPart}${visiblePart}`;
 };
-
 </script>
 
 <style scoped>
