@@ -44,6 +44,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> attemptAuthentication");
         String atk = extractor.extractAccesstoken(request.getHeader(HttpHeaders.AUTHORIZATION));
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> attemptAuthentication atk , "+atk);
         Authentication authentication = new JwtAuthenticationToken(atk);
         return getAuthenticationManager().authenticate(authentication);
     }

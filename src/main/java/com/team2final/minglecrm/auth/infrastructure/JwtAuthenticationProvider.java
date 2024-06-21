@@ -32,7 +32,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         }
 
         String atk = (String) authentication.getPrincipal();
-
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> authenticate atk, "+atk);
         /* JwtToken 검증, 실패 시 예외 발생 */
 
         if (atk != null) {
