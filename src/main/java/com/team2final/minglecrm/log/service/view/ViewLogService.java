@@ -2,15 +2,17 @@ package com.team2final.minglecrm.log.service.view;
 
 import com.team2final.minglecrm.customer.domain.Customer;
 import com.team2final.minglecrm.customer.domain.repository.CustomerRepository;
-import com.team2final.minglecrm.customer.service.CustomerService;
 import com.team2final.minglecrm.employee.domain.Employee;
 import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
 import com.team2final.minglecrm.log.domain.ViewLog;
 import com.team2final.minglecrm.log.domain.repository.ViewLogRepository;
+import com.team2final.minglecrm.log.domain.repository.queryDsl.ViewLogSearchRepository;
 import com.team2final.minglecrm.log.dto.view.request.ViewLogSearchCondition;
 import com.team2final.minglecrm.log.dto.view.response.ViewLogResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.team2final.minglecrm.customer.domain.QCustomer.customer;
-import static com.team2final.minglecrm.employee.domain.QEmployee.employee;
-
 @Service
 @RequiredArgsConstructor
 public class ViewLogService {
@@ -30,6 +29,7 @@ public class ViewLogService {
     private final ViewLogRepository viewLogRepository;
     private final CustomerRepository customerRepository;
     private final EmployeeRepository employeeRepository;
+    private final ViewLogSearchRepository viewLogSearchRepository;
 
     public List<ViewLogResponse> findAllLogs() {
 
@@ -67,6 +67,8 @@ public class ViewLogService {
     }
 
     public Page<ViewLogResponse> search(Pageable pageable, ViewLogSearchCondition condition) {
-        return null;
+        pageable = pageable == null ? PageRequest.of(0, 5) : pageable;
+        List<ViewLogResponse> search = viewLogSearchRepository.search(condition);
+        return new PageImpl<>(search, pageable, search.size());
     }
 }

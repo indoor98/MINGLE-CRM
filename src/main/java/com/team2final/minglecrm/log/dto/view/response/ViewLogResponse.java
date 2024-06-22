@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
-@RequiredArgsConstructor
 public class ViewLogResponse {
 
     private final Long id;
@@ -45,4 +44,16 @@ public class ViewLogResponse {
         );
     }
 
+    @QueryProjection
+    public ViewLogResponse(Long id, String employeeName, String employeeEmail, String employeeGrade, String customerName, String customerEmail, String customerGrade, LocalDateTime viewTime, Integer viewCount) {
+        this.id = id;
+        EmployeeName = employeeName;
+        EmployeeEmail = employeeEmail;
+        EmployeeGrade = employeeGrade;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+        this.customerGrade = customerGrade;
+        this.viewTime = viewTime;
+        this.viewCount = viewCount;
+    }
 }
