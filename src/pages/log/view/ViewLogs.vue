@@ -90,24 +90,36 @@ export default {
       customerGrade: null
     });
     const employeeGrades = [
-      { label: '선택 안함', value: null },
-      { label: 'Manager', value: 'Manager' },
-      { label: 'Staff', value: 'Staff' },
-      { label: 'Marketer', value: 'Marketer' },
-      { label: 'Consultant', value: 'Consultant' }
+      { label: 'Manager', value: 'ROLE_MANAGER' },
+      { label: 'Staff', value: 'ROLE_STAFF' },
+      { label: 'Marketer', value: 'ROLE_MARKETER' },
+      { label: 'Consultant', value: 'ROLE_CONSULTANT' }
     ];
     const customerGrades = [
-      { label: '선택 안함', value: null },
-      { label: 'New', value: 'New' },
+      { label: 'New', value: 'NEW' },
       { label: 'VIP', value: 'VIP' },
       { label: 'VVIP', value: 'VVIP' },
       { label: 'BASIC', value: 'BASIC' }
     ];
 
     const fetchData = () => {
-      axios.get('http://localhost:8080/api/v1/view-logs/search', { params: search.value })
+      // 쿼리 파라미터를 생성
+      const params = {};
+      if (search.value.employeeName) params.employeeName = search.value.employeeName;
+      if (search.value.employeeEmail) params.employeeEmail = search.value.employeeEmail;
+      if (search.value.employeeGrade) params.employeeGrade = search.value.employeeGrade?.value || search.value.employeeGrade;
+      if (search.value.customerName) params.customerName = search.value.customerName;
+      if (search.value.customerEmail) params.customerEmail = search.value.customerEmail;
+      if (search.value.customerGrade) params.customerGrade = search.value.customerGrade?.value || search.value.customerGrade;
+
+      axios.get('http://localhost:8080/api/v1/view-logs/search', { params })
         .then(response => {
-          viewLogs.value = response.data;
+          if (Array.isArray(response.data.content)) {
+            viewLogs.value = response.data.content;
+          } else {
+            console.error('서버로부터 반환된 데이터가 배열이 아닙니다:', response.data);
+            viewLogs.value = [];
+          }
         })
         .catch(error => {
           console.error('조회 로그를 불러오는 중 오류가 발생했습니다:', error);
@@ -123,7 +135,13 @@ export default {
       // 기본 데이터 불러오기
       axios.get('http://localhost:8080/api/v1/view-logs')
         .then(response => {
-          viewLogs.value = response.data;
+          console.log('기본 데이터:', response.data); // 디버깅용 로그
+          if (Array.isArray(response.data)) {
+            viewLogs.value = response.data; // viewLogs에 전체 데이터 할당
+          } else {
+            console.error('서버로부터 반환된 기본 데이터가 배열이 아닙니다:', response.data);
+            viewLogs.value = [];
+          }
         })
         .catch(error => {
           console.error('기본 데이터를 불러오는 중 오류가 발생했습니다:', error);
