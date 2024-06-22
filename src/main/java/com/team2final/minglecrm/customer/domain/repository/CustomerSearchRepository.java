@@ -42,6 +42,7 @@ public class CustomerSearchRepository {
                 .fetch();
     }
 
+
     private BooleanExpression customerNameEq(String customerName) {
         return customerName != null ? QCustomer.customer.name.contains(customerName) : null;
     }
