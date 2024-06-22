@@ -54,6 +54,7 @@ public class ViewLogService {
                     .viewCount(1)
                     .viewTime(LocalDateTime.now())
                     .build();
+
             viewLogRepository.save(createdViewLog);
         } else {
             ViewLog existingViewLog = optionalViewLog.get();

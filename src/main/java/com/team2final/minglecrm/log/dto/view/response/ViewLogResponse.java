@@ -16,9 +16,13 @@ public class ViewLogResponse {
 
     private final String EmployeeName;
 
+    private final String EmployeeEmail;
+
     private final String EmployeeGrade;
 
     private final String customerName;
+
+    private final String customerEmail;
 
     private final String customerGrade;
 
@@ -31,8 +35,10 @@ public class ViewLogResponse {
         return new ViewLogResponse(
                 viewLog.getId(),
                 viewLog.getEmployee().getName(),
+                viewLog.getEmployee().getEmail(),
                 viewLog.getEmployee().getAuthority(),
                 viewLog.getCustomer().getName(),
+                viewLog.getCustomer().getEmail(),
                 viewLog.getCustomer().getGrade(),
                 viewLog.getViewTime(),
                 viewLog.getViewCount()
