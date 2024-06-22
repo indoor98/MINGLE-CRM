@@ -8,11 +8,15 @@ import com.team2final.minglecrm.customer.dto.request.CustomerSearchCondition;
 import com.team2final.minglecrm.customer.dto.request.CustomerUpdateRequest;
 import com.team2final.minglecrm.customer.dto.response.CustomerDetailResponse;
 import com.team2final.minglecrm.customer.dto.response.CustomerResponse;
+import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
+import com.team2final.minglecrm.log.service.view.ViewLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +28,10 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final EmployeeRepository employeeRepository;
+    private final ViewLogService viewLogService;
     private final CustomerSearchRepository customerSearchRepository;
+
 
     //TODO : 권한
     // 고객 조회
@@ -50,6 +57,11 @@ public class CustomerService {
         if (customer.getIsDeleted()) {
             throw new RuntimeException("없슴둥");
         }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        viewLogService.createViewLog(customerId, userEmail);
+        
 
         return CustomerDetailResponse.of(customer);
     }
