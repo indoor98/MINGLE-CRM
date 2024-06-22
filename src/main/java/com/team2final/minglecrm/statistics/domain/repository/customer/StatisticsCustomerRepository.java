@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.statistics.domain.repository;
+package com.team2final.minglecrm.statistics.domain.repository.customer;
 
 import com.team2final.minglecrm.customer.domain.Customer;
 import io.lettuce.core.dynamic.annotation.Param;
