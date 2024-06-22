@@ -93,6 +93,11 @@ const routes = [
         name: "statisticsPage",
         component: () => import("pages/statistics/StatisticsPage.vue"),
       },
+      {
+        path: "/view-log",
+        name: "viewLogPage",
+        component: () => import("pages/log/view/ViewLogPage.vue"),
+      },
     ],
   },
   {
