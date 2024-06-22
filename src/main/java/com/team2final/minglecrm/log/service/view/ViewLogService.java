@@ -7,8 +7,11 @@ import com.team2final.minglecrm.employee.domain.Employee;
 import com.team2final.minglecrm.employee.domain.repository.EmployeeRepository;
 import com.team2final.minglecrm.log.domain.ViewLog;
 import com.team2final.minglecrm.log.domain.repository.ViewLogRepository;
+import com.team2final.minglecrm.log.dto.view.request.ViewLogSearchCondition;
 import com.team2final.minglecrm.log.dto.view.response.ViewLogResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,5 +64,9 @@ public class ViewLogService {
             existingViewLog.updateViewCountAndTime();
             viewLogRepository.save(existingViewLog);
         }
+    }
+
+    public Page<ViewLogResponse> search(Pageable pageable, ViewLogSearchCondition condition) {
+        return null;
     }
 }
