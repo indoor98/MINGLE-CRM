@@ -28,9 +28,9 @@ public class ViewLogSearchRepository {
         return queryFactory
                 .select(new QViewLogResponse(
                         viewLog.id,
+                        viewLog.employee.name,
                         viewLog.employee.email,
                         viewLog.employee.authority,
-                        viewLog.employee.name,
                         viewLog.customer.name,
                         viewLog.customer.email,
                         viewLog.customer.grade,
@@ -42,12 +42,13 @@ public class ViewLogSearchRepository {
                         customerNameEq(condition.getCustomerName()),
                         customerGradeEq(condition.getCustomerGrade()),
                         customerEmailEq(condition.getCustomerEmail()),
-                        employeeGradeEq(condition.getEmployeeGrade()),
                         employeeNameEq(condition.getEmployeeName()),
+                        employeeGradeEq(condition.getEmployeeGrade()),
                         employeeEmailEq(condition.getEmployeeEmail())
                 )
                 .fetch();
     }
+
 
     private BooleanExpression customerNameEq(String customerName) {
         return customerName != null ? QCustomer.customer.name.contains(customerName) : null;
@@ -66,11 +67,11 @@ public class ViewLogSearchRepository {
     }
 
     private BooleanExpression employeeGradeEq(String employeeGrade) {
-        return employeeGrade != null ? QCustomer.customer.grade.eq(employeeGrade) : null;
+        return employeeGrade != null ? QEmployee.employee.authority.eq(employeeGrade) : null;
     }
 
     private BooleanExpression employeeEmailEq(String employeeEmail) {
-        return employeeEmail != null ? QCustomer.customer.email.eq(employeeEmail) : null;
+        return employeeEmail != null ? QEmployee.employee.email.eq(employeeEmail) : null;
     }
 
 
