@@ -31,23 +31,14 @@ public class ViewLog {
 
     private LocalDateTime viewTime;
 
-    private LocalDateTime viewLastTime;
-
-    private Integer viewCount;
-
 
     @Builder
-    public ViewLog(Long id, Customer customer, Employee employee, String log, LocalDateTime viewTime, Integer viewCount) {
+    public ViewLog(Long id, Customer customer, Employee employee, String log, LocalDateTime viewTime) {
         this.id = id;
         this.customer = customer;
         this.employee = employee;
         this.log = log;
         this.viewTime = viewTime;
-        this.viewCount = viewCount;
     }
 
-    public void updateViewCountAndTime() {
-        this.viewCount += 1;
-        this.viewLastTime = LocalDateTime.now();
-    }
 }

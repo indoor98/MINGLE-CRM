@@ -27,8 +27,6 @@ public class ViewLogResponse {
 
     private final LocalDateTime viewTime;
 
-    private final Integer viewCount;
-
 
     public static ViewLogResponse from(ViewLog viewLog) {
         return new ViewLogResponse(
@@ -39,13 +37,12 @@ public class ViewLogResponse {
                 viewLog.getCustomer().getName(),
                 viewLog.getCustomer().getEmail(),
                 viewLog.getCustomer().getGrade(),
-                viewLog.getViewTime(),
-                viewLog.getViewCount()
+                viewLog.getViewTime()
         );
     }
 
     @QueryProjection
-    public ViewLogResponse(Long id, String employeeName, String employeeEmail, String employeeGrade, String customerName, String customerEmail, String customerGrade, LocalDateTime viewTime, Integer viewCount) {
+    public ViewLogResponse(Long id, String employeeName, String employeeEmail, String employeeGrade, String customerName, String customerEmail, String customerGrade, LocalDateTime viewTime) {
         this.id = id;
         EmployeeName = employeeName;
         EmployeeEmail = employeeEmail;
@@ -54,6 +51,5 @@ public class ViewLogResponse {
         this.customerEmail = customerEmail;
         this.customerGrade = customerGrade;
         this.viewTime = viewTime;
-        this.viewCount = viewCount;
     }
 }

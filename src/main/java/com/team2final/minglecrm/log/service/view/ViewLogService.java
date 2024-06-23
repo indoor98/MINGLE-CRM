@@ -48,22 +48,13 @@ public class ViewLogService {
         Employee employee = employeeRepository.findByEmail(employeeEmail).orElseThrow(
                 () -> new RuntimeException("직원을 찾을 수 없습니다."));
 
-        Optional<ViewLog> optionalViewLog = viewLogRepository.findByEmployeeEmailAndCustomerId(employeeEmail, customerId);
+        ViewLog createdViewLog = ViewLog.builder()
+                .customer(customer)
+                .employee(employee)
+                .viewTime(LocalDateTime.now())
+                .build();
 
-        if (optionalViewLog.isEmpty()) {
-            ViewLog createdViewLog = ViewLog.builder()
-                    .customer(customer)
-                    .employee(employee)
-                    .viewCount(1)
-                    .viewTime(LocalDateTime.now())
-                    .build();
-
-            viewLogRepository.save(createdViewLog);
-        } else {
-            ViewLog existingViewLog = optionalViewLog.get();
-            existingViewLog.updateViewCountAndTime();
-            viewLogRepository.save(existingViewLog);
-        }
+        viewLogRepository.save(createdViewLog);
     }
 
     public Page<ViewLogResponse> search(Pageable pageable, ViewLogSearchCondition condition) {
