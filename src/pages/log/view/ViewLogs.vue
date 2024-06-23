@@ -36,9 +36,9 @@
                 <template v-slot:prepend>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date v-model="search.startDate" mask="YYYY-MM-DD HH:mm">
+                      <q-date v-model="search.startDate" mask="YYYY-MM-DD HH:mm" @update:model-value="validateDates">
                         <div class="row items-center justify-end">
-                          <q-btn v-close-popup label="Close" color="primary" flat />
+                          <q-btn v-close-popup label="확인" color="primary" flat />
                         </div>
                       </q-date>
                     </q-popup-proxy>
@@ -53,7 +53,7 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <q-date v-model="endDate" mask="YYYY-MM-DD" @update:model-value="setEndDateToEndOfDay">
                         <div class="row items-center justify-end">
-                          <q-btn v-close-popup label="Close" color="primary" flat />
+                          <q-btn v-close-popup label="확인" color="primary" flat />
                         </div>
                       </q-date>
                     </q-popup-proxy>
@@ -66,6 +66,9 @@
             <q-btn @click="fetchData" label="검색" color="primary" class="q-mt-md" dense/>
           </div>
         </div>
+        <q-banner v-if="errorMessage" dense class="bg-red text-white q-mt-md">
+          {{ errorMessage }}
+        </q-banner>
       </q-card-section>
     </q-card>
 
@@ -93,7 +96,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { api as axios } from "src/boot/axios";
 
 export default {
@@ -125,6 +128,7 @@ export default {
       startDate: '',
       endDate: ''
     });
+    const errorMessage = ref('');
     const employeeGrades = [
       { label: 'Manager', value: 'ROLE_MANAGER' },
       { label: 'Staff', value: 'ROLE_STAFF' },
@@ -201,7 +205,23 @@ export default {
 
     const setEndDateToEndOfDay = (date) => {
       search.value.endDate = date + ' 23:59'; // 날짜를 YYYY-MM-DD 23:59 형식으로 설정
+      validateDates();
     };
+
+    const validateDates = () => {
+      if (search.value.startDate && search.value.endDate) {
+        const startDate = new Date(search.value.startDate);
+        const endDate = new Date(search.value.endDate);
+        if (startDate > endDate) {
+          errorMessage.value = '시작 날짜는 종료 날짜보다 이후일 수 없습니다.';
+        } else {
+          errorMessage.value = '';
+        }
+      }
+    };
+
+    watch(() => search.value.startDate, validateDates);
+    watch(() => search.value.endDate, validateDates);
 
     onMounted(() => {
       axios.get('http://localhost:8080/api/v1/view-logs')
@@ -229,7 +249,9 @@ export default {
       employeeGrades,
       customerGrades,
       fetchData,
-      setEndDateToEndOfDay
+      setEndDateToEndOfDay,
+      errorMessage,
+      validateDates
     };
   },
 };
@@ -276,5 +298,9 @@ export default {
 
 .date-range {
   flex: 1;
+}
+
+.q-banner {
+  text-align: center;
 }
 </style>
