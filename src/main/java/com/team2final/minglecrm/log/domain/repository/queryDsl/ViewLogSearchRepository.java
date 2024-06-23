@@ -34,8 +34,7 @@ public class ViewLogSearchRepository {
                         viewLog.customer.name,
                         viewLog.customer.email,
                         viewLog.customer.grade,
-                        viewLog.viewTime,
-                        viewLog.viewCount
+                        viewLog.viewTime
                 ))
                 .from(viewLog)
                 .where(
