@@ -87,7 +87,7 @@ const loaded = ref(false); // 데이터 로딩 상태
 onMounted(async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8080/api/v1/statistics/revisit-rate"
+      "http://localhost:8080/api/v1/statistics/customers/revisit-rate"
     );
 
     const responseData = response.data;

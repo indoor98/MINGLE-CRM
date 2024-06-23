@@ -5,6 +5,7 @@
     <DoughnutChart ref="doughnut" />
     <ReuseChart :updatedata="updatedata" />
     <RevisitRate />
+    <ReservationCntByYear />
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import BarChart from "../../components/statistics/BarChart.vue";
 import DoughnutChart from "../../components/statistics/DoughnutChart.vue";
 import ReuseChart from "../../components/statistics/ReuseChart.vue";
 import RevisitRate from "../../components/statistics/RevisitRate.vue";
+import ReservationCntByYear from "../../components/statistics/ReservationCntByYear.vue";
 
 const updatedata = ref([10, 20, 30, 40, 50]);
 </script>
