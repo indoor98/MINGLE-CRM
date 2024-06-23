@@ -1,9 +1,7 @@
 package com.team2final.minglecrm.log.dto.view.request;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter

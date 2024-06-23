@@ -56,12 +56,12 @@ public class ViewLogSearchRepository {
         return customerName != null ? QCustomer.customer.name.contains(customerName) : null;
     }
 
-    private BooleanExpression customerGradeEq(String customerGrade) {
-        return customerGrade != null ? QCustomer.customer.grade.eq(customerGrade) : null;
+    private BooleanExpression customerEmailEq(String customerEmail) {
+        return customerEmail != null ? QCustomer.customer.email.contains(customerEmail) : null;
     }
 
-    private BooleanExpression customerEmailEq(String customerEmail) {
-        return customerEmail != null ? QCustomer.customer.email.eq(customerEmail) : null;
+    private BooleanExpression customerGradeEq(String customerGrade) {
+        return customerGrade != null ? QCustomer.customer.grade.eq(customerGrade) : null;
     }
 
     private BooleanExpression employeeNameEq(String employeeName) {
@@ -73,7 +73,7 @@ public class ViewLogSearchRepository {
     }
 
     private BooleanExpression employeeEmailEq(String employeeEmail) {
-        return employeeEmail != null ? QEmployee.employee.email.eq(employeeEmail) : null;
+        return employeeEmail != null ? QEmployee.employee.email.contains(employeeEmail) : null;
     }
 
     private BooleanExpression startDateAfter(LocalDateTime startDate) {
