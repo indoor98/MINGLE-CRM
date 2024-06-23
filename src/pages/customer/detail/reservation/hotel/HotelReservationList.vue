@@ -1,7 +1,7 @@
 <!-- HotelReservationList.vue -->
 <template>
   <div class="q-pa-md">
-    <q-separator class="q-my-md" />
+    <q-separator class="q-my-md"/>
 
     <!-- SearchInput 컴포넌트 사용 -->
     <SearchInput
@@ -28,6 +28,13 @@
           </q-td>
         </q-tr>
       </template>
+      <template v-slot:no-data>
+        <q-tr>
+          <q-td :colspan="hotelReservationColumns.length" class="text-center">
+            호텔 내역이 없습니다.
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
 
     <!-- 예약 상세 정보 다이얼로그 -->
@@ -38,12 +45,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { api as axios } from "src/boot/axios";
-import { useRoute } from 'vue-router';
+import {ref, computed, onMounted} from 'vue';
+import {api as axios} from "src/boot/axios";
+import {useRoute} from 'vue-router';
 import HotelReservationDetail from './HotelReservationDetail.vue';
 import SearchInput from 'src/components/SearchInput.vue'; // SearchInput 컴포넌트 임포트
-import { formatPrice } from '/src/utils/utils'; // 유틸리티 함수 불러오기
+import {formatPrice} from '/src/utils/utils'; // 유틸리티 함수 불러오기
 import Fuse from 'fuse.js'; // fuse.js 임포트
 
 const route = useRoute();
@@ -122,12 +129,12 @@ onMounted(() => {
 });
 
 const hotelReservationColumns = [
-  { name: 'reservationId', label: '#', align: 'left', field: 'reservationId' },
-  { name: 'reservationDate', label: '예약 날짜', align: 'left', field: 'reservationDate' },
-  { name: 'name', label: '고객명', align: 'center', field: 'name' },
-  { name: 'phoneNumber', label: '전화번호', align: 'center', field: 'phoneNumber' },
-  { name: 'hotelName', label: '호텔명', align: 'center', field: 'hotelName' },
-  { name: 'reservationType', label: '방 유형', align: 'center', field: 'reservationType' }
+  {name: 'reservationId', label: '#', align: 'left', field: 'reservationId'},
+  {name: 'reservationDate', label: '예약 날짜', align: 'left', field: 'reservationDate'},
+  {name: 'name', label: '고객명', align: 'center', field: 'name'},
+  {name: 'phoneNumber', label: '전화번호', align: 'center', field: 'phoneNumber'},
+  {name: 'hotelName', label: '호텔명', align: 'center', field: 'hotelName'},
+  {name: 'reservationType', label: '방 유형', align: 'center', field: 'reservationType'}
 ];
 </script>
 

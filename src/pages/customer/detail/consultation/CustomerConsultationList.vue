@@ -24,6 +24,14 @@
           </q-td>
         </q-tr>
       </template>
+
+      <template v-slot:no-data>
+        <q-tr>
+          <q-td :colspan="inquiryColumns.length" class="text-center">
+            상담 내역이 없습니다.
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
 
     <q-dialog v-model="showDialog" persistent>

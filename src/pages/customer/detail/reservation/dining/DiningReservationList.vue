@@ -28,6 +28,13 @@
           </q-td>
         </q-tr>
       </template>
+      <template v-slot:no-data>
+        <q-tr>
+          <q-td :colspan="reservationColumns.length" class="text-center">
+            다이닝 예약이 없습니다.
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
 
     <q-dialog v-model="showDialog" persistent>
