@@ -6,6 +6,7 @@ import com.team2final.minglecrm.log.service.view.ViewLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -38,10 +41,12 @@ public class ViewLogApi {
             @RequestParam(value = "employeeGrade", required = false) String employeeGrade,
             @RequestParam(value = "customerName", required = false) String customerName,
             @RequestParam(value = "customerEmail", required = false) String customerEmail,
-            @RequestParam(value = "customerGrade", required = false) String customerGrade
+            @RequestParam(value = "customerGrade", required = false) String customerGrade,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(value = "endDate", required = false)  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
     ) {
         ViewLogSearchCondition condition = new ViewLogSearchCondition(
-                employeeName, employeeGrade, employeeEmail, customerName, customerGrade, customerEmail
+                employeeName, employeeGrade, employeeEmail, customerName, customerGrade, customerEmail, startDate, endDate
         );
 
         Page<ViewLogResponse> viewLogResponses = viewLogService.search(pageable, condition);

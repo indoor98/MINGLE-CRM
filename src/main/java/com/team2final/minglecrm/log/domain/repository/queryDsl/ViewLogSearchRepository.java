@@ -11,6 +11,9 @@ import com.team2final.minglecrm.log.dto.view.response.ViewLogResponse;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -43,11 +46,11 @@ public class ViewLogSearchRepository {
                         customerEmailEq(condition.getCustomerEmail()),
                         employeeNameEq(condition.getEmployeeName()),
                         employeeGradeEq(condition.getEmployeeGrade()),
-                        employeeEmailEq(condition.getEmployeeEmail())
+                        employeeEmailEq(condition.getEmployeeEmail()),
+                        withinDateRange(condition.getStartDate(), condition.getEndDate())
                 )
                 .fetch();
     }
-
 
     private BooleanExpression customerNameEq(String customerName) {
         return customerName != null ? QCustomer.customer.name.contains(customerName) : null;
@@ -73,5 +76,34 @@ public class ViewLogSearchRepository {
         return employeeEmail != null ? QEmployee.employee.email.eq(employeeEmail) : null;
     }
 
+    private BooleanExpression startDateAfter(LocalDateTime startDate) {
+        if (startDate == null) {
+            return null;
+        }
+        LocalDateTime startDateTime = startDate.toLocalDate().atStartOfDay();
+        return QViewLog.viewLog.viewTime.after(startDateTime);
+    }
 
+    private BooleanExpression endDateBefore(LocalDateTime endDate) {
+        if (endDate == null) {
+            return null;
+        }
+        LocalDateTime endDateTime = endDate.toLocalDate().atTime(LocalTime.MAX);
+        return QViewLog.viewLog.viewTime.before(endDateTime);
+    }
+
+    private BooleanExpression withinDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        BooleanExpression startCondition = startDateAfter(startDate);
+        BooleanExpression endCondition = endDateBefore(endDate);
+
+        if (startCondition != null && endCondition != null) {
+            return startCondition.and(endCondition);
+        } else if (startCondition != null) {
+            return startCondition;
+        } else if (endCondition != null) {
+            return endCondition;
+        } else {
+            return null;
+        }
+    }
 }
