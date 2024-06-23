@@ -4,7 +4,6 @@
       <q-card-section>
         <div class="filter-container">
           <div class="filter-row">
-            <!-- 왼쪽 영역: 직원 관련 필드 -->
             <div class="left-section">
               <q-input v-model="search.employeeName" label="직원 이름" outlined dense class="filter-input"/>
               <q-input v-model="search.employeeEmail" label="직원 이메일" outlined dense class="filter-input"/>
@@ -17,7 +16,6 @@
                 class="filter-select"
               />
             </div>
-            <!-- 오른쪽 영역: 고객 관련 필드 -->
             <div class="right-section">
               <q-input v-model="search.customerName" label="고객 이름" outlined dense class="filter-input"/>
               <q-input v-model="search.customerEmail" label="고객 이메일" outlined dense class="filter-input"/>
@@ -31,8 +29,40 @@
               />
             </div>
           </div>
+          <div class="filter-row">
+            <div class="date-range">
+              <!-- 시작 날짜 -->
+              <q-input filled v-model="search.startDate" label="시작 날짜" outlined dense class="filter-input">
+                <template v-slot:prepend>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-date v-model="search.startDate" mask="YYYY-MM-DD HH:mm">
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+
+              <!-- 종료 날짜 -->
+              <q-input filled v-model="search.endDate" label="종료 날짜" outlined dense class="filter-input">
+                <template v-slot:prepend>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-date v-model="endDate" mask="YYYY-MM-DD" @update:model-value="setEndDateToEndOfDay">
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </div>
+          </div>
           <div class="filter-row full-width">
-            <!-- 검색 버튼 추가 -->
             <q-btn @click="fetchData" label="검색" color="primary" class="q-mt-md" dense/>
           </div>
         </div>
@@ -42,14 +72,19 @@
     <!-- 조회 결과 테이블 -->
     <div class="table-container">
       <q-table
-        :rows="viewLogs"
-        :columns="columns"
+        :rows="groupedViewLogs"
+        :columns="groupedColumns"
         row-key="id"
         :pagination="pagination"
       >
-        <template #body-cell-viewTime="props">
+        <!-- 로그 확장 템플릿 -->
+        <template #body-cell-logs="props">
           <q-td :props="props">
-            {{ formatDateTime(props.row.viewTime) }}
+            <q-expansion-item v-for="(log, index) in props.row.logsByDate" :key="index" :label="`${log.date} (${log.times.length} 조회)`">
+              <q-list>
+                <q-item-label v-for="(time, idx) in log.times" :key="idx">{{ time }}</q-item-label>
+              </q-list>
+            </q-expansion-item>
           </q-td>
         </template>
       </q-table>
@@ -64,16 +99,15 @@ import { api as axios } from "src/boot/axios";
 export default {
   setup() {
     const viewLogs = ref([]);
+    const groupedViewLogs = ref([]);
     const columns = [
-      { name: 'id', label: 'ID', align: 'left', field: 'id' },
       { name: 'employeeName', label: '직원 이름', align: 'left', field: 'employeeName' },
       { name: 'employeeEmail', label: '직원 이메일', align: 'left', field: 'employeeEmail' },
       { name: 'employeeGrade', label: '직원 직급', align: 'left', field: 'employeeGrade' },
       { name: 'customerName', label: '고객 이름', align: 'left', field: 'customerName' },
       { name: 'customerEmail', label: '고객 이메일', align: 'left', field: 'customerEmail' },
       { name: 'customerGrade', label: '고객 등급', align: 'left', field: 'customerGrade' },
-      { name: 'viewTime', label: '조회 시간', align: 'left', field: 'viewTime' },
-      { name: 'viewCount', label: '조회수', align: 'left', field: 'viewCount' }
+      { name: 'logs', label: '조회 로그', align: 'left', field: 'logs' }
     ];
     const pagination = {
       sortBy: 'id',
@@ -87,7 +121,9 @@ export default {
       employeeGrade: null,
       customerName: '',
       customerEmail: '',
-      customerGrade: null
+      customerGrade: null,
+      startDate: '',
+      endDate: ''
     });
     const employeeGrades = [
       { label: 'Manager', value: 'ROLE_MANAGER' },
@@ -103,7 +139,6 @@ export default {
     ];
 
     const fetchData = () => {
-      // 쿼리 파라미터를 생성
       const params = {};
       if (search.value.employeeName) params.employeeName = search.value.employeeName;
       if (search.value.employeeEmail) params.employeeEmail = search.value.employeeEmail;
@@ -111,11 +146,14 @@ export default {
       if (search.value.customerName) params.customerName = search.value.customerName;
       if (search.value.customerEmail) params.customerEmail = search.value.customerEmail;
       if (search.value.customerGrade) params.customerGrade = search.value.customerGrade?.value || search.value.customerGrade;
+      if (search.value.startDate) params.startDate = new Date(search.value.startDate).toISOString(); // 시작 날짜를 ISO 형식으로 변환하여 전송
+      if (search.value.endDate) params.endDate = new Date(search.value.endDate).toISOString(); // 종료 날짜를 ISO 형식으로 변환하여 전송
 
       axios.get('http://localhost:8080/api/v1/view-logs/search', { params })
         .then(response => {
           if (Array.isArray(response.data.content)) {
             viewLogs.value = response.data.content;
+            groupLogs();
           } else {
             console.error('서버로부터 반환된 데이터가 배열이 아닙니다:', response.data);
             viewLogs.value = [];
@@ -126,18 +164,51 @@ export default {
         });
     };
 
-    const formatDateTime = (dateTime) => {
-      return new Date(dateTime).toLocaleString();
+    const formatDate = (dateTime) => {
+      return new Date(dateTime).toLocaleDateString();
     };
 
-    // 페이지 로드 시 자동으로 데이터 가져오기
+    const formatTime = (dateTime) => {
+      return new Date(dateTime).toLocaleTimeString();
+    };
+
+    const groupLogs = () => {
+      const grouped = {};
+      viewLogs.value.forEach(log => {
+        const date = formatDate(log.viewTime);
+        const time = formatTime(log.viewTime);
+        const key = `${log.employeeName}-${log.customerName}`;
+        if (!grouped[key]) {
+          grouped[key] = {
+            employeeName: log.employeeName,
+            employeeEmail: log.employeeEmail,
+            employeeGrade: log.employeeGrade,
+            customerName: log.customerName,
+            customerEmail: log.customerEmail,
+            customerGrade: log.customerGrade,
+            logsByDate: []
+          };
+        }
+        let dateEntry = grouped[key].logsByDate.find(entry => entry.date === date);
+        if (!dateEntry) {
+          dateEntry = { date, times: [] };
+          grouped[key].logsByDate.push(dateEntry);
+        }
+        dateEntry.times.push(time);
+      });
+      groupedViewLogs.value = Object.values(grouped);
+    };
+
+    const setEndDateToEndOfDay = (date) => {
+      search.value.endDate = date + ' 23:59'; // 날짜를 YYYY-MM-DD 23:59 형식으로 설정
+    };
+
     onMounted(() => {
-      // 기본 데이터 불러오기
       axios.get('http://localhost:8080/api/v1/view-logs')
         .then(response => {
-          console.log('기본 데이터:', response.data); // 디버깅용 로그
           if (Array.isArray(response.data)) {
-            viewLogs.value = response.data; // viewLogs에 전체 데이터 할당
+            viewLogs.value = response.data;
+            groupLogs();
           } else {
             console.error('서버로부터 반환된 기본 데이터가 배열이 아닙니다:', response.data);
             viewLogs.value = [];
@@ -150,13 +221,15 @@ export default {
 
     return {
       viewLogs,
+      groupedViewLogs,
       columns,
+      groupedColumns: columns,
       pagination,
       search,
       employeeGrades,
       customerGrades,
-      formatDateTime,
-      fetchData
+      fetchData,
+      setEndDateToEndOfDay
     };
   },
 };
@@ -185,8 +258,8 @@ export default {
 }
 
 .filter-input, .filter-select {
-  flex: 1; /* Inputs, selects 등의 너비를 균등하게 배분 */
-  max-width: 100%; /* 최대 너비 100%로 설정 */
+  flex: 1;
+  max-width: 100%;
 }
 
 .full-width {
@@ -194,22 +267,14 @@ export default {
 }
 
 .q-mt-md {
-  margin-top: 20px; /* 버튼과 위의 간격 조정 */
+  margin-top: 20px;
 }
 
 .left-section, .right-section {
-  flex: 1; /* 좌우 영역을 균등하게 나누기 위해 추가 */
+  flex: 1;
 }
 
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.q-gutter-sm {
-  padding: 8px; /* 팝업 내부 간격 설정 */
-}
-
-.q-mt-sm {
-  margin-top: 8px; /* 검색 및 닫기 버튼과의 간격 설정 */
+.date-range {
+  flex: 1;
 }
 </style>
