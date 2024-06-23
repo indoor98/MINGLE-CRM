@@ -13,7 +13,7 @@ echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
 cp $JAR_FILE $PROJECT_ROOT/minglecrm-0.0.1-SNAPSHOT.jar
 
 # 환경 변수 로드
-#source ~/.bash_profile
+source ~/.bashrc
 
 # jar 파일 실행
 echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
