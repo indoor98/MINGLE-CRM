@@ -32,6 +32,15 @@
           </q-td>
         </q-tr>
       </template>
+
+      <template v-slot:no-data>
+        <q-tr>
+          <q-td :colspan="paymentColumns.length" class="text-center">
+            결제 내역이 없습니다.
+          </q-td>
+        </q-tr>
+      </template>
+
     </q-table>
 
     <!-- 결제 상세 정보 다이얼로그 -->
