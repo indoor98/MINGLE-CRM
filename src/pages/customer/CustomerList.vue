@@ -149,7 +149,9 @@ const searchCustomers = async () => {
       params.gender = selectedGender.value;
     }
 
-    const response = await axios.get('http://localhost:8080/api/v1/customers/search', {params});
+    const response = await axios.get('/api/v1/customers/search', {
+      params: params  // 올바르게 params 객체를 전달
+    });
     customers.value = response.data.content;
     pagination.value.page = response.data.number + 1;
     pagination.value.rowsPerPage = response.data.size;
@@ -158,6 +160,7 @@ const searchCustomers = async () => {
     console.error('Error fetching customers:', error);
   }
 };
+
 
 
 onMounted(() => {
