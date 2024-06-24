@@ -1,7 +1,110 @@
 <template>
   <div>
     <div class="text-h4">전체 문의 목록</div>
-    <q-input filled v-model="filter" label="Search" class="q-mb-md" />
+    <section class="search-container row q-col-gutter-xl flex-center q-pa-xs">
+      <div class="search-fields-container row q-col-gutter-sm q-mb-md">
+        <q-input
+          v-model="searchParams.customerName"
+          label="이름"
+          filled
+          class="search-field"
+        />
+        <q-input
+          v-model="searchParams.customerPhone"
+          label="전화번호"
+          filled
+          class="search-field"
+        />
+        <q-input
+          v-model="searchParams.inquiryTitle"
+          label="문의 제목"
+          filled
+          class="search-field"
+        />
+        <q-input
+          v-model="searchParams.inquiryContent"
+          label="문의 내용"
+          filled
+          class="search-field"
+        />
+        <q-input
+          v-model="searchParams.keyword"
+          label="검색어"
+          filled
+          class="search-field"
+        />
+        <q-input
+          v-model="searchParams.dateRange.from"
+          mask="date"
+          :rules="['date']"
+          label="시작일"
+          class="search-field"
+        >
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy
+                cover
+                transition-show="scale"
+                transition-hide="scale"
+              >
+                <q-date v-model="searchParams.dateRange.from">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+        <q-input
+          v-model="searchParams.dateRange.to"
+          mask="date"
+          :rules="['date']"
+          label="종료일"
+          class="search-field"
+        >
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy
+                cover
+                transition-show="scale"
+                transition-hide="scale"
+              >
+                <q-date v-model="searchParams.dateRange.to">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+        <q-select
+          v-model="searchParams.type"
+          :options="typeOptions"
+          label="문의 타입"
+          class="search-field"
+        />
+        <q-select
+          v-model="searchParams.isReply"
+          :options="replyOptions"
+          label="답변 여부"
+          class="search-field"
+        />
+        <q-select
+          v-model="searchParams.actionStatus"
+          :options="actionStatusOptions"
+          label="조치 상태"
+          class="search-field"
+        />
+        <q-btn
+          color="primary"
+          label="Search"
+          @click="fetchInquiriesSearch"
+          class="q-ml-sm search-btn"
+        />
+      </div>
+    </section>
     <!-- 검색 입력 필드 생성
       v-model을 통해 filter 변수와 양방향 바인딩
       사용자가 입력한 검색어를 filter 변수에 저장
@@ -11,11 +114,11 @@
       :columns="columns"
       row-key="id"
       :loading="loading"
-      pagination.sync="pagination"
-      @request="fetchInquiries"
+      v-model:pagination="pagination"
+      @request="onRequest"
       @row-click="onRowClick"
     />
-    <q-pagination
+    <!-- <q-pagination
       v-model="pagination.page"
       :max="Math.min(5, maxPages)"
       @page-change="fetchInquiries"
@@ -23,20 +126,48 @@
       boundary-links
       class="q-mt-md"
       layout="pages"
-    />
+    /> -->
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { api as axios } from "src/boot/axios";
+// import axios from "axios";
 import { useRouter } from "vue-router";
+import { useTokenStore } from "src/stores/token-store";
 
 const inquiries = ref([]); // 데이터를 저장하는 반응형 변수
 const loading = ref(false); // 데이터 로딩 상태를 나타냄
 const filter = ref(""); // 검색 입력 값을 저장
-const pagination = ref({ page: 1, rowsPerPage: 30, rowsNumber: 0 }); // 페이징 정보를 저장하는 반응형 변수 초기값 설정
+const pagination = ref({ page: 1, rowsPerPage: 20, rowsNumber: 0 }); // 페이징 정보를 저장하는 반응형 변수 초기값 설정
 const maxPages = ref(1); // 전체 페이지 수를 저장하는 변수
+
+const searchParams = ref({
+  customerName: "",
+  customerPhone: "",
+  inquiryTitle: "",
+  inquiryContent: "",
+  keyword: "",
+  dateRange: {
+    from: "",
+    to: "",
+  },
+  type: "",
+  isReply: null,
+  actionStatus: "",
+});
+
+const typeOptions = ["온라인 문의", "전화 문의", "방문 문의"];
+const replyOptions = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+const actionStatusOptions = [
+  { label: "조치 불필요", value: "조치 불필요" },
+  { label: "조치 전", value: "조치 전" },
+  { label: "조치 후", value: "조치 후" },
+];
 
 // 컬럼 정의
 const columns = [
@@ -52,30 +183,36 @@ const columns = [
   {
     name: "customerName",
     align: "left",
-    label: "Customer Name",
+    label: "이름",
     field: "customerName",
     sortable: true,
   },
   {
     name: "customerPhone",
     align: "left",
-    label: "Customer Phone",
+    label: "전화번호",
     field: "customerPhone",
     sortable: true,
   },
   {
     name: "date",
     align: "left",
-    label: "Date",
+    label: "문의 날짜",
     field: "date",
     format: (val) => new Date(val).toLocaleString(),
     sortable: true,
   },
-  { name: "type", align: "left", label: "Type", field: "type", sortable: true },
+  {
+    name: "type",
+    align: "left",
+    label: "문의 타입",
+    field: "type",
+    sortable: true,
+  },
   {
     name: "isReply",
     align: "left",
-    label: "Reply Status",
+    label: "답변 여부",
     field: "isReply",
     format: (val) => (val ? "Yes" : "No"),
     sortable: true,
@@ -83,28 +220,28 @@ const columns = [
   {
     name: "employName",
     align: "left",
-    label: "Employee Name",
+    label: "직원 이름",
     field: "employName",
     sortable: true,
   },
   {
     name: "inquiryTitle",
     align: "left",
-    label: "Inquiry Title",
+    label: "문의 제목",
     field: "inquiryTitle",
     sortable: true,
   },
   {
     name: "inquiryContent",
     align: "left",
-    label: "Inquiry Content",
+    label: "문의 내용",
     field: "inquiryContent",
     sortable: true,
   },
   {
     name: "actionStatus",
     align: "left",
-    label: "Action Status",
+    label: "조치 상태",
     field: "actionStatus",
     sortable: true,
   },
@@ -112,23 +249,87 @@ const columns = [
 
 const router = useRouter();
 
+const onRequest = (params) => {
+  const { page, rowsPerPage } = params.pagination;
+  pagination.value.page = page;
+  pagination.value.rowsPerPage = rowsPerPage;
+  fetchInquiries();
+};
+
 // 데이터 요청 함수
 const fetchInquiries = async () => {
   loading.value = true; // 데이터 요청할 때 로딩 상태 true로 설정
   try {
-    const response = await axios.get("http://localhost:8080/api/v1/inquiries", {
+    const response = await axios.get("/api/v1/inquiries", {
       params: {
         page: pagination.value.page - 1, // 백엔드 페이지 번호가 0부터 시작
         size: pagination.value.rowsPerPage,
       },
     });
 
-    const { content, totalElements, totalPages } = response.data.data;
-    console.log("응답 데이터:", response.data.data);
+    inquiries.value = response.data.data.content;
+    pagination.value.page = response.data.data.number + 1;
+    pagination.value.rowsPerPage = response.data.data.size;
+    pagination.value.rowsNumber = response.data.data.totalElements;
+
+    console.log("데이터 로드 완료:", response.data.data);
+    console.log("페이지 정보:", pagination.value);
+
     console.log("페이지:", pagination.value.page);
     console.log("한 페이지당 항목 수:", pagination.value.rowsPerPage);
-    console.log("총 항목 수:", totalElements);
-    console.log("총 페이지 수:", totalPages);
+    console.log("총 항목 수:", pagination.value.rowsNumber);
+  } catch (error) {
+    console.error("문의를 가져오지 못했습니다. :", error);
+  } finally {
+    loading.value = false; // 로딩 상태 종료
+  }
+};
+
+// 검색 조건을 기반으로 데이터를 요청하는 함수
+const fetchInquiriesSearch = async () => {
+  loading.value = true; // 데이터 요청할 때 로딩 상태 true로 설정
+  try {
+    const params = new URLSearchParams();
+    params.append("page", pagination.value.page - 1);
+    params.append("size", pagination.value.rowsPerPage);
+    params.append("customerName", searchParams.value.customerName);
+    params.append("customerPhone", searchParams.value.customerPhone);
+    params.append("inquiryTitle", searchParams.value.inquiryTitle);
+    params.append("inquiryContent", searchParams.value.inquiryContent);
+    params.append("keyword", searchParams.value.keyword);
+
+    // 대괄호를 직접 인코딩하여 추가
+    if (searchParams.value.dateRange.from) {
+      params.append("dateRange%5Bfrom%5D", searchParams.value.dateRange.from);
+    }
+    if (searchParams.value.dateRange.to) {
+      params.append("dateRange%5Bto%5D", searchParams.value.dateRange.to);
+    }
+    if (searchParams.value.type) params.append("type", searchParams.value.type);
+    if (searchParams.value.isReply !== null)
+      params.append("isReply", searchParams.value.isReply);
+    if (searchParams.value.actionStatus)
+      params.append("actionStatus", searchParams.value.actionStatus);
+
+    const response = await axios.get(
+      `/api/v1/inquiries/search2?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${useTokenStore().getAtk}`, // store.atk는 토큰 상태를 나타내는 변수
+        },
+      }
+    );
+
+    // 여기서 response.data를 확인하여 구조를 로그로 출력해보세요.
+    console.log("응답 데이터:", response.data.data);
+
+    // 만약 response.data.data가 undefined 또는 null인 경우 처리
+    if (!response.data.data || !response.data.data.content) {
+      console.error("응답 데이터에서 필요한 내용이 없습니다.");
+      return;
+    }
+
+    const { content, totalElements, totalPages } = response.data.data;
 
     inquiries.value = content.map((item) => ({
       id: item.id,
@@ -141,21 +342,10 @@ const fetchInquiries = async () => {
       inquiryTitle: item.inquiryTitle,
       inquiryContent: item.inquiryContent,
       actionStatus: item.actionStatus,
-    })); // 응답 데이터에서 목록 추출
-    // pagination.value.rowsNumber = response.data.data.totalElements; // 전체 데이터의 개수를 pagination 객체에 저장
-    // maxPages.value = Math.ceil(
-    //   data.totalElements / pagination.value.rowsPerPage
-    // );
+    }));
 
     pagination.value.rowsNumber = totalElements;
-    // pagination.value.page = totalPages; // 현재 페이지 설정
-    maxPages.value = totalPages; // 최대 페이지 수 설정
-    console.log("데이터 로드 완료:", response.data.data);
-    console.log("페이지 정보:", pagination.value);
-
-    console.log("페이지:", pagination.value.page);
-    console.log("한 페이지당 항목 수:", pagination.value.rowsPerPage);
-    console.log("총 항목 수:", pagination.value.rowsNumber);
+    maxPages.value = totalPages;
   } catch (error) {
     console.error("문의를 가져오지 못했습니다. :", error);
   } finally {
@@ -173,13 +363,6 @@ const onRowClick = (event, row) => {
 };
 
 onMounted(fetchInquiries); // 컴포넌트가 마운트될 때 fetchInquiries 함수 호출
-
-watch(
-  // pagination.value.page 와 pagination.value.rowsPerPage가 변경될 때마다 fetchInquiries 함수 호출
-  [() => pagination.value.page, () => pagination.value.rowsPerPage],
-  fetchInquiries,
-  { immediate: true } // 컴포넌트가 마운트될 때 바로 데이터 로드
-);
 
 // computed 속성 : filteredInquiries - 필터링된 목록을 반환하는 계산된 속성
 const filteredInquiries = computed(() => {
@@ -205,6 +388,34 @@ const filteredInquiries = computed(() => {
 /* 직접 변수 값을 설정 */
 $primary-color: #007bff;
 $secondary-color: #6c757d;
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.search-fields-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.search-field {
+  flex: 1 1 15%;
+  margin-right: 1rem;
+}
+
+.search-btn {
+  flex: 0 0 auto;
+  margin-left: 1rem;
+}
 
 .q-pagination {
   display: flex;
