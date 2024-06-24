@@ -66,6 +66,7 @@
             row-key="id"
             v-model:pagination="pagination"
             @request="onRequest"
+            hide-pagination
           >
             <template v-slot:body="props">
               <q-tr :props="props" @click="rowClicked(props.row)">
@@ -84,6 +85,16 @@
         </div>
       </q-card-section>
     </q-card>
+
+    <div class="q-pa-lg flex flex-center">
+      <q-pagination
+        v-model="pagination.page"
+        :max="maxPage"
+        @update:model-value="onPageChange"
+        input
+        input-class="text-orange-10"
+      />
+    </div>
 
     <!-- 맨 위로 가는 버튼 -->
     <q-btn
@@ -105,8 +116,8 @@ const router = useRouter();
 const searchName = ref('');
 const customers = ref([]);
 const pagination = ref({
-  rowsPerPage: 20,
   page: 1,
+  rowsPerPage: 20,
   rowsNumber: 0
 });
 const selectedGrade = ref(null);
@@ -137,31 +148,24 @@ const searchCustomers = async () => {
     const params = {
       page: pagination.value.page - 1,
       size: pagination.value.rowsPerPage,
+      name: searchName.value || null,
+      grade: selectedGrade.value || null,
+      gender: selectedGender.value || null
     };
 
-    if (searchName.value) {
-      params.name = searchName.value;
-    }
-    if (selectedGrade.value) {
-      params.grade = selectedGrade.value;
-    }
-    if (selectedGender.value) {
-      params.gender = selectedGender.value;
-    }
-
     const response = await axios.get('/api/v1/customers/search', {
-      params: params  // 올바르게 params 객체를 전달
+      params: params
     });
     customers.value = response.data.content;
     pagination.value.page = response.data.number + 1;
     pagination.value.rowsPerPage = response.data.size;
     pagination.value.rowsNumber = response.data.totalElements;
   } catch (error) {
-    console.error('Error fetching customers:', error);
+    console.error('Error searching customers:', error);
   }
 };
 
-
+const maxPage = computed(() => Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage));
 
 onMounted(() => {
   fetchCustomers();
@@ -174,41 +178,46 @@ const executeSearch = () => {
 
 const rowClicked = (row) => {
   if (row && row.id) {
-    router.push({path: `/customer-detail/${row.id}`});
+    router.push({ path: `/customer-detail/${row.id}` });
   } else {
     console.error('Invalid row data:', row);
   }
 };
 
 const onRequest = (params) => {
-  const {page, rowsPerPage} = params.pagination;
+  const { page, rowsPerPage } = params.pagination;
   pagination.value.page = page;
   pagination.value.rowsPerPage = rowsPerPage;
   fetchCustomers();
 };
 
+const onPageChange = (page) => {
+  pagination.value.page = page;
+  fetchCustomers();
+};
+
 const columns = [
-  {name: 'id', label: '#', align: 'left', field: 'id'},
-  {name: 'name', label: '이름', align: 'left', field: 'name', sortable: true},
-  {name: 'grade', label: '등급', align: 'center', field: 'grade', sortable: true},
-  {name: 'phone', label: '전화번호', align: 'center', field: 'phone', sortable: true},
-  {name: 'employeeName', label: '직원 이름', align: 'center', field: 'employeeName'},
-  {name: 'gender', label: '성별', align: 'center', field: 'gender'},
-  {name: 'birth', label: '생년월일', align: 'center', field: 'birth'},
+  { name: 'id', label: '#', align: 'left', field: 'id' },
+  { name: 'name', label: '이름', align: 'left', field: 'name', sortable: true },
+  { name: 'grade', label: '등급', align: 'center', field: 'grade', sortable: true },
+  { name: 'phone', label: '전화번호', align: 'center', field: 'phone', sortable: true },
+  { name: 'employeeName', label: '직원 이름', align: 'center', field: 'employeeName' },
+  { name: 'gender', label: '성별', align: 'center', field: 'gender' },
+  { name: 'birth', label: '생년월일', align: 'center', field: 'birth' },
 ];
 
 const gradeOptions = [
-  {label: '선택 안 함', value: ''},
-  {label: 'NEW', value: 'NEW'},
-  {label: 'BASIC', value: 'BASIC'},
-  {label: 'VIP', value: 'VIP'},
-  {label: 'VVIP', value: 'VVIP'}
+  { label: '선택 안 함', value: '' },
+  { label: 'NEW', value: 'NEW' },
+  { label: 'BASIC', value: 'BASIC' },
+  { label: 'VIP', value: 'VIP' },
+  { label: 'VVIP', value: 'VVIP' }
 ];
 
 const genderOptions = [
-  {label: '선택 안 함', value: ''},
-  {label: '여성', value: 'Female'},
-  {label: '남성', value: 'Male'}
+  { label: '선택 안 함', value: '' },
+  { label: '여성', value: 'Female' },
+  { label: '남성', value: 'Male' }
 ];
 
 const maskName = (name) => {
@@ -288,6 +297,14 @@ const scrollToTop = () => {
   width: 9px; /* 버튼 크기 조정 */
   height: 9px; /* 버튼 크기 조정 */
 }
+
+.q-pa-lg {
+  padding: 16px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
-
-
