@@ -1,14 +1,14 @@
 
 package com.team2final.minglecrm.statistics.dto.response.reservation;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor
+//@NoArgsConstructor
+@AllArgsConstructor
+//@RequiredArgsConstructor
 public class DailyReservationResponse {
 
     private Long id;
@@ -18,7 +18,7 @@ public class DailyReservationResponse {
     private Long reservationCount;
     private LocalDate reservationDate;
 
-    @Builder
+
     public DailyReservationResponse(Long id, Integer reservationYear, Integer reservationMonth, Integer reservationDay, Long reservationCount) {
         this.id = id;
         this.reservationYear = reservationYear;
@@ -28,10 +28,7 @@ public class DailyReservationResponse {
         this.reservationDate = LocalDate.of(reservationYear, reservationMonth, reservationDay);
     }
 
-    @Builder
-    public DailyReservationResponse(Long id, LocalDate reservationDate, Long reservationCount) {
-        this.id = id;
-        this.reservationDate = reservationDate;
-        this.reservationCount = reservationCount;
-    }
+
+
+
 }

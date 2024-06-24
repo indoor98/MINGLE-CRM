@@ -48,7 +48,20 @@ public class StatisticsReservationService {
                         monthlyReservationCount.getReservationYear(),
                         monthlyReservationCount.getReservationMonth(),
                         monthlyReservationCount.getReservationCount()
-                        ))
+                ))
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    // 월 별 예약 수 조회 - 페이징처리 X
+    public List<MonthlyReservationResponse> getAllMonthlyReservation() {
+        List<MonthlyReservationResponse> result = monthlyReservationCountRepository.findAll().stream()
+                .map(monthlyReservationCount -> new MonthlyReservationResponse(
+                        monthlyReservationCount.getId(),
+                        monthlyReservationCount.getReservationYear(),
+                        monthlyReservationCount.getReservationMonth(),
+                        monthlyReservationCount.getReservationCount()
+                ))
                 .collect(Collectors.toList());
         return result;
     }
@@ -57,6 +70,19 @@ public class StatisticsReservationService {
     public List<WeeklyReservationResponse> getAllWeeklyReservation(Pageable pageable) {
         pageable = pageable == null ? PageRequest.of(0, 3) : pageable;
         List<WeeklyReservationResponse> result = weeklyReservationCountRepository.findAllBy(pageable).stream()
+                .map(weeklyReservationCount -> new WeeklyReservationResponse(
+                        weeklyReservationCount.getId(),
+                        weeklyReservationCount.getReservationYear(),
+                        weeklyReservationCount.getReservationWeek(),
+                        weeklyReservationCount.getReservationCount()
+                ))
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    // 주 별 예약 수 조회 페이징처리 x
+    public List<WeeklyReservationResponse> getAllWeeklyReservation() {
+        List<WeeklyReservationResponse> result = weeklyReservationCountRepository.findAll().stream()
                 .map(weeklyReservationCount -> new WeeklyReservationResponse(
                         weeklyReservationCount.getId(),
                         weeklyReservationCount.getReservationYear(),
@@ -82,17 +108,48 @@ public class StatisticsReservationService {
         return result;
     }
 
+    // 일 별 예약 수 조회 - 페이징 처리 x
+    public List<DailyReservationResponse> getAllDailyReservation() {
+        List<DailyReservationResponse> result = dailyReservationCountRepository.findAll().stream()
+                .map(dailyReservationCount -> new DailyReservationResponse(
+                        dailyReservationCount.getId(),
+                        dailyReservationCount.getReservationYear(),
+                        dailyReservationCount.getReservationMonth(),
+                        dailyReservationCount.getReservationDay(),
+                        dailyReservationCount.getReservationCount()
+                ))
+                .collect(Collectors.toList());
+        return result;
+    }
+
     // 기간 설정해서 예약 수 조회
     public List<DailyReservationResponse> getDailyReservationByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
         pageable = pageable == null ? PageRequest.of(0, 3) : pageable;
         List<DailyReservationResponse> result = dailyReservationCountRepository.findByReservationDateBetween(startDate, endDate, pageable).stream()
                 .map(dailyReservationCount -> new DailyReservationResponse(
                         dailyReservationCount.getId(),
-                        dailyReservationCount.getReservationDate(),
+                        dailyReservationCount.getReservationYear(),
+                        dailyReservationCount.getReservationMonth(),
+                        dailyReservationCount.getReservationDay(),
                         dailyReservationCount.getReservationCount()
                 ))
                 .collect(Collectors.toList());
         return result;
     }
+
+    // 기간 설정해서 예약 수 조회 - 페이징 처리 x
+    public List<DailyReservationResponse> getDailyReservationByDateRange(LocalDate startDate, LocalDate endDate) {
+        List<DailyReservationResponse> result = dailyReservationCountRepository.findByReservationDateBetween(startDate, endDate).stream()
+                .map(dailyReservationCount -> new DailyReservationResponse(
+                        dailyReservationCount.getId(),
+                        dailyReservationCount.getReservationYear(),
+                        dailyReservationCount.getReservationMonth(),
+                        dailyReservationCount.getReservationDay(),
+                        dailyReservationCount.getReservationCount()
+                ))
+                .collect(Collectors.toList());
+        return result;
+    }
+
 
 }

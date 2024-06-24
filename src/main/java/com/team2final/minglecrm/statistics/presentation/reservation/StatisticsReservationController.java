@@ -44,6 +44,14 @@ public class StatisticsReservationController {
         return ResponseEntity.ok(result);
     }
 
+    // // 월 별 예약 수 조회 - 페이징 처리 x
+    @GetMapping("/monthly-reservation-cnt/all")
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+    public ResponseEntity<List<MonthlyReservationResponse>> getAllMonthlyReservationCount() {
+        List<MonthlyReservationResponse> result = statisticsReservationService.getAllMonthlyReservation();
+        return ResponseEntity.ok(result);
+    }
+
 
     // // 주 별 예약 수 조회
     @GetMapping("/weekly-reservation-cnt")
@@ -53,11 +61,27 @@ public class StatisticsReservationController {
         return ResponseEntity.ok(result);
     }
 
+    // // 주 별 예약 수 조회 - 페이징처리 x
+    @GetMapping("/weekly-reservation-cnt/all")
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+    public ResponseEntity<List<WeeklyReservationResponse>> getWeeklyReservationCount() {
+        List<WeeklyReservationResponse> result = statisticsReservationService.getAllWeeklyReservation();
+        return ResponseEntity.ok(result);
+    }
+
     // // 일 별 예약 수 조회
     @GetMapping("/daily-reservation-cnt")
 //    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
     public ResponseEntity<List<DailyReservationResponse>> getDailyReservationCount(Pageable pageable) {
         List<DailyReservationResponse> result = statisticsReservationService.getAllDailyReservation(pageable);
+        return ResponseEntity.ok(result);
+    }
+
+    // // 일 별 예약 수 조회 - 페이징처리 x
+    @GetMapping("/daily-reservation-cnt/all")
+//    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+    public ResponseEntity<List<DailyReservationResponse>> getDailyReservationCount() {
+        List<DailyReservationResponse> result = statisticsReservationService.getAllDailyReservation();
         return ResponseEntity.ok(result);
     }
 
@@ -71,6 +95,28 @@ public class StatisticsReservationController {
             LocalDate start = LocalDate.parse(startDate, formatter);
             LocalDate end = LocalDate.parse(endDate, formatter);
             List<DailyReservationResponse> result = statisticsReservationService.getDailyReservationByDateRange(start, end, pageable);
+
+            if (end.isBefore(start)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "종료 날짜가 시작 날짜 보다 빠릅니다.");
+            }
+            return ResponseEntity.ok(result);
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "날짜 형식이 옳바르지 않습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "예약 수를 조회할 수 없습니다.", e);
+        }
+    }
+
+    // 기간 설정해서 예약 수 조회
+    @GetMapping("/daily-reservation-cnt-date/all")
+    public ResponseEntity<List<DailyReservationResponse>> getDailyReservationsByDateRange(@RequestParam("start") String startDate,
+                                                                                          @RequestParam("end") String endDate) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate start = LocalDate.parse(startDate, formatter);
+            LocalDate end = LocalDate.parse(endDate, formatter);
+            List<DailyReservationResponse> result = statisticsReservationService.getDailyReservationByDateRange(start, end);
 
             if (end.isBefore(start)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "종료 날짜가 시작 날짜 보다 빠릅니다.");

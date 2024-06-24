@@ -14,4 +14,7 @@ public interface DailyReservationCountRepository extends JpaRepository<DailyRese
     List<DailyReservationCount> findAllBy(Pageable pageable);
 
     List<DailyReservationCount> findByReservationDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
+
+    // 페이징처리 x
+    List<DailyReservationCount> findByReservationDateBetween(LocalDate startDate, LocalDate endDate);
 }
