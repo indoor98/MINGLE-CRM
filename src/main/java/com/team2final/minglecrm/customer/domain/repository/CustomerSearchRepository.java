@@ -7,6 +7,9 @@ import com.team2final.minglecrm.customer.dto.request.CustomerSearchCondition;
 import com.team2final.minglecrm.customer.dto.response.CustomerResponse;
 import com.team2final.minglecrm.customer.dto.response.QCustomerResponse;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,10 +23,10 @@ public class CustomerSearchRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<CustomerResponse> search(CustomerSearchCondition condition) {
+    public Page<CustomerResponse> search(CustomerSearchCondition condition, Pageable pageable) {
         QCustomer customer = QCustomer.customer;
 
-        return queryFactory
+        List<CustomerResponse> results = queryFactory
                 .select(new QCustomerResponse(
                         customer.id,
                         customer.name,
@@ -39,7 +42,21 @@ public class CustomerSearchRepository {
                         customerGradeEq(condition.getGrade()),
                         genderEq(condition.getGender())
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        long totalCount = queryFactory
+                .select(customer)
+                .from(customer)
+                .where(
+                        customerNameEq(condition.getCustomerName()),
+                        customerGradeEq(condition.getGrade()),
+                        genderEq(condition.getGender())
+                )
+                .fetchCount();
+
+        return new PageImpl<>(results, pageable, totalCount);
     }
 
 

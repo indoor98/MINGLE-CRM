@@ -33,8 +33,6 @@ public class CustomerService {
     private final CustomerSearchRepository customerSearchRepository;
 
 
-    //TODO : 권한
-    // 고객 조회
     @Transactional(readOnly = true)
     public Page<CustomerResponse> getAllCustomer(Pageable pageable) {
         pageable = pageable == null ? PageRequest.of(0, 5) : pageable;
@@ -85,8 +83,7 @@ public class CustomerService {
 
     public Page<CustomerResponse> search(Pageable pageable, CustomerSearchCondition condition) {
         pageable = pageable == null ? PageRequest.of(0, 5) : pageable;
-        List<CustomerResponse> search = customerSearchRepository.search(condition);
-        return new PageImpl<>(search, pageable, search.size());
+        return customerSearchRepository.search(condition, pageable);
     }
 
 }
