@@ -38,4 +38,6 @@ public class PurchaseList {
         this.dishName = dishName;
         this.roomType = roomType;
     }
+
 }
+
