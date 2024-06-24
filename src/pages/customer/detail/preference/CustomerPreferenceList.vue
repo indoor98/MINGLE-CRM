@@ -30,7 +30,7 @@ const preferences = ref([]);
 
 const fetchPreferences = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/preferences`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/preferences`);
     preferences.value = [response.data];
     console.log(preferences.value); // 데이터 확인용 콘솔 출력
   } catch (error) {

@@ -76,7 +76,7 @@ let fuse; // fuse.js 인스턴스
 
 const fetchPayments = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/payments`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/payments`);
     payments.value = response.data.map((payment, index) => ({
       paymentId: payment.id,
       customerName: payment.customerName,

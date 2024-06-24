@@ -65,7 +65,7 @@ let fuse; // fuse.js 인스턴스
 
 const fetchInquiries = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/inquiries`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/inquiries`);
     inquiries.value = response.data.data.content.map((inquiry) => ({
       id: inquiry.id,
       customerId: customerId,
