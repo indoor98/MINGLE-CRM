@@ -125,26 +125,6 @@ const selectedGender = ref(null);
 
 const fetchCustomers = async () => {
   try {
-    const response = await axios.get('/api/v1/customers', {
-      params: {
-        page: pagination.value.page - 1,
-        size: pagination.value.rowsPerPage,
-        name: searchName.value,
-        grade: selectedGrade.value,
-        gender: selectedGender.value
-      }
-    });
-    customers.value = response.data.content;
-    pagination.value.page = response.data.number + 1;
-    pagination.value.rowsPerPage = response.data.size;
-    pagination.value.rowsNumber = response.data.totalElements;
-  } catch (error) {
-    console.error('Error fetching customers:', error);
-  }
-};
-
-const searchCustomers = async () => {
-  try {
     const params = {
       page: pagination.value.page - 1,
       size: pagination.value.rowsPerPage,
@@ -161,7 +141,7 @@ const searchCustomers = async () => {
     pagination.value.rowsPerPage = response.data.size;
     pagination.value.rowsNumber = response.data.totalElements;
   } catch (error) {
-    console.error('Error searching customers:', error);
+    console.error('Error fetching customers:', error);
   }
 };
 
@@ -173,7 +153,7 @@ onMounted(() => {
 
 const executeSearch = () => {
   pagination.value.page = 1; // 검색을 다시 시작할 때 페이지를 1로 초기화
-  searchCustomers();
+  fetchCustomers();
 };
 
 const rowClicked = (row) => {
