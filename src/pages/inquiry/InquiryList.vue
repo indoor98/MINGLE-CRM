@@ -335,8 +335,9 @@ const fetchInquiriesSearch = async () => {
       params.append("endDate", searchParams.value.endDate + "T23:59:59");
     }
     if (searchParams.value.type) params.append("type", searchParams.value.type);
-    if (searchParams.value.isReply !== null)
+    if (searchParams.value.isReply !== null) {
       params.append("isReply", searchParams.value.isReply);
+    }
     if (searchParams.value.actionStatus)
       params.append("actionStatus", searchParams.value.actionStatus);
 
