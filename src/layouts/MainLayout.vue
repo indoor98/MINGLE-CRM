@@ -71,7 +71,12 @@
           :key="link.title"
           v-bind="link"
         />
-        <q-item clickable v-ripple @click="openLogMenu" @mouseover="openLogMenu">
+        <q-item
+          clickable
+          v-ripple
+          @click="openLogMenu"
+          @mouseover="openLogMenu"
+        >
           <q-item-section avatar>
             <q-icon name="map" />
           </q-item-section>
@@ -106,16 +111,16 @@
 </template>
 
 <script setup>
-import {ref, computed, onMounted} from "vue";
+import { ref, computed, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
-import {useTokenStore} from "src/stores/token-store";
-import {storeToRefs} from "pinia";
+import { useTokenStore } from "src/stores/token-store";
+import { storeToRefs } from "pinia";
 import axios from "axios";
-import {api as customAxios} from "/src/boot/axios";
-import {useUserStore} from "src/stores/user-store";
+import { api as customAxios } from "/src/boot/axios";
+import { useUserStore } from "src/stores/user-store";
 
 const store = useTokenStore();
-const {atk} = storeToRefs(store);
+const { atk } = storeToRefs(store);
 const userStore = useUserStore();
 
 const linksList = [
@@ -156,6 +161,7 @@ const linksList = [
     caption: "상담 탭",
     icon: "school",
     to: "/inquiry",
+    roles: ["ROLE_CONSULTANT"],
   },
   {
     title: "이메일",
@@ -198,7 +204,7 @@ const renewToken = async () => {
     console.log(response.data);
     console.log("renewToken 실행 완료");
     if (response.data.code === 200) {
-      const {atk, atkExpiration} = response.data.data;
+      const { atk, atkExpiration } = response.data.data;
       store.setSigninResponse(atk, atkExpiration);
       console.log("갱신 완료");
     } else {
@@ -236,6 +242,10 @@ const filteredLinks = computed(() => {
   } else if (userRole.value === "ROLE_MARKETER") {
     return linksList.filter((link) =>
       link.roles ? link.roles.includes("ROLE_MARKETER") : true
+    );
+  } else if (userRole.value === "ROLE_CONSULTANT") {
+    return linksList.filter(
+      (link) => (link.roles ? link.roles.includes("ROLE_CONSULTANT") : true) // 컨설턴트
     );
   } else {
     return linksList;

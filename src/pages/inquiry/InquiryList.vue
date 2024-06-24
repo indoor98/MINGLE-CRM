@@ -34,10 +34,9 @@
           class="search-field"
         />
         <q-input
-          v-model="searchParams.dateRange.from"
-          mask="date"
-          :rules="['date']"
+          v-model="searchParams.startDate"
           label="시작일"
+          filled
           class="search-field"
         >
           <template v-slot:append>
@@ -47,7 +46,7 @@
                 transition-show="scale"
                 transition-hide="scale"
               >
-                <q-date v-model="searchParams.dateRange.from">
+                <q-date v-model="searchParams.startDate" mask="YYYY-MM-DD">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -56,11 +55,11 @@
             </q-icon>
           </template>
         </q-input>
+
         <q-input
-          v-model="searchParams.dateRange.to"
-          mask="date"
-          :rules="['date']"
+          v-model="searchParams.endDate"
           label="종료일"
+          filled
           class="search-field"
         >
           <template v-slot:append>
@@ -70,7 +69,7 @@
                 transition-show="scale"
                 transition-hide="scale"
               >
-                <q-date v-model="searchParams.dateRange.to">
+                <q-date v-model="searchParams.endDate" mask="YYYY-MM-DD">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -149,10 +148,8 @@ const searchParams = ref({
   inquiryTitle: "",
   inquiryContent: "",
   keyword: "",
-  dateRange: {
-    from: "",
-    to: "",
-  },
+  startDate: "",
+  endDate: "",
   type: "",
   isReply: null,
   actionStatus: "",
@@ -253,7 +250,39 @@ const onRequest = (params) => {
   const { page, rowsPerPage } = params.pagination;
   pagination.value.page = page;
   pagination.value.rowsPerPage = rowsPerPage;
-  fetchInquiries();
+
+  if (hasSearchCriteria()) {
+    fetchInquiriesSearch();
+  } else {
+    fetchInquiries();
+  }
+};
+
+const hasSearchCriteria = () => {
+  const {
+    customerName,
+    customerPhone,
+    inquiryTitle,
+    inquiryContent,
+    keyword,
+    startDate,
+    endDate,
+    type,
+    isReply,
+    actionStatus,
+  } = searchParams.value;
+
+  return (
+    customerName ||
+    customerPhone ||
+    inquiryTitle ||
+    inquiryContent ||
+    keyword ||
+    (startDate && endDate) ||
+    type ||
+    isReply !== null ||
+    actionStatus
+  );
 };
 
 // 데이터 요청 함수
@@ -299,11 +328,11 @@ const fetchInquiriesSearch = async () => {
     params.append("keyword", searchParams.value.keyword);
 
     // 대괄호를 직접 인코딩하여 추가
-    if (searchParams.value.dateRange.from) {
-      params.append("dateRange%5Bfrom%5D", searchParams.value.dateRange.from);
+    if (searchParams.value.startDate) {
+      params.append("startDate", searchParams.value.startDate + "T00:00:00");
     }
-    if (searchParams.value.dateRange.to) {
-      params.append("dateRange%5Bto%5D", searchParams.value.dateRange.to);
+    if (searchParams.value.endDate) {
+      params.append("endDate", searchParams.value.endDate + "T23:59:59");
     }
     if (searchParams.value.type) params.append("type", searchParams.value.type);
     if (searchParams.value.isReply !== null)
@@ -319,33 +348,34 @@ const fetchInquiriesSearch = async () => {
         },
       }
     );
-
-    // 여기서 response.data를 확인하여 구조를 로그로 출력해보세요.
     console.log("응답 데이터:", response.data.data);
 
-    // 만약 response.data.data가 undefined 또는 null인 경우 처리
     if (!response.data.data || !response.data.data.content) {
       console.error("응답 데이터에서 필요한 내용이 없습니다.");
       return;
     }
 
-    const { content, totalElements, totalPages } = response.data.data;
+    // const { content, totalElements, totalPages } = response.data.data;
 
-    inquiries.value = content.map((item) => ({
-      id: item.id,
-      customerName: item.customerName,
-      customerPhone: item.customerPhone,
-      date: new Date(item.date).toLocaleString(),
-      type: item.type,
-      isReply: item.isReply,
-      employName: item.employName,
-      inquiryTitle: item.inquiryTitle,
-      inquiryContent: item.inquiryContent,
-      actionStatus: item.actionStatus,
-    }));
+    // inquiries.value = content.map((item) => ({
+    //   id: item.id,
+    //   customerName: item.customerName,
+    //   customerPhone: item.customerPhone,
+    //   date: new Date(item.date).toLocaleString(),
+    //   type: item.type,
+    //   isReply: item.isReply,
+    //   employName: item.employName,
+    //   inquiryTitle: item.inquiryTitle,
+    //   inquiryContent: item.inquiryContent,
+    //   actionStatus: item.actionStatus,
+    // }));
 
-    pagination.value.rowsNumber = totalElements;
-    maxPages.value = totalPages;
+    // pagination.value.rowsNumber = totalElements;
+    // maxPages.value = totalPages;
+    inquiries.value = response.data.data.content;
+    pagination.value.page = response.data.data.number + 1;
+    pagination.value.rowsPerPage = response.data.data.size;
+    pagination.value.rowsNumber = response.data.data.totalElements;
   } catch (error) {
     console.error("문의를 가져오지 못했습니다. :", error);
   } finally {
