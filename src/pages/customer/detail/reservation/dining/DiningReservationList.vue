@@ -69,7 +69,7 @@ let fuse;
 
 const fetchReservations = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/dish/reservations`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/dish/reservations`);
     reservations.value = response.data.map((reservation) => ({
       reservationId: reservation.id,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),

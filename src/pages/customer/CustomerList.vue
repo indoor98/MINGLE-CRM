@@ -114,7 +114,7 @@ const selectedGender = ref(null);
 
 const fetchCustomers = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/v1/customers', {
+    const response = await axios.get('/api/v1/customers', {
       params: {
         page: pagination.value.page - 1,
         size: pagination.value.rowsPerPage,

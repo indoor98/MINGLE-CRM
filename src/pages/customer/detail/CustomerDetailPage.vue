@@ -23,7 +23,7 @@
 
         <q-tab-panel name="preference">
           <q-card>
-            <CustomerPreferenceList/>
+            <CustomerPreferenceDetail/>
           </q-card>
         </q-tab-panel>
 
@@ -68,7 +68,7 @@
 
         <q-tab-panel name="reward">
           <q-card>
-            <CustomerRewardList/>
+            <CustomerRewardDetail/>
           </q-card>
         </q-tab-panel>
 
@@ -78,15 +78,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import CustomerSummary from 'pages/customer/detail/summary/CustomerSummary.vue';
 import CustomerPaymentList from "pages/customer/detail/payment/CustomerPaymentList.vue";
 import HotelReservationList from "pages/customer/detail/reservation/hotel/HotelReservationList.vue";
 import DiningReservationList from "pages/customer/detail/reservation/dining/DiningReservationList.vue";
 import CustomerConsultationList from "pages/customer/detail/consultation/CustomerConsultationList.vue";
-import CustomerRewardList from "pages/customer/detail/reward/CustomerRewardList.vue";
+import CustomerRewardDetail from "pages/customer/detail/reward/CustomerRewardDetail.vue";
 import CustomerVoucherList from "pages/customer/detail/voucher/CustomerVoucherList.vue";
-import CustomerPreferenceList from "pages/customer/detail/preference/CustomerPreferenceList.vue";
+import CustomerPreferenceList from "pages/customer/detail/preference/CustomerPreferenceDetail.vue";
+import CustomerPreferenceDetail from "pages/customer/detail/preference/CustomerPreferenceDetail.vue";
 
 const activeTab = ref('summary');
 const activeReservationTab = ref('hotel'); // 기본적으로 호텔 예약 탭이 활성화되도록 설정

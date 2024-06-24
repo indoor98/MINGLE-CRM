@@ -8,7 +8,7 @@
         <tbody>
         <tr v-for="col in preferenceColumns" :key="col.name">
           <th>{{ col.label }}</th>
-          <td>{{ formatValue(preferences[0][col.field]) }}</td>
+          <td>{{ formatValue(preferences[0][col.field], col.field) }}</td>
         </tr>
         </tbody>
       </table>
@@ -30,7 +30,7 @@ const preferences = ref([]);
 
 const fetchPreferences = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/preferences`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/preferences`);
     preferences.value = [response.data];
     console.log(preferences.value); // 데이터 확인용 콘솔 출력
   } catch (error) {
@@ -54,11 +54,21 @@ const preferenceColumns = [
   { name: 'isBreakfastPreferred', label: '아침 식사 선호 여부', align: 'left', field: 'isBreakfastPreferred', sortable: true },
 ];
 
-const formatValue = (value) => {
+const formatValue = (value, field) => {
+  if (field === 'preferredCheckinTime' || field === 'preferredCheckoutTime') {
+    return formatHour(value);
+  }
   if (typeof value === 'boolean') {
     return value ? '예' : '아니오';
   }
   return value;
+};
+
+const formatHour = (timeString) => {
+  if (!timeString) return '';
+  const [hour, minute] = timeString.split(':').map(Number);
+  const roundedHour = minute >= 30 ? hour + 1 : hour;
+  return `${roundedHour}시`;
 };
 </script>
 

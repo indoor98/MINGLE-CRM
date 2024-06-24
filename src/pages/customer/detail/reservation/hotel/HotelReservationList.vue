@@ -71,7 +71,7 @@ let fuse; // fuse.js 인스턴스
 // 예약 목록 가져오기
 const fetchReservations = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/hotel/reservations`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/hotel/reservations`);
     reservations.value = response.data.map((reservation, index) => ({
       reservationId: index + 1,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),
