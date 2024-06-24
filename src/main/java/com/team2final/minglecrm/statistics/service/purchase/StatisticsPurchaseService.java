@@ -1,21 +1,13 @@
 package com.team2final.minglecrm.statistics.service.purchase;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.team2final.minglecrm.statistics.domain.PurchaseList;
-import com.team2final.minglecrm.statistics.domain.QPurchaseList;
 import com.team2final.minglecrm.statistics.domain.repository.purchase.PurchaseListRepository;
-import com.team2final.minglecrm.statistics.dto.response.purchase.StatisticsResponse;
+import com.team2final.minglecrm.statistics.dto.response.purchase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +15,23 @@ public class StatisticsPurchaseService {
 
     private final PurchaseListRepository purchaseListRepository;
 
-    public List<StatisticsResponse> getStatistics(LocalDate startDate, LocalDate endDate,
-                                                  boolean groupByDishName, boolean groupByRoomType,
-                                                  boolean groupByCustomerGender, boolean groupByCustomerGrade) {
-        return purchaseListRepository.findStatistics(startDate, endDate, groupByDishName, groupByRoomType, groupByCustomerGender, groupByCustomerGrade);
+    public List<StatisticsDishNameResponse> getStatisticsByDishName(LocalDate startDate, LocalDate endDate) {
+        return purchaseListRepository.findStatisticsByDishName(startDate, endDate);
+    }
+
+    public List<StatisticsRoomTypeResponse> getStatisticsByRoomType(LocalDate startDate, LocalDate endDate) {
+        return purchaseListRepository.findStatisticsByRoomType(startDate, endDate);
+    }
+
+    public List<StatisticsDishNameAndRoomTypeResponse> getStatisticsByDishNameAndRoomType(LocalDate startDate, LocalDate endDate) {
+        return purchaseListRepository.findStatisticsByDishNameAndRoomType(startDate, endDate);
+    }
+
+    public List<StatisticsGenderResponse> getStatisticsByGender(LocalDate startDate, LocalDate endDate, String gender) {
+        return purchaseListRepository.findStatisticsByGender(startDate, endDate, gender);
+    }
+
+    public List<StatisticsGradeResponse> getStatisticsByGrade(LocalDate startDate, LocalDate endDate, String grade) {
+        return purchaseListRepository.findStatisticsByGrade(startDate, endDate, grade);
     }
 }
