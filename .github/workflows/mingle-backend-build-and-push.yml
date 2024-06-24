@@ -79,10 +79,6 @@ jobs:
         run: |
           cd ./src/main/resources
           echo "${{ secrets.PROPERTIES }}" > ./application-aws.properties
-#          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > ./application-aws.properties
-#          echo "JWT_SECRET_KEY=asd@asdklassddghj@wg@dhjgadhasgdd@wgSDAwSadsbdjhA@SDwdSADSAWwdwasDWDASdwdaSDWdasdwdas@DNwdASNdAdawdjkahsdjkhwuadhwkdh2djkhdajksd" >> ./application-aws.properties
-#          echo "SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}" >> ./application-aws.properties
-#          echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> ./application-aws.properties
         shell: bash
 
       - name: Make Zip File
