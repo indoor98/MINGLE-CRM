@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.inquiry.presentation;
 
 import com.team2final.minglecrm.common.exception.ResultResponse;
+import com.team2final.minglecrm.inquiry.domain.ActionStatus;
 import com.team2final.minglecrm.inquiry.dto.request.InquiryActionRequest;
 import com.team2final.minglecrm.inquiry.dto.request.InquiryReplyRequest;
 import com.team2final.minglecrm.inquiry.dto.request.UpdateInquiryActionRequest;
@@ -38,6 +39,7 @@ public class InquiryController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> inquiries = inquiryService.getAllInquiries(pageable);
+        System.out.println("페이지네이션 테스트");
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 전체 목록 반환 성공", inquiries));
     }
 
@@ -145,7 +147,7 @@ public class InquiryController {
     }
 
     @GetMapping("/search2")
-    public ResponseEntity<Page<Inquiry>> searchInquiries(
+    public ResponseEntity<ResultResponse<Page<InquiryResponse>>> searchInquiries(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String customerName,
             @RequestParam(required = false) String customerPhone,
@@ -153,27 +155,18 @@ public class InquiryController {
             @RequestParam(required = false) String inquiryContent,
             @RequestParam(required = false) LocalDateTime startDate,
             @RequestParam(required = false) LocalDateTime endDate,
-            Pageable pageable) {
-
-        Page<Inquiry> inquiries;
-
-        if (keyword != null && !keyword.isEmpty()) {
-            inquiries = inquiryService.searchInquiries(keyword, startDate, endDate, pageable);
-        } else if (customerName != null && !customerName.isEmpty()) {
-            inquiries = inquiryService.searchByCustomerName(customerName, pageable);
-        } else if (customerPhone != null && !customerPhone.isEmpty()) {
-            inquiries = inquiryService.searchByCustomerPhone(customerPhone, pageable);
-        } else if (inquiryTitle != null && !inquiryTitle.isEmpty()) {
-            inquiries = inquiryService.searchByInquiryTitle(inquiryTitle, pageable);
-        } else if (inquiryContent != null && !inquiryContent.isEmpty()) {
-            inquiries = inquiryService.searchByInquiryContent(inquiryContent, pageable);
-        } else if (startDate != null && endDate != null) {
-            inquiries = inquiryService.searchByDateRange(startDate, endDate, pageable);
-        } else {
-            inquiries = inquiryService.searchInquiries("", (LocalDateTime) null, null, pageable);
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(inquiries);
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Boolean isReply,
+            @RequestParam(required = false) ActionStatus actionStatus,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<InquiryResponse> inquiries = inquiryService.searchInquiries(
+                keyword, customerName, customerPhone, inquiryTitle, inquiryContent,
+                startDate, endDate, type, isReply, actionStatus, pageable
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 전체 목록 검색 성공", inquiries));
     }
 
 }

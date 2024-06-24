@@ -259,28 +259,13 @@ public class InquiryService {
             return convertToDTO(inquiry, reply, action);
         });
     }
-    public Page<Inquiry> searchInquiries(String keyword, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        return inquiryRepository.searchByKeyword(keyword, startDate, endDate, pageable);
-    }
-
-    public Page<Inquiry> searchByCustomerName(String customerName, Pageable pageable) {
-        return inquiryRepository.findByCustomerName(customerName, pageable);
-    }
-
-    public Page<Inquiry> searchByCustomerPhone(String customerPhone, Pageable pageable) {
-        return inquiryRepository.findByCustomerPhone(customerPhone, pageable);
-    }
-
-    public Page<Inquiry> searchByInquiryTitle(String inquiryTitle, Pageable pageable) {
-        return inquiryRepository.findByInquiryTitle(inquiryTitle, pageable);
-    }
-
-    public Page<Inquiry> searchByInquiryContent(String inquiryContent, Pageable pageable) {
-        return inquiryRepository.findByInquiryContent(inquiryContent, pageable);
-    }
-
-    public Page<Inquiry> searchByDateRange(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        return inquiryRepository.findByDateRange(startDate, endDate, pageable);
+    public Page<InquiryResponse> searchInquiries(String keyword, String customerName, String customerPhone, String inquiryTitle, String inquiryContent, LocalDateTime startDate, LocalDateTime endDate, String type, Boolean isReply, ActionStatus actionStatus, Pageable pageable) {
+        Page<Inquiry> inquiries = inquiryRepository.searchByCondition(keyword, customerName, customerPhone, inquiryTitle, inquiryContent, startDate, endDate, type, isReply, actionStatus, pageable);
+        return inquiries.map(inquiry -> {
+            InquiryReply reply = inquiryReplyRepository.findByInquiryId(inquiry.getId());
+            InquiryAction action = inquiryActionRepository.findByInquiryId(inquiry.getId());
+            return convertToDTO(inquiry, reply, action);
+        });
     }
 
     private InquiryResponse convertToDTO(Inquiry inquiry, InquiryReply inquiryReply, InquiryAction inquiryAction) {
@@ -318,7 +303,6 @@ public class InquiryService {
     }
 
     private InquiryActionResponse convertToActionDTO(InquiryAction inquiryAction) {
-        System.out.println("Converting InquiryAction to InquiryActionResponse");
         System.out.println("Action Status: " + inquiryAction.getActionStatus());  // 로그 추가
 
         return InquiryActionResponse.builder()
