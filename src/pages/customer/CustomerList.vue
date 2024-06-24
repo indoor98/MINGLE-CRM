@@ -66,6 +66,7 @@
             row-key="id"
             v-model:pagination="pagination"
             @request="onRequest"
+            hide-pagination
           >
             <template v-slot:body="props">
               <q-tr :props="props" @click="rowClicked(props.row)">
@@ -84,6 +85,16 @@
         </div>
       </q-card-section>
     </q-card>
+
+    <div class="q-pa-lg flex flex-center">
+      <q-pagination
+        v-model="pagination.page"
+        :max="maxPage"
+        @update:model-value="onPageChange"
+        input
+        input-class="text-orange-10"
+      />
+    </div>
 
     <!-- 맨 위로 가는 버튼 -->
     <q-btn
@@ -105,51 +116,24 @@ const router = useRouter();
 const searchName = ref('');
 const customers = ref([]);
 const pagination = ref({
-  rowsPerPage: 20,
   page: 1,
+  rowsPerPage: 20,
   rowsNumber: 0
 });
 const selectedGrade = ref(null);
 const selectedGender = ref(null);
 
-const fetchCustomers = async () => {
-  try {
-    const response = await axios.get('/api/v1/customers', {
-      params: {
-        page: pagination.value.page - 1,
-        size: pagination.value.rowsPerPage,
-        name: searchName.value,
-        grade: selectedGrade.value,
-        gender: selectedGender.value
-      }
-    });
-    customers.value = response.data.content;
-    pagination.value.page = response.data.number + 1;
-    pagination.value.rowsPerPage = response.data.size;
-    pagination.value.rowsNumber = response.data.totalElements;
-  } catch (error) {
-    console.error('Error fetching customers:', error);
-  }
-};
-
-const searchCustomers = async () => {
+const fetchCustomers = async (page = 1) => {
   try {
     const params = {
-      page: pagination.value.page - 1,
+      page: page - 1,
       size: pagination.value.rowsPerPage,
+      name: searchName.value || null,
+      grade: selectedGrade.value || null,
+      gender: selectedGender.value || null
     };
 
-    if (searchName.value) {
-      params.name = searchName.value;
-    }
-    if (selectedGrade.value) {
-      params.grade = selectedGrade.value;
-    }
-    if (selectedGender.value) {
-      params.gender = selectedGender.value;
-    }
-
-    const response = await axios.get('http://localhost:8080/api/v1/customers/search', {params});
+    const response = await axios.get('/api/v1/customers/search', { params });
     customers.value = response.data.content;
     pagination.value.page = response.data.number + 1;
     pagination.value.rowsPerPage = response.data.size;
@@ -159,6 +143,7 @@ const searchCustomers = async () => {
   }
 };
 
+const maxPage = computed(() => Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage));
 
 onMounted(() => {
   fetchCustomers();
@@ -166,54 +151,59 @@ onMounted(() => {
 
 const executeSearch = () => {
   pagination.value.page = 1; // 검색을 다시 시작할 때 페이지를 1로 초기화
-  searchCustomers();
+  fetchCustomers();
 };
 
 const rowClicked = (row) => {
   if (row && row.id) {
-    router.push({path: `/customer-detail/${row.id}`});
+    router.push({ path: `/customer-detail/${row.id}` });
   } else {
     console.error('Invalid row data:', row);
   }
 };
 
 const onRequest = (params) => {
-  const {page, rowsPerPage} = params.pagination;
+  const { page, rowsPerPage } = params.pagination;
   pagination.value.page = page;
   pagination.value.rowsPerPage = rowsPerPage;
-  fetchCustomers();
+  fetchCustomers(page);
+};
+
+const onPageChange = (page) => {
+  pagination.value.page = page;
+  fetchCustomers(page);
 };
 
 const columns = [
-  {name: 'id', label: '#', align: 'left', field: 'id'},
-  {name: 'name', label: '이름', align: 'left', field: 'name', sortable: true},
-  {name: 'grade', label: '등급', align: 'center', field: 'grade', sortable: true},
-  {name: 'phone', label: '전화번호', align: 'center', field: 'phone', sortable: true},
-  {name: 'employeeName', label: '직원 이름', align: 'center', field: 'employeeName'},
-  {name: 'gender', label: '성별', align: 'center', field: 'gender'},
-  {name: 'birth', label: '생년월일', align: 'center', field: 'birth'},
+  { name: 'id', label: '#', align: 'left', field: 'id' },
+  { name: 'name', label: '이름', align: 'left', field: 'name', sortable: true },
+  { name: 'grade', label: '등급', align: 'center', field: 'grade', sortable: true },
+  { name: 'phone', label: '전화번호', align: 'center', field: 'phone', sortable: true },
+  { name: 'employeeName', label: '직원 이름', align: 'center', field: 'employeeName' },
+  { name: 'gender', label: '성별', align: 'center', field: 'gender' },
+  { name: 'birth', label: '생년월일', align: 'center', field: 'birth' },
 ];
 
 const gradeOptions = [
-  {label: '선택 안 함', value: ''},
-  {label: 'NEW', value: 'NEW'},
-  {label: 'BASIC', value: 'BASIC'},
-  {label: 'VIP', value: 'VIP'},
-  {label: 'VVIP', value: 'VVIP'}
+  { label: '선택 안 함', value: '' },
+  { label: 'NEW', value: 'NEW' },
+  { label: 'BASIC', value: 'BASIC' },
+  { label: 'VIP', value: 'VIP' },
+  { label: 'VVIP', value: 'VVIP' }
 ];
 
 const genderOptions = [
-  {label: '선택 안 함', value: ''},
-  {label: '여성', value: 'Female'},
-  {label: '남성', value: 'Male'}
+  { label: '선택 안 함', value: '' },
+  { label: '여성', value: 'Female' },
+  { label: '남성', value: 'Male' }
 ];
 
 const maskName = (name) => {
   if (!name) return '';
 
   const length = name.length;
-  const visibleChars = 4; // 처음 두 글자와 마지막 두 글자를 노출
-  const maskedChars = length - visibleChars; // 마스킹할 문자 수
+  const visibleChars = Math.min(4, length); // 처음 두 글자와 마지막 두 글자를 노출
+  const maskedChars = Math.max(0, length - visibleChars); // 마스킹할 문자 수
 
   const visiblePart = name.slice(0, 2); // 처음 두 글자
   const maskedPart = '*'.repeat(maskedChars); // 나머지 부분을 '*'로 마스킹
@@ -227,7 +217,7 @@ const maskPhoneNumber = (phoneNumber) => {
   if (!phoneNumber) return '';
 
   const visibleDigits = phoneNumber.slice(-4);
-  const maskedDigits = '*'.repeat(phoneNumber.length - 8); // 처음 세 자리와 마지막 네 자리를 제외한 부분을 마스킹
+  const maskedDigits = '*'.repeat(Math.max(0, phoneNumber.length - 7)); // 처음 세 자리와 마지막 네 자리를 제외한 부분을 마스킹
 
   return `${phoneNumber.slice(0, 3)}${maskedDigits}${visibleDigits}`;
 };
@@ -236,7 +226,7 @@ const maskBirthdate = (birthdate) => {
   if (!birthdate) return '';
 
   const visiblePart = birthdate.slice(-2); // 일자는 그대로 표시
-  const maskedPart = '*'.repeat(birthdate.length - 4); // 연도와 월을 마스킹
+  const maskedPart = '*'.repeat(Math.max(0, birthdate.length - 4)); // 연도와 월을 마스킹
 
   return `${birthdate.slice(0, 4)}${maskedPart}${visiblePart}`;
 };
@@ -285,6 +275,14 @@ const scrollToTop = () => {
   width: 9px; /* 버튼 크기 조정 */
   height: 9px; /* 버튼 크기 조정 */
 }
+
+.q-pa-lg {
+  padding: 16px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
-
-
