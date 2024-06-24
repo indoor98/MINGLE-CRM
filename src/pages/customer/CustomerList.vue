@@ -123,19 +123,17 @@ const pagination = ref({
 const selectedGrade = ref(null);
 const selectedGender = ref(null);
 
-const fetchCustomers = async () => {
+const fetchCustomers = async (page = 1) => {
   try {
     const params = {
-      page: pagination.value.page - 1,
+      page: page - 1,
       size: pagination.value.rowsPerPage,
       name: searchName.value || null,
       grade: selectedGrade.value || null,
       gender: selectedGender.value || null
     };
 
-    const response = await axios.get('/api/v1/customers/search', {
-      params: params
-    });
+    const response = await axios.get('/api/v1/customers/search', { params });
     customers.value = response.data.content;
     pagination.value.page = response.data.number + 1;
     pagination.value.rowsPerPage = response.data.size;
@@ -168,12 +166,12 @@ const onRequest = (params) => {
   const { page, rowsPerPage } = params.pagination;
   pagination.value.page = page;
   pagination.value.rowsPerPage = rowsPerPage;
-  fetchCustomers();
+  fetchCustomers(page);
 };
 
 const onPageChange = (page) => {
   pagination.value.page = page;
-  fetchCustomers();
+  fetchCustomers(page);
 };
 
 const columns = [
@@ -204,8 +202,8 @@ const maskName = (name) => {
   if (!name) return '';
 
   const length = name.length;
-  const visibleChars = 4; // 처음 두 글자와 마지막 두 글자를 노출
-  const maskedChars = length - visibleChars; // 마스킹할 문자 수
+  const visibleChars = Math.min(4, length); // 처음 두 글자와 마지막 두 글자를 노출
+  const maskedChars = Math.max(0, length - visibleChars); // 마스킹할 문자 수
 
   const visiblePart = name.slice(0, 2); // 처음 두 글자
   const maskedPart = '*'.repeat(maskedChars); // 나머지 부분을 '*'로 마스킹
@@ -219,7 +217,7 @@ const maskPhoneNumber = (phoneNumber) => {
   if (!phoneNumber) return '';
 
   const visibleDigits = phoneNumber.slice(-4);
-  const maskedDigits = '*'.repeat(phoneNumber.length - 8); // 처음 세 자리와 마지막 네 자리를 제외한 부분을 마스킹
+  const maskedDigits = '*'.repeat(Math.max(0, phoneNumber.length - 7)); // 처음 세 자리와 마지막 네 자리를 제외한 부분을 마스킹
 
   return `${phoneNumber.slice(0, 3)}${maskedDigits}${visibleDigits}`;
 };
@@ -228,7 +226,7 @@ const maskBirthdate = (birthdate) => {
   if (!birthdate) return '';
 
   const visiblePart = birthdate.slice(-2); // 일자는 그대로 표시
-  const maskedPart = '*'.repeat(birthdate.length - 4); // 연도와 월을 마스킹
+  const maskedPart = '*'.repeat(Math.max(0, birthdate.length - 4)); // 연도와 월을 마스킹
 
   return `${birthdate.slice(0, 4)}${maskedPart}${visiblePart}`;
 };
