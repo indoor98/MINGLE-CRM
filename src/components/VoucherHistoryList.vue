@@ -11,20 +11,24 @@
           :pagination="{ rowsPerPage: 10 }"
           style="cursor: pointer"
         >
-          <template v-slot:body-cell-requestDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.requestDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-confirmDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.confirmDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-rejectedReason="props">
-            <q-td :props="props">
-              {{ toTenWords(props.row.rejectedReason) }}
-            </q-td>
+          <template v-slot:body="props">
+            <q-tr :props="props" @click="showVoucherDetail(props.row)">
+              <q-td v-for="col in columns" :key="col.name" :props="props">
+                <span
+                  v-if="
+                    col.field === 'requestDate' || col.field === 'confirmDate'
+                  "
+                >
+                  {{ toDate(props.row[col.field]) }}
+                </span>
+                <span v-else-if="col.field === 'rejectedReason'">{{
+                  toTenWords(props.row[col.field])
+                }}</span>
+                <span v-else>
+                  {{ props.row[col.field] }}
+                </span>
+              </q-td>
+            </q-tr>
           </template>
           <template v-slot:no-data>
             <q-tr>
@@ -41,17 +45,24 @@
         <p style="color: red" class="text-center">{{ errorMessage }}</p>
       </q-card-section>
     </q-card>
+
+    <q-dialog v-model="showDialog" persistent>
+      <VoucherDetail :voucher="selectedVoucher" @close="closeVoucherDetail" />
+    </q-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, defineProps, watch } from "vue";
 import { api as axios } from "src/boot/axios";
+import VoucherDetail from "./VoucherHistoryDetail.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 const title = ref("");
+const showDialog = ref(false);
+const selectedVoucher = ref({});
 
 const props = defineProps({
   selected: {
@@ -167,13 +178,11 @@ const allColumns = [
 ];
 
 const toDate = (beforeDate) => {
-  return (
-    beforeDate.substring(0, 4) +
-    "-" +
-    beforeDate.substring(5, 7) +
-    "-" +
-    beforeDate.substring(8, 10)
-  );
+  const date = new Date(beforeDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };
 
 const toTenWords = (beforeWord) => {
@@ -219,6 +228,16 @@ const fetchVouchers = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const showVoucherDetail = (voucher) => {
+  selectedVoucher.value = voucher;
+  showDialog.value = true;
+};
+
+const closeVoucherDetail = () => {
+  showDialog.value = false;
+  selectedVoucher.value = null;
 };
 
 onMounted(() => {

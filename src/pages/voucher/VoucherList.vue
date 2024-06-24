@@ -18,41 +18,38 @@
           :pagination="{ rowsPerPage: 50 }"
           style="cursor: pointer"
         >
-          <template v-slot:body-cell-createdReason="props">
-            <q-td :props="props">
-              {{ toTenWords(props.row.createdReason) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-createdDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.endDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-startDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.startDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-endDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.endDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-request="props">
-            <q-td :props="props">
-              <q-btn
-                label="요청"
-                color="primary"
-                @click="requestVoucher(props.row.voucherId)"
-              >
-              </q-btn>
-              <q-btn
-                label="삭제"
-                color="secondary"
-                @click="deleteVoucher(props.row.voucherId)"
-              >
-              </q-btn>
-            </q-td>
+          <template v-slot:body="props">
+            <q-tr :props="props" @click="showVoucherDetail(props.row)">
+              <q-td v-for="col in columns" :key="col.name" :props="props">
+                <template v-if="col.name === 'createdReason'">
+                  {{ toTenWords(props.row[col.field]) }}
+                </template>
+                <template
+                  v-else-if="
+                    col.name === 'createdDate' ||
+                    col.name === 'startDate' ||
+                    col.name === 'endDate'
+                  "
+                >
+                  {{ toDate(props.row[col.field]) }}
+                </template>
+                <template v-else-if="col.name === 'request'">
+                  <q-btn
+                    label="요청"
+                    color="primary"
+                    @click.stop="requestVoucher(props.row.voucherId)"
+                  ></q-btn>
+                  <q-btn
+                    label="삭제"
+                    color="secondary"
+                    @click.stop="deleteVoucher(props.row.voucherId)"
+                  ></q-btn>
+                </template>
+                <template v-else>
+                  {{ props.row[col.field] }}
+                </template>
+              </q-td>
+            </q-tr>
           </template>
           <template v-slot:no-data>
             <q-tr>
@@ -69,6 +66,11 @@
         <p style="color: red" class="text-center">{{ errorMessage }}</p>
       </q-card-section>
     </q-card>
+
+    <!-- 바우처 상세 모달 -->
+    <q-dialog v-model="showDialog" persistent>
+      <VoucherDetail :voucher="selectedVoucher" @close="closeVoucherDetail" />
+    </q-dialog>
 
     <!-- 바우처 생성 모달 -->
     <q-dialog v-model="showCreationModal">
@@ -140,22 +142,25 @@
     </q-dialog>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Dialog, Notify } from "quasar";
+import VoucherDetail from "./VoucherDetail.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 const showCreationModal = ref(false);
-const showRequestModal = ref(false);
 const voucher = ref({
   customerId: "",
   amount: 0,
   startDate: "",
   endDate: "",
 });
+const showDialog = ref(false);
+const selectedVoucher = ref({});
 
 const toTenWords = (beforeWord) => {
   const afterword =
@@ -270,73 +275,55 @@ const createVoucher = async () => {
   }
 };
 
+const showVoucherDetail = (voucher) => {
+  selectedVoucher.value = voucher;
+  showDialog.value = true;
+};
+
+const closeVoucherDetail = () => {
+  showDialog.value = false;
+  selectedVoucher.value = {};
+};
+
 const requestVoucher = async (voucherId) => {
-  Dialog.create({
-    title: "확인",
-    message: `${voucherId}번 바우처 발급을 요청하시겠습니까?`,
-    ok: "예",
-    cancel: "아니오",
-  }).onOk(async () => {
-    try {
-      await axios.post(
-        `http://localhost:8080/api/v1/vouchers/request/${voucherId}`
-      );
-      Notify.create({
-        type: "positive",
-        message: "바우처가 성공적으로 승인되었습니다.",
-      });
-      // Refresh the voucher list after request
-      fetchVouchers();
-    } catch (error) {
-      console.error("바우처 승인 중 에러 발생:", error);
-      Notify.create({
-        type: "negative",
-        message: "바우처 승인 중 에러가 발생했습니다.",
-      });
-    }
-  });
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/api/v1/vouchers/request/${voucherId}`
+    );
+    // 바우처 목록을 다시 불러옴
+    fetchVouchers();
+    Notify.create({
+      type: "positive",
+      message: "요청이 성공적으로 완료되었습니다.",
+    });
+  } catch (error) {
+    console.error("바우처 요청 중 에러 발생:", error);
+    Notify.create({
+      type: "negative",
+      message: "요청 중 에러가 발생했습니다.",
+    });
+  }
 };
 
 const deleteVoucher = async (voucherId) => {
-  Dialog.create({
-    title: "확인",
-    message: `${voucherId}번 바우처를 삭제하시겠습니까?`,
-    ok: "예",
-    cancel: "아니오",
-  }).onOk(async () => {
-    try {
-      await axios.delete(`http://localhost:8080/api/v1/vouchers/${voucherId}`);
-      Notify.create({
-        type: "positive",
-        message: "바우처가 성공적으로 삭제되었습니다.",
-      });
-      // Refresh the voucher list after request
-      fetchVouchers();
-    } catch (error) {
-      console.error("바우처 삭제 중 에러 발생:", error);
-      Notify.create({
-        type: "negative",
-        message: "바우처 삭제 중 에러가 발생했습니다.",
-      });
-    }
-  });
+  try {
+    const response = await axios.delete(
+      `http://localhost:8080/api/v1/vouchers/${voucherId}`
+    );
+    // 바우처 목록을 다시 불러옴
+    fetchVouchers();
+    Notify.create({
+      type: "positive",
+      message: "삭제가 성공적으로 완료되었습니다.",
+    });
+  } catch (error) {
+    console.error("바우처 삭제 중 에러 발생:", error);
+    Notify.create({
+      type: "negative",
+      message: "삭제 중 에러가 발생했습니다.",
+    });
+  }
 };
 
-onMounted(() => {
-  fetchVouchers();
-});
+onMounted(fetchVouchers);
 </script>
-<style scoped>
-.flex {
-  display: flex;
-}
-.justify-between {
-  justify-content: space-between;
-}
-.items-center {
-  align-items: center;
-}
-q-table {
-  cursor: pointer;
-}
-</style>

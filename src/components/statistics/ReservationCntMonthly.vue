@@ -1,10 +1,10 @@
 <template>
   <q-page class="q-pa-md">
-    <h2>연도별 예약수</h2>
+    <h2>월별 예약수</h2>
     <q-card class="q-mt-md">
       <q-card-section>
         <q-table
-          :rows="byYearCnts"
+          :rows="monthlyReservations"
           :columns="columns"
           row-key="id"
           :loading="loading"
@@ -31,9 +31,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
-import { Bar, Doughnut } from "vue-chartjs";
+import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
   Title,
@@ -42,8 +42,6 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
-  DoughnutController,
-  ArcElement,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
@@ -54,8 +52,6 @@ ChartJS.register(
   BarElement,
   CategoryScale,
   LinearScale,
-  DoughnutController,
-  ArcElement,
   ChartDataLabels
 );
 
@@ -65,16 +61,25 @@ const chartData = ref({
   labels: [],
   datasets: [
     {
-      label: "By Year Reservation Rate",
-      backgroundColor: [], // 다채로운 색상 배열로 설정
-      borderColor: [], // 경계 색상 배열로 설정
+      label: "Monthly Reservation Count",
+      backgroundColor: "rgba(75, 192, 192, 0.2)",
+      borderColor: "rgba(75, 192, 192, 1)",
+      borderWidth: 1,
       data: [], // 초기값 설정
     },
   ],
 });
 
 const chartOptions = ref({
+  responsive: true,
   plugins: {
+    legend: {
+      position: "top",
+    },
+    title: {
+      display: true,
+      text: "월별 예약수 통계",
+    },
     datalabels: {
       anchor: "end",
       align: "top",
@@ -84,9 +89,22 @@ const chartOptions = ref({
       },
     },
   },
+  scales: {
+    x: {
+      grid: {
+        display: true,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        drawBorder: true,
+      },
+    },
+    y: {
+      beginAtZero: true,
+      suggestedMax: 14, // 최대값을 데이터 값보다 약간 더 높게 설정
+    },
+  },
 });
 
-const byYearCnts = ref([]);
+const monthlyReservations = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 
@@ -99,6 +117,13 @@ const columns = [
     sortable: true,
   },
   {
+    name: "reservationMonth",
+    label: "예약 월",
+    align: "center",
+    field: "reservationMonth",
+    sortable: true,
+  },
+  {
     name: "reservationCount",
     label: "예약 횟수",
     align: "center",
@@ -107,71 +132,34 @@ const columns = [
   },
 ];
 
-const fetchReservationCnts = async () => {
+const fetchMonthlyReservations = async () => {
   try {
     const response = await axios.get(
-      `/api/v1/statistic/reservation/by-year-reservation-cnt`
+      `/api/v1/statistic/reservation/monthly-reservation-cnt/all`
     );
-    byYearCnts.value = response.data;
+    monthlyReservations.value = response.data;
     errorMessage.value = "";
 
-    chartData.value.labels = byYearCnts.value.map(
-      (item) => item.reservationYear
+    // 차트 데이터 설정
+    const labels = monthlyReservations.value.map(
+      (item) => `${item.reservationYear}-${item.reservationMonth}`
     );
-    chartData.value.datasets[0].data = byYearCnts.value.map(
-      (item) => item.reservationCount
-    );
+    const data = monthlyReservations.value.map((item) => item.reservationCount);
 
-    // 색상 배열 설정
-    const colors = [
-      "rgba(75, 192, 192, 1)",
-      "rgba(54, 162, 235, 1)",
-      "rgba(255, 206, 86, 1)",
-      "rgba(75, 192, 192, 1)",
-      "rgba(153, 102, 255, 1)",
-      "rgba(255, 159, 64, 1)",
-      "rgba(199, 199, 199, 1)",
-      "rgba(83, 102, 255, 1)",
-    ];
-    const borderColors = [
-      "rgba(75, 192, 192, 1)",
-      "rgba(54, 162, 235, 1)",
-      "rgba(255, 206, 86, 1)",
-      "rgba(75, 192, 192, 1)",
-      "rgba(153, 102, 255, 1)",
-      "rgba(255, 159, 64, 1)",
-      "rgba(199, 199, 199, 1)",
-      "rgba(83, 102, 255, 1)",
-    ];
-
-    chartData.value.datasets[0].backgroundColor = colors.slice(
-      0,
-      byYearCnts.value.length
-    );
-    chartData.value.datasets[0].borderColor = borderColors.slice(
-      0,
-      byYearCnts.value.length
-    );
+    chartData.value.labels = labels;
+    chartData.value.datasets[0].data = data;
 
     loaded.value = true; // 데이터 로딩이 완료되면 true로 설정
   } catch (error) {
-    console.error("연도별 예약수 목록을 불러오는 중 에러 발생:", error);
-    errorMessage.value =
-      "연도별 예약수 목록을 불러오는 중 에러가 발생했습니다.";
+    console.error("월별 예약수 목록을 불러오는 중 에러 발생:", error);
+    errorMessage.value = "월별 예약수 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
   }
 };
 
 onMounted(() => {
-  fetchReservationCnts();
-});
-
-watch((newSelected) => {
-  if (newSelected) {
-    loading.value = true;
-    fetchReservationCnts();
-  }
+  fetchMonthlyReservations();
 });
 </script>
 

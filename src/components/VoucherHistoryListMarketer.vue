@@ -11,45 +11,49 @@
           :pagination="{ rowsPerPage: 10 }"
           style="cursor: pointer"
         >
-          <template v-slot:body-cell-createdReason="props">
-            <q-td :props="props">
-              {{ toTenWords(props.row.createdReason) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-requestDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.requestDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-confirmDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.confirmDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-sendOrCancelDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.sendOrCancelDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-sendOrCancel="props">
-            <q-td :props="props">
-              <q-btn
-                label="발송"
-                color="primary"
-                @click="
-                  sendVoucher(
-                    props.row.voucherId,
-                    props.row.customerEmail,
-                    props.row.voucherCode
-                  )
-                "
-              ></q-btn>
-              <q-btn
-                label="취소"
-                color="secondary"
-                @click="cancelVoucher(props.row.voucherId)"
-              ></q-btn>
-            </q-td>
+          <template v-slot:body="props">
+            <q-tr :props="props" @click="showVoucherDetail(props.row)">
+              <q-td v-for="col in columns" :key="col.name" :props="props">
+                <span
+                  v-if="
+                    col.field === 'requestDate' ||
+                    col.field === 'confirmDate' ||
+                    col.field === 'sendOrCancelDate'
+                  "
+                >
+                  {{ toDate(props.row[col.field]) }}
+                </span>
+                <span
+                  v-else-if="
+                    col.field === 'createdReason' ||
+                    col.field === 'rejectedReason'
+                  "
+                >
+                  {{ toTenWords(props.row[col.field]) }}
+                </span>
+                <span v-else-if="col.field === 'sendOrCancel'">
+                  <q-btn
+                    label="발송"
+                    color="primary"
+                    @click.stop="
+                      sendVoucher(
+                        props.row.voucherId,
+                        props.row.customerEmail,
+                        props.row.voucherCode
+                      )
+                    "
+                  ></q-btn>
+                  <q-btn
+                    label="취소"
+                    color="secondary"
+                    @click.stop="cancelVoucher(props.row.voucherId)"
+                  ></q-btn>
+                </span>
+                <span v-else>
+                  {{ props.row[col.field] }}
+                </span>
+              </q-td>
+            </q-tr>
           </template>
           <template v-slot:no-data>
             <q-tr>
@@ -66,12 +70,20 @@
         <p style="color: red" class="text-center">{{ errorMessage }}</p>
       </q-card-section>
     </q-card>
+
+    <q-dialog v-model="showDialog" persistent>
+      <VoucherHistoryDetail
+        :voucher="selectedVoucher"
+        @close="closeVoucherDetail"
+      />
+    </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits, watch } from "vue";
+import { ref, onMounted, defineProps, defineEmits, watch } from "vue";
 import { api as axios } from "src/boot/axios";
+import VoucherHistoryDetail from "./VoucherHistoryDetail.vue";
 import { Notify, Dialog } from "quasar";
 
 const props = defineProps({
@@ -87,9 +99,10 @@ const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 const title = ref("");
+const showDialog = ref(false);
+const selectedVoucher = ref({});
 
 const columns = ref([]);
-
 const defaultColumns = [
   {
     name: "voucherId",
@@ -259,6 +272,16 @@ const fetchVouchers = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const showVoucherDetail = (voucher) => {
+  selectedVoucher.value = voucher;
+  showDialog.value = true;
+};
+
+const closeVoucherDetail = () => {
+  showDialog.value = false;
+  selectedVoucher.value = null;
 };
 
 const sendVoucher = (voucherId, customerEmail, voucherCode) => {

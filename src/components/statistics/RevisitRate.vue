@@ -1,12 +1,14 @@
 <template>
-  <div>
-    <h2>Overall Revisit Rate</h2>
-    <Bar v-if="loaded" :data="overallChartData" :options="chartOptions" />
-    <h2>Revisit Rate By Gender</h2>
-    <Doughnut v-if="loaded" :data="genderChartData" :options="chartOptions" />
-    <h2>Revisit Rate By Grade</h2>
-    <Bar v-if="loaded" :data="gradeChartData" :options="chartOptions" />
-  </div>
+  <q-page class="q-pa-md">
+    <h2>고객 등급별 재방문률</h2>
+    <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
+    <h2>고객 성별별 재방문률</h2>
+    <Doughnut
+      v-if="loaded"
+      :data="genderChartData"
+      :options="genderChartOptions"
+    />
+  </q-page>
 </template>
 
 <script setup>
@@ -36,13 +38,13 @@ ChartJS.register(
   ArcElement
 );
 
-const overallChartData = ref({
-  labels: ["Overall"],
+const chartData = ref({
+  labels: ["NEW", "VIP", "BASIC", "VVIP", "Overall"],
   datasets: [
     {
-      label: "Overall Revisit Rate",
-      backgroundColor: "#42A5F5",
-      data: [0], // 초기값 설정
+      label: "Revisit Rate By Grade",
+      backgroundColor: ["#FFCE56", "#FF6384", "#36A2EB", "#4BC0C0", "#42A5F5"],
+      data: [0, 0, 0, 0, 0], // 초기값 설정
     },
   ],
 });
@@ -58,17 +60,6 @@ const genderChartData = ref({
   ],
 });
 
-const gradeChartData = ref({
-  labels: ["NEW", "VIP", "BASIC", "VVIP"],
-  datasets: [
-    {
-      label: "Revisit Rate By Grade",
-      backgroundColor: ["#FFCE56", "#FF6384", "#36A2EB", "#4BC0C0"],
-      data: [0, 0, 0, 0], // 초기값 설정
-    },
-  ],
-});
-
 const chartOptions = ref({
   responsive: true,
   plugins: {
@@ -79,6 +70,46 @@ const chartOptions = ref({
       display: true,
       text: "Revisit Rate Statistics",
     },
+    datalabels: {
+      anchor: "end",
+      align: "top",
+      formatter: (value) => value.toFixed(2),
+      font: {
+        weight: "bold",
+      },
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: true,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        drawBorder: true,
+      },
+    },
+    y: {
+      beginAtZero: false,
+    },
+  },
+});
+
+const genderChartOptions = ref({
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top",
+    },
+    title: {
+      display: true,
+      text: "Revisit Rate by Gender",
+    },
+    datalabels: {
+      align: "top",
+      formatter: (value) => value.toFixed(2),
+      font: {
+        weight: "bold",
+      },
+    },
   },
 });
 
@@ -87,21 +118,22 @@ const loaded = ref(false); // 데이터 로딩 상태
 onMounted(async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8080/api/v1/statistics/customers/revisit-rate"
+      "/api/v1/statistics/customers/revisit-rate"
     );
 
     const responseData = response.data;
 
-    overallChartData.value.datasets[0].data = [responseData.overallRevisitRate];
-    genderChartData.value.datasets[0].data = [
-      responseData.revisitRateByGender.Male,
-      responseData.revisitRateByGender.Female,
-    ];
-    gradeChartData.value.datasets[0].data = [
+    chartData.value.datasets[0].data = [
       responseData.revisitRateByGrade.NEW,
       responseData.revisitRateByGrade.VIP,
       responseData.revisitRateByGrade.BASIC,
       responseData.revisitRateByGrade.VVIP,
+      responseData.overallRevisitRate,
+    ];
+
+    genderChartData.value.datasets[0].data = [
+      responseData.revisitRateByGender.Male,
+      responseData.revisitRateByGender.Female,
     ];
 
     loaded.value = true; // 데이터 로딩이 완료되면 true로 설정
