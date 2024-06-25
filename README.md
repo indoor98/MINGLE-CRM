@@ -8,7 +8,7 @@
  
 |<img src="https://avatars.githubusercontent.com/u/85616993?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/98157935?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/65129708?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/156767787?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/155680893?v=4" width="150" height="150"/>|
 |:-:|:-:|:-:|:-:|:-:|
-|강찬미<br/>[@chan-nni](https://github.com/chan-nni)|장명훈<br/>[@indoor98](https://github.com/indoor98)|하지민<br/>[@zzimni](https://github.com/zzimni)|dongwook<br/>[@hsw50108](https://github.com/hsw50108)|권성지<br/>[@holyplace129](https://github.com/holyplace129)|
+|강찬미<br/>[@chan-nni](https://github.com/chan-nni)|장명훈<br/>[@indoor98](https://github.com/indoor98)|하지민<br/>[@zzimni](https://github.com/zzimni)|김동욱<br/>[@hsw50108](https://github.com/hsw50108)|권성지<br/>[@holyplace129](https://github.com/holyplace129)|
 
 </div>
 
