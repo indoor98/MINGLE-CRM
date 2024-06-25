@@ -39,7 +39,6 @@ public class InquiryController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<InquiryResponse> inquiries = inquiryService.getAllInquiries(pageable);
-        System.out.println("페이지네이션 테스트");
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 전체 목록 반환 성공", inquiries));
     }
 
