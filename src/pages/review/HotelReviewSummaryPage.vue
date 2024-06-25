@@ -86,12 +86,7 @@
         <q-select
           class="q-mx-xl"
           v-model="hotel"
-          :options="[
-            { label: '선택 안함', value: '선택 안함' },
-            { label: 'SEOUL', value: 'SEOUL' },
-            { label: 'BUSAN', value: 'BUSAN' },
-            { label: 'SOKCHO', value: 'SOKCHO' },
-          ]"
+          :options="hotelOptions"
           label="호텔 지점"
         />
 
@@ -141,6 +136,7 @@ const startDate = ref();
 const endDate = ref();
 const summaryType = ref("POSITIVE");
 const hotel = ref("선택 안함");
+const hotelOptions = ref(["선택 안함", "SEOUL", "BUSAN", "SOKCHO"]);
 
 const getHotelReviewsAverageRatings = async (startDate, endDate) => {
   try {
@@ -181,10 +177,8 @@ const getHotelReviewsSummaryByPeriod = async (startDate, endDate) => {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
     let hotelParam = hotel.value;
-    if (hotel.value === "선택 안함") {
+    if (hotelParam === "선택 안함") {
       hotelParam = "All";
-    } else {
-      hotelParam = hotel.value;
     }
 
     const response = await axios.get("/api/hotel/review/summary", {
@@ -210,11 +204,9 @@ const createHotelReviewsSummaryByPeriod = async (startDate, endDate) => {
   try {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
-    let hotelParam = null;
-    if (hotel.value === "선택 안함") {
+    let hotelParam = hotel.value;
+    if (hotelParam === "선택 안함") {
       hotelParam = "All";
-    } else {
-      hotelParam = hotel.value.value;
     }
 
     const response = await axios.post("/api/hotel/review/summary", {
