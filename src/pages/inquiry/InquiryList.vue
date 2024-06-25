@@ -228,13 +228,13 @@ const columns = [
     field: "inquiryTitle",
     sortable: true,
   },
-  {
-    name: "inquiryContent",
-    align: "left",
-    label: "문의 내용",
-    field: "inquiryContent",
-    sortable: true,
-  },
+  // {
+  //   name: "inquiryContent",
+  //   align: "left",
+  //   label: "문의 내용",
+  //   field: "inquiryContent",
+  //   sortable: true,
+  // },
   {
     name: "actionStatus",
     align: "left",

@@ -220,13 +220,13 @@ const columns = [
     field: "inquiryTitle",
     sortable: true,
   },
-  {
-    name: "inquiryContent",
-    align: "left",
-    label: "Inquiry Content",
-    field: "inquiryContent",
-    sortable: true,
-  },
+  // {
+  //   name: "inquiryContent",
+  //   align: "left",
+  //   label: "Inquiry Content",
+  //   field: "inquiryContent",
+  //   sortable: true,
+  // },
   {
     name: "actionStatus",
     align: "left",
