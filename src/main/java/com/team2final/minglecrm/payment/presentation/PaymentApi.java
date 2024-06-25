@@ -33,8 +33,12 @@ public class PaymentApi {
 
     @GetMapping("/search")
     // 결제 내역 다중 검색
-    public ResponseEntity<List<PaymentResponse>> getPaymentListByCustomerId(@PathVariable Long customerId, @RequestBody PaymentSearchCondition condition) {
+    public ResponseEntity<List<PaymentResponse>> getPaymentListByCustomerId(
+            @PathVariable Long customerId,
+            @ModelAttribute PaymentSearchCondition condition) {
+
         List<PaymentResponse> paymentResponses = paymentService.searchPaymentDetail(customerId, condition);
+
         return ResponseEntity.ok(paymentResponses);
     }
 }
