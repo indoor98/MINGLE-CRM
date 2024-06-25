@@ -166,8 +166,9 @@ public class VoucherController {
     }
 
     // 다중검색
-    @GetMapping("/search")
-    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> search(@RequestBody VoucherSearchCondition condition) {
+    @PostMapping("/search")
+    public ResponseEntity<ResultResponse<List<VoucherHistoryResponse>>> search(
+            @RequestBody VoucherSearchCondition condition) {
         List<VoucherHistoryResponse> searchVoucher = voucherService.search(condition);
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "다중 검색 바우처 목록 조회 성공", searchVoucher));
     }

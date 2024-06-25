@@ -3,6 +3,7 @@ package com.team2final.minglecrm.voucher.domain.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team2final.minglecrm.voucher.domain.QVoucherHistory;
+import com.team2final.minglecrm.voucher.domain.status.VoucherStatusType;
 import com.team2final.minglecrm.voucher.dto.request.VoucherSearchCondition;
 import com.team2final.minglecrm.voucher.dto.response.QVoucherHistoryResponse;
 import com.team2final.minglecrm.voucher.dto.response.VoucherHistoryResponse;
@@ -61,9 +62,14 @@ public class VoucherSearchRepository {
                         rejectedReasonContains(condition.getRejectedReason()),
                         voucherCodeContains(condition.getVoucherCode()),
                         dateBetween(condition.getStartDate(), condition.getEndDate()),
-                        gradeEq(condition.getCustomerGrade())
+                        gradeEq(condition.getCustomerGrade()),
+                        statusEq(condition.getStatus())
                 )
                 .fetch();
+    }
+
+    public BooleanExpression statusEq(VoucherStatusType status) {
+        return status != null ? QVoucherHistory.voucherHistory.status.eq(status) : null;
     }
 
     public BooleanExpression gradeEq(String grade) {
