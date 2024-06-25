@@ -1,11 +1,20 @@
-# MINGLE CRM 
+
+<div align=center>
+
+![image](https://github.com/kinggodgeneralteam2/BE05-FIN-2TEAM-MINGLECRM-BACKEND/assets/98157935/24493327-b0ba-43ea-97c7-431144693501)
+
+<h1 align=center> 호텔 & 다이닝 비지니스를 위한 고객 관리 시스템 </h1>
+
+</div>
 
  <details>
  <summary>
-    🌼프로젝트 기획서
+    <h1>🌼프로젝트 기획서</h1>
   </summary>
 
-# 프로젝트 개요
+<h2> 프로젝트 개요 </h2>
+
+
 
 - 팀 명 : Team Mingle
 - 프로젝트 명칭 : Mingle-CRM
@@ -14,7 +23,7 @@
 - 팀원 : 강찬미, 권성지, 김동욱, 장명훈, 하지민
 - 프로젝트 요약 : 호텔&리조트 기업이 효과적으로 고객 관리 및 마케팅 업무를 수행할 수 있도록 보조하는 고객 관리 시스템(CRM)입니다.
 
-# 프로젝트 목표 및 타겟
+<h2> 프로젝트 목표 및 타겟 </h2>
 
 - 프로젝트 배경
     - 이전 PM(Personal Mobility) 업체의 CX팀의 인턴으로 근무했던 팀원은 업무에 불편함을 느꼈습니다. 성수기 기준 주 평균 4,000개의 문의 중 유의미한 인사이트를 도출해내는 것은 상당한 시간이 필요했습니다. 기존의 CRM서비스는 불특정 다수의 기업에게 서비스하기 때문에 사용하는 기업에게 불필요한 결과들까지 보여지는 것이 문제였습니다.
@@ -27,7 +36,7 @@
     - 프로젝트의 핵심 목표는 이용자(호텔 직원)들이 본인의 업무를 효율적/효과적으로 수행할 수 있도록 돕는 것입니다.
     - 따라서 이를 위해 단순히 고객 데이터 조회 뿐만 아니라 고객 별 개인화 마케팅을 돕기 위한 여러 통계 생성 및 시각화를 주요 목표로 합니다.
 
-# 주요 기능
+<h2> 주요 기능 </h2> 
 
 1.  **권한 관리**
     - 우선순위 : 상
@@ -51,7 +60,7 @@
     - 우선순위 : 상
     - **목적:** 시스템은 주기적으로 통계 정보를 생성하고 관리해야 합니다.
 
-# 사용 기술 스택
+<h2> 사용 기술 스택 </h2>
 
 ### Backend
 
@@ -75,10 +84,10 @@
 
  <details>
  <summary>
-    🌼요구사항 정의서
+   <h1> 🌼요구사항 정의서 </h1>
   </summary>
   
-# 요구사항 정의서 / 명세서 ⇒ Entity 만들기
+<h1> 요구사항 정의서 </h1>
 
 **📌 목적**
 
@@ -218,7 +227,7 @@
 
  <details>
  <summary>
-    🌼시스템 아키텍처
+   <h1>🌼시스템 아키텍처 </h1> 
   </summary>
 
 <img width="1039" alt="스크린샷 2024-05-20 오전 10 51 37" src="https://github.com/kinggodgeneralteam2/BE05-FIN-2TEAM-MINGLECRM-BACKEND/assets/65129708/7ba84ad6-81ac-40d9-9692-2c6e1e63c74d">
@@ -227,7 +236,7 @@
 
  <details>
  <summary>
-🌼화면 설계서
+ <h1> 🌼화면 설계서 </h1>
    
   </summary>
   (https://www.figma.com/design/vgABOThuvnOdEdwMbqtJk2/mingle?node-id=0-1&t=Igw3yxiZ4yRqkeHs-0)
@@ -236,7 +245,7 @@
 
  <details>
  <summary>
-    🌼ERD
+  <h1>  🌼ERD </h1>
   </summary>
   <img width="1039" alt="스크린샷 2024-05-20 오전 10 51 37" src="https://github.com/kinggodgeneralteam2/BE05-FIN-2TEAM-MINGLECRM-BACKEND/assets/98157935/2b0bfef2-19e0-45c6-bfca-202a21ede0be">
 
@@ -244,11 +253,12 @@
 
  <details>
  <summary>
-    🌼WBS
+   <h1> 🌼WBS </h1>
   </summary>
    
   ![mingle_WBS (1)](https://github.com/kinggodgeneralteam2/BE05-FIN-2TEAM-MINGLECRM-BACKEND/assets/98157935/331ccb46-73ad-425e-a681-642a3db16a87)
 
 
 </details>
+
 
