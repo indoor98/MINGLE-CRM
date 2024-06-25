@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.review.domain.hotel;
 
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.team2final.minglecrm.customer.domain.Customer;
 import com.team2final.minglecrm.reservation.domain.hotel.RoomReservation;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @NamedEntityGraph(name = "HotelReview.withRoomReservationAndCustomer",
         attributeNodes = {
                 @NamedAttributeNode("roomReservation"),
@@ -25,7 +26,6 @@ public class HotelReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Double kindnessRating;
     private Double cleanlinessRating;
     private Double convenienceRating;
@@ -40,6 +40,7 @@ public class HotelReview {
     @OneToOne
     @JoinColumn(name = "room_reservation_id")
     private RoomReservation roomReservation;
+
 
 
 }

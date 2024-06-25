@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 public class HotelReviewResponse {
 
-
     private String customerName;
     private Double kindnessRating;
     private Double cleanlinessRating;
@@ -47,4 +46,5 @@ public class HotelReviewResponse {
                 .roomType(hotelReview.getRoomReservation().getHotelRoom().getRoomType())
                 .build();
     }
+
 }

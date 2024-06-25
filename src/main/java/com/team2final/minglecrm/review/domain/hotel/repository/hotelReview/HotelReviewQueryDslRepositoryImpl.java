@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.hotel.repository;
+package com.team2final.minglecrm.review.domain.hotel.repository.hotelReview;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -7,10 +7,13 @@ import com.team2final.minglecrm.ai.dto.vo.QHotelReviewForSummary;
 import com.team2final.minglecrm.customer.domain.QCustomer;
 import com.team2final.minglecrm.reservation.domain.hotel.QHotelRoom;
 import com.team2final.minglecrm.reservation.domain.hotel.QRoomReservation;
+import com.team2final.minglecrm.review.domain.hotel.HotelReview;
 import com.team2final.minglecrm.review.domain.hotel.QHotelReview;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewForSummaryResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.QHotelReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.dto.hotel.response.QHotelReviewForSummaryResponse;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,7 +36,6 @@ public class HotelReviewQueryDslRepositoryImpl implements HotelReviewQueryDslRep
 
     @Override
     public Page<HotelReviewConditionSearchResponse> searchByExpression(HotelReviewConditionSearchRequest condition, Pageable pageable) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         QHotelReview hotelReview = QHotelReview.hotelReview;
         QCustomer customer = QCustomer.customer;
@@ -84,6 +86,7 @@ public class HotelReviewQueryDslRepositoryImpl implements HotelReviewQueryDslRep
 
         QHotelReview hotelReview = QHotelReview.hotelReview;
 
+
         return queryFactory
                 .select(new QHotelReviewForSummary(
                         hotelReview.comment
@@ -92,4 +95,36 @@ public class HotelReviewQueryDslRepositoryImpl implements HotelReviewQueryDslRep
                 .where(hotelReview.createdTime.after(startDate))
                 .fetch();
     }
+
+    public List<HotelReviewForSummaryResponse> findHotelReviewsByCondition(HotelReviewConditionSearchRequest condition) {
+        QHotelReview hotelReview = QHotelReview.hotelReview;
+        QHotelRoom hotelRoom = QHotelRoom.hotelRoom;
+        QRoomReservation roomReservation = QRoomReservation.roomReservation;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (condition.getHotel() != null) {
+            builder.and(hotelRoom.hotel.eq(condition.getHotel())); // Hotel 정보 검색
+        }
+
+        if (condition.getStartDate() != null && condition.getEndDate() != null) {
+            builder.and(hotelReview.createdTime.between(condition.getStartDate(), condition.getEndDate()));
+        }
+
+        return queryFactory
+                .select(new QHotelReviewForSummaryResponse(
+                        hotelReview.kindnessRating,
+                        hotelReview.cleanlinessRating,
+                        hotelReview.convenienceRating,
+                        hotelReview.locationRating,
+                        hotelReview.comment,
+                        hotelReview.createdTime
+                ))
+                .from(hotelReview)
+                .join(hotelReview.roomReservation, roomReservation)
+                .join(roomReservation.hotelRoom, hotelRoom) // HotelRoom과 조인
+                .where(builder)
+                .fetch();
+    }
+
 }

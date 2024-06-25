@@ -1,8 +1,9 @@
 package com.team2final.minglecrm.review.domain.dining.repository;
 
 import com.team2final.minglecrm.ai.dto.vo.DiningReviewForSummary;
-import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchForSummaryResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,4 +16,5 @@ public interface DiningReviewQueryDslRepository {
 
     List<DiningReviewForSummary> findAllByStartDateCondition(LocalDateTime startDate);
 
+    List<DiningReviewConditionSearchForSummaryResponse> findDiningReviewsByCondition(DiningReviewConditionSearchRequest condition);
 }
