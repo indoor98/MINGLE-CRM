@@ -84,7 +84,7 @@
           label="문의 타입"
           class="search-field"
         />
-        <q-select
+        <!-- <q-select
           v-model="searchParams.isReply"
           :options="replyOptions"
           label="답변 여부"
@@ -95,7 +95,7 @@
           :options="actionStatusOptions"
           label="조치 상태"
           class="search-field"
-        />
+        /> -->
         <q-btn
           color="primary"
           label="Search"
