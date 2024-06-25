@@ -40,11 +40,16 @@ public class Employee {
         this.email = email;
         this.password = password;
         this.authority = authority;
+        this.createdDate = LocalDateTime.now();
         this.isDeleted = false;
     }
 
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void updateEmployeeInfo(String encodedPassword) {
+        this.password = encodedPassword;
     }
 }
