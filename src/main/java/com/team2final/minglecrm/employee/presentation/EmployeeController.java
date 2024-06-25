@@ -8,6 +8,9 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +47,22 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new AuthEmailCheckResponse("success", true));
         }
         return ResponseEntity.status(HttpStatus.OK).body(new AuthEmailCheckResponse("failed", false));
+    }
+
+    @GetMapping("/api/v1/employee/profile")
+    public ResponseEntity<EmployeeInfoResponse> getEmployeeInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        EmployeeInfoResponse employeeInfo = employeeService.getEmployeeInfo(userEmail);
+        return new ResponseEntity<>(employeeInfo, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/api/v1/employee-info")
+    public void updateEmployeeInfo(@RequestBody UpdateEmployeeRequest updateEmployeeRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        employeeService.updateEmployeeInfo(updateEmployeeRequest, userEmail);
     }
 
 }

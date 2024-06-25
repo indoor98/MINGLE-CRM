@@ -3,6 +3,8 @@ package com.team2final.minglecrm.employee.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.team2final.minglecrm.employee.dto.request.SignInRequest;
 import com.team2final.minglecrm.employee.dto.request.SignUpRequest;
+import com.team2final.minglecrm.employee.dto.request.UpdateEmployeeRequest;
+import com.team2final.minglecrm.employee.dto.response.EmployeeInfoResponse;
 import com.team2final.minglecrm.employee.dto.response.SignInResponse;
 import com.team2final.minglecrm.employee.dto.response.SignUpResponse;
 import com.team2final.minglecrm.auth.dto.Subject;
@@ -99,5 +101,17 @@ public class EmployeeService {
         redisDao.deleteValues(subject.getEmail());
         System.out.println(subject.getEmail() + "로그아웃이요");
         return null;
+    }
+
+    public EmployeeInfoResponse getEmployeeInfo(String employeeEmail) {
+        Employee employee = employeeRepository.findByEmail(employeeEmail).orElseThrow();
+        return EmployeeInfoResponse.of(employee);
+    }
+
+    @Transactional
+    public void updateEmployeeInfo(UpdateEmployeeRequest updateEmployeeRequest, String employeeEmail) {
+        Employee employee = employeeRepository.findByEmail(employeeEmail).orElseThrow();
+        String encodedPassword = passwordEncoder.encode(updateEmployeeRequest.getPassword());
+        employee.updateEmployeeInfo(encodedPassword);
     }
 }
