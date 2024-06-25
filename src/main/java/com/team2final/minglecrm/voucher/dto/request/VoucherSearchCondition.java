@@ -35,4 +35,6 @@ public class VoucherSearchCondition {
 
     private LocalDateTime endDate;
 
+    private String customerGrade;
+
 }

@@ -43,7 +43,8 @@ public class VoucherSearchRepository {
                         voucherHistory.voucher.amount,
                         voucherHistory.rejectedReason,
                         voucherHistory.voucherCode,
-                        voucherHistory.issueOrCancelDate
+                        voucherHistory.issueOrCancelDate,
+                        voucherHistory.customer.grade
                 ))
                 .from(voucherHistory)
                 .where(
@@ -59,9 +60,14 @@ public class VoucherSearchRepository {
                         amountEq(condition.getAmount()),
                         rejectedReasonContains(condition.getRejectedReason()),
                         voucherCodeContains(condition.getVoucherCode()),
-                        dateBetween(condition.getStartDate(), condition.getEndDate())
+                        dateBetween(condition.getStartDate(), condition.getEndDate()),
+                        gradeEq(condition.getCustomerGrade())
                 )
                 .fetch();
+    }
+
+    public BooleanExpression gradeEq(String grade) {
+        return grade != null ? QVoucherHistory.voucherHistory.customer.grade.eq(grade) : null;
     }
 
     private BooleanExpression requestDateEq(LocalDateTime requestDate) {

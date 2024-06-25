@@ -38,8 +38,9 @@ public class VoucherHistoryResponse {
     private final String voucherCode;
     private final LocalDateTime sendOrCancelDate;
 
+    private final String customerGrade;
 
-    public static VoucherHistoryResponse of(VoucherHistory voucherHistory){
+    public static VoucherHistoryResponse of(VoucherHistory voucherHistory) {
         Long employeeStaffId = voucherHistory.getEmployeeStaff() != null ? voucherHistory.getEmployeeStaff().getId() : null;
         Long employeeManagerId = voucherHistory.getEmployeeManager() != null ? voucherHistory.getEmployeeManager().getId() : null;
         String employeeStaffName = voucherHistory.getEmployeeStaff() != null ? voucherHistory.getEmployeeStaff().getName() : null;
@@ -68,12 +69,15 @@ public class VoucherHistoryResponse {
                 voucherHistory.getVoucher().getAmount(),
                 voucherHistory.getRejectedReason(),
                 voucherHistory.getVoucherCode(),
-                voucherHistory.getIssueOrCancelDate()
+                voucherHistory.getIssueOrCancelDate(),
+
+                // 고객등급
+                voucherHistory.getCustomer().getGrade()
         );
     }
 
     @QueryProjection
-    public VoucherHistoryResponse(Long voucherHistoryId, Long voucherId, VoucherStatusType status, LocalDateTime requestDate, String createdReason, LocalDateTime confirmDate, LocalDateTime conversionDate, Long creatorId, String creatorName, Long confirmerId, String confirmerName, Long customerId, String customerName, String customerEmail, Long amount, String rejectedReason, String voucherCode, LocalDateTime sendOrCancelDate) {
+    public VoucherHistoryResponse(Long voucherHistoryId, Long voucherId, VoucherStatusType status, LocalDateTime requestDate, String createdReason, LocalDateTime confirmDate, LocalDateTime conversionDate, Long creatorId, String creatorName, Long confirmerId, String confirmerName, Long customerId, String customerName, String customerEmail, Long amount, String rejectedReason, String voucherCode, LocalDateTime sendOrCancelDate, String customerGrade) {
         this.voucherHistoryId = voucherHistoryId;
         this.voucherId = voucherId;
         this.status = status;
@@ -92,5 +96,6 @@ public class VoucherHistoryResponse {
         this.rejectedReason = rejectedReason;
         this.voucherCode = voucherCode;
         this.sendOrCancelDate = sendOrCancelDate;
+        this.customerGrade = customerGrade;
     }
 }
