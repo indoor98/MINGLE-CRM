@@ -23,6 +23,10 @@
             <th>고객 이름</th>
             <td>{{ voucher.customerName }}</td>
           </tr>
+          <tr>
+            <th>고객 등급</th>
+            <td>{{ voucher.customerGrade }}</td>
+          </tr>
           <!-- <tr>
             <th>고객 이메일</th>
             <td>{{ voucher.customerEmail }}</td>

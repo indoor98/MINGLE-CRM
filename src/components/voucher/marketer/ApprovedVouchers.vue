@@ -1,6 +1,82 @@
 <template>
   <div>
-    <h2 class="text-h6">{{ title }}</h2>
+    <h2 class="text-h6">승인된 바우처 목록</h2>
+
+    <q-card class="my-card">
+      <q-card-section class="row justify-center q-pa-xs">
+        <div class="col q-pa-sm">
+          <q-input
+            v-model="searchCustomerName"
+            clearable
+            filled
+            color="purple-12"
+            label="고객명"
+            dense
+            placeholder="고객명을 입력하세요"
+          />
+        </div>
+        <div class="col q-pa-sm">
+          <q-input
+            v-model="searchConfirmerName"
+            clearable
+            filled
+            color="purple-12"
+            label="검토 매니저명"
+            dense
+            placeholder="매니저명을 입력하세요"
+          />
+        </div>
+
+        <div class="col q-pa-sm">
+          <q-input
+            v-model="searchAmount"
+            clearable
+            filled
+            color="purple-12"
+            label="금액"
+            dense
+            placeholder="금액을 입력하세요"
+          />
+        </div>
+
+        <div class="col q-pa-sm">
+          <q-input
+            v-model="searchCreatedReason"
+            clearable
+            filled
+            color="purple-12"
+            label="생성 사유"
+            dense
+            placeholder="생성 사유를 입력하세요"
+          />
+        </div>
+
+        <div class="col q-pa-sm">
+          <q-select
+            v-model="selectedGrade"
+            filled
+            color="purple-12"
+            label="고객 등급"
+            :options="gradeOptions"
+            emit-value
+            map-options
+            dense
+            placeholder="선택"
+          />
+        </div>
+
+        <div class="col q-pa-sm">
+          <q-btn
+            color="primary"
+            label="검색"
+            @click="searchVouchers"
+            dense
+            class="full-width"
+          />
+        </div>
+      </q-card-section>
+    </q-card>
+
     <q-card class="q-mt-md">
       <q-card-section>
         <q-table
@@ -16,20 +92,10 @@
               <q-td v-for="col in columns" :key="col.name" :props="props">
                 <span
                   v-if="
-                    col.field === 'requestDate' ||
-                    col.field === 'confirmDate' ||
-                    col.field === 'sendOrCancelDate'
+                    col.field === 'requestDate' || col.field === 'confirmDate'
                   "
                 >
                   {{ toDate(props.row[col.field]) }}
-                </span>
-                <span
-                  v-else-if="
-                    col.field === 'createdReason' ||
-                    col.field === 'rejectedReason'
-                  "
-                >
-                  {{ toTenWords(props.row[col.field]) }}
                 </span>
                 <span v-else-if="col.field === 'sendOrCancel'">
                   <q-btn
@@ -72,38 +138,39 @@
     </q-card>
 
     <q-dialog v-model="showDialog" persistent>
-      <VoucherHistoryDetail
-        :voucher="selectedVoucher"
-        @close="closeVoucherDetail"
-      />
+      <VoucherDetail :voucher="selectedVoucher" @close="closeVoucherDetail" />
     </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, defineEmits, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
-import VoucherHistoryDetail from "./voucher/VoucherHistoryDetail.vue";
-import { Notify, Dialog } from "quasar";
-
-const props = defineProps({
-  selected: {
-    type: String,
-    required: true,
-  },
-});
-
-const emits = defineEmits(["send-voucher"]);
+import VoucherDetail from "components/voucher/VoucherHistoryDetail.vue";
+import { useUserStore } from "src/stores/user-store";
+const userStore = useUserStore();
 
 const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
-const title = ref("");
 const showDialog = ref(false);
 const selectedVoucher = ref({});
 
-const columns = ref([]);
-const defaultColumns = [
+const searchCustomerName = ref("");
+const searchAmount = ref(null);
+const searchCreatedReason = ref("");
+const searchConfirmerName = ref("");
+const selectedGrade = ref(null);
+
+const gradeOptions = [
+  { label: "선택 안 함", value: "" },
+  { label: "NEW", value: "NEW" },
+  { label: "BASIC", value: "BASIC" },
+  { label: "VIP", value: "VIP" },
+  { label: "VVIP", value: "VVIP" },
+];
+
+const columns = [
   {
     name: "voucherId",
     label: "바우처 ID",
@@ -138,10 +205,6 @@ const defaultColumns = [
     field: "amount",
     sortable: true,
   },
-];
-
-const approvedColumns = [
-  ...defaultColumns,
   {
     name: "confirmDate",
     label: "승인 일자",
@@ -170,105 +233,31 @@ const approvedColumns = [
   },
 ];
 
-const rejectedColumns = [
-  ...defaultColumns,
-  {
-    name: "confirmDate",
-    label: "거절 일자",
-    align: "center",
-    field: "confirmDate",
-    sortable: true,
-  },
-  {
-    name: "rejectedReason",
-    label: "거절 사유",
-    align: "center",
-    field: "rejectedReason",
-  },
-  {
-    name: "confirmerName",
-    label: "검토 매니저 이름",
-    align: "center",
-    field: "confirmerName",
-    sortable: true,
-  },
-];
-
-const sendedColumns = [
-  ...defaultColumns,
-  {
-    name: "status",
-    label: "전환 여부",
-    align: "center",
-    field: "status",
-    sortable: true,
-  },
-];
-
-const canceledColumns = [
-  ...defaultColumns,
-  {
-    name: "sendOrCancelDate",
-    label: "취소 날짜",
-    align: "center",
-    field: "sendOrCancelDate",
-    sortable: true,
-  },
-];
+const toDate = (beforeDate) => {
+  const date = new Date(beforeDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 const toTenWords = (beforeWord) => {
-  const afterword =
+  const afterWord =
     beforeWord.length <= 10 ? beforeWord : beforeWord.substring(0, 10) + "...";
-  return afterword;
-};
-
-const toDate = (beforeDate) => {
-  return (
-    beforeDate.substring(0, 4) +
-    "-" +
-    beforeDate.substring(5, 7) +
-    "-" +
-    beforeDate.substring(8, 10)
-  );
-};
-
-const updateColumns = (selected) => {
-  switch (selected) {
-    case "approved-marketer":
-      title.value = "승인된 바우처 목록";
-      columns.value = approvedColumns;
-      break;
-    case "rejected-marketer":
-      title.value = "승인 거절된 바우처 목록";
-      columns.value = rejectedColumns;
-      break;
-    case "requested-marketer":
-      title.value = "승인 검토 전 바우처 목록";
-      columns.value = defaultColumns;
-      break;
-    case "sended-marketer":
-      title.value = "발송한 바우처 목록";
-      columns.value = sendedColumns;
-      break;
-    case "canceled-marketer":
-      title.value = "발송 취소한 바우처 목록";
-      columns.value = canceledColumns;
-      break;
-  }
+  return afterWord;
 };
 
 const fetchVouchers = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/v1/vouchers/${props.selected}`
+      `http://localhost:8080/api/v1/vouchers/approved-marketer`
     );
     vouchers.value = response.data.data;
-    console.log(vouchers.value);
     errorMessage.value = "";
   } catch (error) {
-    console.error("승인 요청한 바우처 목록을 불러오는 중 에러 발생:", error);
+    console.error("승인된 바우처 목록을 불러오는 중 에러 발생:", error);
     errorMessage.value =
-      "승인 요청한 바우처 목록을 불러오는 중 에러가 발생했습니다.";
+      "승인된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
   }
@@ -283,6 +272,30 @@ const closeVoucherDetail = () => {
   showDialog.value = false;
   selectedVoucher.value = null;
 };
+
+const searchVouchers = async () => {
+  try {
+    const data = {
+      customerName: searchCustomerName.value || null,
+      creatorName: userStore.name || null,
+      confirmerName: searchConfirmerName.value || null,
+      amount: searchAmount.value ? Number(searchAmount.value) : null,
+      createdReason: searchCreatedReason.value || null,
+      customerGrade: selectedGrade.value || null,
+      status: "APPROVED",
+    };
+
+    const response = await axios.post(
+      "http://localhost:8080/api/v1/vouchers/search",
+      data
+    );
+    vouchers.value = response.data.data;
+  } catch (error) {
+    console.error("Error fetching vouchers:", error);
+  }
+};
+
+const emits = defineEmits(["send-voucher"]);
 
 const sendVoucher = (voucherId, customerEmail, voucherCode) => {
   emits("send-voucher", voucherId, customerEmail, voucherCode);
@@ -316,20 +329,6 @@ const cancelVoucher = async (voucherId) => {
 };
 
 onMounted(() => {
-  updateColumns(props.selected);
   fetchVouchers();
 });
-
-watch(
-  () => props.selected,
-  (newSelected) => {
-    if (newSelected) {
-      loading.value = true;
-      updateColumns(newSelected);
-      fetchVouchers();
-    }
-  }
-);
 </script>
-
-<style scoped></style>

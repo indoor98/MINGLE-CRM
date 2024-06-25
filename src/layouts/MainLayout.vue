@@ -12,7 +12,7 @@
         />
         <q-avatar>
           <q-img
-            src="https://raw.githubusercontent.com/kinggodgeneralteam2/BE05-FIN-2TEAM-MINGLECRM-FRONTEND/0d1a7d413e5f369853a41661c455dcd8b7293d16/%E1%84%85%E1%85%A9%E1%84%80%E1%85%A9-removebg-preview.png"
+            src="https://github.com/kinggodgeneralteam2/TEAM2-MINGLE-CRM/assets/155680893/d2c27cc2-d62e-4459-9e66-c46426da8fac"
           />
         </q-avatar>
 
@@ -69,7 +69,7 @@
         <EssentialLink
           v-for="link in filteredLinks"
           :key="link.title"
-          v-bind="link"
+          :link="link"
         />
       </q-list>
     </q-drawer>
@@ -108,16 +108,35 @@ const linksList = [
   },
   {
     title: "바우처",
-    caption: "바우처 탭",
+    caption: "매니저 바우처 탭",
     icon: "school",
     to: "/voucher-manager",
     roles: ["ROLE_MANAGER"],
   },
   {
     title: "바우처",
-    caption: "바우처 탭",
+    caption: "마케터 바우처 탭",
     icon: "school",
-    to: "/voucher-marketer",
+    children: [
+      {
+        title: "초안 작성",
+        caption: "승인 요청전 바우처 목록",
+        icon: "assignment_late",
+        to: "/voucher-marketer/draft",
+      },
+      {
+        title: "승인 상태 확인",
+        caption: "승인 요청한 바우처 목록",
+        icon: "assignment_turned_in",
+        to: "/voucher-marketer/approval-check",
+      },
+      {
+        title: "발송 관리",
+        caption: "바우처 이메일 발송 상태 목록",
+        icon: "send",
+        to: "/voucher-marketer/email",
+      },
+    ],
     roles: ["ROLE_MARKETER"],
   },
   {
