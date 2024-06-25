@@ -158,9 +158,6 @@ const restaurantOptions = ref([
 ]);
 const startDate = ref("");
 const endDate = ref("");
-const positiveReviewSummary = ref("");
-const negativeReviewSummary = ref("");
-const seletedSummaryTap = ref("positive");
 
 const pagination = ref({
   sortBy: "desc",
@@ -212,30 +209,6 @@ const getDiningReviews = async () => {
   }
 };
 
-const getDiningPositiveReviewSummary = async () => {
-  const response = await axios.get(
-    "http://localhost:8080/api/dining/review/summary",
-    {
-      params: {
-        summaryType: "POSITIVE",
-      },
-    }
-  );
-  positiveReviewSummary.value = response.data.data.summary;
-};
-
-const getDiningNegativeReviewSummary = async () => {
-  const response = await axios.get(
-    "http://localhost:8080/api/dining/review/summary",
-    {
-      params: {
-        summaryType: "NEGATIVE",
-      },
-    }
-  );
-  negativeReviewSummary.value = response.data.data.summary;
-};
-
 const getDiningReviewMetaData = async () => {
   const response = await axios.get(
     "http://localhost:8080/api/dining/review/meta"
@@ -255,8 +228,6 @@ watch(
 // 컴포넌트가 마운트될 때 getHotelReviews 함수 호출
 onMounted(() => {
   getDiningReviews();
-  getDiningPositiveReviewSummary();
-  getDiningNegativeReviewSummary();
   getDiningReviewMetaData();
 });
 </script>

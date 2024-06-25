@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <section class="row q-col-gutter-xl flex flex-center q-mt-xs">
+    <section class="row q-col-gutter-xl flex flex-center q-mt-md">
       <q-input v-model="startDate" mask="date" :rules="['date']" label="시작일">
         <template v-slot:append>
           <q-icon name="event" class="cursor-pointer">
@@ -156,7 +156,6 @@ import { ref, watch, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 // import axios from "axios"; // axios 모듈을 기본 내보내기로 임포트
 
-const current = ref(1);
 const reviews = ref([]);
 const hotel = ref("선택 안함");
 const hotelOptions = ref(["선택 안함", "SEOUL", "SOKCHO", "BUSAN"]);
@@ -175,9 +174,6 @@ const roomTypeOptions = ref([
 ]);
 const startDate = ref("");
 const endDate = ref("");
-
-const positiveReviewSummary = ref("");
-const negativeReviewSummary = ref("");
 
 const customerName = ref("");
 
@@ -234,30 +230,6 @@ const getHotelReviews = async () => {
   }
 };
 
-const getHotelPositiveReviewSummary = async () => {
-  const response = await axios.get(
-    "http://localhost:8080/api/hotel/review/summary",
-    {
-      params: {
-        summaryType: "POSITIVE",
-      },
-    }
-  );
-  positiveReviewSummary.value = response.data.data.summary;
-};
-
-const getHotelNegativeReviewSummary = async () => {
-  const response = await axios.get(
-    "http://localhost:8080/api/hotel/review/summary",
-    {
-      params: {
-        summaryType: "NEGATIVE",
-      },
-    }
-  );
-  negativeReviewSummary.value = response.data.data.summary;
-};
-
 const getHotelReviewMetaData = async () => {
   const response = await axios.get(
     "http://localhost:8080/api/hotel/review/meta"
@@ -277,8 +249,7 @@ watch(
 // 컴포넌트가 마운트될 때 getHotelReviews 함수 호출
 onMounted(() => {
   getHotelReviews();
-  getHotelPositiveReviewSummary();
-  getHotelNegativeReviewSummary();
+
   getHotelReviewMetaData();
 });
 </script>
