@@ -24,7 +24,10 @@ public class EmployeeController {
 
     @PostMapping("/api/v1/auth/signup")
     public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest requestDTO) {
+        System.out.println(">>>>>>>>>> signup , " + requestDTO);
         SignUpResponse responseDTO = employeeService.signUp(requestDTO);
+        System.out.println(">>>>>>>>>> responseDTO , " + responseDTO);
+
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 

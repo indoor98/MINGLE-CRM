@@ -8,17 +8,12 @@ DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
 TIME_NOW=$(date +%c)
 
-# 환경 변수 설정
-export SMTP_EMAIL=minglecrm@gmail.com
-export SMTP_PASSWORD=mqpfjvaxsffkvsfc
-
 # build 파일 복사
 echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
 cp $JAR_FILE $PROJECT_ROOT/minglecrm-0.0.1-SNAPSHOT.jar
 
-#codedeploy bashrc를 읽어오지 못해 해당 파일 로드하게 작업 - 환경변수 사용 시 추가
-#sudo vim ~/.bash_profile
-#source ~/.bash_profile
+# 환경 변수 로드
+source ~/.bashrc
 
 # jar 파일 실행
 echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG

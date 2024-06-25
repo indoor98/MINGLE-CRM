@@ -17,6 +17,10 @@ env:
   S3_BUCKET_NAME: mingle.bucket
   CODE_DEPLOY_APPLICATION_NAME: codeDeploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: codeDeploy
+#  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+#  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+#  SMTP_EMAIL: ${{ secrets.SMTP_EMAIL }}
+#  SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
 
 permissions:
   contents: read
