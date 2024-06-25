@@ -26,18 +26,17 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> authenticate");
+
         if (!supports(authentication.getClass())) {
             return null;
         }
 
         String atk = (String) authentication.getPrincipal();
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> authenticate atk, "+atk);
+
         /* JwtToken 검증, 실패 시 예외 발생 */
 
         if (atk != null) {
             jwtUtil.validateAccessToken(atk);
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> authenticate atk , "+atk);
             try {
                 Subject subject = jwtUtil.getSubject(atk);
 
@@ -55,7 +54,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 throw new RuntimeException(e);
             }
         } else {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> authenticate else ");
             Authentication failToken =  new UsernamePasswordAuthenticationToken(null, null, null);
             failToken.setAuthenticated(false);
             return failToken;

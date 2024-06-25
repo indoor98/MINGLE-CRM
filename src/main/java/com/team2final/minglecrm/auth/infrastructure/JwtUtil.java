@@ -38,7 +38,6 @@ public class JwtUtil {
             @Value("${spring.jwt.live.atk}") final Long accessTokenExpirationTime,
             @Value("${spring.jwt.live.rtk}") final Long refreshTokenExpirationTime
     ) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         this.objectMapper = objectMapper;
         this.redisDao = redisDao;
         this.employeeRepository = employeeRepository;
@@ -50,7 +49,7 @@ public class JwtUtil {
     public TokenResponse createTokensBySignIn(String email) throws JsonProcessingException {
 
         Employee employee = employeeRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-        System.out.println("debug >>> createTokensBySignIn employee , "+employee);
+
         return createTokenResponse(employee);
     }
 
@@ -70,9 +69,9 @@ public class JwtUtil {
 
         String atk = createToken(atkSubject, accessTokenExpirationTime);
         String rtk = createToken(rtkSubject, refreshTokenExpirationTime);
-        System.out.println("debug >>>> redisDao start ");
+
         redisDao.setValues(employee.getEmail(), rtk, Duration.ofMillis(refreshTokenExpirationTime));
-        System.out.println("debug >>>> redisDao end ");
+
         return TokenResponse.builder()
                 .atk(atk)
                 .rtk(rtk)
