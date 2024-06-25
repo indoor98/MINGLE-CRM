@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.inquiry.service;
 
+import com.team2final.minglecrm.employee.domain.Employee;
 import com.team2final.minglecrm.inquiry.dto.request.InquiryActionRequest;
 import com.team2final.minglecrm.inquiry.dto.request.InquiryReplyRequest;
 import com.team2final.minglecrm.inquiry.dto.response.InquiryActionResponse;
@@ -118,15 +119,15 @@ public class InquiryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-//        Employee employee = employeeRepository.findByEmail(userEmail)
-//                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+        Employee employee = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         Inquiry inquiry = inquiryRepository.findById(request.getInquiryId())
                 .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다."));
 
         InquiryReply inquiryReply = InquiryReply.builder()
                 .inquiry(inquiry)
-                .employee(null)
+                .employee(employee)
                 .reply(request.getReply())
                 .date(LocalDateTime.now())
                 .build();
@@ -141,14 +142,14 @@ public class InquiryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-//        Employee employee = employeeRepository.findByEmail(userEmail)
-//                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+        Employee employee = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         InquiryReply inquiryReply = inquiryReplyRepository.findById(inquiryReplyId)
                 .orElseThrow(() -> new IllegalArgumentException("답변을 찾을 수 없습니다."));
 
         // 엔티티 메서드 호출
-        inquiryReply.updateReply(updatedReply, LocalDateTime.now(), null);
+        inquiryReply.updateReply(updatedReply, LocalDateTime.now(), employee);
 
         return convertToDTO(inquiryReply);
     }
@@ -158,8 +159,8 @@ public class InquiryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-//        Employee employee = employeeRepository.findByEmail(userEmail)
-//                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+        Employee employee = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         Inquiry inquiry = inquiryRepository.findById(request.getInquiryId())
                 .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다."));
@@ -168,7 +169,7 @@ public class InquiryService {
 
         InquiryAction inquiryAction = InquiryAction.builder()
                 .inquiry(inquiry)
-                .employee(null)
+                .employee(employee)
                 .actionStatus(ActionStatus.fromValue(request.getActionStatus()))
                 .actionContent(request.getActionContent())
                 .date(LocalDateTime.now())
@@ -184,8 +185,8 @@ public class InquiryService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-//        Employee employee = employeeRepository.findByEmail(userEmail)
-//                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
+        Employee employee = employeeRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("로그인한 사용자를 찾을 수 없습니다."));
 
         System.out.println("Service layer: Updating action with ID: " + inquiryActionId);
         System.out.println("Service layer: Received action status: " + actionStatus);
@@ -201,7 +202,7 @@ public class InquiryService {
         System.out.println("Updating action: " + updateAction);  // 추가 로그
         System.out.println("Updating action status: " + actionStatus);  // 추가 로그
 
-        inquiryAction.updateAction(updateAction, LocalDateTime.now(), null, actionStatus);
+        inquiryAction.updateAction(updateAction, LocalDateTime.now(), employee, actionStatus);
 
         InquiryActionResponse response = convertToActionDTO(inquiryAction);
 
@@ -297,6 +298,7 @@ public class InquiryService {
                 .id(inquiryReply.getId())
                 .inquiryId(inquiryReply.getInquiry().getId())
                 .email(inquiryReply.getEmployee() != null ? inquiryReply.getEmployee().getEmail() : null)
+                .name(inquiryReply.getEmployee() != null ? inquiryReply.getEmployee().getName() : null)
                 .reply(inquiryReply.getReply())
                 .date(inquiryReply.getDate())
                 .build();
@@ -311,6 +313,7 @@ public class InquiryService {
                 .actionContent(inquiryAction.getActionContent())
                 .actionStatus(inquiryAction.getActionStatus().getValue())
                 .email(inquiryAction.getEmployee() != null ? inquiryAction.getEmployee().getEmail() : null)
+                .name(inquiryAction.getEmployee() != null ? inquiryAction.getEmployee().getName() : null)
                 .date(inquiryAction.getDate())
                 .build();
     }

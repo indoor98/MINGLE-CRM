@@ -133,7 +133,7 @@ public class InquiryController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "고객 문의 상세 조회 성공", inquiryDetail));
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search2")
     public ResponseEntity<ResultResponse<Page<InquiryResponse>>> searchInquiries(
             @RequestParam String keyword,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -145,7 +145,7 @@ public class InquiryController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "문의 전체 목록 검색 성공", inquiries));
     }
 
-    @GetMapping("/search2")
+    @GetMapping("/search")
     public ResponseEntity<ResultResponse<Page<InquiryResponse>>> searchInquiries(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String customerName,
