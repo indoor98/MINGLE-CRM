@@ -98,6 +98,12 @@ const routes = [
         name: "viewLogPage",
         component: () => import("pages/log/view/ViewLogPage.vue"),
       },
+      {
+        path: '/mypage',
+        name: 'myPage',
+        component: () => import('pages/mypage/MyPage.vue'),
+        meta: { requiresAuth: true }
+      }
     ],
   },
   {
