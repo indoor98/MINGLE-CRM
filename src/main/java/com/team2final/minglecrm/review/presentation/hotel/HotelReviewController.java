@@ -6,6 +6,7 @@ import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSe
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewMetaDataResponse;
 import com.team2final.minglecrm.review.service.hotel.HotelReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,14 +37,14 @@ public class HotelReviewController {
     }
 
     @GetMapping("/api/hotel/rating/average")
-    public Double getHotelAverageRatingByPeriod(@RequestParam(name = "startDate") LocalDateTime startDate,
-                                                @RequestParam(name = "endDate") LocalDateTime endDate) {
+    public Double getHotelAverageRatingByPeriod(@RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                                @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return hotelReviewService.getHotelReviewAverageRatingByPeriod(startDate, endDate);
     }
 
     @GetMapping("/api/hotel/review/count")
-    public Long getHotelReviewsNumberByPeriod(@RequestParam(name = "startDate") LocalDateTime startDate,
-                                              @RequestParam(name = "endDate") LocalDateTime endDate) {
+    public Long getHotelReviewsNumberByPeriod(@RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                              @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return hotelReviewService.getHotelReviewsNumberByPeriod(startDate, endDate);
     }
 }

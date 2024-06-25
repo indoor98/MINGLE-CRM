@@ -14,4 +14,6 @@ public interface DiningReviewRepository extends JpaRepository<DiningReview, Long
 
     Page<DiningReview> findAll(Pageable pageable);
     List<DiningReview> findDiningReviewByCreatedDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+
+    Long countDiningReviewByCreatedDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 }

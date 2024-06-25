@@ -25,16 +25,20 @@ public class DiningReviewSummary {
     @Column(length = 1000)
     private String summary;
 
+    private String restaurant;
+
     @Builder
     public DiningReviewSummary(
             LocalDateTime startDate,
             LocalDateTime endDate,
             String summary,
-            SummaryType summaryType) {
+            SummaryType summaryType,
+            String restaurant) {
 
         this.startDate = startDate;
         this.endDate = endDate;
         this.summary = summary;
         this.summaryType = summaryType;
+        this.restaurant = restaurant;
     }
 }

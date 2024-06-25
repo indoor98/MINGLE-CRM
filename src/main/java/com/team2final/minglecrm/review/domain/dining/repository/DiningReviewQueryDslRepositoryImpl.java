@@ -10,11 +10,12 @@ import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewCond
 import com.team2final.minglecrm.reservation.dto.dining.response.QDiningReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.domain.dining.QDiningReview;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchForSummaryResponse;
+import com.team2final.minglecrm.review.dto.dining.response.QDiningReviewConditionSearchForSummaryResponse;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -78,6 +79,36 @@ public class DiningReviewQueryDslRepositoryImpl implements DiningReviewQueryDslR
                 ))
                 .from(diningReview)
                 .where(diningReview.createdDate.after(startDate))
+                .fetch();
+    }
+
+    @Override
+    public List<DiningReviewConditionSearchForSummaryResponse> findDiningReviewsByCondition(DiningReviewConditionSearchRequest condition) {
+        QDiningReview diningReview = QDiningReview.diningReview;
+        QDishReservation dishReservation = QDishReservation.dishReservation;
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if(condition.getRestaurant() != null) {
+            builder.and(dishReservation.restaurant.eq(condition.getRestaurant()));
+        }
+
+        if (condition.getStartDate() != null && condition.getEndDate() != null) {
+            builder.and(diningReview.createdDate.between(condition.getStartDate(), condition.getEndDate()));
+        }
+
+        return queryFactory
+                .select(new QDiningReviewConditionSearchForSummaryResponse(
+                        diningReview.tasteRating,
+                        diningReview.kindnessRating,
+                        diningReview.cleanlinessRating,
+                        diningReview.atmosphereRating,
+                        diningReview.review,
+                        diningReview.createdDate,
+                        dishReservation.restaurant
+                        ))
+                .from(diningReview)
+                .join(diningReview.dishReservation, dishReservation)
+                .where(builder)
                 .fetch();
     }
 }

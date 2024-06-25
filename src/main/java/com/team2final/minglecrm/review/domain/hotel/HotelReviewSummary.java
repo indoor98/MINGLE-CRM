@@ -18,7 +18,7 @@ public class HotelReviewSummary {
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-
+    private String hotel;
     private SummaryType summaryType;
 
     @Column(length = 1000)
@@ -28,11 +28,13 @@ public class HotelReviewSummary {
     public HotelReviewSummary(
             LocalDateTime startDate,
             LocalDateTime endDate,
+            String hotel,
             String summary,
             SummaryType summaryType) {
 
         this.startDate = startDate;
         this.endDate = endDate;
+        this.hotel = hotel;
         this.summary = summary;
         this.summaryType = summaryType;
     }

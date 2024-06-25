@@ -4,15 +4,14 @@ import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.domain.hotel.HotelReview;
-import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewQueryDslRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.hotelReview.HotelReviewRepository;
+import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewForSummaryResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewMetaDataResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +35,16 @@ public class HotelReviewService {
         return response;
     }
 
-    public JoinedReviews getJoinedHotelReviews (LocalDateTime startDate, LocalDateTime endDate) {
-        List<HotelReview> hotelReviewList = hotelReviewRepository.findHotelReviewByCreatedTimeBetween(startDate, endDate);
+    public JoinedReviews getJoinedHotelReviews (LocalDateTime startDate, LocalDateTime endDate, String hotel) {
+        HotelReviewConditionSearchRequest request = new HotelReviewConditionSearchRequest(null, hotel, null, startDate, endDate);
+        List<HotelReviewForSummaryResponse> hotelReviewList = hotelReviewRepository.findHotelReviewsByCondition(request);
         StringBuilder response = new StringBuilder();
+
+        if (hotelReviewList.isEmpty()) {
+            System.out.println("리뷰 데이터가 없습니다.");
+            return null;
+        }
+
         for (int i=0; i < hotelReviewList.size() ; i++) {
             response.append(i)
                     .append(" 번째 리뷰 : ")

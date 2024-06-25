@@ -2,17 +2,14 @@ package com.team2final.minglecrm.ai.service;
 
 import com.team2final.minglecrm.ai.dto.response.DiningReviewSummaryResponse;
 import com.team2final.minglecrm.ai.dto.response.HotelReviewSummaryResponse;
-import com.team2final.minglecrm.ai.dto.vo.DiningReviewForSummary;
-import com.team2final.minglecrm.ai.dto.vo.HotelReviewForSummary;
 import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
 import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
 import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewRepository;
 import com.team2final.minglecrm.review.domain.hotel.HotelReviewSummary;
 import com.team2final.minglecrm.review.domain.hotel.SummaryType;
 import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewSummaryRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewQueryDslRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.HotelReviewSummaryRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.hotelReview.HotelReviewRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.summary.HotelReviewSummaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -43,10 +40,11 @@ public class AiService {
         }
     }
 
-    private void saveHotelSummary(JoinedReviews joinedHotelReviews, SummaryType summaryType, String summaryContent) {
+    private void saveHotelSummary(JoinedReviews joinedHotelReviews, SummaryType summaryType, String summaryContent, String hotel) {
         HotelReviewSummary summary = HotelReviewSummary.builder()
                 .summary(summaryContent)
                 .summaryType(summaryType)
+                .hotel(hotel)
                 .startDate(joinedHotelReviews.getStartDate())
                 .endDate(joinedHotelReviews.getEndDate())
                 .build();
@@ -54,10 +52,11 @@ public class AiService {
         hotelReviewSummaryRepository.save(summary);
     }
 
-    private void saveDiningSummary(JoinedReviews joinedDiningReviews, SummaryType summaryType, String summaryContent) {
+    private void saveDiningSummary(JoinedReviews joinedDiningReviews, SummaryType summaryType, String summaryContent, String restaurant) {
         DiningReviewSummary summary = DiningReviewSummary.builder()
                 .summary(summaryContent)
                 .summaryType(summaryType)
+                .restaurant(restaurant)
                 .startDate(joinedDiningReviews.getStartDate())
                 .endDate(joinedDiningReviews.getEndDate())
                 .build();
@@ -65,7 +64,7 @@ public class AiService {
         diningReviewSummaryRepository.save(summary);
     }
 
-    public String createHotelReviewSummary(JoinedReviews joinedHotelReviews, SummaryType summaryType) {
+    public String createHotelReviewSummary(JoinedReviews joinedHotelReviews, SummaryType summaryType, String hotel) {
         String systemMessageContent = generateSystemMessage(summaryType);
         SystemMessage systemMessage = new SystemMessage(systemMessageContent);
 
@@ -73,11 +72,11 @@ public class AiService {
         Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
         String answer = chatClient.prompt(prompt).call().content();
 
-        saveHotelSummary(joinedHotelReviews, summaryType, answer);
+        saveHotelSummary(joinedHotelReviews, summaryType, answer, hotel);
         return answer;
     }
 
-    public String createDtiningReviewSummary (JoinedReviews joinedDiningReviews, SummaryType summaryType) {
+    public String createDiningReviewSummary(JoinedReviews joinedDiningReviews, SummaryType summaryType, String restaurant) {
         String systemMessageContent = generateSystemMessage(summaryType);
         SystemMessage systemMessage = new SystemMessage(systemMessageContent);
 
@@ -85,18 +84,35 @@ public class AiService {
         Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
         String answer = chatClient.prompt(prompt).call().content();
 
-        saveDiningSummary(joinedDiningReviews, summaryType, answer);
+        saveDiningSummary(joinedDiningReviews, summaryType, answer, restaurant);
         return answer;
     }
 
-    public HotelReviewSummaryResponse getLatestHotelReviewSummary(SummaryType summaryType) {
-        List<HotelReviewSummary> entities =  hotelReviewSummaryRepository.findHotelReviewSummariesBySummaryTypeOrderByStartDateDesc(summaryType);
-        return HotelReviewSummaryResponse.of(entities.get(0));
+    public HotelReviewSummaryResponse getHotelReviewSummaryByPeriod(
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            SummaryType summaryType,
+            String hotel) {
+        List<HotelReviewSummary> entities =  hotelReviewSummaryRepository.findHotelReviewSummariesBySummaryTypeAndStartDateAndEndDateAndHotel(summaryType, startDate, endDate, hotel);
+        if (entities.isEmpty()) {
+            return null;
+        } else {
+            return HotelReviewSummaryResponse.of(entities.get(0));
+        }
     }
 
-    public DiningReviewSummaryResponse getLatestDiningReviewSummary(SummaryType summaryType) {
-        List<DiningReviewSummary> entities = diningReviewSummaryRepository.findDiningReviewSummariesBySummaryTypeOrderByStartDateDesc(summaryType);
-        return DiningReviewSummaryResponse.of(entities.get(0));
+    public DiningReviewSummaryResponse getDiningReviewSummaryByPeriod(
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            SummaryType summaryType,
+            String restaurant) {
+        List<DiningReviewSummary> entities = diningReviewSummaryRepository.findDiningReviewSummariesBySummaryTypeAndStartDateAndEndDateAndRestaurant(summaryType, startDate, endDate,restaurant);
+
+        if (entities.isEmpty()) {
+            return null;
+        } else {
+            return DiningReviewSummaryResponse.of(entities.get(0));
+        }
     }
 
 }
