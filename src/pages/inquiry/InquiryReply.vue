@@ -45,7 +45,7 @@ const submitReply = async () => {
       {
         inquiryId: props.inquiryId,
         reply: reply.value.content,
-        email: null, // 이메일 필드 null로 설정
+        // email: null, // 이메일 필드 null로 설정
       },
       {
         headers: {

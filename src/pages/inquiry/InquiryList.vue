@@ -342,7 +342,7 @@ const fetchInquiriesSearch = async () => {
       params.append("actionStatus", searchParams.value.actionStatus);
 
     const response = await axios.get(
-      `/api/v1/inquiries/search2?${params.toString()}`,
+      `/api/v1/inquiries/search?${params.toString()}`,
       {
         headers: {
           Authorization: `Bearer ${useTokenStore().getAtk}`, // store.atk는 토큰 상태를 나타내는 변수

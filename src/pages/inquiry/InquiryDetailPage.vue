@@ -91,6 +91,12 @@
               </q-item>
               <q-item>
                 <q-item-section
+                  >답변 담당자 이름:
+                  {{ inquiryDetail.inquiryReplyResponse.name }}</q-item-section
+                >
+              </q-item>
+              <q-item>
+                <q-item-section
                   >답변 내용:
                   {{ inquiryDetail.inquiryReplyResponse.reply }}</q-item-section
                 >
@@ -139,6 +145,12 @@
                   {{
                     inquiryDetail.inquiryActionResponse.email
                   }}</q-item-section
+                >
+              </q-item>
+              <q-item v-if="inquiryDetail.inquiryActionResponse">
+                <q-item-section
+                  >조치 담당자 이름:
+                  {{ inquiryDetail.inquiryActionResponse.name }}</q-item-section
                 >
               </q-item>
               <q-item v-if="inquiryDetail.inquiryActionResponse">
