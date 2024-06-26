@@ -3,6 +3,7 @@ package com.team2final.minglecrm.voucher.domain.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team2final.minglecrm.voucher.domain.QVoucherHistory;
+import com.team2final.minglecrm.voucher.domain.status.VoucherStatusType;
 import com.team2final.minglecrm.voucher.dto.request.VoucherSearchCondition;
 import com.team2final.minglecrm.voucher.dto.response.QVoucherHistoryResponse;
 import com.team2final.minglecrm.voucher.dto.response.VoucherHistoryResponse;
@@ -43,7 +44,10 @@ public class VoucherSearchRepository {
                         voucherHistory.voucher.amount,
                         voucherHistory.rejectedReason,
                         voucherHistory.voucherCode,
-                        voucherHistory.issueOrCancelDate
+                        voucherHistory.issueOrCancelDate,
+                        voucherHistory.customer.grade,
+                        voucherHistory.voucher.startDate,
+                        voucherHistory.voucher.endDate
                 ))
                 .from(voucherHistory)
                 .where(
@@ -59,9 +63,28 @@ public class VoucherSearchRepository {
                         amountEq(condition.getAmount()),
                         rejectedReasonContains(condition.getRejectedReason()),
                         voucherCodeContains(condition.getVoucherCode()),
-                        dateBetween(condition.getStartDate(), condition.getEndDate())
+                        dateBetween(condition.getStartDate(), condition.getEndDate()),
+                        gradeEq(condition.getCustomerGrade()),
+                        statusEq(condition.getStatus()),
+                        startDateEq(condition.getStartDate()),
+                        endDateEq(condition.getEndDate())
                 )
                 .fetch();
+    }
+    public BooleanExpression startDateEq(LocalDateTime startDate) {
+        return startDate != null ? QVoucherHistory.voucherHistory.voucher.startDate.eq(startDate) : null;
+    }
+
+    public BooleanExpression endDateEq(LocalDateTime endDate) {
+        return endDate != null ? QVoucherHistory.voucherHistory.voucher.endDate.eq(endDate) : null;
+    }
+
+    public BooleanExpression statusEq(VoucherStatusType status) {
+        return status != null ? QVoucherHistory.voucherHistory.status.eq(status) : null;
+    }
+
+    public BooleanExpression gradeEq(String grade) {
+        return grade != null ? QVoucherHistory.voucherHistory.customer.grade.eq(grade) : null;
     }
 
     private BooleanExpression requestDateEq(LocalDateTime requestDate) {

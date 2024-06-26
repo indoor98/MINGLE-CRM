@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.voucher.dto.request;
 
+import com.team2final.minglecrm.voucher.domain.status.VoucherStatusType;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -34,5 +35,9 @@ public class VoucherSearchCondition {
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
+
+    private String customerGrade;
+
+    private VoucherStatusType status;
 
 }
