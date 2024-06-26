@@ -71,36 +71,6 @@
           :key="link.title"
           :link="link"
         />
-        <q-item
-          clickable
-          v-ripple
-          @click="openLogMenu"
-          @mouseover="openLogMenu"
-        >
-          <q-item-section avatar>
-            <q-icon name="map" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>로그</q-item-label>
-            <q-item-label caption>로그 탭</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-menu v-model="logMenu">
-          <q-list>
-            <EssentialLink
-              title="뷰로그"
-              caption="뷰로그 탭"
-              icon="visibility"
-              to="/view-log"
-            />
-            <EssentialLink
-              title="이메일로그"
-              caption="이메일로그 탭"
-              icon="email"
-              to="/email-log"
-            />
-          </q-list>
-        </q-menu>
       </q-list>
     </q-drawer>
 
@@ -186,13 +156,32 @@ const linksList = [
     title: "이메일",
     caption: "이메일 탭",
     icon: "email",
-    to: "/email",
+    to: "/email-log",
   },
   {
     title: "통계",
     caption: "통계 탭",
     icon: "map",
     to: "/statistics",
+  },
+  {
+    title: "로그",
+    caption: "로그 탭",
+    icon: "map",
+    children: [
+      {
+        title: "뷰 로그",
+        caption: "뷰 로그 탭",
+        icon: "visibility",
+        to: "/view-log",
+      },
+      {
+        title: "이메일 로그",
+        caption: "이메일 로그 탭",
+        icon: "email",
+        to: "/email-log",
+      },
+    ],
   },
 ];
 
