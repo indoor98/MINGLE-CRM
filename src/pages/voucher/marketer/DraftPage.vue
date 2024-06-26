@@ -159,7 +159,7 @@
 import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Dialog, Notify } from "quasar";
-import VoucherDetail from "../../../components/voucher/marketer/VoucherDetail.vue";
+import VoucherDetail from "../../../components/voucher/VoucherDetail.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");

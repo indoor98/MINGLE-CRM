@@ -53,7 +53,8 @@
 
         <div class="col q-pa-sm">
           <q-select
-            v-model="selectedGrade"
+            v-model="selectedGrades"
+            multiple
             filled
             color="purple-12"
             label="고객 등급"
@@ -144,7 +145,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { api as axios } from "src/boot/axios";
 import VoucherDetail from "components/voucher/VoucherHistoryDetail.vue";
 import { useUserStore } from "src/stores/user-store";
@@ -160,7 +161,7 @@ const searchCustomerName = ref("");
 const searchAmount = ref(null);
 const searchCreatedReason = ref("");
 const searchConfirmerName = ref("");
-const selectedGrade = ref(null);
+const selectedGrades = ref([]);
 
 const gradeOptions = [
   { label: "선택 안 함", value: "" },
@@ -281,8 +282,9 @@ const searchVouchers = async () => {
       confirmerName: searchConfirmerName.value || null,
       amount: searchAmount.value ? Number(searchAmount.value) : null,
       createdReason: searchCreatedReason.value || null,
-      customerGrade: selectedGrade.value || null,
-      status: "APPROVED",
+      customerGrades:
+        selectedGrades.value.length > 0 ? selectedGrades.value : null,
+      status: ["APPROVED"],
     };
 
     const response = await axios.post(
@@ -330,5 +332,11 @@ const cancelVoucher = async (voucherId) => {
 
 onMounted(() => {
   fetchVouchers();
+});
+
+watch(selectedGrades, (newVal) => {
+  if (newVal === "") {
+    selectedGrades.value = [""];
+  }
 });
 </script>

@@ -53,7 +53,8 @@
 
         <div class="col q-pa-sm">
           <q-select
-            v-model="selectedGrade"
+            v-model="selectedGrades"
+            multiple
             filled
             color="purple-12"
             label="고객 등급"
@@ -126,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { api as axios } from "src/boot/axios";
 import VoucherDetail from "components/voucher/VoucherHistoryDetail.vue";
 import { useUserStore } from "src/stores/user-store";
@@ -142,7 +143,7 @@ const searchCustomerName = ref("");
 const searchAmount = ref(null);
 const searchRejectedReason = ref("");
 const searchConfirmerName = ref("");
-const selectedGrade = ref(null);
+const selectedGrades = ref([]);
 
 const gradeOptions = [
   { label: "선택 안 함", value: "" },
@@ -257,8 +258,9 @@ const searchVouchers = async () => {
       confirmerName: searchConfirmerName.value || null,
       amount: searchAmount.value ? Number(searchAmount.value) : null,
       rejectedReason: searchRejectedReason.value || null,
-      customerGrade: selectedGrade.value || null,
-      status: "REJECTED",
+      customerGrades:
+        selectedGrades.value.length > 0 ? selectedGrades.value : null,
+      status: ["REJECTED"],
     };
 
     const response = await axios.post(

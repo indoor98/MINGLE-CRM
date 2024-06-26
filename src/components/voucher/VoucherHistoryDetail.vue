@@ -79,6 +79,10 @@
             <th>리워드 전환 일시</th>
             <td>{{ voucher.conversionDate }}</td>
           </tr>
+          <tr v-if="voucher.startDate && voucher.endDate">
+            <th>바우처 유효 기간</th>
+            <td>{{ voucher.startDate }} ~ {{ voucher.endDate }}</td>
+          </tr>
         </tbody>
       </table>
     </q-card-section>

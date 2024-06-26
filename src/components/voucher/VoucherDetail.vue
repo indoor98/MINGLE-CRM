@@ -43,6 +43,10 @@
             <th>바우처 사용 유효 기간</th>
             <td>{{ voucher.startDate }} ~ {{ voucher.endDate }}</td>
           </tr>
+          <tr>
+            <th>바우처 생성 사유</th>
+            <td>{{ voucher.createdReason }}</td>
+          </tr>
         </tbody>
       </table>
     </q-card-section>
