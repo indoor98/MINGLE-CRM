@@ -2,7 +2,7 @@
   <div>
     <!-- 기본 링크 -->
     <q-item
-      v-if="!link.children"
+      v-if="link && !link.children"
       clickable
       tag="router-link"
       :to="link.to"
@@ -19,7 +19,7 @@
     </q-item>
 
     <!-- 하위 메뉴가 있는 경우 -->
-    <q-expansion-item v-else>
+    <q-expansion-item v-else-if="link && link.children">
       <template v-slot:header>
         <q-item-section avatar>
           <q-icon :name="link.icon" />
