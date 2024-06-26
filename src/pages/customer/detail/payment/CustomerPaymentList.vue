@@ -79,6 +79,7 @@ const fetchPayments = async () => {
     const response = await axios.get(`/api/v1/customers/${customerId}/payments`);
     payments.value = response.data.map((payment, index) => ({
       paymentId: payment.id,
+      idx : index +1,
       customerName: payment.customerName,
       number: payment.number,
       type: payment.type,
@@ -140,7 +141,7 @@ onMounted(() => {
 });
 
 const paymentColumns = [
-  {name: 'paymentId', label: '#', align: 'left', field: 'paymentId', sortable: true},
+  {name: 'paymentId', label: '#', align: 'left', field: 'idx', sortable: true},
   {name: 'customerName', label: '고객명', align: 'left', field: 'customerName', sortable: true},
   {name: 'number', label: '전화번호', align: 'center', field: 'number', sortable: true},
   {name: 'type', label: '결제 종류', align: 'center', field: 'type', sortable: true},

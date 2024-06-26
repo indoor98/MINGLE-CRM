@@ -95,8 +95,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/customer/${customerId}`
     );
-    vouchers.value = response.data.data.map((voucher) => ({
+    vouchers.value = response.data.data.map((voucher, index) => ({
       voucherId: voucher.voucherId,
+      idx: index +1,
       requestDate: new Date(voucher.requestDate).toLocaleDateString(),
       isAuth: voucher.isAuth ? "Yes" : "No",
       authDate: voucher.authDate
@@ -162,7 +163,7 @@ onMounted(() => {
 });
 
 const voucherColumns = [
-  { name: "voucherId", label: "바우처 ID", align: "left", field: "voucherId" },
+  { name: "voucherId", label: "바우처 ID", align: "left", field: "idx" },
   {
     name: "requestDate",
     label: "요청 날짜",

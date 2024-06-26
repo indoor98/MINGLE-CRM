@@ -66,8 +66,9 @@ let fuse; // fuse.js 인스턴스
 const fetchInquiries = async () => {
   try {
     const response = await axios.get(`/api/v1/customers/${customerId}/inquiries`);
-    inquiries.value = response.data.data.content.map((inquiry) => ({
+    inquiries.value = response.data.data.content.map((inquiry, index) => ({
       id: inquiry.id,
+      idx : index + 1,
       customerId: customerId,
       customerName: inquiry.customerName,
       customerPhone: inquiry.customerPhone,
@@ -122,7 +123,7 @@ onMounted(() => {
 });
 
 const inquiryColumns = [
-  {name: 'id', label: '#', align: 'left', field: 'id'},
+  {name: 'id', label: '#', align: 'left', field: 'idx'},
   {name: 'customerName', label: '고객명', align: 'left', field: 'customerName'},
   {name: 'customerPhone', label: '전화번호', align: 'center', field: 'customerPhone'},
   {name: 'date', label: '문의 날짜', align: 'center', field: 'date'},

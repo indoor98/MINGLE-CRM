@@ -70,8 +70,8 @@ let fuse;
 const fetchReservations = async () => {
   try {
     const response = await axios.get(`/api/v1/customers/${customerId}/dish/reservations`);
-    reservations.value = response.data.map((reservation) => ({
-      reservationId: reservation.id,
+    reservations.value = response.data.map((reservation, index) => ({
+      reservationId: index + 1,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),
       visitDate: new Date(reservation.visitDate).toLocaleDateString(),
       totalPrice: reservation.totalPrice,
