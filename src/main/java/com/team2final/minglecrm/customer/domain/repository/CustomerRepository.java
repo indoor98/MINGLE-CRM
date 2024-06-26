@@ -1,9 +1,11 @@
 package com.team2final.minglecrm.customer.domain.repository;
 
+import aj.org.objectweb.asm.commons.Remapper;
 import com.team2final.minglecrm.customer.domain.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +22,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Page<Customer> findAllBy(Pageable pageable);
 
-
+    @Query("SELECT c FROM Customer c JOIN FETCH c.employee")
+    Page<Customer> findAllCustomersWithEmployees(Pageable pageable);
 }

@@ -36,7 +36,7 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public Page<CustomerResponse> getAllCustomer(Pageable pageable) {
         pageable = pageable == null ? PageRequest.of(0, 5) : pageable;
-        return customerRepository.findAll(pageable).map(customer ->
+        return customerRepository.findAllCustomersWithEmployees(pageable).map(customer ->
                 new CustomerResponse(
                         customer.getId(),
                         customer.getName(),
