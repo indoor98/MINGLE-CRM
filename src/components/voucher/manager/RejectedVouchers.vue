@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-h6">승인된 바우처 목록</h2>
+    <h2 class="text-h6">승인 거절된 바우처</h2>
 
     <q-card class="my-card">
       <q-card-section class="row justify-center q-pa-xs">
@@ -15,6 +15,19 @@
             placeholder="고객명을 입력하세요"
           />
         </div>
+
+        <div class="col q-pa-sm">
+          <q-input
+            v-model="searchCreatorName"
+            clearable
+            filled
+            color="purple-12"
+            label="요청 직원명"
+            dense
+            placeholder="직원명을 입력하세요"
+          />
+        </div>
+
         <div class="col q-pa-sm">
           <q-input
             v-model="searchConfirmerName"
@@ -41,13 +54,13 @@
 
         <div class="col q-pa-sm">
           <q-input
-            v-model="searchCreatedReason"
+            v-model="searchRejectedReason"
             clearable
             filled
             color="purple-12"
-            label="생성 사유"
+            label="거절 사유"
             dense
-            placeholder="생성 사유를 입력하세요"
+            placeholder="거절 사유를 입력하세요"
           />
         </div>
 
@@ -98,24 +111,9 @@
                 >
                   {{ toDate(props.row[col.field]) }}
                 </span>
-                <span v-else-if="col.field === 'sendOrCancel'">
-                  <q-btn
-                    label="발송"
-                    color="primary"
-                    @click.stop="
-                      sendVoucher(
-                        props.row.voucherId,
-                        props.row.customerEmail,
-                        props.row.voucherCode
-                      )
-                    "
-                  ></q-btn>
-                  <q-btn
-                    label="취소"
-                    color="secondary"
-                    @click.stop="cancelVoucher(props.row.voucherId)"
-                  ></q-btn>
-                </span>
+                <span v-else-if="col.field === 'rejectedReason'">{{
+                  toTenWords(props.row[col.field])
+                }}</span>
                 <span v-else>
                   {{ props.row[col.field] }}
                 </span>
@@ -145,11 +143,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, defineProps, watch } from "vue";
 import { api as axios } from "src/boot/axios";
-import VoucherDetail from "components/voucher/VoucherHistoryDetail.vue";
-import { useUserStore } from "src/stores/user-store";
-const userStore = useUserStore();
+import VoucherDetail from "../VoucherHistoryDetail.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
@@ -159,9 +155,10 @@ const selectedVoucher = ref({});
 
 const searchCustomerName = ref("");
 const searchAmount = ref(null);
-const searchCreatedReason = ref("");
+const searchRejectedReason = ref("");
+const searchCreatorName = ref("");
 const searchConfirmerName = ref("");
-const selectedGrades = ref([]);
+const selectedGrades = ref(null);
 
 const gradeOptions = [
   { label: "선택 안 함", value: "" },
@@ -180,23 +177,24 @@ const columns = [
     sortable: true,
   },
   {
+    name: "requestDate",
+    label: "요청 일자",
+    align: "center",
+    field: "requestDate",
+    sortable: true,
+  },
+  {
+    name: "creatorName",
+    label: "요청 직원 이름",
+    align: "center",
+    field: "creatorName",
+    sortable: true,
+  },
+  {
     name: "customerName",
     label: "고객 이름",
     align: "center",
     field: "customerName",
-    sortable: true,
-  },
-  {
-    name: "createdReason",
-    label: "생성 사유",
-    align: "center",
-    field: "createdReason",
-  },
-  {
-    name: "requestDate",
-    label: "요청 날짜",
-    align: "center",
-    field: "requestDate",
     sortable: true,
   },
   {
@@ -208,16 +206,10 @@ const columns = [
   },
   {
     name: "confirmDate",
-    label: "승인 일자",
+    label: "거절 일자",
     align: "center",
     field: "confirmDate",
     sortable: true,
-  },
-  {
-    name: "voucherCode",
-    label: "바우처 코드",
-    align: "center",
-    field: "voucherCode",
   },
   {
     name: "confirmerName",
@@ -227,10 +219,10 @@ const columns = [
     sortable: true,
   },
   {
-    name: "sendOrCancel",
-    label: "발송 / 발급취소",
+    name: "rejectedReason",
+    label: "거절 사유",
     align: "center",
-    field: "sendOrCancel",
+    field: "rejectedReason",
   },
 ];
 
@@ -251,7 +243,7 @@ const toTenWords = (beforeWord) => {
 const fetchVouchers = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/v1/vouchers/approved-marketer`
+      `http://localhost:8080/api/v1/vouchers/rejected`
     );
     vouchers.value = response.data.data;
     errorMessage.value = "";
@@ -278,15 +270,14 @@ const searchVouchers = async () => {
   try {
     const data = {
       customerName: searchCustomerName.value || null,
-      creatorName: userStore.name || null,
+      creatorName: searchCreatorName.value || null,
       confirmerName: searchConfirmerName.value || null,
       amount: searchAmount.value ? Number(searchAmount.value) : null,
-      createdReason: searchCreatedReason.value || null,
+      rejectedReason: searchRejectedReason.value || null,
       customerGrades:
         selectedGrades.value.length > 0 ? selectedGrades.value : null,
-      status: ["APPROVED"],
+      status: ["REJECTED"],
     };
-
     const response = await axios.post(
       "http://localhost:8080/api/v1/vouchers/search",
       data
@@ -295,39 +286,6 @@ const searchVouchers = async () => {
   } catch (error) {
     console.error("Error fetching vouchers:", error);
   }
-};
-
-const emits = defineEmits(["send-voucher"]);
-
-const sendVoucher = (voucherId, customerEmail, voucherCode) => {
-  emits("send-voucher", voucherId, customerEmail, voucherCode);
-};
-
-const cancelVoucher = async (voucherId) => {
-  Dialog.create({
-    title: "취소",
-    message: "바우처 발급을 취소하시겠습니까?",
-    ok: "확인",
-    cancel: "취소",
-  }).onOk(async () => {
-    try {
-      await axios.post(
-        `http://localhost:8080/api/v1/vouchers/cancel/${voucherId}`
-      );
-      Notify.create({
-        type: "positive",
-        message: "바우처가 성공적으로 발급 취소되었습니다.",
-      });
-      // Refresh the voucher list after rejection
-      fetchVouchers();
-    } catch (error) {
-      console.error("바우처 발급 취소 중 에러 발생:", error);
-      Notify.create({
-        type: "negative",
-        message: "바우처 발급 취소 중 에러가 발생했습니다.",
-      });
-    }
-  });
 };
 
 onMounted(() => {

@@ -53,7 +53,7 @@
 import { ref } from "vue";
 import VoucherList from "./MarketerVoucherDraft.vue";
 import VoucherHistoryListMarketer from "../../components/VoucherHistoryListMarketer.vue";
-import VoucherEmailSend from "./VoucherEmailSend.vue";
+import VoucherEmailSend from "../../components/voucher/marketer/SendVoucherEmail.vue";
 
 const selectedTab = ref("not-requested");
 const selectedTab2 = ref("approved");

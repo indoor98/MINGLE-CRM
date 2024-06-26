@@ -110,7 +110,26 @@ const linksList = [
     title: "바우처",
     caption: "매니저 바우처 탭",
     icon: "school",
-    to: "/voucher-manager",
+    children: [
+      {
+        title: "승인 요청된 바우처",
+        caption: "승인 요청된 바우처 목록",
+        icon: "assignment_late",
+        to: "/voucher-manager/requested",
+      },
+      {
+        title: "검토 완료된 바우처",
+        caption: "검토 완료된 바우처 목록",
+        icon: "assignment_turned_in",
+        to: "/voucher-manager/confirmed",
+      },
+      {
+        title: "모든 바우처",
+        caption: "모든 바우처 목록",
+        icon: "send",
+        to: "/voucher-manager/all",
+      },
+    ],
     roles: ["ROLE_MANAGER"],
   },
   {
