@@ -25,6 +25,18 @@ const routes = [
         component: () => import("pages/voucher/marketer/EmailManagePage.vue"),
       },
       {
+        path: "voucher-manager/requested",
+        component: () => import("pages/voucher/manager/RequestedPage.vue"),
+      },
+      {
+        path: "voucher-manager/confirmed",
+        component: () => import("pages/voucher/manager/ConfirmedPage.vue"),
+      },
+      {
+        path: "voucher-manager/all",
+        component: () => import("pages/voucher/manager/AllVouchersPage.vue"),
+      },
+      {
         path: "reward",
         component: () => import("src/pages/reward/RewardPage.vue"),
       },
@@ -90,7 +102,8 @@ const routes = [
       {
         path: "voucher-email",
         name: "voucherEmailSendPage",
-        component: () => import("src/pages/voucher/VoucherEmailSend.vue"),
+        component: () =>
+          import("src/components/voucher/marketer/SendVoucherEmail.vue"),
         props: (route) => ({
           customerId: route.query.customerId,
           voucherCode: route.query.voucherCode,
@@ -107,11 +120,11 @@ const routes = [
         component: () => import("pages/log/view/ViewLogPage.vue"),
       },
       {
-        path: '/mypage',
-        name: 'myPage',
-        component: () => import('pages/mypage/MyPage.vue'),
-        meta: { requiresAuth: true }
-      }
+        path: "/mypage",
+        name: "myPage",
+        component: () => import("pages/mypage/MyPage.vue"),
+        meta: { requiresAuth: true },
+      },
     ],
   },
   {
