@@ -17,7 +17,7 @@
       v-model:pagination="reservationPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props" @click="showReservationDetail(props.row)">
+        <q-tr :props="props" @click="showReservationDetail(props.row)" class="q-table-row">
           <q-td v-for="col in reservationColumns" :key="col.name" :props="props">
             <template v-if="col.name === 'totalPrice'">
               {{ formatPrice(props.row[col.field]) }}
@@ -70,8 +70,8 @@ let fuse;
 const fetchReservations = async () => {
   try {
     const response = await axios.get(`/api/v1/customers/${customerId}/dish/reservations`);
-    reservations.value = response.data.map((reservation) => ({
-      reservationId: reservation.id,
+    reservations.value = response.data.map((reservation, index) => ({
+      reservationId: index + 1,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),
       visitDate: new Date(reservation.visitDate).toLocaleDateString(),
       totalPrice: reservation.totalPrice,
@@ -126,5 +126,7 @@ const reservationColumns = [
 </script>
 
 <style scoped>
-/* 필요한 스타일을 추가할 수 있습니다. */
+.q-table-row {
+  cursor: pointer; /* 마우스를 올리면 클릭할 수 있는 것처럼 보이도록 */
+}
 </style>

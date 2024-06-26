@@ -69,17 +69,18 @@
             hide-pagination
           >
             <template v-slot:body="props">
-              <q-tr :props="props" @click="rowClicked(props.row)">
+              <q-tr :props="props" @click="rowClicked(props.row)" class="q-table-row">
                 <q-td v-for="col in columns" :key="col.name" :props="props">
                   <!-- 필드별로 적절한 마스킹 함수 적용 -->
                   {{
-                    col.field === "name"
-                      ? maskName(props.row[col.field])
-                      : col.field === "phone"
-                      ? maskPhoneNumber(props.row[col.field])
-                      : col.field === "birth"
-                      ? maskBirthdate(props.row[col.field])
-                      : props.row[col.field]
+
+                    col.field === 'name' ? maskName(props.row[col.field]) :
+                      col.field === 'phone' ? maskPhoneNumber(props.row[col.field]) :
+                        col.field === 'birth' ? maskBirthdate(props.row[col.field]) :
+                          col.field === 'gender' ? convertGender(props.row[col.field]) :
+                            props.row[col.field]
+
+
                   }}
                 </q-td>
               </q-tr>
@@ -178,8 +179,8 @@ const onPageChange = (page) => {
 
 const columns = [
   { name: 'id', label: '#', align: 'left', field: 'id' },
-  { name: 'name', label: '이름', align: 'left', field: 'name', sortable: true },
-  { name: 'grade', label: '등급', align: 'center', field: 'grade', sortable: true },
+  { name: 'name', label: '고객 이름', align: 'left', field: 'name', sortable: true },
+  { name: 'grade', label: '고객 등급', align: 'center', field: 'grade', sortable: true },
   { name: 'phone', label: '전화번호', align: 'center', field: 'phone', sortable: true },
   { name: 'employeeName', label: '직원 이름', align: 'center', field: 'employeeName' },
   { name: 'gender', label: '성별', align: 'center', field: 'gender' },
@@ -232,6 +233,12 @@ const maskBirthdate = (birthdate) => {
   const maskedPart = '*'.repeat(Math.max(0, birthdate.length - 4)); // 연도와 월을 마스킹
 
   return `${birthdate.slice(0, 4)}${maskedPart}${visiblePart}`;
+};
+
+const convertGender = (gender) => {
+  if (gender === 'Male') return '남성';
+  if (gender === 'Female') return '여성';
+  return gender;
 };
 
 const scrollToTop = () => {
@@ -287,5 +294,9 @@ const scrollToTop = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.q-table-row {
+  cursor: pointer; /* 마우스를 올리면 클릭할 수 있는 것처럼 보이도록 */
 }
 </style>

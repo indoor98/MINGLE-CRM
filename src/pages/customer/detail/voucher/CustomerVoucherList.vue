@@ -1,4 +1,3 @@
-<!-- VoucherList.vue -->
 <template>
   <div class="q-pa-md">
     <q-separator class="q-my-md" />
@@ -33,7 +32,7 @@
       v-model:pagination="voucherPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props" @click="showVoucherDetail(props.row)">
+        <q-tr :props="props" @click="showVoucherDetail(props.row)" class="q-table-row">
           <q-td v-for="col in voucherColumns" :key="col.name" :props="props">
             <template v-if="col.name === 'amount'">
               {{ formatPrice(props.row[col.field]) }}
@@ -64,16 +63,13 @@
 </template>
 
 <script setup>
-
-import { ref, computed, onMounted } from 'vue';
-import { api as axios } from "src/boot/axios";
-import { useRoute } from 'vue-router';
+import {ref, computed, onMounted} from 'vue';
+import {api as axios} from "src/boot/axios";
+import {useRoute} from 'vue-router';
 import Fuse from 'fuse.js';
 import CustomerVoucherDetail from './CustomerVoucherDetail.vue';
 import SearchInput from 'src/components/SearchInput.vue'; // SearchInput 컴포넌트 임포트
-import { formatPrice } from 'src/utils/utils.js'; // 유틸리티 함수 불러오기
-
-
+import {formatPrice} from 'src/utils/utils.js'; // 유틸리티 함수 불러오기
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -95,8 +91,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/customer/${customerId}`
     );
-    vouchers.value = response.data.data.map((voucher) => ({
+    vouchers.value = response.data.data.map((voucher, index) => ({
       voucherId: voucher.voucherId,
+      idx: index + 1,
       requestDate: new Date(voucher.requestDate).toLocaleDateString(),
       isAuth: voucher.isAuth ? "Yes" : "No",
       authDate: voucher.authDate
@@ -128,14 +125,6 @@ const fetchVouchers = async () => {
       ],
       threshold: 0.3, // 유사도 설정 (0.0 - 1.0, 낮을수록 엄격)
     });
-
-    // 페이지네이션 설정
-    //   voucherPagination.value.pagesNumber = Math.ceil(
-    //     response.data.data.length / voucherPagination.value.rowsPerPage
-    //   );
-    //   voucherPagination.value.isFirstPage = voucherPagination.value.page === 1;
-    //   voucherPagination.value.isLastPage =
-    //     voucherPagination.value.page === voucherPagination.value.pagesNumber;
   } catch (error) {
     console.error("Error fetching vouchers:", error);
   }
@@ -162,15 +151,15 @@ onMounted(() => {
 });
 
 const voucherColumns = [
-  { name: "voucherId", label: "바우처 ID", align: "left", field: "voucherId" },
+  {name: "voucherId", label: "바우처 ID", align: "left", field: "idx"},
   {
     name: "requestDate",
     label: "요청 날짜",
     align: "left",
     field: "requestDate",
   },
-  { name: "isAuth", label: "인증 여부", align: "center", field: "isAuth" },
-  { name: "authDate", label: "인증 날짜", align: "center", field: "authDate" },
+  {name: "isAuth", label: "인증 여부", align: "center", field: "isAuth"},
+  {name: "authDate", label: "인증 날짜", align: "center", field: "authDate"},
   {
     name: "isConvertedYn",
     label: "전환 여부",
@@ -183,7 +172,7 @@ const voucherColumns = [
     align: "center",
     field: "conversionDate",
   },
-  { name: "issuerId", label: "발급자 ID", align: "center", field: "issuerId" },
+  {name: "issuerId", label: "발급자 ID", align: "center", field: "issuerId"},
   {
     name: "approverId",
     label: "승인자 ID",
@@ -196,10 +185,12 @@ const voucherColumns = [
     align: "center",
     field: "customerId",
   },
-  { name: "amount", label: "금액", align: "center", field: "amount" },
+  {name: "amount", label: "금액", align: "center", field: "amount"},
 ];
 </script>
 
 <style scoped>
-/* 필요한 스타일을 추가할 수 있습니다. */
+.q-table-row {
+  cursor: pointer; /* 마우스를 올리면 클릭할 수 있는 것처럼 보이도록 */
+}
 </style>
