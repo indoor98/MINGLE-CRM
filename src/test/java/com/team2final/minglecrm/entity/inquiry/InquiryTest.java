@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.entity.inquiry;
 
-import com.team2final.minglecrm.entity.customer.Customer;
+import com.team2final.minglecrm.customer.domain.Customer;
+import com.team2final.minglecrm.inquiry.domain.Inquiry;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

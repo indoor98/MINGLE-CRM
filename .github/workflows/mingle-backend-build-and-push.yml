@@ -13,10 +13,17 @@ on:
 
 # 해당 코드에서 사용될 변수 설정
 env:
-  PROJECT_NAME: mingle
-  BUCKET_NAME: mingle.bucket
-  CODE_DEPLOY_APP_NAME: codeDeploy
-  DEPLOYMENT_GROUP_NAME: codeDeploy
+  AWS_REGION: ap-northeast-2
+  S3_BUCKET_NAME: mingle.bucket
+  CODE_DEPLOY_APPLICATION_NAME: codeDeploy
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: codeDeploy
+#  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+#  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+#  SMTP_EMAIL: ${{ secrets.SMTP_EMAIL }}
+#  SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -66,7 +73,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Make application-aws.properties
         run: |
@@ -79,10 +86,20 @@ jobs:
         shell: bash
 
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+        run: |
+          aws deploy push \
+            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+            --ignore-hidden-files \
+            --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
+            --source .
 
-      - name: Code Deploy
-        run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+      - name: Deploy to AWS EC2 from S3
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+            --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
 
       # 빌드가 완료되면 슬랙으로 알림
       - name: Slack Notification
