@@ -150,8 +150,8 @@ const linksList = [
         to: "/voucher-marketer/approval-check",
       },
       {
-        title: "발송 및 전환 상태 조회",
-        // caption: "발송 및 전환 여부 확인",
+        title: "발송 및 전환 확인",
+        // caption: "전환 여부 확인",
         icon: "mark_chat_read",
         to: "/voucher-marketer/email",
       },
