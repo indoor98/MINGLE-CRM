@@ -40,6 +40,9 @@ public class VoucherHistoryResponse {
 
     private final String customerGrade;
 
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
+
     public static VoucherHistoryResponse of(VoucherHistory voucherHistory) {
         Long employeeStaffId = voucherHistory.getEmployeeStaff() != null ? voucherHistory.getEmployeeStaff().getId() : null;
         Long employeeManagerId = voucherHistory.getEmployeeManager() != null ? voucherHistory.getEmployeeManager().getId() : null;
@@ -72,12 +75,16 @@ public class VoucherHistoryResponse {
                 voucherHistory.getIssueOrCancelDate(),
 
                 // 고객등급
-                voucherHistory.getCustomer().getGrade()
+                voucherHistory.getCustomer().getGrade(),
+
+                // 바우처 유효기간
+                voucherHistory.getVoucher().getStartDate(),
+                voucherHistory.getVoucher().getEndDate()
         );
     }
 
     @QueryProjection
-    public VoucherHistoryResponse(Long voucherHistoryId, Long voucherId, VoucherStatusType status, LocalDateTime requestDate, String createdReason, LocalDateTime confirmDate, LocalDateTime conversionDate, Long creatorId, String creatorName, Long confirmerId, String confirmerName, Long customerId, String customerName, String customerEmail, Long amount, String rejectedReason, String voucherCode, LocalDateTime sendOrCancelDate, String customerGrade) {
+    public VoucherHistoryResponse(Long voucherHistoryId, Long voucherId, VoucherStatusType status, LocalDateTime requestDate, String createdReason, LocalDateTime confirmDate, LocalDateTime conversionDate, Long creatorId, String creatorName, Long confirmerId, String confirmerName, Long customerId, String customerName, String customerEmail, Long amount, String rejectedReason, String voucherCode, LocalDateTime sendOrCancelDate, String customerGrade, LocalDateTime startDate, LocalDateTime endDate) {
         this.voucherHistoryId = voucherHistoryId;
         this.voucherId = voucherId;
         this.status = status;
@@ -97,5 +104,7 @@ public class VoucherHistoryResponse {
         this.voucherCode = voucherCode;
         this.sendOrCancelDate = sendOrCancelDate;
         this.customerGrade = customerGrade;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }
