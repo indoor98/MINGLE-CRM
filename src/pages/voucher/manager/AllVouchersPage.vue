@@ -192,6 +192,7 @@ const statusOptions = [
   { label: "승인됨", value: "APPROVED" },
   { label: "거절됨", value: "REJECTED" },
   { label: "발송됨", value: "SENDED" },
+  { label: "취소됨", value: "CANCELED" },
   { label: "전환됨", value: "CONVERTED" },
 ];
 
@@ -269,9 +270,8 @@ const fetchVouchers = async () => {
     vouchers.value = response.data.data;
     errorMessage.value = "";
   } catch (error) {
-    console.error("승인된 바우처 목록을 불러오는 중 에러 발생:", error);
-    errorMessage.value =
-      "승인된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
+    console.error("모든된 바우처 목록을 불러오는 중 에러 발생:", error);
+    errorMessage.value = "모든 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
   }
