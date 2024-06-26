@@ -1,50 +1,56 @@
 <template>
   <q-card class="custom-card">
+    <q-card-section>
+      <div class="text-h6">바우처 상세 정보</div>
+    </q-card-section>
+
     <q-separator />
 
     <q-card-section>
-      <q-list>
-        <q-item>
-          <q-item-label>Voucher ID</q-item-label>
-          <q-item-section>{{ voucherDetails.voucherId }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Status</q-item-label>
-          <q-item-section>{{ voucherDetails.status }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>요청 일자</q-item-label>
-          <q-item-section>{{ voucherDetails.requestDate }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>매니저 승인/거절 일자</q-item-label>
-          <q-item-section>{{ voucherDetails.confirmDate }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>전송/취소 일자</q-item-label>
-          <q-item-section>{{ voucherDetails.sendOrCancelDate }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>리워드 전환 일자</q-item-label>
-          <q-item-section>{{ voucherDetails.convertsionDate }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>생성 마케터 ID</q-item-label>
-          <q-item-section>{{ voucherDetails.creatorId }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>승인 매니저 ID</q-item-label>
-          <q-item-section>{{ voucherDetails.confirmerId }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Customer ID</q-item-label>
-          <q-item-section>{{ voucherDetails.customerId }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-label>Amount</q-item-label>
-          <q-item-section>{{ voucherDetails.amount }}</q-item-section>
-        </q-item>
-      </q-list>
+      <table class="voucher-table">
+        <tbody>
+        <tr>
+          <th>Voucher ID</th>
+          <td>{{ voucherDetails.voucherId }}</td>
+        </tr>
+        <tr>
+          <th>Status</th>
+          <td>{{ voucherDetails.status }}</td>
+        </tr>
+        <tr>
+          <th>요청 일자</th>
+          <td>{{ voucherDetails.requestDate }}</td>
+        </tr>
+        <tr>
+          <th>매니저 승인/거절 일자</th>
+          <td>{{ voucherDetails.confirmDate }}</td>
+        </tr>
+        <tr>
+          <th>전송/취소 일자</th>
+          <td>{{ voucherDetails.sendOrCancelDate }}</td>
+        </tr>
+        <tr>
+          <th>리워드 전환 일자</th>
+          <td>{{ voucherDetails.convertsionDate }}</td>
+        </tr>
+        <tr>
+          <th>생성 마케터 ID</th>
+          <td>{{ voucherDetails.creatorId }}</td>
+        </tr>
+        <tr>
+          <th>승인 매니저 ID</th>
+          <td>{{ voucherDetails.confirmerId }}</td>
+        </tr>
+        <tr>
+          <th>Customer ID</th>
+          <td>{{ voucherDetails.customerId }}</td>
+        </tr>
+        <tr>
+          <th>Amount</th>
+          <td>{{ voucherDetails.amount }}</td>
+        </tr>
+        </tbody>
+      </table>
     </q-card-section>
 
     <q-card-actions align="right">
@@ -54,13 +60,11 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
+import { api as axios } from 'src/boot/axios';
+import { defineProps } from 'vue';
 
-import { ref, watch, onMounted } from 'vue';
-import { api as axios } from "src/boot/axios";
-
-
-
-const props = defineProps(["voucher"]);
+const props = defineProps(['voucher']);
 const voucherDetails = ref({});
 
 const fetchVoucherDetail = async (customerId, voucherId) => {
@@ -70,7 +74,7 @@ const fetchVoucherDetail = async (customerId, voucherId) => {
     );
     voucherDetails.value = response.data.data;
   } catch (error) {
-    console.error("Error fetching voucher detail:", error);
+    console.error('Error fetching voucher detail:', error);
   }
 };
 
@@ -87,7 +91,8 @@ watch(
 
 <style scoped>
 .custom-card {
-  max-width: 600px;
+  width: 100%;
+  max-width: 800px;
   margin: auto;
 }
 
@@ -96,11 +101,21 @@ watch(
   font-weight: bold;
 }
 
-.q-item {
-  padding: 10px 0;
+.voucher-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
 }
 
-.q-item-label {
+.voucher-table th,
+.voucher-table td {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.voucher-table th {
+  background-color: #f5f5f5;
   font-weight: bold;
 }
 </style>
