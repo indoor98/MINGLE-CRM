@@ -73,10 +73,13 @@
                 <q-td v-for="col in columns" :key="col.name" :props="props">
                   <!-- 필드별로 적절한 마스킹 함수 적용 -->
                   {{
-                    col.field === 'name' ? maskName(props.row[col.field]) :
-                      col.field === 'phone' ? maskPhoneNumber(props.row[col.field]) :
-                        col.field === 'birth' ? maskBirthdate(props.row[col.field]) :
-                          props.row[col.field]
+                    col.field === "name"
+                      ? maskName(props.row[col.field])
+                      : col.field === "phone"
+                      ? maskPhoneNumber(props.row[col.field])
+                      : col.field === "birth"
+                      ? maskBirthdate(props.row[col.field])
+                      : props.row[col.field]
                   }}
                 </q-td>
               </q-tr>
@@ -108,12 +111,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { api as axios } from "src/boot/axios";
 
 const router = useRouter();
-const searchName = ref('');
+const searchName = ref("");
 const customers = ref([]);
 const pagination = ref({
   page: 1,
@@ -122,7 +125,6 @@ const pagination = ref({
 });
 const selectedGrade = ref(null);
 const selectedGender = ref(null);
-
 const fetchCustomers = async (page = 1) => {
   try {
     const params = {
@@ -139,7 +141,7 @@ const fetchCustomers = async (page = 1) => {
     pagination.value.rowsPerPage = response.data.size;
     pagination.value.rowsNumber = response.data.totalElements;
   } catch (error) {
-    console.error('Error fetching customers:', error);
+    console.error("Error fetching customers:", error);
   }
 };
 
@@ -158,7 +160,7 @@ const rowClicked = (row) => {
   if (row && row.id) {
     router.push({ path: `/customer-detail/${row.id}` });
   } else {
-    console.error('Invalid row data:', row);
+    console.error("Invalid row data:", row);
   }
 };
 
@@ -199,14 +201,14 @@ const genderOptions = [
 ];
 
 const maskName = (name) => {
-  if (!name) return '';
+  if (!name) return "";
 
   const length = name.length;
   const visibleChars = Math.min(4, length); // 처음 두 글자와 마지막 두 글자를 노출
   const maskedChars = Math.max(0, length - visibleChars); // 마스킹할 문자 수
 
   const visiblePart = name.slice(0, 2); // 처음 두 글자
-  const maskedPart = '*'.repeat(maskedChars); // 나머지 부분을 '*'로 마스킹
+  const maskedPart = "*".repeat(maskedChars); // 나머지 부분을 '*'로 마스킹
 
   const lastName = name.slice(-2); // 마지막 두 글자
 
@@ -214,7 +216,7 @@ const maskName = (name) => {
 };
 
 const maskPhoneNumber = (phoneNumber) => {
-  if (!phoneNumber) return '';
+  if (!phoneNumber) return "";
 
   const visibleDigits = phoneNumber.slice(-4);
   const maskedDigits = '*'.repeat(Math.max(0, phoneNumber.length - 7)); // 처음 세 자리와 마지막 네 자리를 제외한 부분을 마스킹
@@ -223,9 +225,10 @@ const maskPhoneNumber = (phoneNumber) => {
 };
 
 const maskBirthdate = (birthdate) => {
-  if (!birthdate) return '';
+  if (!birthdate) return "";
 
   const visiblePart = birthdate.slice(-2); // 일자는 그대로 표시
+
   const maskedPart = '*'.repeat(Math.max(0, birthdate.length - 4)); // 연도와 월을 마스킹
 
   return `${birthdate.slice(0, 4)}${maskedPart}${visiblePart}`;
@@ -234,7 +237,7 @@ const maskBirthdate = (birthdate) => {
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
+    behavior: "smooth",
   });
 };
 </script>

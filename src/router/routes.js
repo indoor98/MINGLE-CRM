@@ -10,11 +10,19 @@ const routes = [
       },
       {
         path: "voucher-manager",
-        component: () => import("src/pages/voucher/ManagerVoucherPage.vue"),
+        component: () => import("pages/voucher/ManagerVoucherPage.vue"),
       },
       {
-        path: "voucher-marketer",
-        component: () => import("src/pages/voucher/MarketerVoucherPage.vue"),
+        path: "voucher-marketer/draft",
+        component: () => import("pages/voucher/marketer/DraftPage.vue"),
+      },
+      {
+        path: "voucher-marketer/approval-check",
+        component: () => import("pages/voucher/marketer/ApprovalCheckPage.vue"),
+      },
+      {
+        path: "voucher-marketer/email",
+        component: () => import("pages/voucher/marketer/EmailManagePage.vue"),
       },
       {
         path: "reward",
@@ -82,7 +90,7 @@ const routes = [
       {
         path: "voucher-email",
         name: "voucherEmailSendPage",
-        component: () => import("pages/voucher/voucherEmailSend.vue"),
+        component: () => import("src/pages/voucher/VoucherEmailSend.vue"),
         props: (route) => ({
           customerId: route.query.customerId,
           voucherCode: route.query.voucherCode,

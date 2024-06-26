@@ -51,9 +51,9 @@
 
 <script setup>
 import { ref } from "vue";
-import VoucherList from "./VoucherList.vue";
+import VoucherList from "./MarketerVoucherDraft.vue";
 import VoucherHistoryListMarketer from "../../components/VoucherHistoryListMarketer.vue";
-import VoucherEmailSend from "./voucherEmailSend.vue";
+import VoucherEmailSend from "./VoucherEmailSend.vue";
 
 const selectedTab = ref("not-requested");
 const selectedTab2 = ref("approved");
