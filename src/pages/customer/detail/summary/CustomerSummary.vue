@@ -47,7 +47,13 @@
                 </div>
                 <div v-else>
                   {{ customer.memo }}
-                  <q-btn v-if="!editingMemo" label="메모 편집" color="primary" @click="editMemo" />
+                  <q-btn
+                    v-if="!editingMemo"
+                    label="메모 편집"
+                    color="primary"
+                    @click="editMemo"
+                    class="edit-memo-btn"
+                  />
                 </div>
               </td>
             </tr>
@@ -151,7 +157,6 @@ const getKoreanGender = (gender) => {
 onMounted(fetchCustomerDetail);
 </script>
 
-
 <style scoped>
 .customer-detail-container {
   background-color: #f9f9f9;
@@ -199,6 +204,20 @@ onMounted(fetchCustomerDetail);
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.edit-memo-btn {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-memo-btn:hover {
+  background-color: #0056b3;
 }
 
 .back-to-top-btn {
