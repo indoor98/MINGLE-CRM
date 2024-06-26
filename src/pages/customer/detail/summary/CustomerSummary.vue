@@ -53,7 +53,7 @@
             </tr>
             <tr>
               <th>성별</th>
-              <td>{{ customer.gender }}</td>
+              <td>{{ getKoreanGender(customer.gender) }}</td>
             </tr>
             <tr>
               <th>생일</th>
@@ -137,8 +137,20 @@ const scrollToTop = () => {
   });
 };
 
+const getKoreanGender = (gender) => {
+  switch (gender) {
+    case 'Male':
+      return '남자';
+    case 'Female':
+      return '여자';
+    default:
+      return gender;
+  }
+};
+
 onMounted(fetchCustomerDetail);
 </script>
+
 
 <style scoped>
 .customer-detail-container {
