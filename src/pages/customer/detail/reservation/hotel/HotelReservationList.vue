@@ -1,4 +1,3 @@
-<!-- HotelReservationList.vue -->
 <template>
   <div class="q-pa-md">
     <q-separator class="q-my-md"/>
@@ -22,7 +21,7 @@
       v-model:pagination="reservationPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props" @click="showReservationDetail(props)">
+        <q-tr :props="props" @click="showReservationDetail(props)" class="q-table-row">
           <q-td v-for="col in hotelReservationColumns" :key="col.name" :props="props">
             {{ props.row[col.field] }}
           </q-td>
@@ -139,5 +138,7 @@ const hotelReservationColumns = [
 </script>
 
 <style scoped>
-/* 필요한 스타일을 추가할 수 있습니다. */
+.q-table-row {
+  cursor: pointer; /* 마우스를 올리면 클릭할 수 있는 것처럼 보이도록 */
+}
 </style>

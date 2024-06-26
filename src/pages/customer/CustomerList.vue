@@ -69,7 +69,7 @@
             hide-pagination
           >
             <template v-slot:body="props">
-              <q-tr :props="props" @click="rowClicked(props.row)">
+              <q-tr :props="props" @click="rowClicked(props.row)" class="q-table-row">
                 <q-td v-for="col in columns" :key="col.name" :props="props">
                   <!-- 필드별로 적절한 마스킹 함수 적용 -->
                   {{
@@ -291,5 +291,9 @@ const scrollToTop = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.q-table-row {
+  cursor: pointer; /* 마우스를 올리면 클릭할 수 있는 것처럼 보이도록 */
 }
 </style>

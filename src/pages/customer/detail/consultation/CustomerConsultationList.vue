@@ -18,7 +18,7 @@
       v-model:pagination="inquiryPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props" @click="showInquiryDetail(props.row)">
+        <q-tr :props="props" @click="showInquiryDetail(props.row)" class="q-table-row">
           <q-td v-for="col in inquiryColumns" :key="col.name" :props="props">
             {{ props.row[col.field] }}
           </q-td>
@@ -68,7 +68,7 @@ const fetchInquiries = async () => {
     const response = await axios.get(`/api/v1/customers/${customerId}/inquiries`);
     inquiries.value = response.data.data.content.map((inquiry, index) => ({
       id: inquiry.id,
-      idx : index + 1,
+      idx: index + 1,
       customerId: customerId,
       customerName: inquiry.customerName,
       customerPhone: inquiry.customerPhone,
@@ -133,5 +133,7 @@ const inquiryColumns = [
 </script>
 
 <style scoped>
-/* 필요한 스타일을 추가할 수 있습니다. */
+.q-table-row {
+  cursor: pointer; /* 마우스를 올리면 클릭할 수 있는 것처럼 보이도록 */
+}
 </style>
