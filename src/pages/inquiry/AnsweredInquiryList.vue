@@ -331,7 +331,7 @@ const fetchInquiriesSearch = async () => {
       params.append("actionStatus", searchParams.value.actionStatus);
 
     const response = await axios.get(
-      `/api/v1/inquiries/search2?${params.toString()}`
+      `/api/v1/inquiries/search?${params.toString()}`
     );
     console.log("응답 데이터:", response.data.data);
 
