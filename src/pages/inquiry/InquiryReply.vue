@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-mb-md">
     <q-card-section>
-      <div class="text-h6">답변 작성</div>
+      <!-- <div class="text-h6">답변 작성</div> -->
       <q-separator />
       <q-form @submit="submitReply">
         <q-input
@@ -19,7 +19,7 @@
 
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import { api as axios } from "src/boot/axios";
 import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
@@ -45,7 +45,7 @@ const submitReply = async () => {
       {
         inquiryId: props.inquiryId,
         reply: reply.value.content,
-        email: null, // 이메일 필드 null로 설정
+        // email: null, // 이메일 필드 null로 설정
       },
       {
         headers: {

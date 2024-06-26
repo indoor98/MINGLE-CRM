@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-mb-md">
     <q-card-section>
-      <div class="text-h6">조치 내용 작성</div>
+      <!-- <div class="text-h6">조치 내용 작성</div> -->
       <q-separator />
       <q-form @submit="submitAction">
         <q-select
@@ -32,7 +32,7 @@
 
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import { api as axios } from "src/boot/axios";
 import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({

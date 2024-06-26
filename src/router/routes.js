@@ -10,11 +10,31 @@ const routes = [
       },
       {
         path: "voucher-manager",
-        component: () => import("src/pages/voucher/ManagerVoucherPage.vue"),
+        component: () => import("pages/voucher/ManagerVoucherPage.vue"),
       },
       {
-        path: "voucher-marketer",
-        component: () => import("src/pages/voucher/MarketerVoucherPage.vue"),
+        path: "voucher-marketer/draft",
+        component: () => import("pages/voucher/marketer/DraftPage.vue"),
+      },
+      {
+        path: "voucher-marketer/approval-check",
+        component: () => import("pages/voucher/marketer/ApprovalCheckPage.vue"),
+      },
+      {
+        path: "voucher-marketer/email",
+        component: () => import("pages/voucher/marketer/EmailManagePage.vue"),
+      },
+      {
+        path: "voucher-manager/requested",
+        component: () => import("pages/voucher/manager/RequestedPage.vue"),
+      },
+      {
+        path: "voucher-manager/confirmed",
+        component: () => import("pages/voucher/manager/ConfirmedPage.vue"),
+      },
+      {
+        path: "voucher-manager/all",
+        component: () => import("pages/voucher/manager/AllVouchersPage.vue"),
       },
       {
         path: "reward",
@@ -82,7 +102,8 @@ const routes = [
       {
         path: "voucher-email",
         name: "voucherEmailSendPage",
-        component: () => import("pages/voucher/voucherEmailSend.vue"),
+        component: () =>
+          import("src/components/voucher/marketer/SendVoucherEmail.vue"),
         props: (route) => ({
           customerId: route.query.customerId,
           voucherCode: route.query.voucherCode,
@@ -92,6 +113,17 @@ const routes = [
         path: "/statistics",
         name: "statisticsPage",
         component: () => import("pages/statistics/StatisticsPage.vue"),
+      },
+      {
+        path: "/view-log",
+        name: "viewLogPage",
+        component: () => import("pages/log/view/ViewLogPage.vue"),
+      },
+      {
+        path: "/mypage",
+        name: "myPage",
+        component: () => import("pages/mypage/MyPage.vue"),
+        meta: { requiresAuth: true },
       },
     ],
   },

@@ -69,7 +69,7 @@
         <EssentialLink
           v-for="link in filteredLinks"
           :key="link.title"
-          v-bind="link"
+          :link="link"
         />
       </q-list>
     </q-drawer>
@@ -108,16 +108,54 @@ const linksList = [
   },
   {
     title: "바우처",
-    caption: "바우처 탭",
+    caption: "매니저 바우처 탭",
     icon: "school",
-    to: "/voucher-manager",
+    children: [
+      {
+        title: "승인 요청된 바우처",
+        caption: "승인 요청된 바우처 목록",
+        icon: "assignment_late",
+        to: "/voucher-manager/requested",
+      },
+      {
+        title: "검토 완료된 바우처",
+        caption: "검토 완료된 바우처 목록",
+        icon: "assignment_turned_in",
+        to: "/voucher-manager/confirmed",
+      },
+      {
+        title: "모든 바우처",
+        caption: "모든 바우처 목록",
+        icon: "send",
+        to: "/voucher-manager/all",
+      },
+    ],
     roles: ["ROLE_MANAGER"],
   },
   {
     title: "바우처",
-    caption: "바우처 탭",
+    caption: "마케터 바우처 탭",
     icon: "school",
-    to: "/voucher-marketer",
+    children: [
+      {
+        title: "초안 작성",
+        caption: "승인 요청전 바우처 목록",
+        icon: "assignment_late",
+        to: "/voucher-marketer/draft",
+      },
+      {
+        title: "승인 상태 확인",
+        caption: "승인 요청한 바우처 목록",
+        icon: "assignment_turned_in",
+        to: "/voucher-marketer/approval-check",
+      },
+      {
+        title: "발송 관리",
+        caption: "바우처 이메일 발송 상태 목록",
+        icon: "send",
+        to: "/voucher-marketer/email",
+      },
+    ],
     roles: ["ROLE_MARKETER"],
   },
   {
@@ -131,6 +169,7 @@ const linksList = [
     caption: "상담 탭",
     icon: "school",
     to: "/inquiry",
+    roles: ["ROLE_CONSULTANT"],
   },
   {
     title: "이메일",
@@ -143,6 +182,26 @@ const linksList = [
     caption: "통계 탭",
     icon: "map",
     to: "/statistics",
+  },
+  {
+    title: "로그",
+    caption: "로그 탭",
+    icon: "map",
+    children: [
+      {
+        title: "뷰 로그",
+        caption: "뷰 로그 탭",
+        icon: "visibility",
+        to: "/view-log",
+      },
+      {
+        title: "이메일 로그",
+        caption: "이메일 로그 탭",
+        icon: "email",
+        to: "/email-log",
+      },
+    ],
+    roles: ["ROLE_MANAGER"],
   },
 ];
 
@@ -188,8 +247,14 @@ const renewToken = async () => {
 };
 
 const leftDrawerOpen = ref(false);
+const logMenu = ref(false);
+
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function openLogMenu() {
+  logMenu.value = true;
 }
 
 const userName = computed(() => userStore.name);
@@ -205,6 +270,10 @@ const filteredLinks = computed(() => {
   } else if (userRole.value === "ROLE_MARKETER") {
     return linksList.filter((link) =>
       link.roles ? link.roles.includes("ROLE_MARKETER") : true
+    );
+  } else if (userRole.value === "ROLE_CONSULTANT") {
+    return linksList.filter(
+      (link) => (link.roles ? link.roles.includes("ROLE_CONSULTANT") : true) // 컨설턴트
     );
   } else {
     return linksList;

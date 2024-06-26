@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-h6">{{ title }}</h2>
+    <h2 class="text-h6">승인 완료된 바우처</h2>
 
     <q-card class="my-card">
       <q-card-section class="row justify-center q-pa-xs">
@@ -15,7 +15,6 @@
             placeholder="고객명을 입력하세요"
           />
         </div>
-
         <div class="col q-pa-sm">
           <q-input
             v-model="searchCreatorName"
@@ -27,7 +26,6 @@
             placeholder="직원명을 입력하세요"
           />
         </div>
-
         <div class="col q-pa-sm">
           <q-input
             v-model="searchConfirmerName"
@@ -39,7 +37,6 @@
             placeholder="매니저명을 입력하세요"
           />
         </div>
-
         <div class="col q-pa-sm">
           <q-input
             v-model="searchAmount"
@@ -51,7 +48,6 @@
             placeholder="금액을 입력하세요"
           />
         </div>
-
         <div class="col q-pa-sm">
           <q-input
             v-model="searchCreatedReason"
@@ -63,10 +59,10 @@
             placeholder="생성 사유를 입력하세요"
           />
         </div>
-
         <div class="col q-pa-sm">
           <q-select
-            v-model="selectedGrade"
+            v-model="selectedGrades"
+            multiple
             filled
             color="purple-12"
             label="고객 등급"
@@ -77,7 +73,6 @@
             placeholder="선택"
           />
         </div>
-
         <div class="col q-pa-sm">
           <q-btn
             color="primary"
@@ -89,7 +84,6 @@
         </div>
       </q-card-section>
     </q-card>
-
     <q-card class="q-mt-md">
       <q-card-section>
         <q-table
@@ -110,9 +104,6 @@
                 >
                   {{ toDate(props.row[col.field]) }}
                 </span>
-                <span v-else-if="col.field === 'rejectedReason'">{{
-                  toTenWords(props.row[col.field])
-                }}</span>
                 <span v-else>
                   {{ props.row[col.field] }}
                 </span>
@@ -142,9 +133,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { api as axios } from "src/boot/axios";
-import VoucherDetail from "./voucher/VoucherHistoryDetail.vue";
+import VoucherDetail from "../VoucherHistoryDetail.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
@@ -158,7 +149,7 @@ const searchAmount = ref(null);
 const searchCreatedReason = ref("");
 const searchCreatorName = ref("");
 const searchConfirmerName = ref("");
-const selectedGrade = ref(null);
+const selectedGrades = ref([]);
 
 const gradeOptions = [
   { label: "선택 안 함", value: "" },
@@ -168,16 +159,7 @@ const gradeOptions = [
   { label: "VVIP", value: "VVIP" },
 ];
 
-const props = defineProps({
-  selected: {
-    type: String,
-    required: true,
-  },
-});
-
-const columns = ref([]);
-
-const defaultColumns = [
+const columns = [
   {
     name: "voucherId",
     label: "바우처 ID",
@@ -213,10 +195,6 @@ const defaultColumns = [
     field: "amount",
     sortable: true,
   },
-];
-
-const approvedColumns = [
-  ...defaultColumns,
   {
     name: "confirmDate",
     label: "승인 일자",
@@ -237,48 +215,6 @@ const approvedColumns = [
     align: "center",
     field: "voucherCode",
   },
-  {
-    name: "status",
-    label: "상태",
-    align: "center",
-    field: "status",
-    sortable: true,
-  },
-];
-
-const rejectedColumns = [
-  ...defaultColumns,
-  {
-    name: "confirmDate",
-    label: "거절 일자",
-    align: "center",
-    field: "confirmDate",
-    sortable: true,
-  },
-  {
-    name: "confirmerName",
-    label: "검토 매니저 이름",
-    align: "center",
-    field: "confirmerName",
-    sortable: true,
-  },
-  {
-    name: "rejectedReason",
-    label: "거절 사유",
-    align: "center",
-    field: "rejectedReason",
-  },
-];
-
-const allColumns = [
-  ...defaultColumns,
-  {
-    name: "status",
-    label: "상태",
-    align: "center",
-    field: "status",
-    sortable: true,
-  },
 ];
 
 const toDate = (beforeDate) => {
@@ -295,33 +231,10 @@ const toTenWords = (beforeWord) => {
   return afterWord;
 };
 
-const updateColumns = (selected) => {
-  switch (selected) {
-    case "approved":
-      title.value = "승인된 바우처 목록";
-      columns.value = approvedColumns;
-      break;
-    case "rejected":
-      title.value = "승인 거절된 바우처 목록";
-      columns.value = rejectedColumns;
-      break;
-    case "histories":
-      title.value = "모든 바우처 히스토리 목록";
-      columns.value = allColumns;
-      break;
-  }
-};
-
 const fetchVouchers = async () => {
-  if (!props.selected) {
-    errorMessage.value = "유효한 바우처 ID를 선택해주세요.";
-    loading.value = false;
-    return;
-  }
-
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/v1/vouchers/${props.selected}`
+      `http://localhost:8080/api/v1/vouchers/approved`
     );
     vouchers.value = response.data.data;
     errorMessage.value = "";
@@ -352,15 +265,10 @@ const searchVouchers = async () => {
       confirmerName: searchConfirmerName.value || null,
       amount: searchAmount.value ? Number(searchAmount.value) : null,
       createdReason: searchCreatedReason.value || null,
-      grade: selectedGrade.value || null,
+      customerGrades:
+        selectedGrades.value.length > 0 ? selectedGrades.value : null,
+      status: ["APPROVED"],
     };
-
-    // const config = {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // };
-
     const response = await axios.post(
       "http://localhost:8080/api/v1/vouchers/search",
       data
@@ -372,18 +280,6 @@ const searchVouchers = async () => {
 };
 
 onMounted(() => {
-  updateColumns(props.selected);
   fetchVouchers();
 });
-
-watch(
-  () => props.selected,
-  (newSelected) => {
-    if (newSelected) {
-      loading.value = true;
-      updateColumns(newSelected);
-      fetchVouchers();
-    }
-  }
-);
 </script>

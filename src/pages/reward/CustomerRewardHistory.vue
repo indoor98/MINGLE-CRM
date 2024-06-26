@@ -31,7 +31,7 @@
 
 <script setup>
 import { ref, onMounted, watch, defineProps, defineEmits } from "vue";
-import axios from "axios";
+import { api as axios } from "src/boot/axios";
 
 const props = defineProps({
   customerName: {
