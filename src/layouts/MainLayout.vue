@@ -156,7 +156,7 @@ const linksList = [
     title: "이메일",
     caption: "이메일 탭",
     icon: "email",
-    to: "/email-log",
+    to: "/email",
   },
   {
     title: "통계",
