@@ -182,6 +182,7 @@ const linksList = [
         to: "/email-log",
       },
     ],
+    roles: ["ROLE_MANAGER"],
   },
 ];
 
