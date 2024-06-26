@@ -44,6 +44,13 @@
           </q-td>
         </q-tr>
       </template>
+      <template v-slot:no-data>
+        <q-tr>
+          <q-td :colspan="voucherColumns.length" class="text-center">
+            바우처 내역이 없습니다.
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
 
     <!-- 바우처 상세 정보 다이얼로그 -->

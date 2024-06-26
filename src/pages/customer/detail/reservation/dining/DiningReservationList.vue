@@ -28,6 +28,13 @@
           </q-td>
         </q-tr>
       </template>
+      <template v-slot:no-data>
+        <q-tr>
+          <q-td :colspan="reservationColumns.length" class="text-center">
+            다이닝 예약이 없습니다.
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
 
     <q-dialog v-model="showDialog" persistent>
@@ -62,7 +69,7 @@ let fuse;
 
 const fetchReservations = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/dish/reservations`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/dish/reservations`);
     reservations.value = response.data.map((reservation) => ({
       reservationId: reservation.id,
       reservationDate: new Date(reservation.reservationDate).toLocaleDateString(),

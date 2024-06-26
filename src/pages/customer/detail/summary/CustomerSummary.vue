@@ -110,7 +110,7 @@ const editMemo = () => {
 
 const saveMemo = async () => {
   try {
-    const response = await axios.put(`http://localhost:8080/api/v1/customers/${customerId}/memo`, {
+    const response = await axios.put(`/api/v1/customers/${customerId}/memo`, {
       memo: editedMemo.value
     });
     customer.value.memo = editedMemo.value;

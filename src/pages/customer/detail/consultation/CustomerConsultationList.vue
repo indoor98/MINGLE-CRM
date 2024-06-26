@@ -24,6 +24,14 @@
           </q-td>
         </q-tr>
       </template>
+
+      <template v-slot:no-data>
+        <q-tr>
+          <q-td :colspan="inquiryColumns.length" class="text-center">
+            상담 내역이 없습니다.
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
 
     <q-dialog v-model="showDialog" persistent>
@@ -57,7 +65,7 @@ let fuse; // fuse.js 인스턴스
 
 const fetchInquiries = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/inquiries`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/inquiries`);
     inquiries.value = response.data.data.content.map((inquiry) => ({
       id: inquiry.id,
       customerId: customerId,

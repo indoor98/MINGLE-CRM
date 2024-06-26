@@ -55,7 +55,7 @@ export default {
     const fetchCustomers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/customers"
+          "/api/v1/customers"
         );
         console.log(response.data); // 데이터를 콘솔에 출력하여 확인합니다.
         rows.value = response.data.map((customer) => ({

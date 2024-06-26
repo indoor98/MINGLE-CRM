@@ -46,7 +46,7 @@ const columns = [
 
 const fetchRewardInfo = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/rewards`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/rewards`);
     rewardInfo.value.customerId = response.data.data.customerId;
     rewardInfo.value.amount = response.data.data.amount;
   } catch (error) {

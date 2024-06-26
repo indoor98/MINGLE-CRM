@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-mb-md">
     <q-card-section>
-      <div class="text-h6">답변 수정</div>
+      <!-- <div class="text-h6">답변 수정</div> -->
       <q-separator />
       <q-form @submit="submitEdit">
         <q-input

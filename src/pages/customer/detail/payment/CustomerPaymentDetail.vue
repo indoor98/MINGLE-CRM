@@ -82,7 +82,7 @@ onMounted(async () => {
 
 const fetchPayment = async (customerId, paymentId) => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/payments/${paymentId}`);
+    const response = await axios.get(`/api/v1/customers/${customerId}/payments/${paymentId}`);
     paymentDetail.value = response.data;
   } catch (error) {
     console.error('결제 정보를 가져오는 중 에러 발생:', error);

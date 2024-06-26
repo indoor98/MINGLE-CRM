@@ -1,6 +1,6 @@
 <template>
   <q-card-section>
-    <div class="text-h6">조치 내용 수정</div>
+    <!-- <div class="text-h6">조치 내용 수정</div> -->
     <q-separator />
     <q-form @submit="updateAction">
       <q-select
