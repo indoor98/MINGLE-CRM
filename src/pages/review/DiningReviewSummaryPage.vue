@@ -3,7 +3,7 @@
     <q-item>
       <q-item-section class="row flex flex-center">
         <div class="q-pa-md" style="font-size: 25px">
-          기간 내 사용자 리뷰 총 평점
+          요약된 호텔 리뷰 총 평점
         </div>
         <q-rating
           size="50px"
@@ -21,7 +21,7 @@
       <q-separator vertical />
 
       <q-item-section class="row flex flex-center">
-        <div class="q-pb-md" style="font-size: 25px">기간 내 리뷰 수</div>
+        <div class="q-pb-md" style="font-size: 25px">요약된 리뷰 수</div>
         <q-icon class="q-pa-md" name="people" size="60px"></q-icon>
         <div style="font-size: 25px">
           {{ reviewsNumber }}
@@ -37,7 +37,7 @@
           v-model="startDate"
           mask="date"
           :rules="['date']"
-          label="시작일"
+          label="리뷰 작성 시작일"
         >
           <template v-slot:append>
             <q-icon name="event" class="cursor-pointer">
@@ -60,7 +60,12 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input v-model="endDate" mask="date" :rules="['date']" label="종료일">
+        <q-input
+          v-model="endDate"
+          mask="date"
+          :rules="['date']"
+          label="리뷰 작성 종료일"
+        >
           <template v-slot:append>
             <q-icon name="event" class="cursor-pointer">
               <q-popup-proxy
@@ -94,8 +99,8 @@
           v-model="summaryType"
           toggle-color="primary"
           :options="[
-            { label: '긍정', value: 'POSITIVE' },
-            { label: '부정', value: 'NEGATIVE' },
+            { label: '긍정적인 리뷰 요약', value: 'POSITIVE' },
+            { label: '부정적인 리뷰 요약', value: 'NEGATIVE' },
           ]"
           class="q-ma-md"
         />
@@ -118,6 +123,7 @@
       <q-card-section
         class="col-9 scroll flex flex-center"
         style="font-size: 17px"
+        :loading="loading"
       >
         {{ summary }}
       </q-card-section>
@@ -129,6 +135,7 @@
 import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 
+const loading = ref(true);
 const summary = ref("");
 const averageRating = ref(0);
 const reviewsNumber = ref(0);
@@ -149,10 +156,17 @@ const getDiningReviewsAverageRatings = async (startDate, endDate) => {
   try {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
+    let restaurantParam = restaurant.value;
+
+    if (restaurantParam === "선택 안함") {
+      restaurantParam = "All";
+    }
+
     const response = await axios.get("/api/dining/rating/average", {
       params: {
         startDate: start.slice(0, 11) + "00:00:00",
         endDate: end.slice(0, 11) + "23:59:59",
+        restaurant: restaurantParam,
       },
     });
     averageRating.value = response.data.data;
@@ -165,10 +179,17 @@ const getDiningReviewsNumber = async (startDate, endDate) => {
   try {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
+
+    let restaurantParam = restaurant.value;
+
+    if (restaurantParam === "선택 안함") {
+      restaurantParam = "All";
+    }
     const response = await axios.get("/api/dining/review/count", {
       params: {
         startDate: start.slice(0, 11) + "00:00:00",
         endDate: end.slice(0, 11) + "23:59:59",
+        restaurant: restaurantParam,
       },
     });
 
