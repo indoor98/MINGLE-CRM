@@ -22,12 +22,12 @@
                     <q-btn
                       label="승인"
                       color="primary"
-                      @click="approveVoucher(props.row.voucherId)"
+                      @click.stop="approveVoucher(props.row.voucherId)"
                     ></q-btn>
                     <q-btn
                       label="거절"
                       color="secondary"
-                      @click="rejectVoucher(props.row.voucherId)"
+                      @click.stop="rejectVoucher(props.row.voucherId)"
                     ></q-btn>
                   </template>
                   <temaplate v-else>

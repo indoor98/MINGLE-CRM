@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-h6">승인된 바우처 목록</h2>
+    <h2 class="text-h6">발송 취소된 바우처 목록</h2>
 
     <q-card class="my-card">
       <q-card-section class="row justify-center q-pa-xs">
@@ -208,9 +208,9 @@ const fetchVouchers = async () => {
     vouchers.value = response.data.data;
     errorMessage.value = "";
   } catch (error) {
-    console.error("승인된 바우처 목록을 불러오는 중 에러 발생:", error);
+    console.error("발송 취소된 바우처 목록을 불러오는 중 에러 발생:", error);
     errorMessage.value =
-      "승인된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
+      "발송 취소된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
   }

@@ -248,9 +248,9 @@ const fetchVouchers = async () => {
     vouchers.value = response.data.data;
     errorMessage.value = "";
   } catch (error) {
-    console.error("승인된 바우처 목록을 불러오는 중 에러 발생:", error);
+    console.error("거절된 바우처 목록을 불러오는 중 에러 발생:", error);
     errorMessage.value =
-      "승인된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
+      "거절된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
   }
