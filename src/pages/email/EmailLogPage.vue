@@ -110,7 +110,7 @@ const columns = ref([
   },
 ]);
 
-const fetchRewards = async () => {
+const fetchEmailLogs = async () => {
   try {
     const response = await axios.get(
       `http://localhost:8080/api/events/${pagination.value.page - 1}`
@@ -140,6 +140,6 @@ const rowClicked = (row) => {
 };
 
 onMounted(() => {
-  fetchRewards();
+  fetchEmailLogs();
 });
 </script>

@@ -1,32 +1,13 @@
 <template>
   <q-page class="q-gutter-sm">
-    <q-tabs
-      v-model="selectedTab"
-      narrow-indicator
-      densealign="justify"
-      dense
-      align="left"
-      class="text-primary"
-    >
-      <q-tab name="개인" label="개인" />
-      <q-tab name="그룹" label="그룹" />
-    </q-tabs>
-
     <div class="row">
-      <div v-if="selectedTab === '개인'" class="row">
-        <q-input v-model="toEmails" filled label="받는 사람" />
-        <q-btn flat icon="send" @click="sendPersonalEmail"></q-btn>
-      </div>
-      <div v-else-if="selectedTab === '그룹'" class="row">
-        <q-select
-          filled
-          v-model="group"
-          :options="GroupOptions"
-          label="고객 그룹"
-          style="min-width: 216px"
-        />
-        <q-btn flat icon="send" @click="sendGroupEmail"></q-btn>
-      </div>
+      <q-btn @click="showCreationModal = true" label="고객 이메일 조회하기" />
+      <q-btn
+        flat-lined
+        @click="sendPersonalEmail"
+        label="발송 하기"
+        icon="send"
+      ></q-btn>
     </div>
     <q-input v-model="title" filled label="제목" />
 
@@ -37,7 +18,19 @@
       min-height="5rem"
     />
 
-    <q-btn class=""> </q-btn>
+    <q-dialog v-model="showCreationModal">
+      <customer-list-modal />
+      <q-card>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            label="선택 완료"
+            color="primary"
+            @click="createVoucher"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -46,8 +39,10 @@ import { ref } from "vue";
 // import axios from "axios";
 import { api as axios } from "src/boot/axios";
 import { useRouter } from "vue-router";
+import CustomerListModal from "./CustomerListModal.vue";
 
 const router = useRouter();
+const showCreationModal = ref(false);
 
 const content = ref("");
 const toEmails = ref("");

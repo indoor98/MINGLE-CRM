@@ -1,94 +1,74 @@
 <template>
-  <q-page class="container">
-    <q-card class="my-card">
-      <q-card-section class="row justify-center q-pa-xs">
-        <div class="col-12 col-md-4 q-pa-sm">
-          <q-input
-            v-model="searchName"
-            clearable
-            filled
-            color="purple-12"
-            label="고객명"
-            dense
-            placeholder="고객명을 입력하세요"
-          />
-        </div>
+  <q-card class="my-card">
+    <q-card-section class="row justify-center q-pa-xs">
+      <div class="col-12 col-md-4 q-pa-sm">
+        <q-input
+          v-model="searchName"
+          clearable
+          filled
+          color="purple-12"
+          label="고객명"
+          dense
+          placeholder="고객명을 입력하세요"
+        />
+      </div>
 
-        <div class="col-12 col-md-3 q-pa-sm">
-          <q-select
-            v-model="selectedGrade"
-            filled
-            color="purple-12"
-            label="등급"
-            :options="gradeOptions"
-            emit-value
-            map-options
-            dense
-            placeholder="선택"
-          />
-        </div>
+      <div class="col-12 col-md-3 q-pa-sm">
+        <q-select
+          v-model="selectedGrade"
+          filled
+          color="purple-12"
+          label="등급"
+          :options="gradeOptions"
+          emit-value
+          map-options
+          dense
+          placeholder="선택"
+        />
+      </div>
 
-        <div class="col-12 col-md-3 q-pa-sm">
-          <q-select
-            v-model="selectedGender"
-            filled
-            color="purple-12"
-            label="성별"
-            :options="genderOptions"
-            emit-value
-            map-options
-            dense
-            placeholder="선택"
-          />
-        </div>
+      <div class="col-12 col-md-3 q-pa-sm">
+        <q-select
+          v-model="selectedGender"
+          filled
+          color="purple-12"
+          label="성별"
+          :options="genderOptions"
+          emit-value
+          map-options
+          dense
+          placeholder="선택"
+        />
+      </div>
 
-        <div class="col-12 col-md-2 q-pa-sm">
-          <q-btn
-            color="primary"
-            label="검색"
-            @click="executeSearch"
-            dense
-            class="full-width"
-          />
-        </div>
-      </q-card-section>
-    </q-card>
-
-    <q-card class="q-mt-md my-card">
-      <q-card-section class="q-pa-none">
-        <div class="q-table-container">
-          <q-table
-            flat
-            bordered
-            title="고객 목록"
-            :rows="customers"
-            :columns="columns"
-            row-key="id"
-            v-model:pagination="pagination"
-            @request="onRequest"
-            hide-pagination
-          >
-            <template v-slot:body="props">
-              <q-tr :props="props" @click="rowClicked(props.row)">
-                <q-td v-for="col in columns" :key="col.name" :props="props">
-                  <!-- 필드별로 적절한 마스킹 함수 적용 -->
-                  {{
-                    col.field === "name"
-                      ? maskName(props.row[col.field])
-                      : col.field === "phone"
-                      ? maskPhoneNumber(props.row[col.field])
-                      : col.field === "birth"
-                      ? maskBirthdate(props.row[col.field])
-                      : props.row[col.field]
-                  }}
-                </q-td>
-              </q-tr>
-            </template>
-          </q-table>
-        </div>
-      </q-card-section>
-    </q-card>
-
+      <div class="col-12 col-md-2 q-pa-sm">
+        <q-btn
+          color="primary"
+          label="검색"
+          @click="executeSearch"
+          dense
+          class="full-width"
+        />
+      </div>
+    </q-card-section>
+    <q-card-section class="q-pa-none">
+      <div class="q-table-container">
+        <q-table
+          flat
+          bordered
+          title="고객 이메일 목록"
+          :rows="customers"
+          :columns="columns"
+          row-key="id"
+          v-model:pagination="pagination"
+          v-model:selected="selected"
+          @request="onRequest"
+          hide-pagination
+          selection="multiple"
+        >
+        </q-table>
+      </div>
+    </q-card-section>
     <div class="q-pa-lg flex flex-center">
       <q-pagination
         v-model="pagination.page"
@@ -107,7 +87,7 @@
       @click="scrollToTop"
       title="맨 위로 이동"
     />
-  </q-page>
+  </q-card>
 </template>
 
 <script setup>
@@ -115,6 +95,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { api as axios } from "src/boot/axios";
 
+const selected = ref([]);
 const router = useRouter();
 const searchName = ref("");
 const customers = ref([]);
