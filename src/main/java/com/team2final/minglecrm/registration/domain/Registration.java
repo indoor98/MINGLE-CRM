@@ -1,6 +1,5 @@
 package com.team2final.minglecrm.registration.domain;
 
-import com.team2final.minglecrm.employee.domain.Employee;
 import com.team2final.minglecrm.registration.domain.type.RequestStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -25,9 +24,7 @@ public class Registration {
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "manager_id")
-    private Employee manager;
+    private String approvalManagerName;
 
 
     @Builder
@@ -39,8 +36,8 @@ public class Registration {
         this.status = status;
     }
 
-    public void changeStatus() {
+    public void changeStatus(String userEmail) {
         this.status = RequestStatus.APPROVED;
-//        this.manager =
+        this.approvalManagerName = userEmail;
     }
 }

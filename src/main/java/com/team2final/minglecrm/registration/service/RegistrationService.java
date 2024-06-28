@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +56,13 @@ public class RegistrationService {
 
 
     public void approvedEmployeeRequest(SignUpRequest signUpRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
         String email = signUpRequest.getEmail();
         Registration registration = registrationRepository.findByEmail(email);
-        registration.changeStatus();
+        registration.changeStatus(userEmail);
+
         employeeService.signUp(signUpRequest);
     }
 
