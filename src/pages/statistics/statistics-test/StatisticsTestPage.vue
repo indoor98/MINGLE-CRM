@@ -3,7 +3,7 @@
     <div class="row col-12">
       <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         <div class="row">
-          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-pr-sm">
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 q-pr-sm">
             <q-card class="q-pa-md">
               <div class="row q-py-md full-width items-center justify-center">
                 <div class="total-sales-box justify-center items-center">
@@ -18,7 +18,7 @@
               <div
                 class="row text-weight-bold text-h6 full-width justify-center"
               >
-                Total Sales
+                전일 방문고객수
               </div>
               <div class="row text-grey-7 full-width justify-center">
                 +70% Income
@@ -26,12 +26,12 @@
               <div
                 class="row text-weight-bold text-h4 full-width justify-center"
               >
-                $777m
+                {{ yesterdayNum }}
               </div>
             </q-card>
           </div>
           <div
-            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm-sm q-pl-xs-sm"
+            class="col-lg-4 col-md-4 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm q-pr-sm"
           >
             <q-card class="q-pa-md">
               <div class="row q-py-md full-width items-center justify-center">
@@ -47,7 +47,7 @@
               <div
                 class="row text-weight-bold text-h6 full-width justify-center"
               >
-                Avg Sales
+                재방문률
               </div>
               <div class="row text-grey-7 full-width justify-center">
                 +22% Sales
@@ -55,12 +55,12 @@
               <div
                 class="row text-weight-bold text-h4 full-width justify-center"
               >
-                $543k
+                {{ revisitRate }} %
               </div>
             </q-card>
           </div>
           <div
-            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pr-sm-sm q-pr-xs-sm q-mt-lg-none q-mt-md-none q-mt-sm-md q-mt-xs-md"
+            class="col-lg-4 col-md-4 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pr-sm-sm q-pr-xs-sm q-mt-lg-none q-mt-md-none q-mt-sm-md q-mt-xs-md q-pl-sm"
           >
             <q-card class="q-pa-md">
               <div class="row q-py-md full-width items-center justify-center">
@@ -76,7 +76,7 @@
               <div
                 class="row text-weight-bold text-h6 full-width justify-center"
               >
-                Users
+                전일 신규고객수
               </div>
               <div class="row text-grey-7 full-width justify-center">
                 +79% New User
@@ -84,12 +84,12 @@
               <div
                 class="row text-weight-bold text-h4 full-width justify-center"
               >
-                9998
+                {{ newCustomerNum }}
               </div>
             </q-card>
           </div>
-          <div
-            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-pl-sm q-mt-lg-none q-mt-md-none q-mt-sm-md q-mt-xs-md"
+          <!-- <div
+            class="col-lg-4 col-md-4 col-sm-6 col-xs-6 q-pl-sm q-mt-lg-none q-mt-md-none q-mt-sm-md q-mt-xs-md"
           >
             <q-card class="q-pa-md">
               <div class="row q-py-md full-width items-center justify-center">
@@ -116,7 +116,7 @@
                 $799m
               </div>
             </q-card>
-          </div>
+          </div> -->
         </div>
         <div>
           <q-card class="row q-mt-md float-right full-width card-item">
@@ -250,15 +250,87 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import ECharts from "vue-echarts";
 import "echarts";
 import { useQuasar } from "quasar";
 import ReservationCntByYear from "/src/components/statistics/ReservationCntByYear.vue";
 import RevisitRate from "/src/components/statistics/RevisitRate.vue";
+import { api as axios } from "src/boot/axios";
 
 const $q = useQuasar();
 
+const errorMessage = ref("");
+const yesterdayNum = ref(null);
+const revisitRate = ref(null);
+const newCustomerNum = ref(null);
+
+const getYesterday = () => {
+  // 오늘 날짜 객체 생성
+  const today = new Date();
+
+  // 어제 날짜 객체 생성
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  // 연, 월, 일 추출
+  const year = yesterday.getFullYear();
+  const month = String(yesterday.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 1을 더함
+  const day = String(yesterday.getDate()).padStart(2, "0"); // 일
+
+  // 'YYYY-MM-DD' 형식으로 반환
+  return `${year}-${month}-${day}`;
+};
+
+const fetchVisitNum = async () => {
+  try {
+    const response = await axios.get(
+      "/api/v1/statistic/reservation/daily-reservation-cnt-date",
+      {
+        params: {
+          start: getYesterday(),
+          end: getYesterday(),
+        },
+      }
+    );
+    yesterdayNum.value = response.data.length;
+    console.log(yesterdayNum);
+  } catch (error) {
+    console.error("에러 발생:", error);
+    errorMessage.value = "에러가 발생했습니다.";
+  }
+  // finally {
+  //   loading.value = false;
+  // }
+};
+const fetchRevisitRate = async () => {
+  try {
+    const response = await axios.get(
+      "/api/v1/statistics/customers/revisit-rate"
+    );
+    revisitRate.value = response.data.overallRevisitRate.toFixed(2);
+  } catch (error) {
+    console.error("에러 발생:", error);
+    errorMessage.value = "에러가 발생했습니다.";
+  }
+};
+const fetchNewCustomerNum = async () => {
+  try {
+    const response = await axios.get(
+      "/api/v1/statistics/customers/new-customers",
+      {
+        params: {
+          start: getYesterday(),
+          end: getYesterday(),
+        },
+      }
+    );
+    newCustomerNum.value = response.data.length;
+  } catch (error) {
+    console.error("에러 발생:", error);
+    errorMessage.value = "에러가 발생했습니다.";
+  }
+};
 const getLineChartOptions = () => {
   return {
     tooltip: {
@@ -340,6 +412,11 @@ const getPieChartOptions = () => {
     ],
   };
 };
+onMounted(() => {
+  fetchVisitNum();
+  fetchRevisitRate();
+  fetchNewCustomerNum();
+});
 </script>
 
 <style>
