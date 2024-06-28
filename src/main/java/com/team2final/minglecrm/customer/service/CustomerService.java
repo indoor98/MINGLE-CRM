@@ -28,7 +28,6 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final EmployeeRepository employeeRepository;
     private final ViewLogService viewLogService;
     private final CustomerSearchRepository customerSearchRepository;
 

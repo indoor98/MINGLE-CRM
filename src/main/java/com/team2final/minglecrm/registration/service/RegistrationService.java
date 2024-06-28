@@ -39,27 +39,24 @@ public class RegistrationService {
         registrationRepository.save(registration);
     }
 
-    public Page<RegistrationResponse> getAllRegistration(Pageable pageable) {
+    public Page<RegistrationResponse> getPendingStatusEmployList(Pageable pageable) {
         pageable = (pageable == null) ? PageRequest.of(0, 5) : pageable;
-        Page<Registration> registrations = registrationRepository.findAll(pageable);
-
+        Page<Registration> registrations = registrationRepository.findByStatus(RequestStatus.PENDING, pageable);
         return registrations.map(RegistrationResponse::from);
     }
 
     public void approvedEmployeeRequest(SignUpRequest signUpRequest) {
-        System.out.println("approvedEmployeeRequest called with: " + signUpRequest);
         String email = signUpRequest.getEmail();
-
-        System.out.println("email = " + email);
         Registration registration = registrationRepository.findByEmail(email);
         registration.changeStatus();
-        System.out.println("registration = " + registration);
-
         employeeService.signUp(signUpRequest);
-
     }
 
     public void rejectEmployeeRequest(SignUpRequest signUpRequest) {
 
+    }
+
+    public Long getPendingCount() {
+        return registrationRepository.countByStatus(RequestStatus.PENDING);
     }
 }

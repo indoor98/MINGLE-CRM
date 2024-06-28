@@ -41,5 +41,6 @@ public class Registration {
 
     public void changeStatus() {
         this.status = RequestStatus.APPROVED;
+//        this.manager =
     }
 }

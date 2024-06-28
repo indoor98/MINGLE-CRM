@@ -1,9 +1,7 @@
 package com.team2final.minglecrm.registration.presentation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team2final.minglecrm.employee.dto.request.SignUpRequest;
 import com.team2final.minglecrm.registration.dto.request.RegistrationRequest;
-import com.team2final.minglecrm.registration.dto.request.RequestWrapper;
 import com.team2final.minglecrm.registration.dto.request.UpdateStatusRequest;
 import com.team2final.minglecrm.registration.dto.response.RegistrationResponse;
 import com.team2final.minglecrm.registration.service.RegistrationService;
@@ -13,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -24,9 +23,18 @@ public class RegistrationApi {
     private final RegistrationService registrationService;
 
     @GetMapping
-    public ResponseEntity<Page<RegistrationResponse>> getRegistration(Pageable pageable) {
-        Page<RegistrationResponse> registrationResponses = registrationService.getAllRegistration(pageable);
+    public ResponseEntity<Page<RegistrationResponse>> getPendingStatusEmployList(Pageable pageable) {
+        Page<RegistrationResponse> registrationResponses = registrationService.getPendingStatusEmployList(pageable);
         return ResponseEntity.ok(registrationResponses);
+    }
+
+    @GetMapping("/pendingCount")
+    public ResponseEntity<Map<String, Long>> getPendingCount() {
+        Long count = registrationService.getPendingCount();
+        Map<String, Long> response = new HashMap<>();
+        response.put("count", count);
+        System.out.println("count = " + count);
+        return ResponseEntity.ok(response);
     }
 
 
@@ -49,8 +57,9 @@ public class RegistrationApi {
             return null;
         }
         return null;
-//        return ResponseEntity.badRequest().body(new RegistrationResponse("Invalid action"));
     }
+
+
 
 
 }

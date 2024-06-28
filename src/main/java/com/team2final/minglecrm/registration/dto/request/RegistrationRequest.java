@@ -8,5 +8,4 @@ public class RegistrationRequest {
 
     private RequestStatus requestStatus;
 
-
 }

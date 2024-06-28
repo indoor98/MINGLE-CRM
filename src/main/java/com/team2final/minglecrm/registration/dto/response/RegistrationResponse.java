@@ -3,7 +3,6 @@ package com.team2final.minglecrm.registration.dto.response;
 import com.team2final.minglecrm.registration.domain.Registration;
 import com.team2final.minglecrm.registration.domain.type.RequestStatus;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class RegistrationResponse {
