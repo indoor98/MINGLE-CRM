@@ -115,6 +115,12 @@ const routes = [
         component: () => import("pages/statistics/StatisticsPage.vue"),
       },
       {
+        path: "/statistics-test",
+        name: "statisticsTestPage",
+        component: () =>
+          import("pages/statistics/statistics-test/StatisticsTestPage.vue"),
+      },
+      {
         path: "/view-log",
         name: "viewLogPage",
         component: () => import("pages/log/view/ViewLogPage.vue"),

@@ -184,6 +184,12 @@ const linksList = [
     to: "/statistics",
   },
   {
+    title: "통계 테스트!",
+    caption: "통계 보기",
+    icon: "leaderboard",
+    to: "/statistics-test",
+  },
+  {
     title: "로그",
     caption: "로그 조회",
     icon: "map",

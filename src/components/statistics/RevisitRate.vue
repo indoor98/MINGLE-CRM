@@ -1,8 +1,8 @@
 <template>
   <q-page class="q-pa-md">
-    <h2>고객 등급별 재방문률</h2>
-    <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
-    <h2>고객 성별별 재방문률</h2>
+    <!-- <h2>고객 등급별 재방문률</h2>
+    <Bar v-if="loaded" :data="chartData" :options="chartOptions" /> -->
+    <!-- <h2>고객 성별별 재방문률</h2> -->
     <Doughnut
       v-if="loaded"
       :data="genderChartData"
@@ -101,7 +101,7 @@ const genderChartOptions = ref({
     },
     title: {
       display: true,
-      text: "Revisit Rate by Gender",
+      text: "재방문 고객 성비",
     },
     datalabels: {
       align: "top",
