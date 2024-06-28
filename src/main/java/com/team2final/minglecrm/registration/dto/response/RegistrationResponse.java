@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.registration.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.team2final.minglecrm.registration.domain.Registration;
 import com.team2final.minglecrm.registration.domain.type.RequestStatus;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class RegistrationResponse {
     private final String requestedRole;
     private final RequestStatus status;
 
+    @QueryProjection
     public RegistrationResponse(String name, String email, String password, String requestedRole, RequestStatus status) {
         this.name = name;
         this.email = email;

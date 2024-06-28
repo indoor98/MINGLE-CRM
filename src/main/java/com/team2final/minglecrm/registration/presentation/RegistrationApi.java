@@ -2,6 +2,7 @@ package com.team2final.minglecrm.registration.presentation;
 
 import com.team2final.minglecrm.employee.dto.request.SignUpRequest;
 import com.team2final.minglecrm.registration.dto.request.RegistrationRequest;
+import com.team2final.minglecrm.registration.dto.request.RegistrationSearchCondition;
 import com.team2final.minglecrm.registration.dto.request.UpdateStatusRequest;
 import com.team2final.minglecrm.registration.dto.response.RegistrationResponse;
 import com.team2final.minglecrm.registration.service.RegistrationService;
@@ -44,7 +45,6 @@ public class RegistrationApi {
     }
 
 
-
     @PostMapping("/updateStatus")
     public ResponseEntity<RegistrationResponse> updateEmployeeRequestStatus(
             @RequestParam String action,
@@ -65,7 +65,15 @@ public class RegistrationApi {
         return null;
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Page<RegistrationResponse>> getAllEmployList(
+            @ModelAttribute RegistrationSearchCondition condition,
+            Pageable pageable) {
 
+        Page<RegistrationResponse> registrationResponses = registrationService.searchRegistration(condition, pageable);
+        return ResponseEntity.ok(registrationResponses);
+
+    }
 
 
 }

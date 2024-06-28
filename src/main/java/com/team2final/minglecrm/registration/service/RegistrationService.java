@@ -5,7 +5,9 @@ import com.team2final.minglecrm.employee.dto.request.SignUpRequest;
 import com.team2final.minglecrm.employee.service.EmployeeService;
 import com.team2final.minglecrm.registration.domain.Registration;
 import com.team2final.minglecrm.registration.domain.repository.RegistrationRepository;
+import com.team2final.minglecrm.registration.domain.repository.RegistrationSearchRepository;
 import com.team2final.minglecrm.registration.domain.type.RequestStatus;
+import com.team2final.minglecrm.registration.dto.request.RegistrationSearchCondition;
 import com.team2final.minglecrm.registration.dto.response.RegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,11 +19,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
 
     private final RegistrationRepository registrationRepository;
+    private final RegistrationSearchRepository registrationSearchRepository;
     private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
 
@@ -86,4 +91,9 @@ public class RegistrationService {
     public Long getPendingCount() {
         return registrationRepository.countByStatus(RequestStatus.PENDING);
     }
+
+    public Page<RegistrationResponse> searchRegistration(RegistrationSearchCondition condition, Pageable pageable) {
+        return registrationSearchRepository.search(condition, pageable);
+    }
+
 }
