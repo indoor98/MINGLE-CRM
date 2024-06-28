@@ -45,6 +45,14 @@ public class RegistrationService {
         return registrations.map(RegistrationResponse::from);
     }
 
+    public Page<RegistrationResponse> getAllStatusEmployList(Pageable pageable) {
+        pageable = (pageable == null) ? PageRequest.of(0, 5) : pageable;
+        Page<Registration> registrations = registrationRepository.findAll(pageable);
+        return registrations.map(RegistrationResponse::from);
+    }
+
+
+
     public void approvedEmployeeRequest(SignUpRequest signUpRequest) {
         String email = signUpRequest.getEmail();
         Registration registration = registrationRepository.findByEmail(email);

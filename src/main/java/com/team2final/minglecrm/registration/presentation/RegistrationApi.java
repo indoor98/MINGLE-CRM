@@ -28,6 +28,12 @@ public class RegistrationApi {
         return ResponseEntity.ok(registrationResponses);
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<Page<RegistrationResponse>> getAllStatusEmployList(Pageable pageable) {
+        Page<RegistrationResponse> registrationResponses = registrationService.getAllStatusEmployList(pageable);
+        return ResponseEntity.ok(registrationResponses);
+    }
+
     @GetMapping("/pendingCount")
     public ResponseEntity<Map<String, Long>> getPendingCount() {
         Long count = registrationService.getPendingCount();
