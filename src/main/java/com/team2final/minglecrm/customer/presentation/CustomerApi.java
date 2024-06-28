@@ -20,7 +20,7 @@ public class CustomerApi {
     private final CustomerService customerService;
 
     @GetMapping()
-//    @PreAuthorize("hasAnyRole('MARKETER', 'MANAGER', 'CONSULTANT')")
+    @PreAuthorize("hasAnyRole('MARKETER', 'MANAGER', 'CONSULTANT')")
     public ResponseEntity<Page<CustomerResponse>> getAllCustomers(Pageable pageable) {
         Page<CustomerResponse> customers = customerService.getAllCustomer(pageable);
         return ResponseEntity.ok(customers);
@@ -28,6 +28,7 @@ public class CustomerApi {
 
     // 검색
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('CONSULTANT', 'MANAGER','MARKETER')")
     public ResponseEntity<Page<CustomerResponse>> searchCustomers(
             Pageable pageable,
             @RequestParam(value = "name", required = false) String name,
