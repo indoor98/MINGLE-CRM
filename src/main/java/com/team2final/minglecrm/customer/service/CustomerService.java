@@ -40,6 +40,7 @@ public class CustomerService {
                 new CustomerResponse(
                         customer.getId(),
                         customer.getName(),
+                        customer.getEmail(),
                         customer.getPhone(),
                         customer.getEmployee().getName(),
                         customer.getGrade(),
