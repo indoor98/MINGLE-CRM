@@ -26,6 +26,8 @@ public class Registration {
 
     private String approvalManagerName;
 
+    private Boolean isRejected;
+
 
     @Builder
     public Registration(String name, String password, String email, String requestedRole, RequestStatus status) {
@@ -36,8 +38,15 @@ public class Registration {
         this.status = status;
     }
 
-    public void changeStatus(String userEmail) {
+    public void approveChangeStatus(String userEmail) {
         this.status = RequestStatus.APPROVED;
         this.approvalManagerName = userEmail;
+        this.isRejected = false;
+    }
+
+    public void rejectedChangeStatus(String userEmail) {
+        this.status = RequestStatus.REJECTED;
+        this.approvalManagerName = userEmail;
+        this.isRejected = true;
     }
 }

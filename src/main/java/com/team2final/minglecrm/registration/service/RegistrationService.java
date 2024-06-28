@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -55,19 +56,31 @@ public class RegistrationService {
 
 
 
+    @Transactional
     public void approvedEmployeeRequest(SignUpRequest signUpRequest) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = authentication.getName();
+        String userEmail = getMangerEmail();
+        Registration registration = getRequestedEmployeeEmail(signUpRequest);
 
-        String email = signUpRequest.getEmail();
-        Registration registration = registrationRepository.findByEmail(email);
-        registration.changeStatus(userEmail);
-
+        registration.approveChangeStatus(userEmail);
         employeeService.signUp(signUpRequest);
     }
 
+    @Transactional
     public void rejectEmployeeRequest(SignUpRequest signUpRequest) {
+        String userEmail = getMangerEmail();
+        Registration registration = getRequestedEmployeeEmail(signUpRequest);
 
+        registration.rejectedChangeStatus(userEmail);
+    }
+
+    private static String getMangerEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+    private Registration getRequestedEmployeeEmail(SignUpRequest signUpRequest) {
+        String email = signUpRequest.getEmail();
+        return registrationRepository.findByEmail(email);
     }
 
     public Long getPendingCount() {
