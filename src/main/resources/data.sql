@@ -20,7 +20,8 @@ VALUES (1, 'mpavese0', 'vsimonitto0@1688.com', 'dP6.Ie\Jkf', 'MANAGER', '2023-07
        (19, 'dvaggi', 'cvasilyevi@amazonaws.com', 'oK6@BlJV', 'STAFF', '2022-12-08', TRUE, FALSE),
        (20, 'csapsonj', 'clivingstonej@cnbc.com', 'mS0.#b7VNhDS#*', 'STAFF', '2024-04-27', TRUE, FALSE),
        (21, '하지민', 'hjm3327@naver.com', '$2a$10$utpGEnYcosoY.YQdvQ5uce5aRuLtR9RknbfwXGZnBK8P6fgo8K98W', 'ROLE_MANAGER', '2024-04-27', TRUE, FALSE),
-       (22, '찜케터', 'zzimni98@gmail.com', '$2a$10$n.HK7abog5/EOYBhcs6bGuDqcMKNxJ.aPA4vhIt7RRvjgYo1lern2', 'ROLE_MARKETER', '2024-06-13', TRUE, FALSE);
+       (22, '찜케터', 'zzimni98@gmail.com', '$2a$10$n.HK7abog5/EOYBhcs6bGuDqcMKNxJ.aPA4vhIt7RRvjgYo1lern2', 'ROLE_MARKETER', '2024-06-13', TRUE, FALSE),
+       (23, '동니저', 'test@gmail.com', '$2a$10$k44kauejFFkukb7MluJxP.n8GEkj6I/yv/mU1x5Uy49WTXAE47x3q', 'ROLE_MANAGER', '2024-06-13', TRUE, FALSE);
 
 
 INSERT INTO customer (id, name, grade, phone, email, address, employee_id, memo, gender, birth, created_date,
