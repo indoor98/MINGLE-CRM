@@ -3,7 +3,7 @@
     <q-item>
       <q-item-section class="row flex flex-center">
         <div class="q-pa-md" style="font-size: 25px">
-          요약된 다이닝 리뷰 총 평점
+          요약된 호텔 리뷰 총 평점
         </div>
         <q-rating
           size="50px"
@@ -37,7 +37,7 @@
           v-model="startDate"
           mask="date"
           :rules="['date']"
-          label="시작일"
+          label="리뷰 작성 시작일"
         >
           <template v-slot:append>
             <q-icon name="event" class="cursor-pointer">
@@ -60,7 +60,12 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input v-model="endDate" mask="date" :rules="['date']" label="종료일">
+        <q-input
+          v-model="endDate"
+          mask="date"
+          :rules="['date']"
+          label="리뷰 작성 종료일"
+        >
           <template v-slot:append>
             <q-icon name="event" class="cursor-pointer">
               <q-popup-proxy
@@ -94,8 +99,8 @@
           v-model="summaryType"
           toggle-color="primary"
           :options="[
-            { label: '긍정', value: 'POSITIVE' },
-            { label: '부정', value: 'NEGATIVE' },
+            { label: '긍정적으로 리뷰 요약', value: 'POSITIVE' },
+            { label: '부정적으로 리뷰 요약', value: 'NEGATIVE' },
           ]"
           class="q-ma-md"
         />

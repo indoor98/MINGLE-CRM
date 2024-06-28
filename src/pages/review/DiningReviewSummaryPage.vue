@@ -3,7 +3,7 @@
     <q-item>
       <q-item-section class="row flex flex-center">
         <div class="q-pa-md" style="font-size: 25px">
-          요약된 호텔 리뷰 총 평점
+          요약된 다이닝 리뷰 총 평점
         </div>
         <q-rating
           size="50px"
@@ -99,8 +99,8 @@
           v-model="summaryType"
           toggle-color="primary"
           :options="[
-            { label: '긍정적인 리뷰 요약', value: 'POSITIVE' },
-            { label: '부정적인 리뷰 요약', value: 'NEGATIVE' },
+            { label: '긍정적으로 리뷰 요약', value: 'POSITIVE' },
+            { label: '부정적으로 리뷰 요약', value: 'NEGATIVE' },
           ]"
           class="q-ma-md"
         />
