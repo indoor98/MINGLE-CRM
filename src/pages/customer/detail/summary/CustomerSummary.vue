@@ -23,6 +23,10 @@
               <td>{{ customer.phone }}</td>
             </tr>
             <tr>
+              <th>이메일</th>
+              <td>{{ customer.email }}</td>
+            </tr>
+            <tr>
               <th>주소</th>
               <td>{{ customer.address }}</td>
             </tr>
