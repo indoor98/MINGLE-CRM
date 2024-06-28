@@ -27,6 +27,14 @@
             {{ userName }} {{ formattedUserRole }} 님 환영합니다! :)
           </div>
           <q-btn
+            round
+            icon="notifications"
+            @click="toggleNotifications"
+            class="q-mr-md"
+          >
+            <q-badge floating color="red" rounded>{{ pendingRequestsCount }}</q-badge>
+          </q-btn>
+          <q-btn
             outline
             rounded
             color="accent"
@@ -203,6 +211,24 @@ const linksList = [
     ],
     roles: ["ROLE_MANAGER"],
   },
+  {
+    title: "직원 회원가입 관리",
+    caption: "목록 조회",
+    icon: "supervisor_account", // 아이콘 변경
+    children: [
+      {
+        title: "승인 대기 중 직원",
+        icon: "hourglass_empty", // 승인 대기 아이콘
+        to: "/admin-request",
+      },
+      {
+        title: "모든 직원 요청",
+        icon: "list_alt", // 전체 목록 아이콘
+        to: "/admin-request-all",
+      },
+    ],
+    roles: ["ROLE_MANAGER"],
+  },
 ];
 
 const logout = async () => {
@@ -246,11 +272,27 @@ const renewToken = async () => {
   }
 };
 
+const fetchPendingRequestsCount = async () => {
+  try {
+    const response = await customAxios.get("/api/v1/admin/registers/pendingCount");
+    if (response.status === 200) {
+      pendingRequestsCount.value = response.data.count;
+    }
+  } catch (error) {
+    console.error("Error fetching pending requests count:", error);
+  }
+};
+
 const leftDrawerOpen = ref(false);
 const logMenu = ref(false);
+const pendingRequestsCount = ref(0);
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function toggleNotifications() {
+  logMenu.value = !logMenu.value;
 }
 
 const userName = computed(() => userStore.name);
@@ -290,6 +332,7 @@ const filteredLinks = computed(() => {
 onMounted(async () => {
   await renewToken();
   userStore.loadUserInfo();
+  await fetchPendingRequestsCount(); // Fetch pending requests count on mount
   console.log("Mounted. Current name state:", userStore.name);
 });
 </script>
