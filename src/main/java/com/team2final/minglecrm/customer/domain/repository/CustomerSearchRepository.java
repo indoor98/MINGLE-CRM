@@ -41,7 +41,8 @@ public class CustomerSearchRepository {
                 .where(
                         customerNameEq(condition.getCustomerName()),
                         customerGradeEq(condition.getGrade()),
-                        genderEq(condition.getGender())
+                        genderEq(condition.getGender()),
+                        customerEmailEq(condition.getEmail())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -53,13 +54,17 @@ public class CustomerSearchRepository {
                 .where(
                         customerNameEq(condition.getCustomerName()),
                         customerGradeEq(condition.getGrade()),
-                        genderEq(condition.getGender())
+                        genderEq(condition.getGender()),
+                        customerEmailEq(condition.getEmail())
                 )
                 .fetchCount();
 
         return new PageImpl<>(results, pageable, totalCount);
     }
 
+    private BooleanExpression customerEmailEq(String customerEmail) {
+        return customerEmail != null ? QCustomer.customer.email.contains(customerEmail) : null;
+    }
 
     private BooleanExpression customerNameEq(String customerName) {
         return customerName != null ? QCustomer.customer.name.contains(customerName) : null;
