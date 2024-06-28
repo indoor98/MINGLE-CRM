@@ -21,7 +21,7 @@
       v-model:pagination="paymentPagination"
     >
       <template v-slot:body="props">
-        <q-tr :props="props" @click="showPaymentDetail(props.row)">
+        <q-tr :props="props" @click="showPaymentDetail(props.row)" class="q-table-row">
           <q-td v-for="col in paymentColumns" :key="col.name" :props="props">
             <span v-if="shouldHighlight(props.row[col.field])" class="highlighted-text">
               {{ props.row[col.field] }}
@@ -79,6 +79,7 @@ const fetchPayments = async () => {
     const response = await axios.get(`/api/v1/customers/${customerId}/payments`);
     payments.value = response.data.map((payment, index) => ({
       paymentId: payment.id,
+      idx : index +1,
       customerName: payment.customerName,
       number: payment.number,
       type: payment.type,
@@ -140,7 +141,7 @@ onMounted(() => {
 });
 
 const paymentColumns = [
-  {name: 'paymentId', label: '#', align: 'left', field: 'paymentId', sortable: true},
+  {name: 'paymentId', label: '#', align: 'left', field: 'idx', sortable: true},
   {name: 'customerName', label: '고객명', align: 'left', field: 'customerName', sortable: true},
   {name: 'number', label: '전화번호', align: 'center', field: 'number', sortable: true},
   {name: 'type', label: '결제 종류', align: 'center', field: 'type', sortable: true},
@@ -153,5 +154,9 @@ const paymentColumns = [
 <style scoped>
 .highlighted-text {
   color: red; /* 원하는 텍스트 색상으로 설정 */
+}
+
+.q-table-row {
+  cursor: pointer; /* 마우스를 올리면 클릭할 수 있는 것처럼 보이도록 */
 }
 </style>

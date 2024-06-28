@@ -3,7 +3,7 @@
     <q-item>
       <q-item-section class="row flex flex-center">
         <div class="q-pa-md" style="font-size: 25px">
-          기간 내 사용자 리뷰 총 평점
+          요약된 다이닝 리뷰 총 평점
         </div>
         <q-rating
           size="50px"
@@ -21,7 +21,7 @@
       <q-separator vertical />
 
       <q-item-section class="row flex flex-center">
-        <div class="q-pb-md" style="font-size: 25px">기간 내 리뷰 수</div>
+        <div class="q-pb-md" style="font-size: 25px">요약된 리뷰 수</div>
         <q-icon class="q-pa-md" name="people" size="60px"></q-icon>
         <div style="font-size: 25px">
           {{ reviewsNumber }}
@@ -142,14 +142,21 @@ const getHotelReviewsAverageRatings = async (startDate, endDate) => {
   try {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
+    let hotelParam = hotel.value;
+    if (hotel.value === "선택 안함") {
+      hotelParam = "All";
+    } else {
+      hotelParam = hotel.value;
+    }
     const response = await axios.get("/api/hotel/rating/average", {
       params: {
         startDate: start.slice(0, 11) + "00:00:00",
         endDate: end.slice(0, 11) + "23:59:59",
+        hotel: hotelParam,
       },
     });
-    console.log(response.data);
-    averageRating.value = response.data;
+    console.log(response.data.data);
+    averageRating.value = response.data.data;
   } catch (error) {
     console.log(error);
   }
@@ -159,14 +166,21 @@ const getHotelReviewsNumber = async (startDate, endDate) => {
   try {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
+    let hotelParam = hotel.value;
+    if (hotel.value === "선택 안함") {
+      hotelParam = "All";
+    } else {
+      hotelParam = hotel.value;
+    }
     const response = await axios.get("/api/hotel/review/count", {
       params: {
         startDate: start.slice(0, 11) + "00:00:00",
         endDate: end.slice(0, 11) + "23:59:59",
+        hotel: hotelParam,
       },
     });
     console.log(response.data);
-    reviewsNumber.value = response.data;
+    reviewsNumber.value = response.data.data;
   } catch (error) {
     console.log(error);
   }

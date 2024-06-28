@@ -23,6 +23,10 @@
               <td>{{ customer.phone }}</td>
             </tr>
             <tr>
+              <th>이메일</th>
+              <td>{{ customer.email }}</td>
+            </tr>
+            <tr>
               <th>주소</th>
               <td>{{ customer.address }}</td>
             </tr>
@@ -47,13 +51,19 @@
                 </div>
                 <div v-else>
                   {{ customer.memo }}
-                  <q-btn v-if="!editingMemo" label="메모 편집" color="primary" @click="editMemo" />
+                  <q-btn
+                    v-if="!editingMemo"
+                    label="메모 편집"
+                    color="primary"
+                    @click="editMemo"
+                    class="edit-memo-btn"
+                  />
                 </div>
               </td>
             </tr>
             <tr>
               <th>성별</th>
-              <td>{{ customer.gender }}</td>
+              <td>{{ getKoreanGender(customer.gender) }}</td>
             </tr>
             <tr>
               <th>생일</th>
@@ -137,6 +147,17 @@ const scrollToTop = () => {
   });
 };
 
+const getKoreanGender = (gender) => {
+  switch (gender) {
+    case 'Male':
+      return '남자';
+    case 'Female':
+      return '여자';
+    default:
+      return gender;
+  }
+};
+
 onMounted(fetchCustomerDetail);
 </script>
 
@@ -187,6 +208,20 @@ onMounted(fetchCustomerDetail);
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.edit-memo-btn {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-memo-btn:hover {
+  background-color: #0056b3;
 }
 
 .back-to-top-btn {

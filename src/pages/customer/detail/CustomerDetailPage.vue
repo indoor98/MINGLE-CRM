@@ -6,7 +6,7 @@
       </q-card-section>
 
       <q-tabs v-model="activeTab" class="text-teal">
-        <q-tab label="고객 요약" name="summary" @click="changeTab('summary')" />
+<!--        <q-tab label="고객 요약" name="summary" @click="changeTab('summary')" />-->
         <q-tab label="고객 선호도 내역" name="preference" @click="changeTab('preference')" />
         <q-tab label="예약 내역" name="reservation" @click="changeTab('reservation')" />
         <q-tab label="상담 내역" name="consultation" @click="changeTab('consultation')" />

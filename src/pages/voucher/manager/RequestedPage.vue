@@ -1,66 +1,100 @@
 <template>
-  <div>
-    <h2 class="text-h6">승인 요청된 바우처 목록</h2>
-    <q-card class="q-mt-md">
-      <q-card-section>
-        <q-table
-          :rows="vouchers"
-          :columns="columns"
-          row-key="id"
-          :loading="loading"
-          :pagination="{ rowsPerPage: 10 }"
-          style="cursor: pointer"
-        >
-          <template v-slot:body-cell-createdReason="props">
-            <q-td :props="props">
-              {{ toTenWords(props.row.createdReason) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-requestDate="props">
-            <q-td :props="props">
-              {{ toDate(props.row.requestDate) }}
-            </q-td>
-          </template>
-          <template v-slot:body-cell-approve="props">
-            <q-td :props="props">
-              <q-btn
-                label="승인"
-                color="primary"
-                @click="approveVoucher(props.row.voucherId)"
-              ></q-btn>
-              <q-btn
-                label="거절"
-                color="secondary"
-                @click="rejectVoucher(props.row.voucherId)"
-              ></q-btn>
-            </q-td>
-          </template>
-          <template v-slot:no-data>
-            <q-tr>
-              <q-td :colspan="columns.length" class="text-center">
-                바우처가 없습니다.
+  <q-page>
+    <div class="q-pa-md">
+      <h2 class="text-h6">승인 요청된 바우처 목록</h2>
+      <q-card class="q-mt-md">
+        <q-card-section>
+          <q-table
+            :rows="vouchers"
+            :columns="columns"
+            row-key="id"
+            :loading="loading"
+            :pagination="{ rowsPerPage: 10 }"
+            style="cursor: pointer"
+          >
+            <template v-slot:body="props">
+              <q-tr :props="props" @click="showVoucherDetail(props.row)">
+                <q-td v-for="col in columns" :key="col.name" :props="props">
+                  <template v-if="col.field === 'requestDate'">
+                    {{ toDate(props.row[col.field]) }}
+                  </template>
+                  <template v-else-if="col.name === 'approve'">
+                    <q-btn
+                      label="승인"
+                      color="primary"
+                      @click.stop="approveVoucher(props.row.voucherId)"
+                    ></q-btn>
+                    <q-btn
+                      label="거절"
+                      color="secondary"
+                      @click.stop="rejectVoucher(props.row.voucherId)"
+                    ></q-btn>
+                  </template>
+                  <temaplate v-else>
+                    {{ props.row[col.field] }}
+                  </temaplate>
+                </q-td>
+              </q-tr>
+            </template>
+            <template v-slot:body-cell-approve="props">
+              <q-td :props="props">
+                <q-btn
+                  label="승인"
+                  color="primary"
+                  @click="approveVoucher(props.row.voucherId)"
+                ></q-btn>
+                <q-btn
+                  label="거절"
+                  color="secondary"
+                  @click="rejectVoucher(props.row.voucherId)"
+                ></q-btn>
               </q-td>
-            </q-tr>
-          </template>
-        </q-table>
-      </q-card-section>
-    </q-card>
-    <q-card class="q-mt-md">
-      <q-card-section v-if="errorMessage">
-        <p style="color: red" class="text-center">{{ errorMessage }}</p>
-      </q-card-section>
-    </q-card>
-  </div>
+            </template>
+            <template v-slot:no-data>
+              <q-tr>
+                <q-td :colspan="columns.length" class="text-center">
+                  바우처가 없습니다.
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+        </q-card-section>
+      </q-card>
+      <q-card class="q-mt-md">
+        <q-card-section v-if="errorMessage">
+          <p style="color: red" class="text-center">{{ errorMessage }}</p>
+        </q-card-section>
+      </q-card>
+
+      <q-dialog v-model="showDialog" persistent>
+        <VoucherHistoryDetail
+          :voucher="selectedVoucher"
+          @close="closeVoucherDetail"
+        />
+      </q-dialog>
+    </div>
+  </q-page>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Notify, Dialog } from "quasar";
+import VoucherHistoryDetail from "../../../components/voucher/VoucherHistoryDetail.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
+const showDialog = ref(false);
+const selectedVoucher = ref({});
+
+const searchCustomerName = ref("");
+const searchAmount = ref(null);
+const searchCreatedReason = ref("");
+const searchCreatorName = ref("");
+const searchConfirmerName = ref("");
+const selectedGrades = ref([]);
+const selectedStatus = ref("");
 
 const columns = ref([
   {
@@ -204,6 +238,16 @@ const rejectVoucher = async (voucherId) => {
       });
     }
   });
+};
+
+const showVoucherDetail = (voucher) => {
+  selectedVoucher.value = voucher;
+  showDialog.value = true;
+};
+
+const closeVoucherDetail = () => {
+  showDialog.value = false;
+  selectedVoucher.value = null;
 };
 
 onMounted(() => {

@@ -27,12 +27,7 @@
           filled
           class="search-field"
         />
-        <q-input
-          v-model="searchParams.keyword"
-          label="검색어"
-          filled
-          class="search-field"
-        />
+
         <q-input
           v-model="searchParams.startDate"
           label="시작일"
@@ -98,7 +93,7 @@
         /> -->
         <q-btn
           color="primary"
-          label="Search"
+          label="검색"
           @click="fetchInquiriesSearch"
           class="q-ml-sm search-btn"
         />
@@ -155,6 +150,7 @@ const actionStatusOptions = [
   { label: "조치 후", value: "조치 후" },
 ];
 
+// 컬럼 정의
 const columns = [
   {
     name: "id",
@@ -168,30 +164,36 @@ const columns = [
   {
     name: "customerName",
     align: "left",
-    label: "Customer Name",
+    label: "이름",
     field: "customerName",
     sortable: true,
   },
   {
     name: "customerPhone",
     align: "left",
-    label: "Customer Phone",
+    label: "전화번호",
     field: "customerPhone",
     sortable: true,
   },
   {
     name: "date",
     align: "left",
-    label: "Date",
+    label: "문의 날짜",
     field: "date",
     format: (val) => new Date(val).toLocaleString(),
     sortable: true,
   },
-  { name: "type", align: "left", label: "Type", field: "type", sortable: true },
+  {
+    name: "type",
+    align: "left",
+    label: "문의 타입",
+    field: "type",
+    sortable: true,
+  },
   {
     name: "isReply",
     align: "left",
-    label: "Reply Status",
+    label: "답변 여부",
     field: "isReply",
     format: (val) => (val ? "Yes" : "No"),
     sortable: true,
@@ -199,29 +201,22 @@ const columns = [
   {
     name: "employName",
     align: "left",
-    label: "Employee Name",
-    field: "employName",
+    label: "직원 이름",
+    field: (row) => (row.employName ? row.employName : "답변 직원 없음"),
     sortable: true,
   },
   {
     name: "inquiryTitle",
     align: "left",
-    label: "Inquiry Title",
+    label: "문의 제목",
     field: "inquiryTitle",
     sortable: true,
   },
-  // {
-  //   name: "inquiryContent",
-  //   align: "left",
-  //   label: "Inquiry Content",
-  //   field: "inquiryContent",
-  //   sortable: true,
-  // },
   {
     name: "actionStatus",
     align: "left",
-    label: "Action Status",
-    field: "actionStatus",
+    label: "조치 상태",
+    field: (row) => (row.actionStatus ? row.actionStatus : "조치 상태 없음"),
     sortable: true,
   },
 ];
@@ -320,7 +315,7 @@ const fetchInquiriesSearch = async () => {
       params.append("actionStatus", searchParams.value.actionStatus);
 
     const response = await axios.get(
-      `/api/v1/inquiries/search2?${params.toString()}`
+      `/api/v1/inquiries/search?${params.toString()}`
     );
     console.log("응답 데이터:", response.data.data);
 
@@ -370,6 +365,10 @@ const filteredInquiries = computed(() => {
 $primary-color: #007bff;
 $secondary-color: #6c757d;
 
+.text-h4 {
+  text-align: center;
+}
+
 .search-container {
   display: flex;
   justify-content: center;
@@ -378,24 +377,41 @@ $secondary-color: #6c757d;
   background-color: #f9f9f9;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
+  border: 1px solid #dcdcdc; /* 컨테이너 선을 잘 보이게 추가 */
+  margin-left: 0rem; /* 좌측 여백 */
+  margin-right: 0rem; /* 우측 여백 */
 }
 
 .search-fields-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
 }
 
 .search-field {
-  flex: 1 1 15%;
+  flex: 1 1 calc(25% - 1rem);
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.date-type-search-container {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.date-type-search-container .search-field {
+  flex: 1 1 calc(20% - 1rem);
   margin-right: 1rem;
 }
 
 .search-btn {
   flex: 0 0 auto;
-  margin-left: 1rem;
+  margin: 1rem;
+  height: 35px; /* 버튼의 높이 조정 */
+  line-height: 32px; /* 텍스트가 버튼의 가운데에 오도록 설정 */
+  padding: 0 16px; /* 좌우 여백 추가 */
+  font-size: 14px; /* 버튼의 폰트 크기 조정 */
 }
 
 .q-pagination {
