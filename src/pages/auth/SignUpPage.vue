@@ -110,7 +110,7 @@ const signUp = async () => {
     );
 
     console.log(response.data);
-    window.location.href = "/#/signin";
+    window.location.href = "/#/";
   } catch (error) {
     console.log(error);
   }
