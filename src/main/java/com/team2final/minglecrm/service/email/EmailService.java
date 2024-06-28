@@ -14,6 +14,7 @@ import com.team2final.minglecrm.log.domain.repository.EmailLogRepository;
 import com.team2final.minglecrm.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -61,6 +62,7 @@ public class EmailService {
     }
 
 
+    @Transactional
     public void sendGroupEmail(GroupEmailSendRequest request, String employeeEmail) throws Exception {
 
         // 이벤트 생성
@@ -68,7 +70,7 @@ public class EmailService {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .employeeEmail(employeeEmail)
-                .sendCount(1L)
+                .sendCount(0L)
                 .build();
 
         Long eventId = eventService.createEvent(createEventRequest);
@@ -83,7 +85,7 @@ public class EmailService {
             Customer customer = customerRepository.findByEmail(customerEmail).orElseThrow( () ->
                     new IllegalArgumentException("없는 고객입니다."));
 
-            content = "<img src=http://localhost:8080/api/readcheck/" + eventId.toString() + "/" + customerEmail + "\" " + "onerror=this.style.display='none';>";
+            String newContent = content + " <img src=http://localhost:8080/api/readcheck/" + eventId.toString() + "/" + customerEmail + "\">";
             emailSendService.sendMail(customerEmail, request.getTitle(), content);
 
             EmailLog emailLog = EmailLog.builder()
@@ -91,6 +93,7 @@ public class EmailService {
                     .customer(customer)
                     .build();
 
+            event.increaseSendCount();
             emailLogRepository.save(emailLog);
         }
     }
