@@ -8,17 +8,10 @@ const routes = [
         path: "review",
         component: () => import("pages/review/ReviewPage.vue"),
       },
-      {
-        path: "voucher-manager",
-        component: () => import("pages/voucher/ManagerVoucherPage.vue"),
-      },
+
       {
         path: "voucher-marketer/draft",
         component: () => import("pages/voucher/marketer/DraftPage.vue"),
-      },
-      {
-        path: "voucher-marketer/approval-check",
-        component: () => import("pages/voucher/marketer/ApprovalCheckPage.vue"),
       },
       {
         path: "voucher-marketer/email",
