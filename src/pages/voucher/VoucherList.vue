@@ -78,6 +78,7 @@
         </q-card-section>
 
         <q-card-section>
+          <q-btn @click="showCustomerListModal = true"></q-btn>
           <q-input v-model="voucher.customerId" label="회원 ID" />
           <q-input v-model="voucher.amount" label="금액" type="number" />
           <q-input v-model="voucher.reason" label="생성 이유" type="string" />
@@ -138,18 +139,23 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog> </q-dialog>
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Dialog, Notify } from "quasar";
+import CustomerListModalForVoucher from "./CustomerListModalForVoucher.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 const showCreationModal = ref(false);
 const showRequestModal = ref(false);
+const showCustomerListModal = ref(false);
+
 const voucher = ref({
   customerId: "",
   amount: 0,

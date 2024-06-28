@@ -7,10 +7,16 @@
       :loading="loading"
       v-model:pagination="pagination"
       hide-pagination
+      class="q-mt-xl"
     >
       <template v-slot:body="props">
         <q-tr :props="props" @click="rowClicked(props.row)">
-          <q-td v-for="col in columns" :key="col.name" :props="props">
+          <q-td
+            class="truncate"
+            v-for="col in columns"
+            :key="col.name"
+            :props="props"
+          >
             {{ props.row[col.field] }}
           </q-td>
         </q-tr>
@@ -60,15 +66,8 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: "employeeId",
-    label: "담당자 ID",
-    align: "center",
-    field: "employeeId",
-    sortable: true,
-  },
-  {
     name: "employeeName",
-    label: "담당자 명",
+    label: "이메일 발송자",
     align: "center",
     field: "employeeName",
     sortable: true,
@@ -81,13 +80,6 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: "emailContent",
-    label: "이메일 내용",
-    align: "center",
-    field: "emailContent",
-    sortable: true,
-  },
-  {
     name: "sentDate",
     label: "발송 시간",
     align: "center",
@@ -96,14 +88,14 @@ const columns = ref([
   },
   {
     name: "sendCount",
-    label: "총 수신자 수",
+    label: "총 발신자 수",
     align: "center",
     field: "sendCount",
     sortable: true,
   },
   {
     name: "readCount",
-    label: "열람자 수",
+    label: "총 열람자 수",
     align: "center",
     field: "readCount",
     sortable: true,
@@ -143,3 +135,5 @@ onMounted(() => {
   fetchEmailLogs();
 });
 </script>
+
+<style lang="scss"></style>
