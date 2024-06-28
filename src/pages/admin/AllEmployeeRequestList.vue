@@ -60,7 +60,7 @@
           <q-table
             flat
             bordered
-            title="직원 요청 목록"
+            title="전체 직원 요청 기록"
             :rows="requests"
             :columns="columns"
             row-key="email"
@@ -232,7 +232,7 @@ const statusOptions = [
 }
 
 .q-table-row {
-  
+
 }
 </style>
 

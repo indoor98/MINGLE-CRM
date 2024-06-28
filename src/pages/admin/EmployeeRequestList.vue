@@ -107,32 +107,31 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { api as axios } from "src/boot/axios";
-import { useQuasar } from "quasar";
+import {ref, computed, onMounted} from "vue";
+import {useRouter} from "vue-router";
+import {api as axios} from "src/boot/axios";
+import {useQuasar} from "quasar";
 
 const $q = useQuasar();
 const router = useRouter();
 const searchName = ref("");
+const selectedRole = ref(null);
 const requests = ref([]);
 const pagination = ref({
   page: 1,
   rowsPerPage: 20,
   rowsNumber: 0
 });
-const selectedRole = ref(null);
 
-const fetchRequests = async (page = 1) => {
+const fetchRequests = async (page = 1, initialLoad = false) => {
   try {
-    const params = {
-      page: page - 1,
-      size: pagination.value.rowsPerPage,
-      name: searchName.value || null,
-      role: selectedRole.value || null
-    };
+    const params = new URLSearchParams();
+    params.append('page', page - 1);
+    params.append('size', pagination.value.rowsPerPage);
+    if (searchName.value) params.append('name', searchName.value);
+    if (selectedRole.value) params.append('requestedRole', selectedRole.value);
 
-    const response = await axios.get('/api/v1/admin/registers', {params});
+    const response = await axios.get('/api/v1/admin/registers/search', { params });
     requests.value = response.data.content;
     pagination.value.page = response.data.number + 1;
     pagination.value.rowsPerPage = response.data.size;
@@ -145,7 +144,7 @@ const fetchRequests = async (page = 1) => {
 const maxPage = computed(() => Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage));
 
 onMounted(() => {
-  fetchRequests();
+  fetchRequests(1, true);
 });
 
 const executeSearch = () => {
@@ -169,7 +168,7 @@ const columns = [
   {name: 'name', label: '이름', align: 'left', field: 'name', sortable: true},
   {name: 'email', label: '이메일', align: 'left', field: 'email', sortable: true},
   {name: 'requestedRole', label: '요청된 역할', align: 'center', field: 'requestedRole', sortable: true},
-  {name: 'status', label: '상태', align: 'center', field: 'status', sortable: true}, // 추가된 status 컬럼
+  {name: 'status', label: '상태', align: 'center', field: 'status', sortable: true},
   {name: 'password', label: '비밀번호', align: 'left', field: 'password', sortable: false},
   {name: 'action', label: '액션', align: 'center'}
 ];
@@ -178,7 +177,7 @@ const roleOptions = [
   {label: '선택 안 함', value: ''},
   {label: '매니저', value: 'ROLE_MANAGER'},
   {label: '상담사', value: 'ROLE_CONSULTANT'},
-  {label: '마케터', value: 'ROLE_MARKETER'},
+  {label: '마케터', value: 'ROLE_MARKETER'}
 ];
 
 const updateRequestStatus = async (request, action) => {
@@ -245,6 +244,7 @@ const confirmReject = (request) => {
   });
 };
 </script>
+
 
 <style scoped>
 .container {
