@@ -205,6 +205,7 @@ const createHotelReviewsSummaryByPeriod = async (startDate, endDate) => {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
     let hotelParam = hotel.value;
+
     if (hotelParam === "선택 안함") {
       hotelParam = "All";
     }

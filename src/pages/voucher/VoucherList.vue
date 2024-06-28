@@ -78,8 +78,15 @@
         </q-card-section>
 
         <q-card-section>
-          <q-btn @click="showCustomerListModal = true"></q-btn>
-          <q-input v-model="voucher.customerId" label="회원 ID" />
+          <q-btn @click="showCustomerListModal = true" label="고객 조회">
+            <q-dialog v-model="showCustomerListModal">
+              <customer-list-modal-for-voucher
+                @selected-customer="onSelectedCustomer"
+              />
+            </q-dialog>
+          </q-btn>
+          <q-input v-model="voucher.customerId" label="회원 ID" readonly />
+          <q-input v-model="customerEmail" label="회원 이메일" readonly />
           <q-input v-model="voucher.amount" label="금액" type="number" />
           <q-input v-model="voucher.reason" label="생성 이유" type="string" />
           <q-input
@@ -155,6 +162,8 @@ const loading = ref(true);
 const showCreationModal = ref(false);
 const showRequestModal = ref(false);
 const showCustomerListModal = ref(false);
+const selectedCustomer = ref();
+const customerEmail = ref("");
 
 const voucher = ref({
   customerId: "",
@@ -163,6 +172,13 @@ const voucher = ref({
   endDate: "",
 });
 
+const onSelectedCustomer = (customer) => {
+  console.log(customer);
+  selectedCustomer.value = customer;
+  showCustomerListModal.value = false;
+  voucher.value.customerId = customer.at(0).id;
+  customerEmail.value = customer.at(0).email;
+};
 const toTenWords = (beforeWord) => {
   const afterword =
     beforeWord.length <= 10 ? beforeWord : beforeWord.substring(0, 10) + "...";

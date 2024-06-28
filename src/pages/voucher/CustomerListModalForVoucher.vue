@@ -65,7 +65,7 @@
     </q-card-section>
     <q-card-section class="row flex" style="justify-content: space-between">
       <div class="text-h4">고객 목록</div>
-      <q-btn label="선택 완료" color="primary" @click="createEmailList"
+      <q-btn label="선택 완료" color="primary" @click="selectCustomer"
     /></q-card-section>
     <q-card-section class="q-pa-none">
       <div class="q-table-container">
@@ -79,7 +79,7 @@
           v-model:selected="selected"
           @request="onRequest"
           hide-pagination
-          selection="multiple"
+          selection="single"
         >
         </q-table>
       </div>
@@ -116,15 +116,10 @@ const selectedGrade = ref(null);
 const selectedGender = ref(null);
 
 watch(selected, () => {});
-const emit = defineEmits(["selected-emails"]);
+const emit = defineEmits(["selected-customer"]);
 
-const createEmailList = () => {
-  const emails = [];
-  selected.value.forEach((val) => {
-    console.log(val.email);
-    emails.push(val.email);
-  });
-  emit("selected-emails", emails);
+const selectCustomer = () => {
+  emit("selected-customer", selected.value);
 };
 
 const fetchCustomers = async (page = 1) => {

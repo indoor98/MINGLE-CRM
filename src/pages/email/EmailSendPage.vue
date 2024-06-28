@@ -48,10 +48,9 @@
 </template>
 
 <script setup>
-import { ref, watch, defineEmits } from "vue";
+import { ref } from "vue";
 // import axios from "axios";
 import { api as axios } from "src/boot/axios";
-import { useRouter } from "vue-router";
 import CustomerListModal from "./CustomerListModal.vue";
 
 const showCreationModal = ref(false);

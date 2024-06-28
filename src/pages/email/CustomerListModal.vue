@@ -115,7 +115,6 @@ const pagination = ref({
 const selectedGrade = ref(null);
 const selectedGender = ref(null);
 
-watch(selected, () => {});
 const emit = defineEmits(["selected-emails"]);
 
 const createEmailList = () => {
