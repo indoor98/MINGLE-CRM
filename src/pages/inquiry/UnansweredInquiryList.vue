@@ -27,12 +27,7 @@
           filled
           class="search-field"
         />
-        <q-input
-          v-model="searchParams.keyword"
-          label="검색어"
-          filled
-          class="search-field"
-        />
+
         <q-input
           v-model="searchParams.startDate"
           label="시작일"
@@ -178,30 +173,36 @@ const columns = [
   {
     name: "customerName",
     align: "left",
-    label: "Customer Name",
+    label: "이름",
     field: "customerName",
     sortable: true,
   },
   {
     name: "customerPhone",
     align: "left",
-    label: "Customer Phone",
+    label: "전화번호",
     field: "customerPhone",
     sortable: true,
   },
   {
     name: "date",
     align: "left",
-    label: "Date",
+    label: "문의 날짜",
     field: "date",
     format: (val) => new Date(val).toLocaleString(),
     sortable: true,
   },
-  { name: "type", align: "left", label: "Type", field: "type", sortable: true },
+  {
+    name: "type",
+    align: "left",
+    label: "문의 타입",
+    field: "type",
+    sortable: true,
+  },
   {
     name: "isReply",
     align: "left",
-    label: "Reply Status",
+    label: "답변 여부",
     field: "isReply",
     format: (val) => (val ? "Yes" : "No"),
     sortable: true,
@@ -209,29 +210,22 @@ const columns = [
   {
     name: "employName",
     align: "left",
-    label: "Employee Name",
+    label: "직원 이름",
     field: (row) => (row.employName ? row.employName : "답변 직원 없음"),
     sortable: true,
   },
   {
     name: "inquiryTitle",
     align: "left",
-    label: "Inquiry Title",
+    label: "문의 제목",
     field: "inquiryTitle",
     sortable: true,
   },
-  // {
-  //   name: "inquiryContent",
-  //   align: "left",
-  //   label: "Inquiry Content",
-  //   field: "inquiryContent",
-  //   sortable: true,
-  // },
   {
     name: "actionStatus",
     align: "left",
-    label: "Action Status",
-    field: "actionStatus",
+    label: "조치 상태",
+    field: (row) => (row.actionStatus ? row.actionStatus : "조치 상태 없음"),
     sortable: true,
   },
 ];
