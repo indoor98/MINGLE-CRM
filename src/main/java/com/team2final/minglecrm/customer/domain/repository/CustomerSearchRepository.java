@@ -30,6 +30,7 @@ public class CustomerSearchRepository {
                 .select(new QCustomerResponse(
                         customer.id,
                         customer.name,
+                        customer.email,
                         customer.phone,
                         customer.employee.name,
                         customer.grade,

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,9 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerApi {
     private final CustomerService customerService;
 
-    // TODO : paging 처리 -> 컨텐츠 총 개수 뽑기
     @GetMapping()
-    //    @PreAuthorize("hasAnyRole('STAFF', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('MARKETER', 'MANAGER', 'CONSULTANT')")
     public ResponseEntity<Page<CustomerResponse>> getAllCustomers(Pageable pageable) {
         Page<CustomerResponse> customers = customerService.getAllCustomer(pageable);
         return ResponseEntity.ok(customers);
@@ -28,6 +28,7 @@ public class CustomerApi {
 
     // 검색
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('CONSULTANT', 'MANAGER','MARKETER')")
     public ResponseEntity<Page<CustomerResponse>> searchCustomers(
             Pageable pageable,
             @RequestParam(value = "name", required = false) String name,
