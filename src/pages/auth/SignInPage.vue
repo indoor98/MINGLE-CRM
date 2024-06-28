@@ -82,7 +82,7 @@ const signIn = async () => {
       response.data.data.atkExpiration
     );
 
-    router.push("/#/");
+    router.push("/");
   } catch (error) {
     console.log(error);
   }

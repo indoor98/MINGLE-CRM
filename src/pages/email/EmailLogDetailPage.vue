@@ -8,22 +8,7 @@
       </q-card>
     </div> -->
 
-    <q-btn icon="arrow_back" @click="goBack"> 뒤로</q-btn>
-
-    <q-card flat bordered class="my-card q-my-md">
-      <q-card-section>
-        <div class="text-h4" label="Title">{{ title }}</div>
-      </q-card-section>
-      <q-card-section>
-        <div class="text-h6" label="Title">보낸 사람 : {{ employeeName }}</div>
-      </q-card-section>
-      <q-separator />
-
-      <q-card-section>
-        {{ content }}
-      </q-card-section>
-    </q-card>
-
+    <q-btn flat icon="arrow_back" @click="goBack"> 뒤로</q-btn>
     <q-table
       :rows="emailLogs"
       :columns="columns"
@@ -89,10 +74,6 @@ const emailLogs = ref([]);
 const errorMessage = ref("");
 const loading = ref(true);
 const currentPage = ref(1);
-const title = ref("");
-const content = ref("");
-const employeeName = ref("");
-
 const columns = ref([
   {
     name: "customerId",
@@ -138,10 +119,6 @@ const fetchEmailLogs = async (eventId) => {
     pagesNumber.value = Math.ceil(
       pagesNumberResponse.data.data / pagination.value.rowsPerPage
     );
-
-    title.value = response.data.data.at(0).emailTitle;
-    content.value = response.data.data.at(0).emailContent;
-    employeeName.value = response.data.data.at(0).employeeName;
   } catch (error) {
     console.log(error);
   } finally {
@@ -156,13 +133,8 @@ watch(
   }
 );
 
-onMounted(
-  () => {
-    fetchEmailLogs(props.eventId);
-  }
-  // () => {
-  //   title.value = emailLogs.value.at(0).emailTitle;
-  // }
-);
+onMounted(() => {
+  fetchEmailLogs(props.eventId);
+});
 </script>
 <style lang="scss"></style>
