@@ -7,5 +7,5 @@ import java.time.LocalDate;
 
 @Repository
 public interface DishReservationQueryDslRepository {
-    DishReservationStatisticsResponse findDiningReservationStatistics(LocalDate startDate, LocalDate endDate);
+    DishReservationStatisticsResponse findDishReservationStatistics(LocalDate startDate, LocalDate endDate);
 }
