@@ -140,6 +140,76 @@ public class CustomerSearchRepository {
 
     }
 
+    public RevisitCustomerStatisticsResponse findVisitCustomerStatistics() {
+
+        QCustomer customer = QCustomer.customer;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+
+        NumberTemplate<Integer> age = Expressions.numberTemplate(Integer.class,
+                "TIMESTAMPDIFF(YEAR, {0}, {1})", customer.birth, LocalDate.now());
+
+
+        return queryFactory
+                .select(new QRevisitCustomerStatisticsResponse(
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.between(20, 29).and(customer.gender.eq("Male"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.between(20, 29).and(customer.gender.eq("Female"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.between(30, 39).and(customer.gender.eq("Male"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.between(30, 39).and(customer.gender.eq("Female"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.between(40, 49).and(customer.gender.eq("Male"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.between(40, 49).and(customer.gender.eq("Female"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.between(50, 59).and(customer.gender.eq("Male"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.between(50, 59).and(customer.gender.eq("Female"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.notBetween(0, 59).and(customer.gender.eq("Male"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        ),
+                        Expressions.asNumber(
+                                new CaseBuilder()
+                                        .when(age.notBetween(0, 59).and(customer.gender.eq("Female"))).then(1)
+                                        .otherwise(0).sum().intValue()
+                        )
+                ))
+                .from(customer)
+                .where(customer.visitCnt.gt(0))
+                .fetchOne();
+
+    }
+
     private BooleanExpression customerEmailEq(String customerEmail) {
         return customerEmail != null ? QCustomer.customer.email.contains(customerEmail) : null;
     }

@@ -175,4 +175,7 @@ public class StatisticsCustomerService {
     public RevisitCustomerStatisticsResponse getRevisitCustomerStatistics() {
         return customerSearchRepository.findRevisitCustomerStatistics();
     }
+    public RevisitCustomerStatisticsResponse getVisitCustomerStatistics() {
+        return customerSearchRepository.findVisitCustomerStatistics();
+    }
 }

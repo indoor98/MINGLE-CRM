@@ -121,9 +121,15 @@ public class StatisticsCustomerController {
         return response;
     }
 
-    @GetMapping("/revisit/rate/age-gender")
+    @GetMapping("/revisit/age-gender")
     public ResultResponse<RevisitCustomerStatisticsResponse> getRevisitCustomerStatistics() {
         RevisitCustomerStatisticsResponse response = statisticsCustomerService.getRevisitCustomerStatistics();
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", response);
+    }
+
+    @GetMapping("/visit/age-gender")
+    public ResultResponse<RevisitCustomerStatisticsResponse> getVisitCustomerStatistics() {
+        RevisitCustomerStatisticsResponse response = statisticsCustomerService.getVisitCustomerStatistics();
         return new ResultResponse<>(HttpStatus.OK.value(), "success", response);
     }
 }

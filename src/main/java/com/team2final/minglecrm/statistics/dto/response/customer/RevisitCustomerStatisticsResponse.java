@@ -1,7 +1,9 @@
 package com.team2final.minglecrm.statistics.dto.response.customer;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Data;
 
+@Data
 public class RevisitCustomerStatisticsResponse {
     private final Integer twentyMale;
     private final Integer twentyFemale;
