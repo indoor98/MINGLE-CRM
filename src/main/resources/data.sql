@@ -5928,7 +5928,7 @@ VALUES
     (20, 1.0, 3.0, 1.0, 4.0, '좋아. 그래도 뭔가 잘못된 것 같습니다.', 19, 68, '2024-05-06 0:00:00'),
     (21, 1.0, 3.0, 1.0, 3.0, '좋아. 그래도 뭔가 잘못된 것 같습니다.', 20, 66, '2024-06-07 0:00:00');
 
-ALTER TABLE employee ALTER COLUMN id RESTART WITH 21;
+ALTER TABLE employee ALTER COLUMN id RESTART WITH 23;
 
 
 
