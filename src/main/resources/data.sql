@@ -22,6 +22,8 @@ VALUES (1, 'mpavese0', 'vsimonitto0@1688.com', 'dP6.Ie\Jkf', 'MANAGER', '2023-07
        (21, '하지민', 'hjm3327@naver.com', '$2a$10$utpGEnYcosoY.YQdvQ5uce5aRuLtR9RknbfwXGZnBK8P6fgo8K98W', 'ROLE_MANAGER', '2024-04-27', TRUE, FALSE),
        (22, '찜케터', 'zzimni98@gmail.com', '$2a$10$n.HK7abog5/EOYBhcs6bGuDqcMKNxJ.aPA4vhIt7RRvjgYo1lern2', 'ROLE_MARKETER', '2024-06-13', TRUE, FALSE);
 
+ALTER TABLE employee ALTER COLUMN id RESTART WITH 23;
+
 
 INSERT INTO customer (id, name, grade, phone, email, address, employee_id, memo, gender, birth, created_date,
                       is_deleted, visit_cnt)
