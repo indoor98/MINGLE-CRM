@@ -19,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
@@ -49,7 +47,7 @@ public class RegistrationService {
 
     public Page<RegistrationResponse> getPendingStatusEmployList(Pageable pageable) {
         pageable = (pageable == null) ? PageRequest.of(0, 5) : pageable;
-        Page<Registration> registrations = registrationRepository.findByStatus(RequestStatus.PENDING, pageable);
+        Page<Registration> registrations = registrationRepository.findByStatusOrderByRegistrationRequestTimeDesc(RequestStatus.PENDING, pageable);
         return registrations.map(RegistrationResponse::from);
     }
 

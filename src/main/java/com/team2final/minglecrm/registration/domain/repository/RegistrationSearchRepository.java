@@ -36,7 +36,8 @@ public class RegistrationSearchRepository {
                         registration.email,
                         registration.approvalManagerName,
                         registration.requestedRole,
-                        registration.status
+                        registration.status,
+                        registration.registrationRequestTime
                 ))
                 .from(registration)
                 .where(

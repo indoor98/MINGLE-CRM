@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,6 +30,11 @@ public class Registration {
 
     private Boolean isRejected;
 
+    private LocalDateTime registrationRequestTime;
+
+    private LocalDateTime approvalCompletionTime;
+
+    private LocalDateTime rejectionTime;
 
     @Builder
     public Registration(String name, String password, String email, String requestedRole, RequestStatus status) {
@@ -36,17 +43,20 @@ public class Registration {
         this.email = email;
         this.requestedRole = requestedRole;
         this.status = status;
+        this.registrationRequestTime = LocalDateTime.now();
     }
 
     public void approveChangeStatus(String userEmail) {
         this.status = RequestStatus.APPROVED;
         this.approvalManagerName = userEmail;
         this.isRejected = false;
+        this.approvalCompletionTime = LocalDateTime.now();
     }
 
     public void rejectedChangeStatus(String userEmail) {
         this.status = RequestStatus.REJECTED;
         this.approvalManagerName = userEmail;
         this.isRejected = true;
+        this.rejectionTime = LocalDateTime.now();
     }
 }
