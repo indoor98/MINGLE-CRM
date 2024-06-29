@@ -1,3 +1,6 @@
+import EmployeeRequestList from "pages/admin/EmployeeRequestList.vue";
+import AllEmployeeRequestList from "pages/admin/AllEmployeeRequestList.vue";
+
 const routes = [
   {
     path: "/",
@@ -118,6 +121,16 @@ const routes = [
         component: () => import("pages/mypage/MyPage.vue"),
         meta: { requiresAuth: true },
       },
+      {
+        path: '/admin-request',
+        name: 'EmployeeRequestList',
+        component: EmployeeRequestList
+      },
+      {
+        path: '/admin-request-all',
+        name: 'AllEmployeeRequestList',
+        component: AllEmployeeRequestList
+      }
     ],
   },
   {
