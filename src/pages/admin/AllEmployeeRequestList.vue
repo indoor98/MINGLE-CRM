@@ -102,9 +102,11 @@
   </q-page>
 </template>
 
+
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
+import { format, parseISO } from 'date-fns';
 
 const searchName = ref("");
 const selectedRole = ref(null);
@@ -116,6 +118,25 @@ const pagination = ref({
   rowsNumber: 0,
 });
 
+const roleMap = {
+  'ROLE_MANAGER': '매니저',
+  'ROLE_CONSULTANT': '상담사',
+  'ROLE_MARKETER': '마케터'
+};
+
+const statusMap = {
+  'PENDING': '대기중',
+  'APPROVED': '승인됨',
+  'REJECTED': '거절됨'
+};
+
+const translateRole = (role) => roleMap[role] || role;
+const translateStatus = (status) => statusMap[status] || status;
+
+const formatDate = (dateString) => {
+  return format(parseISO(dateString), 'yyyy-MM-dd HH:mm:ss');
+};
+
 const fetchRequests = async (page = 1, initialLoad = false) => {
   try {
     const params = new URLSearchParams();
@@ -125,12 +146,16 @@ const fetchRequests = async (page = 1, initialLoad = false) => {
     if (selectedRole.value) params.append('requestedRole', selectedRole.value);
     if (selectedStatus.value) params.append('status', selectedStatus.value);
 
-    console.log("Fetching requests with params:", params.toString()); // Log params
-
     const response = await axios.get('/api/v1/admin/registers/search', { params });
-    console.log("Response data:", response.data); // Log response data
 
-    requests.value = response.data.content;
+    requests.value = response.data.content.map(request => {
+      return {
+        ...request,
+        requestedRole: translateRole(request.requestedRole),
+        status: translateStatus(request.status),
+        registrationRequestTime: formatDate(request.registrationRequestTime)
+      };
+    });
     pagination.value.page = response.data.number + 1;
     pagination.value.rowsPerPage = response.data.size;
     pagination.value.rowsNumber = response.data.totalElements;
@@ -167,6 +192,7 @@ const columns = [
   { name: 'email', label: '이메일', align: 'left', field: 'email', sortable: true },
   { name: 'requestedRole', label: '요청된 역할', align: 'center', field: 'requestedRole', sortable: true },
   { name: 'status', label: '상태', align: 'center', field: 'status', sortable: true },
+  { name: 'registrationRequestTime', label: '요청 시간', align: 'center', field: 'registrationRequestTime', sortable: true }
 ];
 
 const roleOptions = [
@@ -232,7 +258,20 @@ const statusOptions = [
 }
 
 .q-table-row {
+  cursor: pointer; /* 마우스를 올리면 클릭할 수 있는 것처럼 보이도록 */
+}
 
+.q-btn {
+  margin: 0 5px;
+  border-radius: 4px; /* 버튼을 둥글게 */
+  text-transform: uppercase; /* 버튼 텍스트를 대문자로 */
+  font-weight: bold; /* 버튼 텍스트를 굵게 */
+  transition: background-color 0.3s; /* 배경색 전환 애니메이션 */
+}
+
+.q-btn:hover {
+  background-color: #ffffff20; /* 호버 시 반투명 배경 */
 }
 </style>
+
 

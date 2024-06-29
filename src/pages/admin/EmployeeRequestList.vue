@@ -57,11 +57,7 @@
             <template v-slot:body="props">
               <q-tr :props="props" class="q-table-row">
                 <q-td v-for="col in columns" :key="col.name" :props="props">
-                  <div v-if="col.name === 'password'">
-                    <!-- 비밀번호 필드 숨김 처리 -->
-                    ******
-                  </div>
-                  <div v-else-if="col.name === 'action'" class="flex-center">
+                  <div v-if="col.name === 'action'" class="flex-center">
                     <q-btn
                       color="negative"
                       @click="confirmReject(props.row)"
@@ -111,6 +107,8 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { api as axios } from "src/boot/axios";
 import { useQuasar } from "quasar";
+import { format, formatDistanceToNow, parseISO, isBefore, subHours } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 const $q = useQuasar();
 const router = useRouter();
@@ -123,6 +121,34 @@ const pagination = ref({
   rowsNumber: 0
 });
 
+const roleMap = {
+  'ROLE_MANAGER': '매니저',
+  'ROLE_CONSULTANT': '상담사',
+  'ROLE_MARKETER': '마케터'
+};
+
+const statusMap = {
+  'PENDING': '대기중',
+  'APPROVED': '승인됨',
+  'REJECTED': '거절됨'
+};
+
+const translateRole = (role) => roleMap[role] || role;
+const translateStatus = (status) => statusMap[status] || status;
+
+const formatDate = (dateString) => {
+  return format(parseISO(dateString), 'yyyy-MM-dd');
+};
+
+const formatTimeOrRelative = (dateString) => {
+  const date = parseISO(dateString);
+  const twentyFourHoursAgo = subHours(new Date(), 24);
+  if (isBefore(date, twentyFourHoursAgo)) {
+    return format(date, 'yyyy-MM-dd HH:mm:ss');
+  }
+  return formatDistanceToNow(date, { addSuffix: true, locale: ko });
+};
+
 const fetchRequests = async (page = 1, useSearchEndpoint = false) => {
   try {
     const params = new URLSearchParams();
@@ -134,7 +160,14 @@ const fetchRequests = async (page = 1, useSearchEndpoint = false) => {
     const endpoint = useSearchEndpoint ? '/api/v1/admin/registers/search' : '/api/v1/admin/registers';
 
     const response = await axios.get(endpoint, { params });
-    requests.value = response.data.content;
+    requests.value = response.data.content.map(request => {
+      return {
+        ...request,
+        requestedRole: translateRole(request.requestedRole),
+        status: translateStatus(request.status),
+        displayTime: formatTimeOrRelative(request.registrationRequestTime)
+      };
+    });
     pagination.value.page = response.data.number + 1;
     pagination.value.rowsPerPage = response.data.size;
     pagination.value.rowsNumber = response.data.totalElements;
@@ -171,7 +204,7 @@ const columns = [
   { name: 'email', label: '이메일', align: 'left', field: 'email', sortable: true },
   { name: 'requestedRole', label: '요청된 역할', align: 'center', field: 'requestedRole', sortable: true },
   { name: 'status', label: '상태', align: 'center', field: 'status', sortable: true },
-  { name: 'password', label: '비밀번호', align: 'left', field: 'password', sortable: false },
+  { name: 'displayTime', label: '요청 시간', align: 'center', field: 'displayTime', sortable: true },
   { name: 'action', label: '액션', align: 'center' }
 ];
 
