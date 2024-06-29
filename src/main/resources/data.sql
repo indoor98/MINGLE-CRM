@@ -25,6 +25,8 @@ VALUES (1, 'mpavese0', 'vsimonitto0@1688.com', 'dP6.Ie\Jkf', 'MANAGER', '2023-07
 
 ALTER TABLE employee ALTER COLUMN id RESTART WITH 23;
 
+ALTER TABLE employee ALTER COLUMN id RESTART WITH 23;
+
 
 INSERT INTO customer (id, name, grade, phone, email, address, employee_id, memo, gender, birth, created_date,
                       is_deleted, visit_cnt)
