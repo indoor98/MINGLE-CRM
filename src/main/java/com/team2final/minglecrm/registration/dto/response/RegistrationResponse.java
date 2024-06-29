@@ -5,6 +5,8 @@ import com.team2final.minglecrm.registration.domain.Registration;
 import com.team2final.minglecrm.registration.domain.type.RequestStatus;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class RegistrationResponse {
 
@@ -13,14 +15,16 @@ public class RegistrationResponse {
     private final String password;
     private final String requestedRole;
     private final RequestStatus status;
+    private final LocalDateTime registrationRequestTime;
 
     @QueryProjection
-    public RegistrationResponse(String name, String email, String password, String requestedRole, RequestStatus status) {
+    public RegistrationResponse(String name, String email, String password, String requestedRole, RequestStatus status, LocalDateTime registrationRequestTime) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.requestedRole = requestedRole;
         this.status = status;
+        this.registrationRequestTime = registrationRequestTime;
     }
 
     public static RegistrationResponse from(Registration registration) {
@@ -29,7 +33,8 @@ public class RegistrationResponse {
                 registration.getEmail(),
                 registration.getPassword(),
                 registration.getRequestedRole(),
-                registration.getStatus()
+                registration.getStatus(),
+                registration.getRegistrationRequestTime()
         );
     }
 }

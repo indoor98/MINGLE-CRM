@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
 
-    Page<Registration> findByStatus(RequestStatus requestStatus, Pageable pageable);
+    Page<Registration> findByStatusOrderByRegistrationRequestTimeDesc(RequestStatus requestStatus, Pageable pageable);
 
     Registration findByEmail(String email);
 
