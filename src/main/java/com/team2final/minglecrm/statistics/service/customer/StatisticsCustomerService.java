@@ -1,5 +1,7 @@
 package com.team2final.minglecrm.statistics.service.customer;
 
+import com.team2final.minglecrm.customer.domain.repository.CustomerSearchRepository;
+import com.team2final.minglecrm.statistics.dto.response.customer.RevisitCustomerStatisticsResponse;
 import com.team2final.minglecrm.statistics.dto.response.customer.StatisticsCustomerResponse;
 import com.team2final.minglecrm.statistics.dto.response.customer.VisitCustomerResponse;
 import com.team2final.minglecrm.customer.domain.Customer;
@@ -25,6 +27,7 @@ public class StatisticsCustomerService {
 
     private final StatisticsCustomerRepository statisticsCustomerRepository;
     private final FrequentCustomerRepository frequentCustomerRepository;
+    private final CustomerSearchRepository customerSearchRepository;
 
     private Date convertToDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -141,5 +144,9 @@ public class StatisticsCustomerService {
             }
         }
         return revisitRateByGrade;
+    }
+
+    public RevisitCustomerStatisticsResponse getRevisitCustomerStatistics() {
+        return customerSearchRepository.findRevisitCustomerStatistics();
     }
 }

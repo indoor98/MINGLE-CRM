@@ -1,5 +1,7 @@
 package com.team2final.minglecrm.statistics.presentation.customer;
 
+import com.team2final.minglecrm.common.exception.ResultResponse;
+import com.team2final.minglecrm.statistics.dto.response.customer.RevisitCustomerStatisticsResponse;
 import com.team2final.minglecrm.statistics.dto.response.customer.VisitCustomerResponse;
 import com.team2final.minglecrm.statistics.dto.response.customer.StatisticsCustomerResponse;
 import com.team2final.minglecrm.statistics.service.customer.StatisticsCustomerService;
@@ -97,6 +99,10 @@ public class StatisticsCustomerController {
 
         return response;
     }
-//
-//    @GetMapping("/revisit/rate/age-gender")
+
+    @GetMapping("/revisit/rate/age-gender")
+    public ResultResponse<RevisitCustomerStatisticsResponse> getRevisitCustomerStatistics() {
+        RevisitCustomerStatisticsResponse response = statisticsCustomerService.getRevisitCustomerStatistics();
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", response);
+    }
 }
