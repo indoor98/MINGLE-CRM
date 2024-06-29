@@ -76,6 +76,32 @@ public class StatisticsCustomerService {
                 .collect(Collectors.toList());
     }
 
+    // 페이징처리 x
+    public List<VisitCustomerResponse> findCustomersByReservationDateBetween(LocalDate startLocalDate, LocalDate endLocalDate) {
+        List<Customer> customers = statisticsCustomerRepository.findCustomersByReservationDateBetween(startLocalDate, endLocalDate);
+        return customers.stream()
+                .map(customer -> customer.getRoomReservations().stream()
+                        .map(reservation -> VisitCustomerResponse.builder()
+                                .id(customer.getId())
+                                .name(customer.getName())
+                                .phone(customer.getPhone())
+                                .employeeName(customer.getEmployee() != null ? customer.getEmployee().getName() : null)
+                                .createdDate(customer.getCreatedDate())
+                                .grade(customer.getGrade())
+                                .address(customer.getAddress())
+                                .memo(customer.getMemo())
+                                .gender(customer.getGender())
+                                .birth(customer.getBirth())
+                                .visitStartDate(reservation.getStartDate())
+                                .visitEndDate(reservation.getEndDate())
+                                .build()
+                        )
+                        .collect(Collectors.toList())
+                )
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
     public List<StatisticsCustomerResponse> findByVisitCntGreaterThan(Integer visitCnt, Pageable pageable) {
         Page<Customer> customers = statisticsCustomerRepository.findByVisitCntGreaterThan(visitCnt, pageable);
         return customers.stream()

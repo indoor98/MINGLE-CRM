@@ -71,6 +71,27 @@ public class StatisticsCustomerController {
         }
     }
 
+    // 직원은 기간을 설정하여 방문 고객을 조회할 수 있다. - 페이징처리 x
+    @GetMapping("/visit-customers/all")
+    public List<VisitCustomerResponse> getVisitCustomers(@RequestParam("start") String startDateStr,
+                                                         @RequestParam("end") String endDateStr) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+
+            if (endDate.isBefore(startDate)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "종료 날짜가 시작 날짜 보다 빠릅니다.");
+            }
+
+            return statisticsCustomerService.findCustomersByReservationDateBetween(startDate, endDate);
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "날짜 형식이 옳바르지 않습니다.");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "고객 정보를 조회할 수 없습니다.", e);
+        }
+    }
+
     // 직원은 특정 방문 횟수 이상인 고객을 조회할 수 있다.
     @GetMapping("/visit-cnt-customers")
     public List<StatisticsCustomerResponse> getCustomersVisitCnt(@RequestParam("visitCnt") Integer visitCnt,
