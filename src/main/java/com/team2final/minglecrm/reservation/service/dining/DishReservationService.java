@@ -76,6 +76,6 @@ public class DishReservationService {
 
     @Transactional
     public DishReservationStatisticsResponse getDishReservationStatistics(LocalDate startDate, LocalDate endDate) {
-        return dishReservationQueryDslRepository.findDiningReservationStatistics(startDate, endDate);
+        return dishReservationQueryDslRepository.findDishReservationStatistics(startDate, endDate);
     }
 }

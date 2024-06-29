@@ -17,7 +17,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class DishReservationQueryDslRepositoryImpl {
+@Repository
+public class DishReservationQueryDslRepositoryImpl implements DishReservationQueryDslRepository {
 
 
     private final EntityManager em;
@@ -29,6 +30,7 @@ public class DishReservationQueryDslRepositoryImpl {
     }
 
 
+    @Override
     public DishReservationStatisticsResponse findDishReservationStatistics(LocalDate startDate, LocalDate endDate) {
 
         QDishReservation dishReservation = QDishReservation.dishReservation;
