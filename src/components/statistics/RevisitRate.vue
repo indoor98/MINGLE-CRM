@@ -1,66 +1,55 @@
 <template>
-  <q-page class="q-pa-md">
-    <!-- <h2>고객 등급별 재방문률</h2>
-    <Bar v-if="loaded" :data="chartData" :options="chartOptions" /> -->
-    <!-- <h2>고객 성별별 재방문률</h2> -->
-    <Doughnut
-      v-if="loaded"
-      :data="genderChartData"
-      :options="genderChartOptions"
-    />
-  </q-page>
+  <!-- <div>고객 등급별 재방문률</div> -->
+  <Bar
+    v-if="loaded && chartName === 'byGrade'"
+    :data="chartData"
+    :options="chartOptions"
+  />
+  <!-- <div>고객 성별별 재방문률</div> -->
+  <Doughnut
+    v-if="loaded && chartShape === 'doughnut'"
+    :data="genderChartData"
+    :options="genderChartOptions"
+  />
+  <Bar
+    v-if="loaded && chartShape === 'bar'"
+    :data="genderChartData"
+    :options="genderChartOptions"
+  />
 </template>
 
 <script setup>
 import { api as axios } from "src/boot/axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps } from "vue";
 import { Bar, Doughnut } from "vue-chartjs";
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  DoughnutController,
-  ArcElement,
-} from "chart.js";
+import Chart from "chart.js/auto";
 
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  DoughnutController,
-  ArcElement
-);
+const props = defineProps(["chartShape", "chartName"]);
 
 const chartData = ref({
   labels: ["NEW", "VIP", "BASIC", "VVIP", "Overall"],
   datasets: [
     {
-      label: "Revisit Rate By Grade",
-      backgroundColor: ["#FFCE56", "#FF6384", "#36A2EB", "#4BC0C0", "#42A5F5"],
+      label: "재방문율 (%)",
+      backgroundColor: ["#FF6666", "#FF9966", "#FFFF66", "#66FF66", "#66B2FF"],
       data: [0, 0, 0, 0, 0], // 초기값 설정
     },
   ],
 });
 
 const genderChartData = ref({
-  labels: ["Male", "Female"],
+  labels: ["여성", "남성"],
   datasets: [
     {
       label: "Revisit Rate By Gender",
-      backgroundColor: ["#FF6384", "#36A2EB"],
+      backgroundColor: ["#FF6666", "#66B2FF"],
       data: [0, 0], // 초기값 설정
     },
   ],
 });
 
 const chartOptions = ref({
+  // indexAxis: "y",
   responsive: true,
   plugins: {
     legend: {
@@ -68,7 +57,7 @@ const chartOptions = ref({
     },
     title: {
       display: true,
-      text: "Revisit Rate Statistics",
+      text: "등급별 재방문율 통계",
     },
     datalabels: {
       anchor: "end",
@@ -101,7 +90,7 @@ const genderChartOptions = ref({
     },
     title: {
       display: true,
-      text: "재방문 고객 성비",
+      text: "성별별 재방문률",
     },
     datalabels: {
       align: "top",
@@ -143,4 +132,19 @@ onMounted(async () => {
 });
 </script>
 
-<style></style>
+<style scoped>
+.card-item {
+  height: 24.5rem !important;
+  border-radius: 5px;
+}
+
+.card-item-2 {
+  height: 24.5rem !important;
+  border-radius: 5px;
+  background: linear-gradient(
+    145deg,
+    rgb(252, 189, 138) 10%,
+    rgb(255, 146, 73)
+  );
+}
+</style>

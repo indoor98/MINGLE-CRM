@@ -187,7 +187,23 @@ const linksList = [
     title: "통계 테스트!",
     caption: "통계 보기",
     icon: "leaderboard",
-    to: "/statistics-test",
+    children: [
+      {
+        title: "통합 통계",
+        icon: "dashboard",
+        to: "/statistics-test",
+      },
+      {
+        title: "호텔 통계",
+        icon: "hotel",
+        to: "/statistics-hotel",
+      },
+      {
+        title: "다이닝 통계",
+        icon: "dining",
+        to: "/statistics-dining",
+      },
+    ],
   },
   {
     title: "로그",

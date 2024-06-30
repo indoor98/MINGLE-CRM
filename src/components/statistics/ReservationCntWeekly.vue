@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <div class="q-pa-md">
     <h2>주별 예약수</h2>
     <q-card class="q-mt-md">
       <q-card-section>
@@ -27,7 +27,7 @@
       </q-card-section>
     </q-card>
     <Line v-if="loaded" :data="chartData" :options="chartOptions" />
-  </q-page>
+  </div>
 </template>
 
 <script setup>

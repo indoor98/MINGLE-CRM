@@ -121,6 +121,18 @@ const routes = [
           import("pages/statistics/statistics-test/StatisticsTestPage.vue"),
       },
       {
+        path: "/statistics-hotel",
+        name: "statisticsHotelPage",
+        component: () =>
+          import("pages/statistics/statistics-test/StatisticsHotelPage.vue"),
+      },
+      {
+        path: "/statistics-dining",
+        name: "statisticsDiningPage",
+        component: () =>
+          import("pages/statistics/statistics-test/StatisticsDiningPage.vue"),
+      },
+      {
         path: "/view-log",
         name: "viewLogPage",
         component: () => import("pages/log/view/ViewLogPage.vue"),

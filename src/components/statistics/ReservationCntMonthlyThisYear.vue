@@ -1,8 +1,7 @@
 <template>
-  <q-page class="q-pa-md">
-    <div>월별 예약수</div>
+  <div>
     <Line v-if="loaded" :data="chartData" :options="chartOptions" />
-  </q-page>
+  </div>
 </template>
 
 <script setup>
@@ -18,11 +17,21 @@ const chartData = ref({
   labels: [],
   datasets: [
     {
-      label: "Monthly Reservation Count",
+      // label: `${new Date().getFullYear()}년 예약수`,
+      label: `올해 예약수`,
+      backgroundColor: "rgba(255, 99, 132, 0.2)",
+      borderColor: "rgba(255, 99, 132, 1)",
+      borderWidth: 1,
+      data: [],
+    },
+    {
+      // label: `${new Date().getFullYear() - 1}년 예약수`,
+      label: `작년 예약수`,
       backgroundColor: "rgba(75, 192, 192, 0.2)",
       borderColor: "rgba(75, 192, 192, 1)",
+
       borderWidth: 1,
-      data: [], // 초기값 설정
+      data: [],
     },
   ],
 });
@@ -49,14 +58,13 @@ const chartOptions = ref({
   scales: {
     x: {
       grid: {
-        display: true,
-        borderColor: "rgba(0, 0, 0, 0.1)",
-        drawBorder: true,
+        display: false,
       },
     },
     y: {
       beginAtZero: true,
-      // suggestedMax: 14, // 최대값을 데이터 값보다 약간 더 높게 설정
+      borderColor: "rgba(0, 0, 0, 0.1)",
+      suggestedMax: 14,
     },
   },
 });
@@ -67,28 +75,46 @@ const loading = ref(true);
 
 const todayDate = new Date();
 const thisYear = todayDate.getFullYear();
+const thisMonth = todayDate.getMonth() + 1; // 현재 월 (1월이 0, 12월이 11)
 
 const fetchMonthlyReservations = async () => {
   try {
     const response = await axios.get(
       `/api/v1/statistic/reservation/monthly-reservation-cnt/all`
     );
-    console.log(thisYear);
-    for (let index = 0; index < response.data.length; index++) {
-      if (response.data[index].reservationYear == thisYear) {
-        monthlyReservations.value.push(response.data[index]);
-      }
-    }
-    errorMessage.value = "";
+
+    monthlyReservations.value = response.data;
+
+    // 올해 데이터 설정
+    const thisYearData = monthlyReservations.value.filter(
+      (item) =>
+        item.reservationYear === thisYear && item.reservationMonth <= thisMonth // 7월 이후 데이터는 제외
+    );
+
+    // 작년 데이터 설정
+    const lastYearData = monthlyReservations.value.filter(
+      (item) => item.reservationYear === thisYear - 1
+    );
 
     // 차트 데이터 설정
-    const labels = monthlyReservations.value.map(
-      (item) => `${item.reservationMonth}`
-    );
-    const data = monthlyReservations.value.map((item) => item.reservationCount);
+    const labels = lastYearData.map((item) => `${item.reservationMonth}월`);
+    const thisYearCounts = thisYearData.map((item) => item.reservationCount);
+    const lastYearCounts = new Array(12).fill(null); // 작년 데이터는 기본적으로 null로 채움
+
+    // 작년 데이터가 있는 월에 대해 값 설정
+    lastYearData.forEach((item) => {
+      const index = item.reservationMonth - 1; // 월은 1월부터 시작이므로 인덱스는 -1 처리
+      lastYearCounts[index] = item.reservationCount;
+    });
 
     chartData.value.labels = labels;
-    chartData.value.datasets[0].data = data;
+    chartData.value.datasets[0].data = thisYearCounts;
+    chartData.value.datasets[1].data = lastYearCounts;
+
+    const maxDataValue = Math.max(...thisYearCounts, ...lastYearCounts);
+    // suggestedMax 설정
+    chartOptions.value.scales.y.suggestedMax =
+      maxDataValue + maxDataValue * 0.1; // 최대값의 10% 여유 추가
 
     loaded.value = true; // 데이터 로딩이 완료되면 true로 설정
   } catch (error) {

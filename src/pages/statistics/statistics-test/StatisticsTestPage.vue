@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md" :class="$q.dark.isActive ? '' : 'bg-grey-1'">
+  <q-page class="q-pa-md">
     <div class="row col-12">
       <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         <div class="row">
@@ -88,53 +88,15 @@
               </div>
             </q-card>
           </div>
-          <!-- <div
-            class="col-lg-4 col-md-4 col-sm-6 col-xs-6 q-pl-sm q-mt-lg-none q-mt-md-none q-mt-sm-md q-mt-xs-md"
-          >
-            <q-card class="q-pa-md">
-              <div class="row q-py-md full-width items-center justify-center">
-                <div class="profit-gain-box justify-center items-center">
-                  <q-icon
-                    class="items-center full-height full-width vertical-middle"
-                    name="currency_exchange"
-                    size="md"
-                    color="white"
-                  />
-                </div>
-              </div>
-              <div
-                class="row text-weight-bold text-h6 full-width justify-center"
-              >
-                Profit Gain
-              </div>
-              <div class="row text-grey-7 full-width justify-center">
-                +66% Income
-              </div>
-              <div
-                class="row text-weight-bold text-h4 full-width justify-center"
-              >
-                $799m
-              </div>
-            </q-card>
-          </div> -->
         </div>
         <div>
           <q-card class="row q-mt-md float-right full-width card-item">
-            <ECharts
-              class="q-pt-md"
-              :option="getLineChartOptions()"
-              :resizable="true"
+            <ReservationCntMonthlyThisYear
+              class="full-width"
+              style="text-align: -webkit-center"
             />
           </q-card>
-          <q-card
-            class="row q-mt-md float-right full-width card-item-2"
-            :class="$q.dark.isActive ? 'text-white' : ''"
-          >
-            <!-- <ECharts
-              class="q-pt-md"
-              :option="getBarChartOptions()"
-              :resizable="true"
-            /> -->
+          <q-card class="row q-mt-md float-right full-width card-item-2">
             <ReservationCntByYear class="full-width" />
           </q-card>
         </div>
@@ -147,8 +109,10 @@
           class="q-pa-md float-right full-width right-card-item text-white"
         >
           <div class="row full-width">
-            <div class="row full-width text-h4 text-weight-bold">$ 4,999</div>
-            <div class="text-subtitle1">Active Balance</div>
+            <div class="row full-width text-h4 text-weight-bold">
+              {{ yesterdayIncome * 0.5 }}₩
+            </div>
+            <div class="text-subtitle1">순이익</div>
           </div>
           <div class="row full-width q-mt-lg">
             <div class="row full-width items-center">
@@ -159,11 +123,11 @@
                   color="green bg-white"
                   style="border-radius: 5px"
                 />
-                <span class="q-ml-md text-weight-bold">Income</span>
+                <span class="q-ml-md text-weight-bold">수입</span>
               </div>
               <div class="col-6">
                 <span class="text-weight-bold float-right text-h6"
-                  >$ 1699.0</span
+                  >+ {{ yesterdayIncome }}₩</span
                 >
               </div>
             </div>
@@ -177,11 +141,11 @@
                   color="red bg-white"
                   style="border-radius: 5px"
                 />
-                <span class="q-ml-md text-weight-bold">Expenses</span>
+                <span class="q-ml-md text-weight-bold">지출</span>
               </div>
               <div class="col-6">
                 <span class="text-weight-bold float-right text-h6"
-                  >$ -799.0</span
+                  >- {{ yesterdayIncome * 0.4 }}₩</span
                 >
               </div>
             </div>
@@ -195,23 +159,23 @@
                   color="red bg-white"
                   style="border-radius: 5px"
                 />
-                <span class="q-ml-md text-weight-bold">Taxes</span>
+                <span class="q-ml-md text-weight-bold">세금</span>
               </div>
               <div class="col-6">
                 <span class="text-weight-bold float-right text-h6"
-                  >$ -199.0</span
+                  >- {{ yesterdayIncome * 0.1 }}₩</span
                 >
               </div>
             </div>
           </div>
           <div class="row full-width q-mt-lg">
-            <q-btn
+            <!-- <q-btn
               label="Add Credit Card"
               class="full-width bg-white text-h6 text-weight-bold rounded-borders"
               icon-right="arrow_right"
               style="color: rgb(250, 108, 14)"
               no-caps
-            />
+            /> -->
           </div>
         </q-card>
         <q-card
@@ -236,13 +200,9 @@
         </q-card>
         <q-card
           class="q-pb-none q-mt-md float-right full-width right-card-item-3"
+          style="align-content: center"
         >
-          <!-- <ECharts
-            class="q-pt-md"
-            :option="getPieChartOptions()"
-            :resizable="true"
-          /> -->
-          <RevisitRate class="full-width" />
+          <RevisitRate :chartShape="doughnut" class="full-width" />
         </q-card>
       </div>
     </div>
@@ -253,17 +213,18 @@
 import { onMounted, ref } from "vue";
 import ECharts from "vue-echarts";
 import "echarts";
-import { useQuasar } from "quasar";
 import ReservationCntByYear from "/src/components/statistics/ReservationCntByYear.vue";
 import RevisitRate from "/src/components/statistics/RevisitRate.vue";
 import { api as axios } from "src/boot/axios";
+import ReservationCntMonthlyThisYear from "src/components/statistics/ReservationCntMonthlyThisYear.vue";
 
-const $q = useQuasar();
+const doughnut = "doughnut";
 
 const errorMessage = ref("");
 const yesterdayNum = ref(null);
 const revisitRate = ref(null);
 const newCustomerNum = ref(null);
+const yesterdayIncome = ref(null);
 
 const getYesterday = () => {
   // 오늘 날짜 객체 생성
@@ -303,6 +264,23 @@ const fetchVisitNum = async () => {
   //   loading.value = false;
   // }
 };
+
+const fetchYesterdayIncome = async () => {
+  try {
+    const response = await axios.get(
+      "/api/v1/statistic/dish/total-price-yesterday"
+    );
+    yesterdayIncome.value = response.data.totalAmount;
+    console.log("yesterdayIncome : ", yesterdayIncome.value);
+  } catch (error) {
+    console.error("에러 발생:", error);
+    errorMessage.value = "에러가 발생했습니다.";
+  }
+  // finally {
+  //   loading.value = false;
+  // }
+};
+
 const fetchRevisitRate = async () => {
   try {
     const response = await axios.get(
@@ -331,91 +309,11 @@ const fetchNewCustomerNum = async () => {
     errorMessage.value = "에러가 발생했습니다.";
   }
 };
-const getLineChartOptions = () => {
-  return {
-    tooltip: {
-      trigger: "item",
-    },
-    title: {
-      left: "center",
-      text: "Total Sales",
-      textStyle: {
-        color: $q.dark.isActive ? "white" : "black",
-      },
-    },
-    xAxis: {
-      data: ["A", "B", "C", "D", "E", "F"],
-      axisLabel: {
-        color: $q.dark.isActive ? "white" : "black",
-      },
-    },
-    yAxis: {
-      axisLabel: {
-        color: $q.dark.isActive ? "white" : "black",
-      },
-    },
-    series: [
-      {
-        data: [10, 50, 280, 130, 170, 455],
-        type: "line",
-        color: ["#FA6C0E"],
-      },
-    ],
-  };
-};
-
-const getPieChartOptions = () => {
-  return {
-    tooltip: {
-      trigger: "item",
-    },
-    legend: {
-      top: "5%",
-      left: "center",
-      textStyle: {
-        color: $q.dark.isActive ? "white" : "black",
-      },
-    },
-    series: [
-      {
-        name: "Access From",
-        type: "pie",
-        radius: ["40%", "70%"],
-        avoidLabelOverlap: false,
-        itemStyle: {
-          borderRadius: 10,
-          borderColor: "#fff",
-          borderWidth: 2,
-        },
-        label: {
-          show: false,
-          position: "center",
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: "40",
-            fontWeight: "bold",
-          },
-        },
-        labelLine: {
-          show: false,
-        },
-        data: [
-          { value: 1048, name: "Search Engine" },
-          { value: 735, name: "Direct" },
-          { value: 580, name: "Email" },
-          { value: 484, name: "Union Ads" },
-          { value: 300, name: "Video Ads" },
-        ],
-      },
-    ],
-  };
-};
 onMounted(() => {
   fetchVisitNum();
   fetchRevisitRate();
   fetchNewCustomerNum();
+  fetchYesterdayIncome();
 });
 </script>
 
