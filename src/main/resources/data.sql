@@ -31,7 +31,7 @@ INSERT INTO customer (id, name, grade, phone, email, address, employee_id, memo,
 
 VALUES (1, '김민준', 'GOLD', '010-9969-6203', 'rbittlestone0@springer.com', '서울특별시 강남구 0 리지 오크 스트리트', 9, '', 'Female',
         '1962-03-27', '2021-12-10', FALSE, 3),
-       (2, '이지훈', 'GOLD', '010-2514-4442', 'lcordle1@pinterest.com', '서울특별시 서초구 48893 앤더슨 파크', 12, 'Etiam justo.',
+       (2, '이지훈', 'GOLD', '010-2514-4442', 'kwonseongji129@gmail.com', '서울특별시 서초구 48893 앤더슨 파크', 12, 'Etiam justo.',
         'Female', '1957-08-28', '2019-11-25', FALSE, 11),
        (3, '박서준', 'SILVER', '010-1507-1401', 'aszwandt2@addthis.com', '서울특별시 종로구 26 러스터 로드', 1,
         'Phasellus in felis. Donec semper sapien a libero.', 'Female', '1997-01-19', '2019-04-07', FALSE, 12),

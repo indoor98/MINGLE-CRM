@@ -156,7 +156,7 @@ public class StatisticsCustomerService {
 
     public Map<String, Double> calculateRevisitRateByGrade() {
         Map<String, Double> revisitRateByGrade = new HashMap<>();
-        String[] grades = {"NEW", "BASIC", "VIP", "VVIP"};
+        String[] grades = {"BROWN", "SILVER", "GOLD", "DIAMOND"};
 
         for (String grade : grades) {
             long totalCustomersByGrade = statisticsCustomerRepository.countByGrade(grade);
