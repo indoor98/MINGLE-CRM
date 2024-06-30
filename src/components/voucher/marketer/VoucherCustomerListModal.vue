@@ -209,10 +209,10 @@ const columns = [
 
 const gradeOptions = [
   { label: "선택 안 함", value: "" },
-  { label: "NEW", value: "NEW" },
-  { label: "BASIC", value: "BASIC" },
-  { label: "VIP", value: "VIP" },
-  { label: "VVIP", value: "VVIP" },
+  { label: "BROWN", value: "BROWN" },
+  { label: "SILVER", value: "SILVER" },
+  { label: "GOLD", value: "GOLD" },
+  { label: "DIAMOND", value: "DIAMOND" },
 ];
 
 const genderOptions = [
