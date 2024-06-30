@@ -153,8 +153,7 @@ const restaurantOptions = ref([
   "선택 안함",
   "담소정",
   "하나미 스시",
-  "Château d Étoiles",
-  "Bella Vista",
+  "도림",
 ]);
 const startDate = ref("");
 const endDate = ref("");
