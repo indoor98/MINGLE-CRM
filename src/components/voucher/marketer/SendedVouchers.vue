@@ -165,6 +165,13 @@ const columns = [
     sortable: true,
   },
   {
+    name: "customerGrade",
+    label: "고객 등급",
+    align: "center",
+    field: "customerGrade",
+    sortable: true,
+  },
+  {
     name: "createdReason",
     label: "생성 사유",
     align: "center",
@@ -212,7 +219,11 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/sended-marketer`
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.map((voucher) => ({
+      ...voucher,
+      status: getStatusLabel(voucher.status),
+      // 다른 필요한 필드에 대한 변환도 가능
+    }));
     errorMessage.value = "";
   } catch (error) {
     console.error("발송된 바우처 목록을 불러오는 중 에러 발생:", error);
@@ -220,6 +231,25 @@ const fetchVouchers = async () => {
       "발송된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
+  }
+};
+
+const getStatusLabel = (status) => {
+  switch (status) {
+    case "REQUESTED":
+      return "요청됨";
+    case "APPROVED":
+      return "승인됨";
+    case "REJECTED":
+      return "거절됨";
+    case "SENDED":
+      return "발송됨";
+    case "CANCELED":
+      return "취소됨";
+    case "CONVERTED":
+      return "전환됨";
+    default:
+      return status;
   }
 };
 

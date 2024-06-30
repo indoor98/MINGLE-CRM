@@ -75,7 +75,7 @@
 
       <!-- 바우처 생성 모달 -->
       <q-dialog v-model="showCreationModal">
-        <q-card>
+        <q-card style="width: 30%; padding: 20px">
           <q-card-section>
             <div class="text-h6">바우처 생성</div>
           </q-card-section>
@@ -331,6 +331,7 @@ const requestVoucher = async (voucherId) => {
     Notify.create({
       type: "positive",
       message: "요청이 성공적으로 완료되었습니다.",
+      color: "green",
     });
   } catch (error) {
     console.error("바우처 요청 중 에러 발생:", error);

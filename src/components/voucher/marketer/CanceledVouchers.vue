@@ -165,6 +165,13 @@ const columns = [
     sortable: true,
   },
   {
+    name: "customerGrade",
+    label: "고객 등급",
+    align: "center",
+    field: "customerGrade",
+    sortable: true,
+  },
+  {
     name: "createdReason",
     label: "생성 사유",
     align: "center",

@@ -177,6 +177,20 @@ const columns = [
     sortable: true,
   },
   {
+    name: "customerName",
+    label: "고객 이름",
+    align: "center",
+    field: "customerName",
+    sortable: true,
+  },
+  {
+    name: "customerGrade",
+    label: "고객 등급",
+    align: "center",
+    field: "customerGrade",
+    sortable: true,
+  },
+  {
     name: "requestDate",
     label: "요청 일자",
     align: "center",
@@ -188,13 +202,6 @@ const columns = [
     label: "요청 직원 이름",
     align: "center",
     field: "creatorName",
-    sortable: true,
-  },
-  {
-    name: "customerName",
-    label: "고객 이름",
-    align: "center",
-    field: "customerName",
     sortable: true,
   },
   {
