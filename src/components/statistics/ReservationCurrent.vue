@@ -2,12 +2,18 @@
   <div class="q-pa-md">
     <div class="row col-12">
       <div class="col-6 q-pa-sm">
-        <q-card class="full-width justify-center card-item">
+        <q-card
+          class="full-width justify-center card-item"
+          style="align-content: center"
+        >
           <ReservationCntByRoom class="full-width" />
         </q-card>
       </div>
       <div class="col-6 q-pa-sm">
-        <q-card class="full-width justify-center card-item">
+        <q-card
+          class="full-width justify-center card-item"
+          style="align-content: center"
+        >
           <ReservationCntMonthlyThisYear class="full-width" />
         </q-card>
       </div>
@@ -51,6 +57,7 @@ onMounted(() => {
 
 <style scoped>
 .card-item {
+  height: 20rem !important;
   border-radius: 5px;
 }
 </style>
