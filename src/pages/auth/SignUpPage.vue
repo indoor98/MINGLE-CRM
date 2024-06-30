@@ -76,7 +76,7 @@ const password = ref("");
 const passwordCheck = ref("");
 const name = ref("");
 const authority = ref("");
-const authorityOptions = ref(["매니저", "마케터", "상담사"]);
+const authorityOptions = ref(["마케터", "상담사"]);
 
 const router = useRoute;
 const authorityConverter = (korean) => {
