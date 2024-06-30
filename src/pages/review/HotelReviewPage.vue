@@ -223,6 +223,7 @@ const getHotelReviews = async () => {
       searchCondition.value,
       { withCredentials: true }
     );
+    getHotelReviewMetaData();
     reviews.value = response.data.data;
     console.log(reviews);
   } catch (error) {
@@ -231,8 +232,30 @@ const getHotelReviews = async () => {
 };
 
 const getHotelReviewMetaData = async () => {
+  const searchCondition = ref({});
+
+  if (hotel.value !== "선택 안함") {
+    searchCondition.value.hotel = hotel.value;
+  }
+  if (roomType.value !== "선택 안함") {
+    searchCondition.value.roomType = roomType.value;
+  }
+  if (startDate.value !== "" && endDate.value !== "") {
+    // 2021-11-08T11:44:30.327959
+    searchCondition.value.startDate =
+      dateToLocalDateTime(startDate.value) + "T00:00:00";
+    searchCondition.value.endDate =
+      dateToLocalDateTime(endDate.value) + "T23:59:59";
+  }
+  if (customerName.value !== "") {
+    searchCondition.value.customerName = customerName;
+  }
+
   const response = await axios.get(
-    "http://localhost:8080/api/hotel/review/meta"
+    "http://localhost:8080/api/hotel/review/meta",
+    {
+      params: searchCondition.value,
+    }
   );
 
   pagination.value.pagesNumber = response.data.data.pagesNumber;
