@@ -32,7 +32,9 @@
             @click="toggleNotifications"
             class="q-mr-md"
           >
-            <q-badge floating color="red" rounded>{{ pendingRequestsCount }}</q-badge>
+            <q-badge floating color="red" rounded>{{
+              pendingRequestsCount
+            }}</q-badge>
           </q-btn>
           <q-btn
             outline
@@ -215,27 +217,14 @@ const linksList = [
   },
   {
     title: "로그",
-    caption: "로그 조회",
-    icon: "map",
-    children: [
-      {
-        title: "고객 상세 조회 로그",
-        // caption: "고객 상세 조회 로그 보기",
-        icon: "visibility",
-        to: "/view-log",
-      },
-      {
-        title: "이메일 로그",
-        // caption: "이메일 로그 보기",
-        icon: "email",
-        to: "/email-log",
-      },
-    ],
+    caption: "고객 상세 조회 로그 보기",
+    icon: "visibility",
+    to: "/view-log",
     roles: ["ROLE_MANAGER"],
   },
   {
     title: "직원 회원가입 관리",
-    caption: "목록 조회",
+    caption: "회원가입 요청 조회",
     icon: "supervisor_account", // 아이콘 변경
     children: [
       {
@@ -296,7 +285,9 @@ const renewToken = async () => {
 
 const fetchPendingRequestsCount = async () => {
   try {
-    const response = await customAxios.get("/api/v1/admin/registers/pendingCount");
+    const response = await customAxios.get(
+      "/api/v1/admin/registers/pendingCount"
+    );
     if (response.status === 200) {
       pendingRequestsCount.value = response.data.count;
     }
