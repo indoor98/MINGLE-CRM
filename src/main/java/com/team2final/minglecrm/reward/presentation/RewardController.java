@@ -42,10 +42,10 @@ public class RewardController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "전체 리워드 히스토리 목록 조회 성공", rewardHistories));
     }
 
-    @PostMapping()
-    public ResponseEntity<ResultResponse<List<RewardHistoryResponse>>> giveRewardHistories() {
-        List<RewardHistoryResponse> rewardHistories = rewardService.getAllRewardHistories();
-        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "전체 리워드 히스토리 목록 조회 성공", rewardHistories));
-    }
+//    @PostMapping()
+//    public ResponseEntity<ResultResponse<List<RewardHistoryResponse>>> giveRewardHistories() {
+//        List<RewardHistoryResponse> rewardHistories = rewardService.getAllRewardHistories();
+//        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "전체 리워드 히스토리 목록 조회 성공", rewardHistories));
+//    }
 
 }
