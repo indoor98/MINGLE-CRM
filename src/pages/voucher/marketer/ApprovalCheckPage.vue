@@ -12,6 +12,7 @@
       </div>
       <div v-if="selectedTab === 'approved' && showVoucherEmailSend">
         <VoucherEmailSend
+          :voucherId="selectedVoucherId"
           :customerEmail="selectedCustomerEmail"
           :voucherCode="selectedVoucherCode"
           @go-back="hideEmailSendPage"
