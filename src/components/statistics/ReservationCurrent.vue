@@ -2,17 +2,17 @@
   <div class="q-pa-md">
     <div class="row col-12">
       <div class="col-6 q-pa-sm">
-        <q-card class="q-pa-md full-width justify-center card-item">
+        <q-card class="full-width justify-center card-item">
           <ReservationCntByRoom class="full-width" />
         </q-card>
       </div>
       <div class="col-6 q-pa-sm">
-        <q-card class="q-pa-md full-width justify-center card-item">
+        <q-card class="full-width justify-center card-item">
           <ReservationCntMonthlyThisYear class="full-width" />
         </q-card>
       </div>
     </div>
-    <div class="row col-12">
+    <div class="row col-12 q-pa-sm">
       <div class="col-12 q-mt-sm row">
         <q-card class="q-pa-md full-width">
           <ReservationCntByAgeGender />

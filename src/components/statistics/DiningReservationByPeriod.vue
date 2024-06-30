@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: center">기간별 메뉴 판매수 통계 - 연령, 성별별</div>
+  <div style="text-align: center">기간별 판매수 통계 - 연령, 성별별</div>
   <div class="q-pa-md">
     <q-form @submit.prevent="fetchCustomerVisits">
       <q-card class="my-card">

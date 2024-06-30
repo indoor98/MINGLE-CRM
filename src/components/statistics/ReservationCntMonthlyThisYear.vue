@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-pa-md">
     <Line v-if="loaded" :data="chartData" :options="chartOptions" />
   </div>
 </template>

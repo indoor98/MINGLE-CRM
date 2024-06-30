@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <div class="q-pa-md">
     <!-- <h2>연도별 예약수</h2>
     <q-card class="q-mt-md">
       <q-card-section>
@@ -21,13 +21,11 @@
         </q-table>
       </q-card-section>
     </q-card> -->
-    <q-card class="q-mt-md">
-      <q-card-section v-if="errorMessage">
-        <p style="color: red" class="text-center">{{ errorMessage }}</p>
-      </q-card-section>
+    <q-card v-if="errorMessage">
+      <p style="color: red" class="text-center">{{ errorMessage }}</p>
     </q-card>
     <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
-  </q-page>
+  </div>
 </template>
 
 <script setup>

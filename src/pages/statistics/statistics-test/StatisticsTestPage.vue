@@ -1,174 +1,181 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row col-12">
-      <div class="col-12">
-        <div class="row">
-          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-pr-sm">
-            <q-card class="q-pa-md">
-              <div class="row q-py-md full-width items-center justify-center">
-                <div class="total-sales-box justify-center items-center">
-                  <q-icon
-                    class="items-center full-height full-width vertical-middle"
-                    name="trending_up"
-                    size="md"
-                    color="white"
-                  />
-                </div>
-              </div>
-              <div
-                class="row text-weight-bold text-h6 full-width justify-center"
-              >
-                전일 방문고객수
-              </div>
-              <div class="row text-grey-7 full-width justify-center">
-                +70% Income
-              </div>
-              <div
-                class="row text-weight-bold text-h4 full-width justify-center"
-              >
-                {{ yesterdayNum }}
-              </div>
-            </q-card>
-          </div>
-          <div
-            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm q-pr-sm"
-          >
-            <q-card class="q-pa-md">
-              <div class="row q-py-md full-width items-center justify-center">
-                <div class="avg-sales-box justify-center items-center">
-                  <q-icon
-                    class="items-center full-height full-width vertical-middle"
-                    name="percent"
-                    size="md"
-                    color="white"
-                  />
-                </div>
-              </div>
-              <div
-                class="row text-weight-bold text-h6 full-width justify-center"
-              >
-                재방문률
-              </div>
-              <div class="row text-grey-7 full-width justify-center">
-                +22% Sales
-              </div>
-              <div
-                class="row text-weight-bold text-h4 full-width justify-center"
-              >
-                {{ revisitRate }} %
-              </div>
-            </q-card>
-          </div>
-          <div
-            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm q-pr-sm"
-          >
-            <q-card class="q-pa-md">
-              <div class="row q-py-md full-width items-center justify-center">
-                <div class="users-box justify-center items-center">
-                  <q-icon
-                    class="items-center full-height full-width vertical-middle"
-                    name="people_alt"
-                    size="md"
-                    color="white"
-                  />
-                </div>
-              </div>
-              <div
-                class="row text-weight-bold text-h6 full-width justify-center"
-              >
-                전일 신규고객수
-              </div>
-              <div class="row text-grey-7 full-width justify-center">
-                +79% New User
-              </div>
-              <div
-                class="row text-weight-bold text-h4 full-width justify-center"
-              >
-                {{ newCustomerNum }}
-              </div>
-            </q-card>
-          </div>
-          <div
-            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm"
-          >
-            <q-card
-              class="q-pa-md float-right full-width right-card-item text-white"
-            >
-              <div class="row full-width">
-                <div class="row full-width text-h4 text-weight-bold">
-                  {{ yesterdayIncome * 0.5 }}₩
-                </div>
-                <div class="text-subtitle1">순이익</div>
-              </div>
-              <div class="row full-width q-mt-lg">
-                <div class="row full-width items-center">
-                  <div class="col-6">
+  <q-page>
+    <div class="q-pa-md">
+      <q-tabs v-model="selectedTab">
+        <q-tab name="combination" label="통합 통계" />
+      </q-tabs>
+      <q-separator />
+      <q-page>
+        <div class="q-pa-md">
+          <div class="row col-12">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 q-pr-sm">
+              <q-card class="q-pa-md card-item">
+                <div class="row q-py-md full-width items-center justify-center">
+                  <div class="total-sales-box justify-center items-center">
                     <q-icon
-                      size="sm"
-                      name="arrow_upward"
-                      color="green bg-white"
-                      style="border-radius: 5px"
+                      class="items-center full-height full-width vertical-middle"
+                      name="trending_up"
+                      size="md"
+                      color="white"
                     />
-                    <span class="q-ml-md text-weight-bold">수입</span>
-                  </div>
-                  <div class="col-6">
-                    <span class="text-weight-bold float-right text-h6"
-                      >+ {{ yesterdayIncome }}₩</span
-                    >
                   </div>
                 </div>
-              </div>
-              <div class="row full-width q-mt-md">
-                <div class="row full-width items-center">
-                  <div class="col-6">
+                <div
+                  class="row text-weight-bold text-h6 full-width justify-center"
+                >
+                  전일 방문고객수
+                </div>
+                <div class="row text-grey-7 full-width justify-center">
+                  +70% Income
+                </div>
+                <div
+                  class="row text-weight-bold text-h4 full-width justify-center"
+                >
+                  {{ yesterdayNum }}
+                </div>
+              </q-card>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 q-pr-sm">
+              <q-card class="q-pa-md card-item">
+                <div class="row q-py-md full-width items-center justify-center">
+                  <div class="avg-sales-box justify-center items-center">
                     <q-icon
-                      size="sm"
-                      name="arrow_downward"
-                      color="red bg-white"
-                      style="border-radius: 5px"
+                      class="items-center full-height full-width vertical-middle"
+                      name="percent"
+                      size="md"
+                      color="white"
                     />
-                    <span class="q-ml-md text-weight-bold">지출</span>
-                  </div>
-                  <div class="col-6">
-                    <span class="text-weight-bold float-right text-h6"
-                      >- {{ yesterdayIncome * 0.4 }}₩</span
-                    >
                   </div>
                 </div>
-              </div>
-              <div class="row full-width q-mt-md">
-                <div class="row full-width items-center">
-                  <div class="col-6">
+                <div
+                  class="row text-weight-bold text-h6 full-width justify-center"
+                >
+                  재방문률
+                </div>
+                <div class="row text-grey-7 full-width justify-center">
+                  +22% Sales
+                </div>
+                <div
+                  class="row text-weight-bold text-h4 full-width justify-center"
+                >
+                  {{ revisitRate }} %
+                </div>
+              </q-card>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 q-pr-sm">
+              <q-card class="q-pa-md card-item">
+                <div class="row q-py-md full-width items-center justify-center">
+                  <div class="users-box justify-center items-center">
                     <q-icon
-                      size="sm"
-                      name="arrow_downward"
-                      color="red bg-white"
-                      style="border-radius: 5px"
+                      class="items-center full-height full-width vertical-middle"
+                      name="people_alt"
+                      size="md"
+                      color="white"
                     />
-                    <span class="q-ml-md text-weight-bold">세금</span>
-                  </div>
-                  <div class="col-6">
-                    <span class="text-weight-bold float-right text-h6"
-                      >- {{ yesterdayIncome * 0.1 }}₩</span
-                    >
                   </div>
                 </div>
-              </div>
-            </q-card>
+                <div
+                  class="row text-weight-bold text-h6 full-width justify-center"
+                >
+                  전일 신규고객수
+                </div>
+                <div class="row text-grey-7 full-width justify-center">
+                  +79% New User
+                </div>
+                <div
+                  class="row text-weight-bold text-h4 full-width justify-center"
+                >
+                  {{ newCustomerNum }}
+                </div>
+              </q-card>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+              <q-card
+                class="q-pa-md full-width right-card-item text-white card-item"
+              >
+                <div class="row full-width">
+                  <div class="row full-width text-h4 text-weight-bold">
+                    {{ yesterdayIncome * 0.5 }}₩
+                  </div>
+                  <div class="text-subtitle1">순이익</div>
+                </div>
+                <div class="row full-width q-mt-md">
+                  <div class="row full-width items-center">
+                    <div class="col-6">
+                      <q-icon
+                        size="sm"
+                        name="arrow_upward"
+                        color="green bg-white"
+                        style="border-radius: 5px"
+                      />
+                      <span class="q-ml-md text-weight-bold">수입</span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-weight-bold float-right text-h6"
+                        >+ {{ yesterdayIncome }}₩</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="row full-width q-mt-md">
+                  <div class="row full-width items-center">
+                    <div class="col-6">
+                      <q-icon
+                        size="sm"
+                        name="arrow_downward"
+                        color="red bg-white"
+                        style="border-radius: 5px"
+                      />
+                      <span class="q-ml-md text-weight-bold">지출</span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-weight-bold float-right text-h6"
+                        >- {{ yesterdayIncome * 0.4 }}₩</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="row full-width q-mt-md">
+                  <div class="row full-width items-center">
+                    <div class="col-6">
+                      <q-icon
+                        size="sm"
+                        name="arrow_downward"
+                        color="red bg-white"
+                        style="border-radius: 5px"
+                      />
+                      <span class="q-ml-md text-weight-bold">세금</span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-weight-bold float-right text-h6"
+                        >- {{ yesterdayIncome * 0.1 }}₩</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </q-card>
+            </div>
+          </div>
+          <div class="row col-12">
+            <div class="col-6 q-pr-sm">
+              <q-card class="row q-mt-md float-right full-width">
+                <ReservationCntMonthlyThisYear
+                  class="full-width"
+                  style="text-align: -webkit-center"
+                />
+              </q-card>
+            </div>
+            <div class="col-6">
+              <q-card class="row q-mt-md float-right full-width">
+                <ReservationCntByYear
+                  class="full-width"
+                  style="text-align: -webkit-center"
+                />
+              </q-card>
+            </div>
           </div>
         </div>
-        <div>
-          <q-card class="row q-mt-md float-right full-width card-item">
-            <ReservationCntMonthlyThisYear
-              class="full-width"
-              style="text-align: -webkit-center"
-            />
-          </q-card>
-          <q-card class="row q-mt-md float-right full-width card-item-2">
-            <ReservationCntByYear class="full-width" />
-          </q-card>
-        </div>
-      </div>
+      </q-page>
     </div>
   </q-page>
 </template>
@@ -182,6 +189,7 @@ import RevisitRate from "/src/components/statistics/RevisitRate.vue";
 import { api as axios } from "src/boot/axios";
 import ReservationCntMonthlyThisYear from "src/components/statistics/ReservationCntMonthlyThisYear.vue";
 
+const selectedTab = ref("combination");
 const doughnut = "doughnut";
 
 const errorMessage = ref("");
@@ -283,17 +291,17 @@ onMounted(() => {
 
 <style>
 .card-item {
-  /* height: 20rem; */
+  height: 15rem;
   border-radius: 5px;
 }
 
 .card-item-2 {
-  /* height: 25rem; */
+  height: 25rem;
   border-radius: 5px;
 }
 
 .right-card-item {
-  /* height: 20rem; */
+  /* height: 20rem;s */
   border-radius: 5px;
   background: linear-gradient(
     145deg,

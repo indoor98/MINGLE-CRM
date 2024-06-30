@@ -23,7 +23,7 @@ const chartData = ref({
   labels: [],
   datasets: [
     {
-      label: "Dish Counts",
+      label: "판매량",
       backgroundColor: [
         "#FF6384", // Red
         "#36A2EB", // Blue
@@ -56,15 +56,15 @@ const chartOptions = ref({
   responsive: true,
   plugins: {
     legend: {
-      display: false,
+      display: true,
     },
     title: {
       display: true,
-      text: "Dish Counts by Name",
+      text: "메뉴별 판매량 통계",
     },
     datalabels: {
       anchor: "end",
-      align: "top",
+      align: "right",
       formatter: (value) => value,
       font: {
         weight: "bold",
