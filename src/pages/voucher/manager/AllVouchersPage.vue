@@ -179,7 +179,7 @@ const selectedGrades = ref([]);
 const selectedStatus = ref([]);
 
 const gradeOptions = [
-  { label: "선택 안 함", value: "" },
+  // { label: "선택 안 함", value: "" },
   { label: "BROWN", value: "BROWN" },
   { label: "SILVER", value: "SILVER" },
   { label: "GOLD", value: "GOLD" },
@@ -187,7 +187,7 @@ const gradeOptions = [
 ];
 
 const statusOptions = [
-  { label: "선택 안 함", value: "" },
+  // { label: "선택 안 함", value: "" },
   { label: "요청됨", value: "REQUESTED" },
   { label: "승인됨", value: "APPROVED" },
   { label: "거절됨", value: "REJECTED" },

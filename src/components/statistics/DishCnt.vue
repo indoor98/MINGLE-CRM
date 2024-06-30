@@ -1,11 +1,16 @@
 <template>
   <div class="q-pa-md">
-    <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
+    <Bar
+      v-if="loaded"
+      ref="barChart"
+      :data="chartData"
+      :options="chartOptions"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -25,26 +30,26 @@ const chartData = ref({
     {
       label: "판매량",
       backgroundColor: [
-        "#FF6384", // Red
-        "#36A2EB", // Blue
-        "#FFCE56", // Yellow
-        "#4BC0C0", // Cyan
-        "#9966FF", // Purple
-        "#FF9F40", // Orange
-        "#2ECC71", // Green
-        "#FFD700", // Gold
-        "#CD5C5C", // Indian Red
-        "#FF69B4", // Hot Pink
-        "#48D1CC", // Medium Turquoise
-        "#87CEEB", // Sky Blue
-        "#9370DB", // Medium Purple
-        "#32CD32", // Lime Green
-        "#FF6347", // Tomato
-        "#8A2BE2", // Blue Violet
-        "#4682B4", // Steel Blue
-        "#FF7F50", // Coral
-        "#00BFFF", // Deep Sky Blue
-        "#9ACD32", // Yellow Green
+        "#FF6384",
+        "#36A2EB",
+        "#FFCE56",
+        "#4BC0C0",
+        "#9966FF",
+        "#FF9F40",
+        "#2ECC71",
+        "#FFD700",
+        "#CD5C5C",
+        "#FF69B4",
+        "#48D1CC",
+        "#87CEEB",
+        "#9370DB",
+        "#32CD32",
+        "#FF6347",
+        "#8A2BE2",
+        "#4682B4",
+        "#FF7F50",
+        "#00BFFF",
+        "#9ACD32",
       ],
       data: [],
     },
@@ -101,10 +106,21 @@ const fetchDishNameStatistics = async () => {
     chartData.value.datasets[0].data = counts;
 
     loaded.value = true;
+
+    // 차트가 로드된 후 리사이즈
+    await nextTick();
+    if (barChart.value) {
+      barChart.value.resize();
+    }
+
+    // 차트가 로드되었음을 부모 컴포넌트에 알림
+    emit("chart-loaded");
   } catch (error) {
     console.error("Error fetching dish name statistics:", error);
   }
 };
+
+const barChart = ref(null);
 
 onMounted(() => {
   fetchDishNameStatistics();

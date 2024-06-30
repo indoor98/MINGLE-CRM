@@ -27,7 +27,7 @@ import Chart from "chart.js/auto";
 const props = defineProps(["chartShape", "chartName"]);
 
 const chartData = ref({
-  labels: ["NEW", "VIP", "BASIC", "VVIP", "Overall"],
+  labels: ["BROWN", "SILVER", "GOLD", "DIAMOND", "전체"],
   datasets: [
     {
       label: "재방문율 (%)",
@@ -113,10 +113,10 @@ onMounted(async () => {
     const responseData = response.data;
 
     chartData.value.datasets[0].data = [
-      responseData.revisitRateByGrade.NEW,
-      responseData.revisitRateByGrade.VIP,
-      responseData.revisitRateByGrade.BASIC,
-      responseData.revisitRateByGrade.VVIP,
+      responseData.revisitRateByGrade.BROWN,
+      responseData.revisitRateByGrade.SILVER,
+      responseData.revisitRateByGrade.GOLD,
+      responseData.revisitRateByGrade.DIAMOND,
       responseData.overallRevisitRate,
     ];
 

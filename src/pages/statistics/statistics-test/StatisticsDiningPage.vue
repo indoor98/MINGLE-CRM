@@ -12,15 +12,13 @@
               class="row full-width justify-center card-item"
               style="align-content: center"
             >
-              <!-- <RevisitRate :chartName="byGrade" class="full-width" /> -->
-              <DishCnt class="full-width" />
+              <DishCnt class="full-width" @chart-loaded="handleChartLoaded" />
             </q-card>
           </div>
         </div>
         <div class="row col-12">
           <div class="col-12 q-pr-sm q-mt-sm row">
             <q-card class="q-pa-md full-width" style="align-content: center">
-              <!-- 여기 연령/성별별 통계로 바꾸기 -->
               <DiningReservationByPeriod />
             </q-card>
           </div>
@@ -32,46 +30,23 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import RevisitRate from "src/components/statistics/RevisitRate.vue";
 import DiningReservationByPeriod from "src/components/statistics/DiningReservationByPeriod.vue";
 import { api as axios } from "src/boot/axios";
 import DishCnt from "src/components/statistics/DishCnt.vue";
 
 const selectedTab = ref("dining");
-const revisitRate = ref(null);
-const doughnut = "doughnut";
-const bar = "bar";
-const byGrade = "byGrade";
 
-const fetchRevisitRate = async () => {
-  try {
-    const response = await axios.get(
-      "/api/v1/statistics/customers/revisit-rate"
-    );
-    revisitRate.value = response.data.overallRevisitRate.toFixed(2);
-  } catch {
-    console.log("잘못된 요청 어쩌구");
-  }
+const handleChartLoaded = () => {
+  console.log("Chart has been loaded and resized");
 };
 
 onMounted(() => {
-  fetchRevisitRate();
+  // 필요한 경우 다른 초기화 작업
 });
 </script>
 
 <style scoped>
 .card-item {
-  /* height: 24.5rem !important; */
   border-radius: 5px;
-}
-
-.card-item-2 {
-  /* height: 24.5rem !important; */
-  border-radius: 5px;
-  background: linear-gradient(
-    145deg,
-    rgb(252, 189, 138) 10%,
-    rgb(255, 146, 73)
-  );
 }
 </style>

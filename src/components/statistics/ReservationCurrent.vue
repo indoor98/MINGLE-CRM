@@ -51,17 +51,6 @@ onMounted(() => {
 
 <style scoped>
 .card-item {
-  /* height: 24.5rem !important; */
   border-radius: 5px;
-}
-
-.card-item-2 {
-  /* height: 24.5rem !important; */
-  border-radius: 5px;
-  background: linear-gradient(
-    145deg,
-    rgb(252, 189, 138) 10%,
-    rgb(255, 146, 73)
-  );
 }
 </style>

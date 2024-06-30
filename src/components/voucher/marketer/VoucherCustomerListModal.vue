@@ -203,7 +203,14 @@ const columns = [
     align: "center",
     field: "employeeName",
   },
-  { name: "gender", label: "성별", align: "center", field: "gender" },
+  {
+    name: "gender",
+    label: "성별",
+    align: "center",
+    field: "gender",
+    format: (val) =>
+      val === "Male" ? "남성" : val === "Female" ? "여성" : val,
+  },
   { name: "birth", label: "생년월일", align: "center", field: "birth" },
 ];
 

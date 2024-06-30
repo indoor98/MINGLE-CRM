@@ -16,6 +16,10 @@ const routes = [
         component: () => import("pages/voucher/marketer/DraftPage.vue"),
       },
       {
+        path: "voucher-marketer/approval-check",
+        component: () => import("pages/voucher/marketer/ApprovalCheckPage.vue"),
+      },
+      {
         path: "voucher-marketer/email",
         component: () => import("pages/voucher/marketer/EmailManagePage.vue"),
       },
@@ -139,9 +143,9 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: '/admin-request',
-        name: 'EmployeeRequestList',
-        component: EmployeeRequestList
+        path: "/admin-request",
+        name: "EmployeeRequestList",
+        component: EmployeeRequestList,
       },
       {
         path: '/admin-request-all',
