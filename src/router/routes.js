@@ -11,7 +11,6 @@ const routes = [
         path: "review",
         component: () => import("pages/review/ReviewPage.vue"),
       },
-
       {
         path: "voucher-marketer/draft",
         component: () => import("pages/voucher/marketer/DraftPage.vue"),
@@ -148,7 +147,11 @@ const routes = [
         path: '/admin-request-all',
         name: 'AllEmployeeRequestList',
         component: AllEmployeeRequestList
-      }
+      },
+      {
+        path: 'signup-success',
+        component: () => import("pages/auth/SignUpSuccess.vue"),
+      },
     ],
   },
   {

@@ -67,9 +67,10 @@
 </template>
 
 <script setup>
+// src/pages/auth/SignUpPage.vue
 import { ref } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 
 const email = ref("");
 const password = ref("");
@@ -78,7 +79,7 @@ const name = ref("");
 const authority = ref("");
 const authorityOptions = ref(["마케터", "상담사"]);
 
-const router = useRoute;
+const router = useRouter();
 const authorityConverter = (korean) => {
   if (korean === "매니저") {
     authority.value = "ROLE_MANAGER";
@@ -110,11 +111,12 @@ const signUp = async () => {
     );
 
     console.log(response.data);
-    window.location.href = "/#/";
+    router.push("/signup-success");
   } catch (error) {
     console.log(error);
   }
 };
+
 
 // /api/v1/auth/signup
 </script>
