@@ -56,6 +56,7 @@ public class StatisticsDishService {
     // 전날 판매된 음식 가격 총합
     public Long calculateTotalPriceYesterday() {
         LocalDate yesterday = LocalDate.now().minusDays(1);
-        return purchaseDishRepository.findTotalAmountByPurchaseDate(yesterday);
+        Long result = purchaseDishRepository.findTotalAmountByPurchaseDate(yesterday) != null ? purchaseDishRepository.findTotalAmountByPurchaseDate(yesterday) : 0L;
+        return result;
     }
 }
