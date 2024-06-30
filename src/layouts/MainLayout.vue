@@ -185,11 +185,33 @@ const linksList = [
     icon: "email",
     to: "/email",
   },
+  // {
+  //   title: "통계",
+  //   caption: "통계 보기",
+  //   icon: "leaderboard",
+  //   to: "/statistics",
+  // },
   {
     title: "통계",
     caption: "통계 보기",
     icon: "leaderboard",
-    to: "/statistics",
+    children: [
+      {
+        title: "통합 통계",
+        icon: "dashboard",
+        to: "/statistics-test",
+      },
+      {
+        title: "호텔 통계",
+        icon: "hotel",
+        to: "/statistics-hotel",
+      },
+      {
+        title: "다이닝 통계",
+        icon: "dining",
+        to: "/statistics-dining",
+      },
+    ],
   },
   {
     title: "로그",

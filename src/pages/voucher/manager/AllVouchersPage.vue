@@ -160,7 +160,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import VoucherHistoryDetail from "../../../components/voucher/VoucherHistoryDetail.vue";
 
