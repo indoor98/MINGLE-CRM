@@ -119,6 +119,13 @@ const columns = ref([
     sortable: true,
   },
   {
+    name: "customerGrade",
+    label: "고객 등급",
+    align: "center",
+    field: "customerGrade",
+    sortable: true,
+  },
+  {
     name: "creatorName",
     label: "발급 직원 이름",
     align: "center",

@@ -10,8 +10,9 @@
           <div class="col-12 q-pl-sm q-mb-sm">
             <q-card
               class="row full-width justify-center card-item"
-              style="align-content: center"
+              style="align-content: center; height: 35rem"
             >
+              <!-- DishCnt 컴포넌트에서 chart-loaded 이벤트를 handleChartLoaded 메서드와 연결 -->
               <DishCnt class="full-width" @chart-loaded="handleChartLoaded" />
             </q-card>
           </div>
