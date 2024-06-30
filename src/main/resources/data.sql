@@ -20,7 +20,10 @@ VALUES (1, '김민수', 'vsimonitto0@1688.com', 'dP6.Ie\Jkf', 'MANAGER', '2023-0
        (19, '최도현', 'cvasilyevi@amazonaws.com', 'oK6@BlJV', 'STAFF', '2022-12-08', TRUE, FALSE),
        (20, '윤하윤', 'clivingstonej@cnbc.com', 'mS0.#b7VNhDS#*', 'STAFF', '2024-04-27', TRUE, FALSE),
        (21, '하지민', 'hjm3327@naver.com', '$2a$10$utpGEnYcosoY.YQdvQ5uce5aRuLtR9RknbfwXGZnBK8P6fgo8K98W', 'ROLE_MANAGER', '2024-04-27', TRUE, FALSE),
-       (22, '찜케터', 'zzimni98@gmail.com', '$2a$10$n.HK7abog5/EOYBhcs6bGuDqcMKNxJ.aPA4vhIt7RRvjgYo1lern2', 'ROLE_MARKETER', '2024-06-13', TRUE, FALSE);
+       (22, '찜케터', 'zzimni98@gmail.com', '$2a$10$n.HK7abog5/EOYBhcs6bGuDqcMKNxJ.aPA4vhIt7RRvjgYo1lern2', 'ROLE_MARKETER', '2024-06-13', TRUE, FALSE),
+       (23, '동니저', 'test@gmail.com', '$2a$10$k44kauejFFkukb7MluJxP.n8GEkj6I/yv/mU1x5Uy49WTXAE47x3q', 'ROLE_MANAGER', '2024-06-13', TRUE, FALSE);
+
+ALTER TABLE employee ALTER COLUMN id RESTART WITH 23;
 
 
 INSERT INTO customer (id, name, grade, phone, email, address, employee_id, memo, gender, birth, created_date,
@@ -5927,7 +5930,7 @@ VALUES
     (20, 1.0, 3.0, 1.0, 4.0, '좋아. 그래도 뭔가 잘못된 것 같습니다.', 19, 68, '2024-05-06 0:00:00'),
     (21, 1.0, 3.0, 1.0, 3.0, '좋아. 그래도 뭔가 잘못된 것 같습니다.', 20, 66, '2024-06-07 0:00:00');
 
-ALTER TABLE employee ALTER COLUMN id RESTART WITH 21;
+ALTER TABLE employee ALTER COLUMN id RESTART WITH 23;
 
 
 

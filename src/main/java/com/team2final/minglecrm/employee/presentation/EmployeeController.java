@@ -2,6 +2,8 @@ package com.team2final.minglecrm.employee.presentation;
 
 import com.team2final.minglecrm.employee.dto.request.*;
 import com.team2final.minglecrm.employee.dto.response.*;
+import com.team2final.minglecrm.registration.dto.request.RegistrationRequest;
+import com.team2final.minglecrm.registration.service.RegistrationService;
 import com.team2final.minglecrm.service.email.EmailAuthService;
 import com.team2final.minglecrm.employee.service.EmployeeService;
 import jakarta.mail.MessagingException;
@@ -21,14 +23,19 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
     private final EmailAuthService emailAuthService;
+    private final RegistrationService registrationService;
+
 
     @PostMapping("/api/v1/auth/signup")
     public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest requestDTO) {
         System.out.println(">>>>>>>>>> signup , " + requestDTO);
-        SignUpResponse responseDTO = employeeService.signUp(requestDTO);
-        System.out.println(">>>>>>>>>> responseDTO , " + responseDTO);
+//        SignUpResponse responseDTO = employeeService.signUp(requestDTO);
+//        System.out.println(">>>>>>>>>> responseDTO , " + responseDTO);
 
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+        registrationService.sendRegistration(requestDTO);
+        return null;
+
+//        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/api/v1/auth/signup/emailauth")

@@ -50,6 +50,10 @@ public class VoucherSearchRepository {
                         voucherHistory.voucher.endDate
                 ))
                 .from(voucherHistory)
+                .leftJoin(voucherHistory.voucher)
+                .leftJoin(voucherHistory.employeeStaff)
+                .leftJoin(voucherHistory.employeeManager)
+                .leftJoin(voucherHistory.customer)
                 .where(
                         requestDateEq(condition.getRequestDate()),
                         createdReasonContains(condition.getCreatedReason()),
@@ -65,7 +69,7 @@ public class VoucherSearchRepository {
                         voucherCodeContains(condition.getVoucherCode()),
                         dateBetween(condition.getStartDate(), condition.getEndDate()),
                         gradeIn(condition.getCustomerGrades()),
-                        statusIn(condition.getStatus()),  // status 여러 개 선택해서 검색
+                        statusIn(condition.getStatus()),
                         startDateEq(condition.getStartDate()),
                         endDateEq(condition.getEndDate())
                 )
