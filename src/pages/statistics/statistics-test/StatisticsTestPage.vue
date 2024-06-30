@@ -1,9 +1,9 @@
 <template>
   <q-page class="q-pa-md">
     <div class="row col-12">
-      <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+      <div class="col-12">
         <div class="row">
-          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 q-pr-sm">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-pr-sm">
             <q-card class="q-pa-md">
               <div class="row q-py-md full-width items-center justify-center">
                 <div class="total-sales-box justify-center items-center">
@@ -31,7 +31,7 @@
             </q-card>
           </div>
           <div
-            class="col-lg-4 col-md-4 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm q-pr-sm"
+            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm q-pr-sm"
           >
             <q-card class="q-pa-md">
               <div class="row q-py-md full-width items-center justify-center">
@@ -60,7 +60,7 @@
             </q-card>
           </div>
           <div
-            class="col-lg-4 col-md-4 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pr-sm-sm q-pr-xs-sm q-mt-lg-none q-mt-md-none q-mt-sm-md q-mt-xs-md q-pl-sm"
+            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm q-pr-sm"
           >
             <q-card class="q-pa-md">
               <div class="row q-py-md full-width items-center justify-center">
@@ -88,6 +88,74 @@
               </div>
             </q-card>
           </div>
+          <div
+            class="col-lg-3 col-md-3 col-sm-6 col-xs-6 q-px-lg-sm q-px-md-sm q-pl-sm"
+          >
+            <q-card
+              class="q-pa-md float-right full-width right-card-item text-white"
+            >
+              <div class="row full-width">
+                <div class="row full-width text-h4 text-weight-bold">
+                  {{ yesterdayIncome * 0.5 }}₩
+                </div>
+                <div class="text-subtitle1">순이익</div>
+              </div>
+              <div class="row full-width q-mt-lg">
+                <div class="row full-width items-center">
+                  <div class="col-6">
+                    <q-icon
+                      size="sm"
+                      name="arrow_upward"
+                      color="green bg-white"
+                      style="border-radius: 5px"
+                    />
+                    <span class="q-ml-md text-weight-bold">수입</span>
+                  </div>
+                  <div class="col-6">
+                    <span class="text-weight-bold float-right text-h6"
+                      >+ {{ yesterdayIncome }}₩</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row full-width q-mt-md">
+                <div class="row full-width items-center">
+                  <div class="col-6">
+                    <q-icon
+                      size="sm"
+                      name="arrow_downward"
+                      color="red bg-white"
+                      style="border-radius: 5px"
+                    />
+                    <span class="q-ml-md text-weight-bold">지출</span>
+                  </div>
+                  <div class="col-6">
+                    <span class="text-weight-bold float-right text-h6"
+                      >- {{ yesterdayIncome * 0.4 }}₩</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row full-width q-mt-md">
+                <div class="row full-width items-center">
+                  <div class="col-6">
+                    <q-icon
+                      size="sm"
+                      name="arrow_downward"
+                      color="red bg-white"
+                      style="border-radius: 5px"
+                    />
+                    <span class="q-ml-md text-weight-bold">세금</span>
+                  </div>
+                  <div class="col-6">
+                    <span class="text-weight-bold float-right text-h6"
+                      >- {{ yesterdayIncome * 0.1 }}₩</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </q-card>
+          </div>
         </div>
         <div>
           <q-card class="row q-mt-md float-right full-width card-item">
@@ -100,110 +168,6 @@
             <ReservationCntByYear class="full-width" />
           </q-card>
         </div>
-      </div>
-      <div
-        class="col-lg-4 col-md-4 col-sm-12 col-xs-12 q-pt-lg-none q-pt-md-none q-pt-sm-md q-pt-xs-md q-pl-lg-md q-pl-md-md q-pl-sm"
-        style="padding-left: 16px"
-      >
-        <q-card
-          class="q-pa-md float-right full-width right-card-item text-white"
-        >
-          <div class="row full-width">
-            <div class="row full-width text-h4 text-weight-bold">
-              {{ yesterdayIncome * 0.5 }}₩
-            </div>
-            <div class="text-subtitle1">순이익</div>
-          </div>
-          <div class="row full-width q-mt-lg">
-            <div class="row full-width items-center">
-              <div class="col-6">
-                <q-icon
-                  size="sm"
-                  name="arrow_upward"
-                  color="green bg-white"
-                  style="border-radius: 5px"
-                />
-                <span class="q-ml-md text-weight-bold">수입</span>
-              </div>
-              <div class="col-6">
-                <span class="text-weight-bold float-right text-h6"
-                  >+ {{ yesterdayIncome }}₩</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="row full-width q-mt-md">
-            <div class="row full-width items-center">
-              <div class="col-6">
-                <q-icon
-                  size="sm"
-                  name="arrow_downward"
-                  color="red bg-white"
-                  style="border-radius: 5px"
-                />
-                <span class="q-ml-md text-weight-bold">지출</span>
-              </div>
-              <div class="col-6">
-                <span class="text-weight-bold float-right text-h6"
-                  >- {{ yesterdayIncome * 0.4 }}₩</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="row full-width q-mt-md">
-            <div class="row full-width items-center">
-              <div class="col-6">
-                <q-icon
-                  size="sm"
-                  name="arrow_downward"
-                  color="red bg-white"
-                  style="border-radius: 5px"
-                />
-                <span class="q-ml-md text-weight-bold">세금</span>
-              </div>
-              <div class="col-6">
-                <span class="text-weight-bold float-right text-h6"
-                  >- {{ yesterdayIncome * 0.1 }}₩</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="row full-width q-mt-lg">
-            <!-- <q-btn
-              label="Add Credit Card"
-              class="full-width bg-white text-h6 text-weight-bold rounded-borders"
-              icon-right="arrow_right"
-              style="color: rgb(250, 108, 14)"
-              no-caps
-            /> -->
-          </div>
-        </q-card>
-        <q-card
-          class="q-pa-md q-mt-md float-right full-width right-card-item-2 text-white"
-        >
-          <div class="row col-12 full-width items-center">
-            <div class="col-5">
-              <q-avatar size="80px">
-                <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-              </q-avatar>
-            </div>
-            <div class="col-7 text-h5 text-weight-bold">Universal Pay</div>
-          </div>
-          <div class="row col-12 q-mt-lg text-weight-bold">Name : Jane Doe</div>
-          <div class="row col-12 q-mt-xs text-weight-bold">
-            Card No : XXXX XXXX XXXX XXXX
-          </div>
-          <div class="row col-12 q-mt-xs text-weight-bold">
-            <span class="col-6">Start : XX/XX</span>
-            <span class="col-6">End : XX/XX</span>
-          </div>
-        </q-card>
-        <q-card
-          class="q-pb-none q-mt-md float-right full-width right-card-item-3"
-          style="align-content: center"
-        >
-          <RevisitRate :chartShape="doughnut" class="full-width" />
-        </q-card>
       </div>
     </div>
   </q-page>
@@ -319,34 +283,23 @@ onMounted(() => {
 
 <style>
 .card-item {
-  height: 20rem;
+  /* height: 20rem; */
   border-radius: 5px;
 }
 
 .card-item-2 {
-  height: 25rem;
+  /* height: 25rem; */
   border-radius: 5px;
 }
 
 .right-card-item {
-  height: 20rem;
+  /* height: 20rem; */
   border-radius: 5px;
   background: linear-gradient(
     145deg,
     rgb(252, 189, 138) 10%,
     rgb(250, 108, 14)
   );
-}
-
-.right-card-item-2 {
-  height: 13.8rem;
-  border-radius: 5px;
-  background: linear-gradient(145deg, rgb(138, 149, 252) 10%, rgb(65, 66, 143));
-}
-
-.right-card-item-3 {
-  height: 25rem;
-  border-radius: 5px;
 }
 
 .total-sales-box {
@@ -374,7 +327,7 @@ onMounted(() => {
 }
 
 .profit-gain-box {
-  height: 4rem;
+  /* height: 4rem; */
   width: 4rem;
   background-color: rgb(17, 48, 85);
   border-radius: 50%;

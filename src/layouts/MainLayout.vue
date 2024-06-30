@@ -177,14 +177,14 @@ const linksList = [
     icon: "email",
     to: "/email",
   },
+  // {
+  //   title: "통계",
+  //   caption: "통계 보기",
+  //   icon: "leaderboard",
+  //   to: "/statistics",
+  // },
   {
     title: "통계",
-    caption: "통계 보기",
-    icon: "leaderboard",
-    to: "/statistics",
-  },
-  {
-    title: "통계 테스트!",
     caption: "통계 보기",
     icon: "leaderboard",
     children: [
