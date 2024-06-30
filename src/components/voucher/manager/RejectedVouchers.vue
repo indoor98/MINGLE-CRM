@@ -161,7 +161,7 @@ const searchConfirmerName = ref("");
 const selectedGrades = ref(null);
 
 const gradeOptions = [
-  // { label: "선택 안 함", value: "" },,
+  // { label: "선택 안 함", value: "" },
   { label: "BROWN", value: "BROWN" },
   { label: "SILVER", value: "SILVER" },
   { label: "GOLD", value: "GOLD" },
