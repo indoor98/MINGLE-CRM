@@ -91,6 +91,7 @@
             <q-input v-model="voucher.customerId" label="회원 ID" readonly />
             <q-input v-model="customerEmail" label="회원 이메일" readonly />
             <q-input v-model="voucher.reason" label="생성 이유" type="string" />
+            <q-input v-model="voucher.amount" label="금액" type="number" />
             <q-input
               v-model="voucher.startDate"
               mask="date"
