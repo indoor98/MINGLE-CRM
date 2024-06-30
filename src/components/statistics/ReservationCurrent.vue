@@ -57,7 +57,7 @@ onMounted(() => {
 
 <style scoped>
 .card-item {
-  height: 20rem !important;
+  min-height: 20rem !important;
   border-radius: 5px;
 }
 </style>
