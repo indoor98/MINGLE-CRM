@@ -327,7 +327,8 @@ const fetchInquiriesSearch = async () => {
       console.log("isReply", searchParams.value.isReply.value);
     }
     if (searchParams.value.actionStatus)
-      params.append("actionStatus", searchParams.value.actionStatus);
+      params.append("actionStatus", searchParams.value.actionStatus.value);
+    console.log(searchParams.value.actionStatus.value);
 
     const response = await axios.get(
       `/api/v1/inquiries/search?${params.toString()}`,

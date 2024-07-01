@@ -2,7 +2,7 @@
   <q-page class="container">
     <q-card class="my-card">
       <q-card-section class="row justify-center q-pa-xs">
-        <div class="col-12 col-md-4 q-pa-sm">
+        <div class="col-xs-6 col-sm-4 col-md q-pa-sm">
           <q-input
             v-model="searchName"
             clearable
@@ -14,7 +14,19 @@
           />
         </div>
 
-        <div class="col-12 col-md-3 q-pa-sm">
+        <div class="col-xs-6 col-sm-4 col-4 col-md q-pa-sm">
+          <q-input
+            v-model="searchEmail"
+            clearable
+            filled
+            color="purple-12"
+            label="고객 이메일"
+            dense
+            placeholder="이메일을 입력하세요"
+          />
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md q-pa-sm">
           <q-select
             v-model="selectedGrade"
             filled
@@ -28,7 +40,7 @@
           />
         </div>
 
-        <div class="col-12 col-md-3 q-pa-sm">
+        <div class="col-xs-6 col-sm-4 col-md q-pa-sm">
           <q-select
             v-model="selectedGender"
             filled
@@ -42,13 +54,28 @@
           />
         </div>
 
-        <div class="col-12 col-md-2 q-pa-sm">
+        <div class="col-xs-6 col-sm-4 col-md q-pa-sm">
+          <q-select
+            v-model="selectedAge"
+            filled
+            color="purple-12"
+            label="연령대"
+            :options="ageOptions"
+            emit-value
+            map-options
+            dense
+            placeholder="선택"
+          />
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md q-pa-sm">
           <q-btn
             color="primary"
             label="검색"
             @click="executeSearch"
             dense
             class="full-width"
+            style="height: -webkit-fill-available"
           />
         </div>
       </q-card-section>
@@ -69,18 +96,23 @@
             hide-pagination
           >
             <template v-slot:body="props">
-              <q-tr :props="props" @click="rowClicked(props.row)" class="q-table-row">
+              <q-tr
+                :props="props"
+                @click="rowClicked(props.row)"
+                class="q-table-row"
+              >
                 <q-td v-for="col in columns" :key="col.name" :props="props">
                   <!-- 필드별로 적절한 마스킹 함수 적용 -->
                   {{
-
-                    col.field === 'name' ? maskName(props.row[col.field]) :
-                      col.field === 'phone' ? maskPhoneNumber(props.row[col.field]) :
-                        col.field === 'birth' ? maskBirthdate(props.row[col.field]) :
-                          col.field === 'gender' ? convertGender(props.row[col.field]) :
-                            props.row[col.field]
-
-
+                    col.field === "name"
+                      ? maskName(props.row[col.field])
+                      : col.field === "phone"
+                      ? maskPhoneNumber(props.row[col.field])
+                      : col.field === "birth"
+                      ? maskBirthdate(props.row[col.field])
+                      : col.field === "gender"
+                      ? convertGender(props.row[col.field])
+                      : props.row[col.field]
                   }}
                 </q-td>
               </q-tr>
@@ -118,11 +150,13 @@ import { api as axios } from "src/boot/axios";
 
 const router = useRouter();
 const searchName = ref("");
+const searchEmail = ref("");
+const selectedAge = ref("");
 const customers = ref([]);
 const pagination = ref({
   page: 1,
   rowsPerPage: 20,
-  rowsNumber: 0
+  rowsNumber: 0,
 });
 const selectedGrade = ref(null);
 const selectedGender = ref(null);
@@ -132,11 +166,13 @@ const fetchCustomers = async (page = 1) => {
       page: page - 1,
       size: pagination.value.rowsPerPage,
       name: searchName.value || null,
+      email: searchEmail.value || null,
       grade: selectedGrade.value || null,
-      gender: selectedGender.value || null
+      gender: selectedGender.value || null,
+      ageGroup: selectedAge.value || null,
     };
 
-    const response = await axios.get('/api/v1/customers/search', { params });
+    const response = await axios.get("/api/v1/customers/search", { params });
     customers.value = response.data.content;
     pagination.value.page = response.data.number + 1;
     pagination.value.rowsPerPage = response.data.size;
@@ -146,7 +182,9 @@ const fetchCustomers = async (page = 1) => {
   }
 };
 
-const maxPage = computed(() => Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage));
+const maxPage = computed(() =>
+  Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage)
+);
 
 onMounted(() => {
   fetchCustomers();
@@ -178,27 +216,65 @@ const onPageChange = (page) => {
 };
 
 const columns = [
-  { name: 'id', label: '#', align: 'left', field: 'id' },
-  { name: 'name', label: '고객 이름', align: 'left', field: 'name', sortable: true },
-  { name: 'grade', label: '고객 등급', align: 'center', field: 'grade', sortable: true },
-  { name: 'phone', label: '전화번호', align: 'center', field: 'phone', sortable: true },
-  { name: 'employeeName', label: '직원 이름', align: 'center', field: 'employeeName' },
-  { name: 'gender', label: '성별', align: 'center', field: 'gender' },
-  { name: 'birth', label: '생년월일', align: 'center', field: 'birth' },
+  { name: "id", label: "#", align: "left", field: "id" },
+  {
+    name: "name",
+    label: "고객 이름",
+    align: "left",
+    field: "name",
+    sortable: true,
+  },
+  {
+    name: "grade",
+    label: "고객 등급",
+    align: "center",
+    field: "grade",
+    sortable: true,
+  },
+  {
+    name: "phone",
+    label: "전화번호",
+    align: "center",
+    field: "phone",
+    sortable: true,
+  },
+  {
+    name: "employeeName",
+    label: "직원 이름",
+    align: "center",
+    field: "employeeName",
+  },
+  {
+    name: "gender",
+    label: "성별",
+    align: "center",
+    field: "gender",
+    format: (val) =>
+      val === "Male" ? "남성" : val === "Female" ? "여성" : val,
+  },
+  { name: "birth", label: "생년월일", align: "center", field: "birth" },
 ];
 
 const gradeOptions = [
-  { label: '선택 안 함', value: '' },
-  { label: 'BROWN', value: 'BROWN' },
-  { label: 'SILVER', value: 'SILVER' },
-  { label: 'GOLD', value: 'GOLD' },
-  { label: 'DIAMOND', value: 'DIAMOND' }
+  { label: "선택 안 함", value: "" },
+  { label: "BROWN", value: "BROWN" },
+  { label: "SILVER", value: "SILVER" },
+  { label: "GOLD", value: "GOLD" },
+  { label: "DIAMOND", value: "DIAMOND" },
 ];
 
 const genderOptions = [
-  { label: '선택 안 함', value: '' },
-  { label: '여성', value: 'Female' },
-  { label: '남성', value: 'Male' }
+  { label: "선택 안 함", value: "" },
+  { label: "여성", value: "Female" },
+  { label: "남성", value: "Male" },
+];
+
+const ageOptions = [
+  { label: "20대", value: "20s" },
+  { label: "30대", value: "30s" },
+  { label: "40대", value: "40s" },
+  { label: "50대", value: "50s" },
+  { label: "60대 이상", value: "60s" },
 ];
 
 const maskName = (name) => {
@@ -220,7 +296,7 @@ const maskPhoneNumber = (phoneNumber) => {
   if (!phoneNumber) return "";
 
   const visibleDigits = phoneNumber.slice(-4);
-  const maskedDigits = '*'.repeat(Math.max(0, phoneNumber.length - 7)); // 처음 세 자리와 마지막 네 자리를 제외한 부분을 마스킹
+  const maskedDigits = "*".repeat(Math.max(0, phoneNumber.length - 7)); // 처음 세 자리와 마지막 네 자리를 제외한 부분을 마스킹
 
   return `${phoneNumber.slice(0, 3)}${maskedDigits}${visibleDigits}`;
 };
@@ -230,14 +306,14 @@ const maskBirthdate = (birthdate) => {
 
   const visiblePart = birthdate.slice(-2); // 일자는 그대로 표시
 
-  const maskedPart = '*'.repeat(Math.max(0, birthdate.length - 4)); // 연도와 월을 마스킹
+  const maskedPart = "*".repeat(Math.max(0, birthdate.length - 4)); // 연도와 월을 마스킹
 
   return `${birthdate.slice(0, 4)}${maskedPart}${visiblePart}`;
 };
 
 const convertGender = (gender) => {
-  if (gender === 'Male') return '남성';
-  if (gender === 'Female') return '여성';
+  if (gender === "Male") return "남성";
+  if (gender === "Female") return "여성";
   return gender;
 };
 

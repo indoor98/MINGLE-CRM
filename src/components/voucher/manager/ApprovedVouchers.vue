@@ -80,6 +80,7 @@
             @click="searchVouchers"
             dense
             class="full-width"
+            style="height: -webkit-fill-available;"
           />
         </div>
       </q-card-section>
@@ -137,6 +138,7 @@ import { ref, onMounted, watch } from "vue";
 import { api as axios } from "src/boot/axios";
 import VoucherDetail from "../VoucherHistoryDetail.vue";
 import { toDate } from "src/utils/utils.js"; // 유틸리티 함수 불러오기
+import { formatPrice } from "src/utils/utils.js";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
@@ -202,6 +204,7 @@ const columns = [
     align: "center",
     field: "amount",
     sortable: true,
+    format: (val) => formatPrice(val),
   },
   {
     name: "confirmDate",

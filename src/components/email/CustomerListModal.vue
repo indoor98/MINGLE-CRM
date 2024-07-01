@@ -1,7 +1,7 @@
 <template>
   <q-card class="my-card">
     <q-card-section class="row justify-center q-mt-lg q-pa-xs">
-      <div class="col-12 col-md q-pa-sm">
+      <div class="col-xs-6 col-sm-4 col-md q-pa-sm">
         <q-input
           v-model="searchName"
           clearable
@@ -12,7 +12,7 @@
           placeholder="고객명을 입력하세요"
         />
       </div>
-      <div class="col-12 col-md q-pa-sm">
+      <div class="col-xs-6 col-sm-4 col-4 col-md q-pa-sm">
         <q-input
           v-model="searchEmail"
           clearable
@@ -24,7 +24,7 @@
         />
       </div>
 
-      <div class="col-12 col-md q-pa-sm">
+      <div class="col-xs-6 col-sm-4 col-4 col-md q-pa-sm">
         <q-select
           v-model="selectedGrade"
           filled
@@ -38,7 +38,7 @@
         />
       </div>
 
-      <div class="col-12 col-md q-pa-sm">
+      <div class="col-xs-6 col-sm-4 col-4 col-md q-pa-sm">
         <q-select
           v-model="selectedGender"
           filled
@@ -51,9 +51,20 @@
           placeholder="선택"
         />
       </div>
-      <!-- </q-card-section>
-    <q-card-section> -->
-      <div class="col-md q-pa-sm">
+      <div class="col-xs-6 col-sm-4 col-4 col-md q-pa-sm">
+        <q-select
+          v-model="selectedAge"
+          filled
+          color="purple-12"
+          label="연령대"
+          :options="ageOptions"
+          emit-value
+          map-options
+          dense
+          placeholder="선택"
+        />
+      </div>
+      <div class="col-xs-6 col-sm-4 col-4 col-md q-pa-sm">
         <q-btn
           color="primary"
           label="검색하기"
@@ -114,6 +125,7 @@ const pagination = ref({
 });
 const selectedGrade = ref(null);
 const selectedGender = ref(null);
+const selectedAge = ref("");
 
 const emit = defineEmits(["selected-emails"]);
 
@@ -135,6 +147,7 @@ const fetchCustomers = async (page = 1) => {
       email: searchEmail.value || null,
       grade: selectedGrade.value || null,
       gender: selectedGender.value || null,
+      ageGroup: selectedAge.value || null,
     };
 
     const response = await axios.get("/api/v1/customers/search", { params });
@@ -207,7 +220,14 @@ const columns = [
     align: "center",
     field: "employeeName",
   },
-  { name: "gender", label: "성별", align: "center", field: "gender" },
+  {
+    name: "gender",
+    label: "성별",
+    align: "center",
+    field: "gender",
+    format: (val) =>
+      val === "Male" ? "남성" : val === "Female" ? "여성" : val,
+  },
   { name: "birth", label: "생년월일", align: "center", field: "birth" },
 ];
 
@@ -223,6 +243,14 @@ const genderOptions = [
   { label: "선택 안 함", value: "" },
   { label: "여성", value: "Female" },
   { label: "남성", value: "Male" },
+];
+
+const ageOptions = [
+  { label: "20대", value: "20s" },
+  { label: "30대", value: "30s" },
+  { label: "40대", value: "40s" },
+  { label: "50대", value: "50s" },
+  { label: "60대 이상", value: "60s" },
 ];
 </script>
 
