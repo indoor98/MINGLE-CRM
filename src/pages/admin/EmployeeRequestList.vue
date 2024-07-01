@@ -163,7 +163,7 @@ const fetchRequests = async (page = 1, useSearchEndpoint = false) => {
     requests.value = response.data.content.map(request => {
       return {
         ...request,
-        requestedRole: translateRole(request.requestedRole),
+        requestedRole: request.requestedRole,
         status: translateStatus(request.status),
         displayTime: formatTimeOrRelative(request.registrationRequestTime)
       };

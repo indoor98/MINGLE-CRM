@@ -111,7 +111,7 @@ const signUp = async () => {
     );
 
     console.log(response.data);
-    router.push("/signup-success");
+    await router.push("/signup-success");
   } catch (error) {
     console.log(error);
   }
