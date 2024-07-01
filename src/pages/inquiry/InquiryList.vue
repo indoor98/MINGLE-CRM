@@ -323,10 +323,13 @@ const fetchInquiriesSearch = async () => {
     }
     if (searchParams.value.type) params.append("type", searchParams.value.type);
     if (searchParams.value.isReply !== null) {
-      params.append("isReply", searchParams.value.isReply.toString());
+      params.append("isReply", JSON.stringify(searchParams.value.isReply));
     }
     if (searchParams.value.actionStatus)
       params.append("actionStatus", searchParams.value.actionStatus);
+
+    // 로그: 요청 전에 로그 찍기
+    console.log("요청 보낼 파라미터:", params.toString());
 
     const response = await axios.get(
       `/api/v1/inquiries/search?${params.toString()}`,
@@ -336,6 +339,7 @@ const fetchInquiriesSearch = async () => {
         },
       }
     );
+
     console.log("응답 데이터:", response.data.data);
 
     if (!response.data.data || !response.data.data.content) {
@@ -343,23 +347,6 @@ const fetchInquiriesSearch = async () => {
       return;
     }
 
-    // const { content, totalElements, totalPages } = response.data.data;
-
-    // inquiries.value = content.map((item) => ({
-    //   id: item.id,
-    //   customerName: item.customerName,
-    //   customerPhone: item.customerPhone,
-    //   date: new Date(item.date).toLocaleString(),
-    //   type: item.type,
-    //   isReply: item.isReply,
-    //   employName: item.employName,
-    //   inquiryTitle: item.inquiryTitle,
-    //   inquiryContent: item.inquiryContent,
-    //   actionStatus: item.actionStatus,
-    // }));
-
-    // pagination.value.rowsNumber = totalElements;
-    // maxPages.value = totalPages;
     inquiries.value = response.data.data.content;
     pagination.value.page = response.data.data.number + 1;
     pagination.value.rowsPerPage = response.data.data.size;
