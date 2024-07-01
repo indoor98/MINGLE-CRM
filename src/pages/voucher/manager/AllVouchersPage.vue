@@ -245,24 +245,6 @@ const columns = [
     align: "center",
     field: "status",
     sortable: true,
-    // format: (val) => {
-    //   switch (val) {
-    //     case "REQUESTED":
-    //       return "요청됨";
-    //     case "APPROVED":
-    //       return "승인됨";
-    //     case "REJECTED":
-    //       return "거절됨";
-    //     case "SENDED":
-    //       return "발송됨";
-    //     case "CANCELED":
-    //       return "취소됨";
-    //     case "CONVERTED":
-    //       return "전환됨";
-    //     default:
-    //       return val;
-    //   }
-    // },
   },
 ];
 
@@ -285,11 +267,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/histories`
     );
-    vouchers.value = response.data.data.map((voucher) => ({
-      ...voucher,
-      status: getStatusLabel(voucher.status),
-      // 다른 필요한 필드에 대한 변환도 가능
-    }));
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
     errorMessage.value = "";
   } catch (error) {
     console.error("모든된 바우처 목록을 불러오는 중 에러 발생:", error);
@@ -345,13 +325,14 @@ const searchVouchers = async () => {
       "http://localhost:8080/api/v1/vouchers/search",
       data
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
   } catch (error) {
     console.error("Error fetching vouchers:", error);
+    errorMessage.value = "바우처 검색 중 에러가 발생했습니다.";
   }
 };
 
-onMounted(() => {
-  fetchVouchers();
-});
+onMounted(fetchVouchers);
 </script>
