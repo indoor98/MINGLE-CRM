@@ -202,6 +202,7 @@ const approveVoucher = async (voucherId) => {
         `http://localhost:8080/api/v1/vouchers/approval/${voucherId}`
       );
       Notify.create({
+        color: "green",
         type: "positive",
         message: "바우처가 성공적으로 승인되었습니다.",
       });
@@ -234,6 +235,7 @@ const rejectVoucher = async (voucherId) => {
         { reason }
       );
       Notify.create({
+        color: "green",
         type: "positive",
         message: "바우처가 성공적으로 거절되었습니다.",
       });

@@ -353,6 +353,7 @@ const deleteVoucher = async (voucherId) => {
     // 바우처 목록을 다시 불러옴
     fetchVouchers();
     Notify.create({
+      color: "green",
       type: "positive",
       message: "삭제가 성공적으로 완료되었습니다.",
     });

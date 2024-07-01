@@ -326,6 +326,7 @@ const cancelVoucher = async (voucherId) => {
         `http://localhost:8080/api/v1/vouchers/cancel/${voucherId}`
       );
       Notify.create({
+        color: "green",
         type: "positive",
         message: "바우처가 성공적으로 발급 취소되었습니다.",
       });
