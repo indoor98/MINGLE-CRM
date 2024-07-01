@@ -78,7 +78,7 @@
           label="문의 타입"
           class="search-field"
         />
-        <!-- <q-select
+        <q-select
           v-model="searchParams.isReply"
           :options="replyOptions"
           label="답변 여부"
@@ -89,7 +89,7 @@
           :options="actionStatusOptions"
           label="조치 상태"
           class="search-field"
-        /> -->
+        />
         <q-btn
           color="primary"
           label="검색"
@@ -323,7 +323,8 @@ const fetchInquiriesSearch = async () => {
     }
     if (searchParams.value.type) params.append("type", searchParams.value.type);
     if (searchParams.value.isReply !== null) {
-      params.append("isReply", searchParams.value.isReply);
+      params.append("isReply", searchParams.value.isReply.value);
+      console.log("isReply", searchParams.value.isReply.value);
     }
     if (searchParams.value.actionStatus)
       params.append("actionStatus", searchParams.value.actionStatus);
