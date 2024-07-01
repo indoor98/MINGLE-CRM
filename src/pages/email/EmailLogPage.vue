@@ -105,12 +105,12 @@ const columns = ref([
 const fetchEmailLogs = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/events/${pagination.value.page - 1}`
+      `https://httpstest.mingle-crm.com/api/events/${pagination.value.page - 1}`
     );
     events.value = response.data.data;
 
     const pagesNumberResponse = await axios.get(
-      "http://localhost:8080/api/event/pagesnumber"
+      "https://httpstest.mingle-crm.com/api/event/pagesnumber"
     );
     pagesNumber.value = Math.ceil(
       pagesNumberResponse.data.data / pagination.value.rowsPerPage

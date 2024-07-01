@@ -246,7 +246,7 @@ const logout = async () => {
   try {
     console.log("로그아웃");
     const response = await customAxios.get(
-      "http://localhost:8080/api/v1/auth/logout",
+      "https://httpstest.mingle-crm.com/api/v1/auth/logout",
       {
         withCredentials: true,
       }
@@ -261,7 +261,7 @@ const logout = async () => {
 const renewToken = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8080/api/v1/auth/renew",
+      "https://httpstest.mingle-crm.com/api/v1/auth/renew",
       {
         withCredentials: true,
       }

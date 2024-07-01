@@ -62,7 +62,7 @@ const submitAction = async () => {
     console.log("액션 상태 전송 확인: ", actionStatus.value.value);
 
     const response = await axios.post(
-      "http://localhost:8080/api/v1/inquiries/action",
+      "https://httpstest.mingle-crm.com/api/v1/inquiries/action",
       {
         inquiryId: props.inquiryId,
         actionStatus: actionStatus.value.value,

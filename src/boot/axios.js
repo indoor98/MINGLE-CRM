@@ -4,7 +4,7 @@ import { useTokenStore } from "src/stores/token-store";
 
 // Create an axios instance
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://httpstest.mingle-crm.com",
   withCredentials: true,
 });
 

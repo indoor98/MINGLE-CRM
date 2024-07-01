@@ -9,46 +9,46 @@
     <q-card-section>
       <table class="voucher-table">
         <tbody>
-        <tr>
-          <th>Voucher ID</th>
-          <td>{{ voucherDetails.voucherId }}</td>
-        </tr>
-        <tr>
-          <th>Status</th>
-          <td>{{ voucherDetails.status }}</td>
-        </tr>
-        <tr>
-          <th>요청 일자</th>
-          <td>{{ voucherDetails.requestDate }}</td>
-        </tr>
-        <tr>
-          <th>매니저 승인/거절 일자</th>
-          <td>{{ voucherDetails.confirmDate }}</td>
-        </tr>
-        <tr>
-          <th>전송/취소 일자</th>
-          <td>{{ voucherDetails.sendOrCancelDate }}</td>
-        </tr>
-        <tr>
-          <th>리워드 전환 일자</th>
-          <td>{{ voucherDetails.convertsionDate }}</td>
-        </tr>
-        <tr>
-          <th>생성 마케터 ID</th>
-          <td>{{ voucherDetails.creatorId }}</td>
-        </tr>
-        <tr>
-          <th>승인 매니저 ID</th>
-          <td>{{ voucherDetails.confirmerId }}</td>
-        </tr>
-        <tr>
-          <th>Customer ID</th>
-          <td>{{ voucherDetails.customerId }}</td>
-        </tr>
-        <tr>
-          <th>Amount</th>
-          <td>{{ voucherDetails.amount }}</td>
-        </tr>
+          <tr>
+            <th>Voucher ID</th>
+            <td>{{ voucherDetails.voucherId }}</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>{{ voucherDetails.status }}</td>
+          </tr>
+          <tr>
+            <th>요청 일자</th>
+            <td>{{ voucherDetails.requestDate }}</td>
+          </tr>
+          <tr>
+            <th>매니저 승인/거절 일자</th>
+            <td>{{ voucherDetails.confirmDate }}</td>
+          </tr>
+          <tr>
+            <th>전송/취소 일자</th>
+            <td>{{ voucherDetails.sendOrCancelDate }}</td>
+          </tr>
+          <tr>
+            <th>리워드 전환 일자</th>
+            <td>{{ voucherDetails.convertsionDate }}</td>
+          </tr>
+          <tr>
+            <th>생성 마케터 ID</th>
+            <td>{{ voucherDetails.creatorId }}</td>
+          </tr>
+          <tr>
+            <th>승인 매니저 ID</th>
+            <td>{{ voucherDetails.confirmerId }}</td>
+          </tr>
+          <tr>
+            <th>Customer ID</th>
+            <td>{{ voucherDetails.customerId }}</td>
+          </tr>
+          <tr>
+            <th>Amount</th>
+            <td>{{ voucherDetails.amount }}</td>
+          </tr>
         </tbody>
       </table>
     </q-card-section>
@@ -60,21 +60,21 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { api as axios } from 'src/boot/axios';
-import { defineProps } from 'vue';
+import { ref, watch } from "vue";
+import { api as axios } from "src/boot/axios";
+import { defineProps } from "vue";
 
-const props = defineProps(['voucher']);
+const props = defineProps(["voucher"]);
 const voucherDetails = ref({});
 
 const fetchVoucherDetail = async (customerId, voucherId) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/v1/vouchers/histories/${voucherId}`
+      `https://httpstest.mingle-crm.com/api/v1/vouchers/histories/${voucherId}`
     );
     voucherDetails.value = response.data.data;
   } catch (error) {
-    console.error('Error fetching voucher detail:', error);
+    console.error("Error fetching voucher detail:", error);
   }
 };
 

@@ -94,22 +94,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { api as axios } from "src/boot/axios";
 
 const route = useRoute();
 const customerId = route.params.id;
 const customer = ref(null);
-const editedMemo = ref('');
+const editedMemo = ref("");
 const editingMemo = ref(false);
 
 const fetchCustomerDetail = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}`);
+    const response = await axios.get(
+      `https://httpstest.mingle-crm.com/api/v1/customers/${customerId}`
+    );
     customer.value = response.data;
   } catch (error) {
-    console.error('고객 상세 정보를 불러오는 데 실패했습니다:', error);
+    console.error("고객 상세 정보를 불러오는 데 실패했습니다:", error);
   }
 };
 
@@ -121,18 +123,18 @@ const editMemo = () => {
 const saveMemo = async () => {
   try {
     const response = await axios.put(`/api/v1/customers/${customerId}/memo`, {
-      memo: editedMemo.value
+      memo: editedMemo.value,
     });
     customer.value.memo = editedMemo.value;
     editingMemo.value = false;
   } catch (error) {
-    console.error('메모 저장에 실패했습니다:', error);
+    console.error("메모 저장에 실패했습니다:", error);
     // 실패 처리 로직 추가
   }
 };
 
 const calculateAge = (birthdate) => {
-  if (!birthdate) return '';
+  if (!birthdate) return "";
 
   const birthYear = new Date(birthdate).getFullYear();
   const currentYear = new Date().getFullYear();
@@ -143,16 +145,16 @@ const calculateAge = (birthdate) => {
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
+    behavior: "smooth",
   });
 };
 
 const getKoreanGender = (gender) => {
   switch (gender) {
-    case 'Male':
-      return '남자';
-    case 'Female':
-      return '여자';
+    case "Male":
+      return "남자";
+    case "Female":
+      return "여자";
     default:
       return gender;
   }
