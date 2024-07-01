@@ -236,7 +236,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/rejected-marketer`
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
     errorMessage.value = "";
   } catch (error) {
     console.error("거절된 바우처 목록을 불러오는 중 에러 발생:", error);
@@ -274,7 +276,9 @@ const searchVouchers = async () => {
       "http://localhost:8080/api/v1/vouchers/search",
       data
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
   } catch (error) {
     console.error("Error fetching vouchers:", error);
   }
