@@ -1,7 +1,7 @@
 <template>
   <q-card class="my-card">
     <q-card-section class="row justify-center q-mt-lg q-pa-xs">
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md q-pa-sm">
         <q-input
           v-model="searchName"
           clearable
@@ -12,7 +12,7 @@
           placeholder="고객명을 입력하세요"
         />
       </div>
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md q-pa-sm">
         <q-input
           v-model="searchEmail"
           clearable
@@ -24,7 +24,7 @@
         />
       </div>
 
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md q-pa-sm">
         <q-select
           v-model="selectedGrade"
           filled
@@ -38,7 +38,7 @@
         />
       </div>
 
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md q-pa-sm">
         <q-select
           v-model="selectedGender"
           filled
@@ -51,15 +51,15 @@
           placeholder="선택"
         />
       </div>
-    </q-card-section>
-    <q-card-section>
-      <div class="row flex" style="justify-content: right">
+      <!-- </q-card-section>
+    <q-card-section> -->
+      <div class="col-md q-pa-sm">
         <q-btn
           color="primary"
           label="검색하기"
           @click="executeSearch"
-          dense
-          style="font-size: 20px"
+          class="full-width"
+          icon-right="search"
         />
       </div>
     </q-card-section>

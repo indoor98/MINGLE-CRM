@@ -144,7 +144,7 @@ const linksList = [
   },
   {
     title: "바우처",
-    caption: "바우처 관리 - 마케터",
+    caption: "바우처 관리 - 직원",
     icon: "redeem",
     children: [
       {
@@ -166,20 +166,21 @@ const linksList = [
         to: "/voucher-marketer/email",
       },
     ],
-    roles: ["ROLE_MARKETER"],
+    roles: ["ROLE_MARKETER", "ROLE_CONSULTANT"],
   },
   {
     title: "리워드",
     caption: "고객별 리워드 조회",
     icon: "paid",
     to: "/reward",
+    roles: ["ROLE_MANAGER"],
   },
   {
     title: "상담",
     caption: "상담 탭",
     icon: "support_agent",
     to: "/inquiry",
-    roles: ["ROLE_CONSULTANT"],
+    roles: ["ROLE_MANAGER", "ROLE_CONSULTANT"],
   },
   {
     title: "이메일",
