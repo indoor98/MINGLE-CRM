@@ -75,15 +75,23 @@
 
       <!-- 바우처 생성 모달 -->
       <q-dialog v-model="showCreationModal">
-        <q-card>
+        <q-card style="width: 30%; padding: 20px">
           <q-card-section>
             <div class="text-h6">바우처 생성</div>
           </q-card-section>
 
           <q-card-section>
-            <q-input v-model="voucher.customerId" label="회원 ID" />
-            <q-input v-model="voucher.amount" label="금액" type="number" />
+            <q-btn @click="showCustomerListModal = true" label="고객 조회">
+              <q-dialog v-model="showCustomerListModal">
+                <VoucherCustomerListModal
+                  @selected-customer="onSelectedCustomer"
+                />
+              </q-dialog>
+            </q-btn>
+            <q-input v-model="voucher.customerId" label="회원 ID" readonly />
+            <q-input v-model="customerEmail" label="회원 이메일" readonly />
             <q-input v-model="voucher.reason" label="생성 이유" type="string" />
+            <q-input v-model="voucher.amount" label="금액" type="number" />
             <q-input
               v-model="voucher.startDate"
               mask="date"
@@ -101,7 +109,7 @@
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
-                          label="Close"
+                          label="선택"
                           color="primary"
                           flat
                         />
@@ -128,7 +136,7 @@
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
-                          label="Close"
+                          label="선택"
                           color="primary"
                           flat
                         />
@@ -145,7 +153,7 @@
               flat
               label="취소"
               color="primary"
-              @click="showCreationModal = false"
+              @click="closeVoucherCreation"
             />
             <q-btn flat label="생성" color="primary" @click="createVoucher" />
           </q-card-actions>
@@ -160,6 +168,7 @@ import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Dialog, Notify } from "quasar";
 import VoucherDetail from "../../../components/voucher/VoucherDetail.vue";
+import VoucherCustomerListModal from "../../../components/voucher/marketer/VoucherCustomerListModal.vue";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
@@ -173,6 +182,9 @@ const voucher = ref({
 });
 const showDialog = ref(false);
 const selectedVoucher = ref({});
+const showCustomerListModal = ref(false);
+const selectedCustomer = ref();
+const customerEmail = ref("");
 
 const toTenWords = (beforeWord) => {
   const afterword =
@@ -198,13 +210,13 @@ const columns = ref([
     field: "voucherId",
     sortable: true,
   },
-  {
-    name: "customerId",
-    label: "회원 ID",
-    align: "center",
-    field: "customerId",
-    sortable: true,
-  },
+  // {
+  //   name: "customerId",
+  //   label: "회원 ID",
+  //   align: "center",
+  //   field: "customerId",
+  //   sortable: true,
+  // },
   {
     name: "customerName",
     label: "회원 이름",
@@ -259,7 +271,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       "http://localhost:8080/api/v1/vouchers/before-requested"
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
     errorMessage.value = "";
   } catch (error) {
     console.error("바우처 목록을 불러오는 중 에러 발생:", error);
@@ -284,6 +298,8 @@ const createVoucher = async () => {
   } catch (error) {
     console.error("바우처 생성 중 에러 발생:", error);
     errorMessage.value = "바우처 생성 중 에러가 발생했습니다.";
+  } finally {
+    closeVoucherCreation();
   }
 };
 
@@ -297,6 +313,17 @@ const closeVoucherDetail = () => {
   selectedVoucher.value = {};
 };
 
+const closeVoucherCreation = () => {
+  showCreationModal.value = false;
+
+  voucher.value.customerId = "";
+  voucher.value.amount = 0;
+  voucher.value.startDate = "";
+  voucher.value.endDate = "";
+  voucher.value.reason = "";
+  customerEmail.value = "";
+};
+
 const requestVoucher = async (voucherId) => {
   try {
     const response = await axios.post(
@@ -307,6 +334,7 @@ const requestVoucher = async (voucherId) => {
     Notify.create({
       type: "positive",
       message: "요청이 성공적으로 완료되었습니다.",
+      color: "green",
     });
   } catch (error) {
     console.error("바우처 요청 중 에러 발생:", error);
@@ -337,5 +365,12 @@ const deleteVoucher = async (voucherId) => {
   }
 };
 
+const onSelectedCustomer = (customer) => {
+  console.log(customer);
+  selectedCustomer.value = customer;
+  showCustomerListModal.value = false;
+  voucher.value.customerId = customer.at(0).id;
+  customerEmail.value = customer.at(0).email;
+};
 onMounted(fetchVouchers);
 </script>

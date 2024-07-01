@@ -22,12 +22,12 @@
                     <q-btn
                       label="승인"
                       color="primary"
-                      @click="approveVoucher(props.row.voucherId)"
+                      @click.stop="approveVoucher(props.row.voucherId)"
                     ></q-btn>
                     <q-btn
                       label="거절"
                       color="secondary"
-                      @click="rejectVoucher(props.row.voucherId)"
+                      @click.stop="rejectVoucher(props.row.voucherId)"
                     ></q-btn>
                   </template>
                   <temaplate v-else>
@@ -119,6 +119,13 @@ const columns = ref([
     sortable: true,
   },
   {
+    name: "customerGrade",
+    label: "고객 등급",
+    align: "center",
+    field: "customerGrade",
+    sortable: true,
+  },
+  {
     name: "creatorName",
     label: "발급 직원 이름",
     align: "center",
@@ -169,7 +176,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       "http://localhost:8080/api/v1/vouchers/requested"
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
     console.log(vouchers.value);
     errorMessage.value = "";
   } catch (error) {

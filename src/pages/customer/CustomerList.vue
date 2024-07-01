@@ -189,10 +189,10 @@ const columns = [
 
 const gradeOptions = [
   { label: '선택 안 함', value: '' },
-  { label: 'NEW', value: 'NEW' },
-  { label: 'BASIC', value: 'BASIC' },
-  { label: 'VIP', value: 'VIP' },
-  { label: 'VVIP', value: 'VVIP' }
+  { label: 'BROWN', value: 'BROWN' },
+  { label: 'SILVER', value: 'SILVER' },
+  { label: 'GOLD', value: 'GOLD' },
+  { label: 'DIAMOND', value: 'DIAMOND' }
 ];
 
 const genderOptions = [
@@ -205,13 +205,13 @@ const maskName = (name) => {
   if (!name) return "";
 
   const length = name.length;
-  const visibleChars = Math.min(4, length); // 처음 두 글자와 마지막 두 글자를 노출
+  const visibleChars = Math.min(2, length); // 처음 두 글자와 마지막 두 글자를 노출
   const maskedChars = Math.max(0, length - visibleChars); // 마스킹할 문자 수
 
-  const visiblePart = name.slice(0, 2); // 처음 두 글자
+  const visiblePart = name.slice(0, 1); // 처음 두 글자
   const maskedPart = "*".repeat(maskedChars); // 나머지 부분을 '*'로 마스킹
 
-  const lastName = name.slice(-2); // 마지막 두 글자
+  const lastName = name.slice(-1); // 마지막 두 글자
 
   return `${visiblePart}${maskedPart}${lastName}`;
 };

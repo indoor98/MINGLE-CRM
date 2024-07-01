@@ -1,6 +1,6 @@
 <template>
-  <q-page class="q-pa-md">
-    <h2>연도별 예약수</h2>
+  <div class="q-pa-md">
+    <!-- <h2>연도별 예약수</h2>
     <q-card class="q-mt-md">
       <q-card-section>
         <q-table
@@ -20,14 +20,12 @@
           </template>
         </q-table>
       </q-card-section>
-    </q-card>
-    <q-card class="q-mt-md">
-      <q-card-section v-if="errorMessage">
-        <p style="color: red" class="text-center">{{ errorMessage }}</p>
-      </q-card-section>
+    </q-card> -->
+    <q-card v-if="errorMessage">
+      <p style="color: red" class="text-center">{{ errorMessage }}</p>
     </q-card>
     <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
-  </q-page>
+  </div>
 </template>
 
 <script setup>
@@ -82,6 +80,23 @@ const chartOptions = ref({
       font: {
         weight: "bold",
       },
+    },
+    title: {
+      display: true,
+      text: "연도별 예약 수",
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: true,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        drawBorder: true,
+      },
+    },
+    y: {
+      beginAtZero: true,
+      suggestedMax: 90, // 최대값을 데이터 값보다 약간 더 높게 설정
     },
   },
 });

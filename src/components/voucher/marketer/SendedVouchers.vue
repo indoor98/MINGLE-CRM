@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-h6">승인된 바우처 목록</h2>
+    <h2 class="text-h6">발송된 바우처 목록</h2>
 
     <q-card class="my-card">
       <q-card-section class="row justify-center q-pa-xs">
@@ -142,11 +142,11 @@ const searchConfirmerName = ref("");
 const selectedGrades = ref([]);
 
 const gradeOptions = [
-  { label: "선택 안 함", value: "" },
-  { label: "NEW", value: "NEW" },
-  { label: "BASIC", value: "BASIC" },
-  { label: "VIP", value: "VIP" },
-  { label: "VVIP", value: "VVIP" },
+  // { label: "선택 안 함", value: "" },
+  { label: "BROWN", value: "BROWN" },
+  { label: "SILVER", value: "SILVER" },
+  { label: "GOLD", value: "GOLD" },
+  { label: "DIAMOND", value: "DIAMOND" },
 ];
 
 const columns = [
@@ -162,6 +162,13 @@ const columns = [
     label: "고객 이름",
     align: "center",
     field: "customerName",
+    sortable: true,
+  },
+  {
+    name: "customerGrade",
+    label: "고객 등급",
+    align: "center",
+    field: "customerGrade",
     sortable: true,
   },
   {
@@ -212,14 +219,39 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/sended-marketer`
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data
+      .sort((a, b) => b.voucherId - a.voucherId)
+      .map((voucher) => ({
+        ...voucher,
+        status: getStatusLabel(voucher.status),
+        // 다른 필요한 필드에 대한 변환도 가능
+      }));
     errorMessage.value = "";
   } catch (error) {
-    console.error("승인된 바우처 목록을 불러오는 중 에러 발생:", error);
+    console.error("발송된 바우처 목록을 불러오는 중 에러 발생:", error);
     errorMessage.value =
-      "승인된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
+      "발송된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
+  }
+};
+
+const getStatusLabel = (status) => {
+  switch (status) {
+    case "REQUESTED":
+      return "요청됨";
+    case "APPROVED":
+      return "승인됨";
+    case "REJECTED":
+      return "거절됨";
+    case "SENDED":
+      return "발송됨";
+    case "CANCELED":
+      return "취소됨";
+    case "CONVERTED":
+      return "전환됨";
+    default:
+      return status;
   }
 };
 
@@ -250,7 +282,13 @@ const searchVouchers = async () => {
       "http://localhost:8080/api/v1/vouchers/search",
       data
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data
+      .sort((a, b) => b.voucherId - a.voucherId)
+      .map((voucher) => ({
+        ...voucher,
+        status: getStatusLabel(voucher.status),
+        // 다른 필요한 필드에 대한 변환도 가능
+      }));
   } catch (error) {
     console.error("Error fetching vouchers:", error);
   }

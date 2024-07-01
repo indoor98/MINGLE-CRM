@@ -1,3 +1,6 @@
+import EmployeeRequestList from "pages/admin/EmployeeRequestList.vue";
+import AllEmployeeRequestList from "pages/admin/AllEmployeeRequestList.vue";
+
 const routes = [
   {
     path: "/",
@@ -7,10 +10,6 @@ const routes = [
       {
         path: "review",
         component: () => import("pages/review/ReviewPage.vue"),
-      },
-      {
-        path: "voucher-manager",
-        component: () => import("pages/voucher/ManagerVoucherPage.vue"),
       },
       {
         path: "voucher-marketer/draft",
@@ -115,6 +114,24 @@ const routes = [
         component: () => import("pages/statistics/StatisticsPage.vue"),
       },
       {
+        path: "/statistics-test",
+        name: "statisticsTestPage",
+        component: () =>
+          import("pages/statistics/statistics-test/StatisticsTestPage.vue"),
+      },
+      {
+        path: "/statistics-hotel",
+        name: "statisticsHotelPage",
+        component: () =>
+          import("pages/statistics/statistics-test/StatisticsHotelPage.vue"),
+      },
+      {
+        path: "/statistics-dining",
+        name: "statisticsDiningPage",
+        component: () =>
+          import("pages/statistics/statistics-test/StatisticsDiningPage.vue"),
+      },
+      {
         path: "/view-log",
         name: "viewLogPage",
         component: () => import("pages/log/view/ViewLogPage.vue"),
@@ -124,6 +141,20 @@ const routes = [
         name: "myPage",
         component: () => import("pages/mypage/MyPage.vue"),
         meta: { requiresAuth: true },
+      },
+      {
+        path: "/admin-request",
+        name: "EmployeeRequestList",
+        component: EmployeeRequestList,
+      },
+      {
+        path: '/admin-request-all',
+        name: 'AllEmployeeRequestList',
+        component: AllEmployeeRequestList
+      },
+      {
+        path: 'signup-success',
+        component: () => import("pages/auth/SignUpSuccess.vue"),
       },
     ],
   },

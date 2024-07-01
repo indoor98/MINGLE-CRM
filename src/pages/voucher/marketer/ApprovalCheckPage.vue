@@ -2,9 +2,9 @@
   <q-page>
     <div class="q-pa-md">
       <q-tabs v-model="selectedTab">
-        <q-tab name="approved" label="승인 완료" />
-        <q-tab name="rejected" label="승인 거절" />
-        <q-tab name="not-confirmed" label="검토전 바우처" />
+        <q-tab name="approved" label="승인됨" />
+        <q-tab name="rejected" label="거절됨" />
+        <q-tab name="not-confirmed" label="검토 전" />
       </q-tabs>
       <q-separator />
       <div v-if="selectedTab === 'approved' && !showVoucherEmailSend">
@@ -12,6 +12,7 @@
       </div>
       <div v-if="selectedTab === 'approved' && showVoucherEmailSend">
         <VoucherEmailSend
+          :voucherId="selectedVoucherId"
           :customerEmail="selectedCustomerEmail"
           :voucherCode="selectedVoucherCode"
           @go-back="hideEmailSendPage"

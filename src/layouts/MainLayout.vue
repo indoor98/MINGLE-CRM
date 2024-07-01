@@ -24,13 +24,23 @@
         <q-space />
         <div v-if="atk" class="row items-center">
           <div v-if="userName" class="q-mr-md">
-            {{ userName }}님 환영합니다! :)
+            {{ userName }} {{ formattedUserRole }} 님 환영합니다! :)
           </div>
+          <q-btn
+            round
+            icon="notifications"
+            @click="toggleNotifications"
+            class="q-mr-md"
+          >
+            <q-badge floating color="red" rounded>{{
+              pendingRequestsCount
+            }}</q-badge>
+          </q-btn>
           <q-btn
             outline
             rounded
             color="accent"
-            icon="account_circle"
+            icon="logout"
             label="로그아웃 "
             to="/"
             @click="logout"
@@ -39,7 +49,7 @@
             outline
             rounded
             color="accent"
-            icon="account_circle"
+            icon="manage_accounts"
             label="마이페이지"
             to="/mypage"
           />
@@ -57,7 +67,7 @@
             outline
             rounded
             color="accent"
-            icon="account_circle"
+            icon="login"
             label="로그인"
             href="#/signin"
           />
@@ -96,37 +106,37 @@ const userStore = useUserStore();
 const linksList = [
   {
     title: "고객",
-    caption: "고객 탭",
-    icon: "school",
+    caption: "고객 정보 조회",
+    icon: "people",
     to: "/customers",
   },
   {
     title: "리뷰",
-    caption: "리뷰 탭",
-    icon: "school",
+    caption: "호텔 / 다이닝 리뷰 조회",
+    icon: "rate_review",
     to: "/review",
   },
   {
     title: "바우처",
-    caption: "매니저 바우처 탭",
-    icon: "school",
+    caption: "바우처 관리 - 매니저",
+    icon: "redeem",
     children: [
       {
-        title: "승인 요청된 바우처",
-        caption: "승인 요청된 바우처 목록",
-        icon: "assignment_late",
+        title: "승인 / 거절",
+        // caption: "승인 요청된 바우처 목록",
+        icon: "rule",
         to: "/voucher-manager/requested",
       },
       {
-        title: "검토 완료된 바우처",
-        caption: "검토 완료된 바우처 목록",
+        title: "검토 완료된 바우처 조회",
+        // caption: "검토 완료된 바우처 목록",
         icon: "assignment_turned_in",
         to: "/voucher-manager/confirmed",
       },
       {
-        title: "모든 바우처",
-        caption: "모든 바우처 목록",
-        icon: "send",
+        title: "전체 바우처 조회",
+        // caption: "바우처 목록",
+        icon: "web_stories",
         to: "/voucher-manager/all",
       },
     ],
@@ -134,25 +144,25 @@ const linksList = [
   },
   {
     title: "바우처",
-    caption: "마케터 바우처 탭",
-    icon: "school",
+    caption: "바우처 관리 - 마케터",
+    icon: "redeem",
     children: [
       {
         title: "초안 작성",
-        caption: "승인 요청전 바우처 목록",
-        icon: "assignment_late",
+        // caption: "승인 요청전 바우처 목록",
+        icon: "create",
         to: "/voucher-marketer/draft",
       },
       {
-        title: "승인 상태 확인",
-        caption: "승인 요청한 바우처 목록",
-        icon: "assignment_turned_in",
+        title: "승인 확인 및 발송",
+        // caption: "승인 요청한 바우처 목록",
+        icon: "send",
         to: "/voucher-marketer/approval-check",
       },
       {
-        title: "발송 관리",
-        caption: "바우처 이메일 발송 상태 목록",
-        icon: "send",
+        title: "발송 및 전환 확인",
+        // caption: "전환 여부 확인",
+        icon: "mark_chat_read",
         to: "/voucher-marketer/email",
       },
     ],
@@ -160,45 +170,72 @@ const linksList = [
   },
   {
     title: "리워드",
-    caption: "리워드 탭",
-    icon: "school",
+    caption: "고객별 리워드 조회",
+    icon: "paid",
     to: "/reward",
   },
   {
     title: "상담",
     caption: "상담 탭",
-    icon: "school",
+    icon: "support_agent",
     to: "/inquiry",
     roles: ["ROLE_CONSULTANT"],
   },
   {
     title: "이메일",
-    caption: "이메일 탭",
+    caption: "이메일 관리",
     icon: "email",
     to: "/email",
   },
+  // {
+  //   title: "통계",
+  //   caption: "통계 보기",
+  //   icon: "leaderboard",
+  //   to: "/statistics",
+  // },
   {
     title: "통계",
-    caption: "통계 탭",
-    icon: "map",
-    to: "/statistics",
+    caption: "통계 보기",
+    icon: "leaderboard",
+    children: [
+      {
+        title: "통합 통계",
+        icon: "dashboard",
+        to: "/statistics-test",
+      },
+      {
+        title: "호텔 통계",
+        icon: "hotel",
+        to: "/statistics-hotel",
+      },
+      {
+        title: "다이닝 통계",
+        icon: "dining",
+        to: "/statistics-dining",
+      },
+    ],
   },
   {
     title: "로그",
-    caption: "로그 탭",
-    icon: "map",
+    caption: "고객 상세 조회 로그 보기",
+    icon: "visibility",
+    to: "/view-log",
+    roles: ["ROLE_MANAGER"],
+  },
+  {
+    title: "직원 회원가입 관리",
+    caption: "회원가입 요청 조회",
+    icon: "supervisor_account", // 아이콘 변경
     children: [
       {
-        title: "뷰 로그",
-        caption: "뷰 로그 탭",
-        icon: "visibility",
-        to: "/view-log",
+        title: "승인 대기 중 직원",
+        icon: "hourglass_empty", // 승인 대기 아이콘
+        to: "/admin-request",
       },
       {
-        title: "이메일 로그",
-        caption: "이메일 로그 탭",
-        icon: "email",
-        to: "/email-log",
+        title: "모든 직원 요청",
+        icon: "list_alt", // 전체 목록 아이콘
+        to: "/admin-request-all",
       },
     ],
     roles: ["ROLE_MANAGER"],
@@ -246,19 +283,44 @@ const renewToken = async () => {
   }
 };
 
+const fetchPendingRequestsCount = async () => {
+  try {
+    const response = await customAxios.get(
+      "/api/v1/admin/registers/pendingCount"
+    );
+    if (response.status === 200) {
+      pendingRequestsCount.value = response.data.count;
+    }
+  } catch (error) {
+    console.error("Error fetching pending requests count:", error);
+  }
+};
+
 const leftDrawerOpen = ref(false);
 const logMenu = ref(false);
+const pendingRequestsCount = ref(0);
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
-function openLogMenu() {
-  logMenu.value = true;
+function toggleNotifications() {
+  logMenu.value = !logMenu.value;
 }
 
 const userName = computed(() => userStore.name);
 const userRole = computed(() => userStore.role);
+
+const roleMapping = {
+  ROLE_MANAGER: "관리자",
+  ROLE_MARKETER: "마케터",
+  ROLE_CONSULTANT: "상담사",
+  ROLE_STAFF: "직원",
+};
+
+const formattedUserRole = computed(() => {
+  return roleMapping[userRole.value] || "";
+});
 
 const filteredLinks = computed(() => {
   if (!atk.value) {
@@ -283,6 +345,7 @@ const filteredLinks = computed(() => {
 onMounted(async () => {
   await renewToken();
   userStore.loadUserInfo();
+  await fetchPendingRequestsCount(); // Fetch pending requests count on mount
   console.log("Mounted. Current name state:", userStore.name);
 });
 </script>

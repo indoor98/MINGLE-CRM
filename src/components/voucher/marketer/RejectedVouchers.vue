@@ -146,11 +146,11 @@ const searchConfirmerName = ref("");
 const selectedGrades = ref([]);
 
 const gradeOptions = [
-  { label: "선택 안 함", value: "" },
-  { label: "NEW", value: "NEW" },
-  { label: "BASIC", value: "BASIC" },
-  { label: "VIP", value: "VIP" },
-  { label: "VVIP", value: "VVIP" },
+  // { label: "선택 안 함", value: "" },
+  { label: "BROWN", value: "BROWN" },
+  { label: "SILVER", value: "SILVER" },
+  { label: "GOLD", value: "GOLD" },
+  { label: "DIAMOND", value: "DIAMOND" },
 ];
 
 const columns = [
@@ -166,6 +166,13 @@ const columns = [
     label: "고객 이름",
     align: "center",
     field: "customerName",
+    sortable: true,
+  },
+  {
+    name: "customerGrade",
+    label: "고객 등급",
+    align: "center",
+    field: "customerGrade",
     sortable: true,
   },
   {
@@ -229,7 +236,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/rejected-marketer`
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
     errorMessage.value = "";
   } catch (error) {
     console.error("거절된 바우처 목록을 불러오는 중 에러 발생:", error);
@@ -267,7 +276,9 @@ const searchVouchers = async () => {
       "http://localhost:8080/api/v1/vouchers/search",
       data
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
   } catch (error) {
     console.error("Error fetching vouchers:", error);
   }

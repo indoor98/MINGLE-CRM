@@ -38,12 +38,6 @@
                 label="회원가입"
                 to="/signup"
               />
-              <q-btn
-                class="full-width q-mt-xs"
-                flat
-                label="대시보드로 이동"
-                to="/"
-              />
             </q-form>
           </q-card-section>
         </q-card>

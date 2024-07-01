@@ -48,7 +48,7 @@ const toEmails = ref(props.customerEmail);
 const title = ref("");
 const selectedTab = ref("개인");
 const group = ref("전체");
-const GroupOptions = ref(["전체", "VIP", "신규 회원", "MINGLE 팀원"]);
+const GroupOptions = ref(["전체", "GOLD", "신규 회원", "MINGLE 팀원"]);
 
 const sendPersonalEmail = async () => {
   try {

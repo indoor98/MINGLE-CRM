@@ -160,7 +160,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import VoucherHistoryDetail from "../../../components/voucher/VoucherHistoryDetail.vue";
 
@@ -179,19 +179,20 @@ const selectedGrades = ref([]);
 const selectedStatus = ref([]);
 
 const gradeOptions = [
-  { label: "선택 안 함", value: "" },
-  { label: "NEW", value: "NEW" },
-  { label: "BASIC", value: "BASIC" },
-  { label: "VIP", value: "VIP" },
-  { label: "VVIP", value: "VVIP" },
+  // { label: "선택 안 함", value: "" },,
+  { label: "BROWN", value: "BROWN" },
+  { label: "SILVER", value: "SILVER" },
+  { label: "GOLD", value: "GOLD" },
+  { label: "DIAMOND", value: "DIAMOND" },
 ];
 
 const statusOptions = [
-  { label: "선택 안 함", value: "" },
+  // { label: "선택 안 함", value: "" },,
   { label: "요청됨", value: "REQUESTED" },
   { label: "승인됨", value: "APPROVED" },
   { label: "거절됨", value: "REJECTED" },
   { label: "발송됨", value: "SENDED" },
+  { label: "취소됨", value: "CANCELED" },
   { label: "전환됨", value: "CONVERTED" },
 ];
 
@@ -266,14 +267,34 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/histories`
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
     errorMessage.value = "";
   } catch (error) {
-    console.error("승인된 바우처 목록을 불러오는 중 에러 발생:", error);
-    errorMessage.value =
-      "승인된 바우처 목록을 불러오는 중 에러가 발생했습니다.";
+    console.error("모든된 바우처 목록을 불러오는 중 에러 발생:", error);
+    errorMessage.value = "모든 바우처 목록을 불러오는 중 에러가 발생했습니다.";
   } finally {
     loading.value = false;
+  }
+};
+
+const getStatusLabel = (status) => {
+  switch (status) {
+    case "REQUESTED":
+      return "요청됨";
+    case "APPROVED":
+      return "승인됨";
+    case "REJECTED":
+      return "거절됨";
+    case "SENDED":
+      return "발송됨";
+    case "CANCELED":
+      return "취소됨";
+    case "CONVERTED":
+      return "전환됨";
+    default:
+      return status;
   }
 };
 
@@ -304,13 +325,14 @@ const searchVouchers = async () => {
       "http://localhost:8080/api/v1/vouchers/search",
       data
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
   } catch (error) {
     console.error("Error fetching vouchers:", error);
+    errorMessage.value = "바우처 검색 중 에러가 발생했습니다.";
   }
 };
 
-onMounted(() => {
-  fetchVouchers();
-});
+onMounted(fetchVouchers);
 </script>
