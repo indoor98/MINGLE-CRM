@@ -176,7 +176,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       "http://localhost:8080/api/v1/vouchers/requested"
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
     console.log(vouchers.value);
     errorMessage.value = "";
   } catch (error) {

@@ -219,11 +219,13 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/v1/vouchers/sended-marketer`
     );
-    vouchers.value = response.data.data.map((voucher) => ({
-      ...voucher,
-      status: getStatusLabel(voucher.status),
-      // 다른 필요한 필드에 대한 변환도 가능
-    }));
+    vouchers.value = response.data.data
+      .sort((a, b) => b.voucherId - a.voucherId)
+      .map((voucher) => ({
+        ...voucher,
+        status: getStatusLabel(voucher.status),
+        // 다른 필요한 필드에 대한 변환도 가능
+      }));
     errorMessage.value = "";
   } catch (error) {
     console.error("발송된 바우처 목록을 불러오는 중 에러 발생:", error);
@@ -280,7 +282,13 @@ const searchVouchers = async () => {
       "http://localhost:8080/api/v1/vouchers/search",
       data
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data
+      .sort((a, b) => b.voucherId - a.voucherId)
+      .map((voucher) => ({
+        ...voucher,
+        status: getStatusLabel(voucher.status),
+        // 다른 필요한 필드에 대한 변환도 가능
+      }));
   } catch (error) {
     console.error("Error fetching vouchers:", error);
   }
