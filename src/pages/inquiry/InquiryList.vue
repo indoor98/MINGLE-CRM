@@ -73,7 +73,7 @@
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
-                          label="Close"
+                          label="선택"
                           color="primary"
                           flat
                         />
@@ -106,7 +106,7 @@
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
-                          label="Close"
+                          label="선택"
                           color="primary"
                           flat
                         />
@@ -161,13 +161,14 @@
             />
           </div>
 
-          <div class="col q-pa-sm">
+          <div class="col-auto q-pa-sm">
             <q-btn
               color="primary"
               label="검색"
               @click="fetchInquiriesSearch"
               dense
               class="full-width"
+              style="min-width: 50px; max-width: 100px"
             />
           </div>
         </q-card-section>
@@ -407,13 +408,10 @@ const fetchInquiriesSearch = async () => {
     }
     if (searchParams.value.type) params.append("type", searchParams.value.type);
     if (searchParams.value.isReply !== null) {
-      params.append(
-        "isReply",
-        JSON.stringify(searchParams.value.isReply.value)
-      );
+      params.append("isReply", JSON.stringify(searchParams.value.isReply));
     }
     if (searchParams.value.actionStatus)
-      params.append("actionStatus", searchParams.value.actionStatus.value);
+      params.append("actionStatus", searchParams.value.actionStatus);
 
     // 로그: 요청 전에 로그 찍기
     console.log("요청 보낼 파라미터:", params.toString());
