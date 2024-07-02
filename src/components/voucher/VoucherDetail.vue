@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <th>바우처 금액</th>
-            <td>{{ voucher.amount }}</td>
+            <td>{{ formatPrice(voucher.amount) }}</td>
           </tr>
           <tr>
             <th>바우처 사용 유효 기간</th>
@@ -59,6 +59,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from "vue";
+import { formatPrice } from "src/utils/utils.js";
 
 const props = defineProps(["voucher"]);
 const emit = defineEmits(["close"]);

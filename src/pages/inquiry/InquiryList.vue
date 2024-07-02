@@ -410,7 +410,8 @@ const fetchInquiriesSearch = async () => {
       params.append("isReply", JSON.stringify(searchParams.value.isReply));
     }
     if (searchParams.value.actionStatus)
-      params.append("actionStatus", searchParams.value.actionStatus);
+      params.append("actionStatus", searchParams.value.actionStatus.value);
+    console.log(searchParams.value.actionStatus.value);
 
     // 로그: 요청 전에 로그 찍기
     console.log("요청 보낼 파라미터:", params.toString());

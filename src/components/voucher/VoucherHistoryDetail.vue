@@ -61,7 +61,7 @@
           </tr>
           <tr>
             <th>바우처 금액</th>
-            <td>{{ voucher.amount }}</td>
+            <td>{{ formatPrice(voucher.amount) }}</td>
           </tr>
           <tr v-if="voucher.rejectedReason">
             <th>거절 사유</th>
@@ -95,6 +95,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from "vue";
+import { formatPrice } from "src/utils/utils.js";
 
 const props = defineProps(["voucher"]);
 const emit = defineEmits(["close"]);

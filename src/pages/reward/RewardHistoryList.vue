@@ -14,7 +14,7 @@
             <q-tr :props="props" @click="rowClicked(props.row)">
               <q-td v-for="col in columns" :key="col.name" :props="props">
                 <template v-if="col.name === 'date'">
-                  {{ toDate(props.row[col.field]) }}
+                  {{ dateTimeToDate(props.row[col.field]) }}
                 </template>
                 <template v-else>
                   {{ props.row[col.field] }}
@@ -43,6 +43,7 @@
 <script setup>
 import { ref, onMounted, defineEmits } from "vue";
 import { api as axios } from "src/boot/axios";
+import { dateTimeToDate } from "src/utils/utils.js";
 
 const rewards = ref([]);
 const errorMessage = ref("");
@@ -102,16 +103,6 @@ const columns = ref([
     field: "paymentId",
   },
 ]);
-
-const toDate = (beforeDate) => {
-  return (
-    beforeDate.substring(0, 4) +
-    "-" +
-    beforeDate.substring(5, 7) +
-    "-" +
-    beforeDate.substring(8, 10)
-  );
-};
 
 const fetchRewards = async () => {
   try {

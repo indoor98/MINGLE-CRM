@@ -9,46 +9,82 @@
     <q-card-section>
       <table class="voucher-table">
         <tbody>
-        <tr>
-          <th>Voucher ID</th>
-          <td>{{ voucherDetails.voucherId }}</td>
-        </tr>
-        <tr>
-          <th>Status</th>
-          <td>{{ voucherDetails.status }}</td>
-        </tr>
-        <tr>
-          <th>요청 일자</th>
-          <td>{{ voucherDetails.requestDate }}</td>
-        </tr>
-        <tr>
-          <th>매니저 승인/거절 일자</th>
-          <td>{{ voucherDetails.confirmDate }}</td>
-        </tr>
-        <tr>
-          <th>전송/취소 일자</th>
-          <td>{{ voucherDetails.sendOrCancelDate }}</td>
-        </tr>
-        <tr>
-          <th>리워드 전환 일자</th>
-          <td>{{ voucherDetails.convertsionDate }}</td>
-        </tr>
-        <tr>
-          <th>생성 마케터 ID</th>
-          <td>{{ voucherDetails.creatorId }}</td>
-        </tr>
-        <tr>
-          <th>승인 매니저 ID</th>
-          <td>{{ voucherDetails.confirmerId }}</td>
-        </tr>
-        <tr>
-          <th>Customer ID</th>
-          <td>{{ voucherDetails.customerId }}</td>
-        </tr>
-        <tr>
-          <th>Amount</th>
-          <td>{{ voucherDetails.amount }}</td>
-        </tr>
+          <tr>
+            <th>바우처 ID</th>
+            <td>{{ voucher.voucherId }}</td>
+          </tr>
+          <tr>
+            <th>상태</th>
+            <td>{{ voucher.status }}</td>
+          </tr>
+          <!-- <tr>
+            <th>고객 ID</th>
+            <td>{{ voucher.customerId }}</td>
+          </tr> -->
+          <!-- <tr>
+            <th>고객 이름</th>
+            <td>{{ voucher.customerName }}</td>
+          </tr> -->
+          <!-- <tr>
+            <th>고객 등급</th>
+            <td>{{ voucher.customerGrade }}</td>
+          </tr> -->
+          <!-- <tr>
+            <th>고객 이메일</th>
+            <td>{{ voucher.customerEmail }}</td>
+          </tr> -->
+          <tr>
+            <th>요청 일시</th>
+            <td>{{ voucher.requestDate }}</td>
+          </tr>
+          <tr>
+            <th>요청 이유</th>
+            <td>{{ voucher.createdReason }}</td>
+          </tr>
+          <tr v-if="voucher.creatorId">
+            <th>요청 직원 ID</th>
+            <td>{{ voucher.creatorId }}</td>
+          </tr>
+          <tr v-if="voucher.creatorId">
+            <th>요청 직원 이름</th>
+            <td>{{ voucher.creatorName }}</td>
+          </tr>
+          <tr v-if="voucher.confirmDate">
+            <th>승인/거절 일시</th>
+            <td>{{ voucher.confirmDate }}</td>
+          </tr>
+          <tr v-if="voucher.confirmerId">
+            <th>확정 매니저 ID</th>
+            <td>{{ voucher.confirmerId }}</td>
+          </tr>
+          <tr v-if="voucher.confirmerId">
+            <th>확정 매니저 이름</th>
+            <td>{{ voucher.confirmerName }}</td>
+          </tr>
+          <tr>
+            <th>바우처 금액</th>
+            <td>{{ formatPrice(voucher.amount) }}</td>
+          </tr>
+          <tr v-if="voucher.rejectedReason">
+            <th>거절 사유</th>
+            <td>{{ voucher.rejectedReason }}</td>
+          </tr>
+          <tr v-if="voucher.sendOrCancelDate">
+            <th>이메일 전송/발급 취소 일시</th>
+            <td>{{ voucher.sendOrCancelDate }}</td>
+          </tr>
+          <tr v-if="voucher.voucherCode">
+            <th>바우처 코드</th>
+            <td>{{ voucher.voucherCode }}</td>
+          </tr>
+          <tr v-if="voucher.conversionDate">
+            <th>리워드 전환 일시</th>
+            <td>{{ voucher.conversionDate }}</td>
+          </tr>
+          <tr v-if="voucher.startDate && voucher.endDate">
+            <th>바우처 유효 기간</th>
+            <td>{{ voucher.startDate }} ~ {{ voucher.endDate }}</td>
+          </tr>
         </tbody>
       </table>
     </q-card-section>
@@ -60,11 +96,12 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { api as axios } from 'src/boot/axios';
-import { defineProps } from 'vue';
+import { ref, watch } from "vue";
+import { api as axios } from "src/boot/axios";
+import { defineProps } from "vue";
+import { formatPrice } from "src/utils/utils.js";
 
-const props = defineProps(['voucher']);
+const props = defineProps(["voucher"]);
 const voucherDetails = ref({});
 
 const fetchVoucherDetail = async (customerId, voucherId) => {
@@ -74,7 +111,7 @@ const fetchVoucherDetail = async (customerId, voucherId) => {
     );
     voucherDetails.value = response.data.data;
   } catch (error) {
-    console.error('Error fetching voucher detail:', error);
+    console.error("Error fetching voucher detail:", error);
   }
 };
 

@@ -125,7 +125,7 @@
                       col.field === 'requestDate' || col.field === 'confirmDate'
                     "
                   >
-                    {{ toDate(props.row[col.field]) }}
+                    {{ dateTimeToDate(props.row[col.field]) }}
                   </span>
                   <span v-else>
                     {{ props.row[col.field] }}
@@ -163,6 +163,7 @@
 import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import VoucherHistoryDetail from "../../../components/voucher/VoucherHistoryDetail.vue";
+import { dateTimeToDate } from "src/utils/utils.js";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
@@ -247,14 +248,6 @@ const columns = [
     sortable: true,
   },
 ];
-
-const toDate = (beforeDate) => {
-  const date = new Date(beforeDate);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
 
 const toTenWords = (beforeWord) => {
   const afterWord =
