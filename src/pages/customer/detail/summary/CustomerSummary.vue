@@ -31,7 +31,7 @@
               <td>{{ customer.address }}</td>
             </tr>
             <tr>
-              <th>직원 이름</th>
+              <th>담당 직원 이름</th>
               <td>{{ customer.employeeName }}</td>
             </tr>
             <tr>

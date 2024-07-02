@@ -240,7 +240,7 @@ const columns = [
   },
   {
     name: "employeeName",
-    label: "직원 이름",
+    label: "담당 직원 이름",
     align: "center",
     field: "employeeName",
     sortable: true,
