@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <h2 class="text-h6">전체 문의 목록</h2>
+      <h2 class="text-h4">전체 문의 목록</h2>
       <q-card class="my-card">
         <q-card-section class="row justify-center q-pa-xs">
           <div class="col q-pa-sm">
@@ -388,11 +388,15 @@ const fetchInquiriesSearch = async () => {
     const params = new URLSearchParams();
     params.append("page", pagination.value.page - 1);
     params.append("size", pagination.value.rowsPerPage);
-    params.append("customerName", searchParams.value.customerName);
-    params.append("customerPhone", searchParams.value.customerPhone);
-    params.append("inquiryTitle", searchParams.value.inquiryTitle);
-    params.append("inquiryContent", searchParams.value.inquiryContent);
-    params.append("keyword", searchParams.value.keyword);
+
+    if (searchParams.value.customerName)
+      params.append("customerName", searchParams.value.customerName);
+    if (searchParams.value.customerPhone)
+      params.append("customerPhone", searchParams.value.customerPhone);
+    if (searchParams.value.inquiryTitle)
+      params.append("inquiryTitle", searchParams.value.inquiryTitle);
+    if (searchParams.value.inquiryContent)
+      params.append("inquiryContent", searchParams.value.inquiryContent);
 
     // 대괄호를 직접 인코딩하여 추가
     if (searchParams.value.startDate) {
