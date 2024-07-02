@@ -32,6 +32,10 @@
               <div class="q-td">
                 {{ inquiryDetail.inquiryResponse.inquiryContent }}
               </div>
+              <div class="q-th">문의 날짜</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryResponse.date }}
+              </div>
               <div class="q-th">답변 상태</div>
               <div class="q-td">
                 {{ inquiryDetail.inquiryResponse.isReply ? "Yes" : "No" }}
