@@ -103,14 +103,14 @@ const chartData = ref({
   labels: ["20대", "30대", "40대", "50대", "60대 이상"],
   datasets: [
     {
-      label: "여성 예약수",
+      label: "여성 판매수",
       backgroundColor: "rgba(255, 99, 132, 0.2)",
       borderColor: "rgba(255, 99, 132, 1)",
       borderWidth: 1,
       data: [], // Data will be populated after API calls
     },
     {
-      label: "남성 예약수",
+      label: "남성 판매수",
       backgroundColor: "rgba(54, 162, 235, 0.2)",
       borderColor: "rgba(54, 162, 235, 1)",
       borderWidth: 1,
@@ -127,7 +127,7 @@ const chartOptions = ref({
     },
     title: {
       display: true,
-      text: "연령 및 성별별 예약수",
+      text: "연령 및 성별별 판매수 (회)",
     },
     datalabels: {
       anchor: "end",

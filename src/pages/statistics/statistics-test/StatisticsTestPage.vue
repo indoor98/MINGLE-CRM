@@ -26,7 +26,7 @@
                   전일 방문고객수
                 </div>
                 <div class="row text-grey-7 full-width justify-center">
-                  +70% Income
+                  +37% 상승
                 </div>
                 <div
                   class="row text-weight-bold text-h4 full-width justify-center"
@@ -53,7 +53,7 @@
                   재방문률
                 </div>
                 <div class="row text-grey-7 full-width justify-center">
-                  +22% Sales
+                  +22% 상승
                 </div>
                 <div
                   class="row text-weight-bold text-h4 full-width justify-center"
@@ -80,7 +80,7 @@
                   전일 신규고객수
                 </div>
                 <div class="row text-grey-7 full-width justify-center">
-                  +79% New User
+                  +20% 상승
                 </div>
                 <div
                   class="row text-weight-bold text-h4 full-width justify-center"
@@ -94,10 +94,13 @@
                 class="q-pa-md full-width right-card-item text-white card-item"
               >
                 <div class="row full-width">
-                  <div class="row full-width text-h4 text-weight-bold">
+                  <!-- <div class="row full-width text-h4 text-weight-bold">
                     {{ yesterdayIncome * 0.5 }}₩
+                  </div> -->
+                  <div class="row full-width text-h4 text-weight-bold">
+                    10,591,560₩
                   </div>
-                  <div class="text-subtitle1">순이익</div>
+                  <div class="text-subtitle1">전일 순이익</div>
                 </div>
                 <div class="row full-width q-mt-md">
                   <div class="row full-width items-center">
@@ -111,8 +114,12 @@
                       <span class="q-ml-md text-weight-bold">수입</span>
                     </div>
                     <div class="col-6">
-                      <span class="text-weight-bold float-right text-h6"
+                      <!-- <span class="text-weight-bold float-right text-h6"
                         >+ {{ yesterdayIncome }}₩</span
+                      > -->
+                      <span
+                        class="text-weight-bold float-right text-h6 right-text"
+                        >+ 23,780,000₩</span
                       >
                     </div>
                   </div>
@@ -129,8 +136,11 @@
                       <span class="q-ml-md text-weight-bold">지출</span>
                     </div>
                     <div class="col-6">
-                      <span class="text-weight-bold float-right text-h6"
+                      <!-- <span class="text-weight-bold float-right text-h6"
                         >- {{ yesterdayIncome * 0.4 }}₩</span
+                      > -->
+                      <span class="text-weight-bold float-right right-text"
+                        >- 12,403,700₩</span
                       >
                     </div>
                   </div>
@@ -147,8 +157,11 @@
                       <span class="q-ml-md text-weight-bold">세금</span>
                     </div>
                     <div class="col-6">
-                      <span class="text-weight-bold float-right text-h6"
+                      <!-- <span class="text-weight-bold float-right text-h6"
                         >- {{ yesterdayIncome * 0.1 }}₩</span
+                      > -->
+                      <span class="text-weight-bold float-right right-text"
+                        >- 784,740₩</span
                       >
                     </div>
                   </div>
@@ -340,5 +353,9 @@ onMounted(() => {
   background-color: rgb(17, 48, 85);
   border-radius: 50%;
   box-shadow: 0 0 60px 0 rgba(16, 61, 119, 0.37);
+}
+
+.right-text {
+  font-size: 1rem;
 }
 </style>

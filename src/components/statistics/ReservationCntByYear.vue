@@ -63,7 +63,7 @@ const chartData = ref({
   labels: [],
   datasets: [
     {
-      label: "By Year Reservation Rate",
+      label: "예약수 (회)",
       backgroundColor: [], // 다채로운 색상 배열로 설정
       borderColor: [], // 경계 색상 배열로 설정
       data: [], // 초기값 설정
@@ -145,8 +145,8 @@ const fetchReservationCnts = async () => {
       "rgba(75, 192, 192, 1)",
       "rgba(153, 102, 255, 1)",
       "rgba(255, 159, 64, 1)",
-      "rgba(199, 199, 199, 1)",
       "rgba(83, 102, 255, 1)",
+      "rgba(199, 199, 199, 1)",
     ];
     const borderColors = [
       "rgba(75, 192, 192, 1)",
@@ -155,8 +155,8 @@ const fetchReservationCnts = async () => {
       "rgba(75, 192, 192, 1)",
       "rgba(153, 102, 255, 1)",
       "rgba(255, 159, 64, 1)",
-      "rgba(199, 199, 199, 1)",
       "rgba(83, 102, 255, 1)",
+      "rgba(199, 199, 199, 1)",
     ];
 
     chartData.value.datasets[0].backgroundColor = colors.slice(
