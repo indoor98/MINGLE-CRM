@@ -16,7 +16,7 @@
               <q-tr :props="props" @click="showVoucherDetail(props.row)">
                 <q-td v-for="col in columns" :key="col.name" :props="props">
                   <template v-if="col.field === 'requestDate'">
-                    {{ toDate(props.row[col.field]) }}
+                    {{ dateTimeToDate(props.row[col.field]) }}
                   </template>
                   <template v-else-if="col.name === 'approve'">
                     <q-btn
@@ -81,6 +81,7 @@ import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Notify, Dialog } from "quasar";
 import VoucherHistoryDetail from "../../../components/voucher/VoucherHistoryDetail.vue";
+import { dateTimeToDate } from "src/utils/utils.js";
 
 const vouchers = ref([]);
 const errorMessage = ref("");
@@ -161,16 +162,6 @@ const toTenWords = (beforeWord) => {
   return afterword;
 };
 
-const toDate = (beforeDate) => {
-  return (
-    beforeDate.substring(0, 4) +
-    "-" +
-    beforeDate.substring(5, 7) +
-    "-" +
-    beforeDate.substring(8, 10)
-  );
-};
-
 const fetchVouchers = async () => {
   try {
     const response = await axios.get(
@@ -202,6 +193,7 @@ const approveVoucher = async (voucherId) => {
         `https://httpstest.mingle-crm.com/api/v1/vouchers/approval/${voucherId}`
       );
       Notify.create({
+        color: "green",
         type: "positive",
         message: "바우처가 성공적으로 승인되었습니다.",
       });
@@ -234,6 +226,7 @@ const rejectVoucher = async (voucherId) => {
         { reason }
       );
       Notify.create({
+        color: "green",
         type: "positive",
         message: "바우처가 성공적으로 거절되었습니다.",
       });

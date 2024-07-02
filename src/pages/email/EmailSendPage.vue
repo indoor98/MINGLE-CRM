@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-gutter-sm">
     <div class="col flex" style="justify-content: space-between">
-      <q-btn @click="showCreationModal = true" label="발신자 선택하기" />
+      <q-btn @click="showCreationModal = true" label="수신자 선택하기" />
       <q-btn
         flat-lined
         @click="SendingValidate"
@@ -12,8 +12,8 @@
     <q-input
       v-model="toEmails"
       filled
-      label="발신자"
-      hint="발신자 선택하기를 사용해주세요!"
+      label="수신자"
+      hint="수신자 선택하기를 사용해주세요!"
       readonly
     />
     <q-input v-model="title" filled label="제목" />
@@ -32,7 +32,7 @@
     <q-dialog v-model="showSendModal">
       <q-card>
         <q-card-section class="text-h6 q-pa-xl">
-          <div>선택된 발신자 수 : {{ selectedCount }}</div>
+          <div>선택된 수신자 수 : {{ selectedCount }}</div>
           <div>메일을 보내시겠습니까?</div>
         </q-card-section>
 

@@ -41,6 +41,9 @@
             <template v-if="col.name === 'amount'">
               {{ formatPrice(props.row[col.field]) }}
             </template>
+            <template v-else-if="col.name === 'requestDate'">
+              {{ toDate(props.row[col.field]) }}
+            </template>
             <template v-else>
               {{ props.row[col.field] }}
             </template>
@@ -73,7 +76,7 @@ import { useRoute } from "vue-router";
 import Fuse from "fuse.js";
 import CustomerVoucherDetail from "./CustomerVoucherDetail.vue";
 import SearchInput from "src/components/SearchInput.vue"; // SearchInput 컴포넌트 임포트
-import { formatPrice } from "src/utils/utils.js"; // 유틸리티 함수 불러오기
+import { formatPrice, toDate } from "src/utils/utils.js"; // 유틸리티 함수 불러오기
 
 const route = useRoute();
 const customerId = route.params.id;
@@ -95,23 +98,26 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       `https://httpstest.mingle-crm.com/api/v1/vouchers/customer/${customerId}`
     );
-    vouchers.value = response.data.data.map((voucher, index) => ({
-      voucherId: voucher.voucherId,
-      idx: index + 1,
-      requestDate: new Date(voucher.requestDate).toLocaleDateString(),
-      isAuth: voucher.isAuth ? "Yes" : "No",
-      authDate: voucher.authDate
-        ? new Date(voucher.authDate).toLocaleDateString()
-        : "-",
-      isConvertedYn: voucher.isConvertedYn ? "Yes" : "No",
-      conversionDate: voucher.conversionDate
-        ? new Date(voucher.conversionDate).toLocaleDateString()
-        : "-",
-      issuerId: voucher.issuerId,
-      approverId: voucher.approverId,
-      customerId: voucher.customerId,
-      amount: voucher.amount,
-    }));
+    // vouchers.value = response.data.data.map((voucher, index) => ({
+    //   voucherId: voucher.voucherId,
+    //   idx: index + 1,
+    //   requestDate: new Date(voucher.requestDate).toLocaleDateString(),
+    //   isAuth: voucher.isAuth ? "Yes" : "No",
+    //   authDate: voucher.authDate
+    //     ? new Date(voucher.authDate).toLocaleDateString()
+    //     : "-",
+    //   conversionDate: voucher.conversionDate
+    //     ? new Date(voucher.conversionDate).toLocaleDateString()
+    //     : null,
+    //   creatorName: voucher.creatorName,
+    //   approverId: voucher.approverId,
+    //   customerId: voucher.customerId,
+    //   amount: voucher.amount,
+    //   status: voucher.status,
+    //   createdReason: voucher.createdReason,
+    // })
+    // );
+    vouchers.value = response.data.data;
 
     // fuse.js 설정
     fuse = new Fuse(vouchers.value, {
@@ -155,41 +161,48 @@ onMounted(() => {
 });
 
 const voucherColumns = [
-  { name: "voucherId", label: "바우처 ID", align: "left", field: "idx" },
+  {
+    name: "voucherId",
+    label: "바우처 ID",
+    align: "center",
+    field: "voucherId",
+    sortable: true,
+  },
   {
     name: "requestDate",
-    label: "요청 날짜",
-    align: "left",
+    label: "요청 일자",
+    align: "center",
     field: "requestDate",
-  },
-  { name: "isAuth", label: "인증 여부", align: "center", field: "isAuth" },
-  { name: "authDate", label: "인증 날짜", align: "center", field: "authDate" },
-  {
-    name: "isConvertedYn",
-    label: "전환 여부",
-    align: "center",
-    field: "isConvertedYn",
+    sortable: true,
   },
   {
-    name: "conversionDate",
-    label: "전환 날짜",
+    name: "creatorName",
+    label: "요청 직원 이름",
     align: "center",
-    field: "conversionDate",
-  },
-  { name: "issuerId", label: "발급자 ID", align: "center", field: "issuerId" },
-  {
-    name: "approverId",
-    label: "승인자 ID",
-    align: "center",
-    field: "approverId",
+    field: "creatorName",
+    sortable: true,
   },
   {
-    name: "customerId",
-    label: "고객 ID",
+    name: "createdReason",
+    label: "발급 사유",
     align: "center",
-    field: "customerId",
+    field: "createdReason",
+    sortable: true,
   },
-  { name: "amount", label: "금액", align: "center", field: "amount" },
+  {
+    name: "amount",
+    label: "금액",
+    align: "center",
+    field: "amount",
+    sortable: true,
+  },
+  {
+    name: "status",
+    label: "상태",
+    align: "center",
+    field: "status",
+    sortable: true,
+  },
 ];
 </script>
 

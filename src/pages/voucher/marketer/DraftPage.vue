@@ -32,7 +32,7 @@
                       col.name === 'endDate'
                     "
                   >
-                    {{ toDate(props.row[col.field]) }}
+                    {{ dateTimeToDate(props.row[col.field]) }}
                   </template>
                   <template v-else-if="col.name === 'request'">
                     <q-btn
@@ -167,6 +167,7 @@
 import { ref, onMounted } from "vue";
 import { api as axios } from "src/boot/axios";
 import { Dialog, Notify } from "quasar";
+import { dateTimeToDate } from "src/utils/utils.js";
 import VoucherDetail from "../../../components/voucher/VoucherDetail.vue";
 import VoucherCustomerListModal from "../../../components/voucher/marketer/VoucherCustomerListModal.vue";
 
@@ -190,16 +191,6 @@ const toTenWords = (beforeWord) => {
   const afterword =
     beforeWord.length <= 10 ? beforeWord : beforeWord.substring(0, 10) + "...";
   return afterword;
-};
-
-const toDate = (beforeDate) => {
-  return (
-    beforeDate.substring(0, 4) +
-    "-" +
-    beforeDate.substring(5, 7) +
-    "-" +
-    beforeDate.substring(8, 10)
-  );
 };
 
 const columns = ref([
@@ -285,16 +276,13 @@ const fetchVouchers = async () => {
 
 const createVoucher = async () => {
   try {
-    const response = await axios.post(
-      "https://httpstest.mingle-crm.com/api/v1/vouchers",
-      {
-        customerId: voucher.value.customerId,
-        amount: voucher.value.amount,
-        reason: voucher.value.reason,
-        startDate: toDate(voucher.value.startDate) + "T00:00:00",
-        endDate: toDate(voucher.value.endDate) + "T23:59:59",
-      }
-    );
+    const response = await axios.post("http://localhost:8080/api/v1/vouchers", {
+      customerId: voucher.value.customerId,
+      amount: voucher.value.amount,
+      reason: voucher.value.reason,
+      startDate: dateTimeToDate(voucher.value.startDate) + "T00:00:00",
+      endDate: dateTimeToDate(voucher.value.endDate) + "T23:59:59",
+    });
     // 새로운 바우처 목록을 다시 불러옴
     fetchVouchers();
     showCreationModal.value = false;
@@ -356,6 +344,7 @@ const deleteVoucher = async (voucherId) => {
     // 바우처 목록을 다시 불러옴
     fetchVouchers();
     Notify.create({
+      color: "green",
       type: "positive",
       message: "삭제가 성공적으로 완료되었습니다.",
     });

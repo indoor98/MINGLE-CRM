@@ -88,7 +88,7 @@ const columns = ref([
   },
   {
     name: "sendCount",
-    label: "총 발신자 수",
+    label: "총 수신자 수",
     align: "center",
     field: "sendCount",
     sortable: true,

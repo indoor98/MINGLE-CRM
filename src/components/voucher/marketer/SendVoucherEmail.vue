@@ -53,7 +53,7 @@ const GroupOptions = ref(["전체", "GOLD", "신규 회원", "MINGLE 팀원"]);
 const sendPersonalEmail = async () => {
   try {
     const response = await axios.post(
-      "https://httpstest.mingle-crm.com/api/email/personal",
+      "https://httpstest.mingle-crm.com/api/email/voucher",
       {
         toEmail: toEmails.value,
         title: title.value,

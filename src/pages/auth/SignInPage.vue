@@ -76,7 +76,7 @@ const signIn = async () => {
       response.data.data.atkExpiration
     );
 
-    router.push("/");
+    router.push("/customers");
   } catch (error) {
     console.log(error);
   }
