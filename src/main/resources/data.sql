@@ -8045,27 +8045,6 @@ VALUES (1, 5.0, 4.0, 5.0, 5.0, '맛있고 서비스도 좋았습니다. 해물�
        (83, 2.0, 3.0, 2.0, 3.0, '가격 대비 양이 적어서 아쉬웠습니다.', 83, 83, '2024-06-07 0:00:00');
 
 
-INSERT INTO event (id, title, content, employee_id, sent_date, send_count)
-VALUES (1, 'Event 1', 'Description for Event 1', NULL, '2024-05-13 00:00:00', 0),
-       (2, 'Event 2', 'Description for Event 2', NULL, '2024-05-14 00:00:00', 0);
-
-
-INSERT INTO email_log (EVENT_ID, CUSTOMER_ID, IS_OPENED, OPENED_TIME)
-VALUES (1, 1, true, '2024-05-13 2:00:00'),
-       (1, 2, true, '2024-05-13 3:00:00'),
-       (1, 3, true, '2024-05-13 4:00:00'),
-       (1, 4, false, null),
-       (1, 5, false, null),
-       (2, 6, true, '2024-05-14 2:00:00'),
-       (2, 7, true, '2024-05-14 3:00:00'),
-       (2, 8, true, '2024-05-14 4:00:00'),
-       (2, 9, true, '2024-05-14 5:00:00'),
-       (2, 10, false, null),
-       (2, 11, false, null);
-
-ALTER TABLE email_log
-    ALTER COLUMN id RESTART WITH 12;
-
 ALTER TABLE voucher
     ALTER COLUMN id RESTART WITH 31;
 ALTER TABLE voucher_history

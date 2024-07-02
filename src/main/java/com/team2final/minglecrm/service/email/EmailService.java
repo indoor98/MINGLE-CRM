@@ -62,6 +62,38 @@ public class EmailService {
         emailLogRepository.save(emailLog);
     }
 
+    @Transactional
+    public void sendVoucherEmail(PersonalEmailSendRequest request, String employeeEmail) throws Exception {
+        // 이벤트 생성
+        CreateEventRequest createEventRequest = CreateEventRequest.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .employeeEmail(employeeEmail)
+                .sendCount(1L)
+                .build();
+
+        Long eventId = eventService.createEvent(createEventRequest);
+
+        Event event = eventRepository.findById(eventId).orElseThrow( () -> new Exception("없는 이벤트입니다."));
+        Customer customer = customerRepository.findByEmail(request.getToEmail()).orElseThrow( () ->
+                new IllegalArgumentException("없는 고객입니다."));
+
+
+        // 이메일 보내기
+        String voucherCode = request.getContent();
+        String traceTag = " <img src=\"https://localhost:8080/api/readcheck/" + eventId.toString() + "/" + request.getToEmail() + "\" " + "onerror=this.style.display='none';>";
+        emailSendService.sendVoucherMail(request.getToEmail(), request.getTitle(), voucherCode, traceTag);
+
+        // 이메일 로그 생성
+
+
+        EmailLog emailLog = EmailLog.builder()
+                .event(event)
+                .customer(customer)
+                .build();
+
+        emailLogRepository.save(emailLog);
+    }
 
     @Transactional
     public void sendGroupEmail(GroupEmailSendRequest request, String employeeEmail) throws Exception {

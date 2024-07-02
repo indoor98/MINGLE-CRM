@@ -66,6 +66,14 @@ public class EventController {
         return new ResultResponse<>(HttpStatus.OK.value(), "success", null);
     }
 
+    @PostMapping("/api/email/voucher")
+    public ResultResponse<Void> sendVoucherEmail(@RequestBody PersonalEmailSendRequest request) throws Exception {
+        String employeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        emailService.sendVoucherEmail(request, employeeEmail);
+        return new ResultResponse<>(HttpStatus.OK.value(), "success", null);
+    }
+
     @GetMapping("/api/events/{pageno}")
     public ResultResponse<List<EventLogResponse>> getAllEvents(@PathVariable(name="pageno") int pageNo) {
         return new ResultResponse<>(HttpStatus.OK.value(), "success", eventService.getAllEvents(pageNo));
@@ -90,4 +98,6 @@ public class EventController {
         Long pagesNumber = logService.getPagesNumberByEventId(eventId);
         return new ResultResponse<>(HttpStatus.OK.value(), "success", pagesNumber);
     }
+
+
 }
