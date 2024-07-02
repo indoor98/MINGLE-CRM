@@ -270,7 +270,7 @@ export default {
         params.endDate = new Date(search.value.endDate).toISOString(); // 종료 날짜를 ISO 형식으로 변환하여 전송
 
       axios
-        .get("https://httpstest.mingle-crm.com/api/v1/view-logs/search", {
+        .get("http://localhost:8080/api/v1/view-logs/search", {
           params,
         })
         .then((response) => {
@@ -349,7 +349,7 @@ export default {
 
     onMounted(() => {
       axios
-        .get("https://httpstest.mingle-crm.com/api/v1/view-logs")
+        .get("http://localhost:8080/api/v1/view-logs")
         .then((response) => {
           if (Array.isArray(response.data)) {
             viewLogs.value = response.data;

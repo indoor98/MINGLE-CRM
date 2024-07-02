@@ -260,7 +260,7 @@ const columns = ref([
 const fetchVouchers = async () => {
   try {
     const response = await axios.get(
-      "https://httpstest.mingle-crm.com/api/v1/vouchers/before-requested"
+      "http://localhost:8080/api/v1/vouchers/before-requested"
     );
     vouchers.value = response.data.data.sort(
       (a, b) => b.voucherId - a.voucherId
@@ -276,16 +276,13 @@ const fetchVouchers = async () => {
 
 const createVoucher = async () => {
   try {
-    const response = await axios.post(
-      "https://httpstest.mingle-crm.com/api/v1/vouchers",
-      {
-        customerId: voucher.value.customerId,
-        amount: voucher.value.amount,
-        reason: voucher.value.reason,
-        startDate: dateTimeToDate(voucher.value.startDate) + "T00:00:00",
-        endDate: dateTimeToDate(voucher.value.endDate) + "T23:59:59",
-      }
-    );
+    const response = await axios.post("http://localhost:8080/api/v1/vouchers", {
+      customerId: voucher.value.customerId,
+      amount: voucher.value.amount,
+      reason: voucher.value.reason,
+      startDate: dateTimeToDate(voucher.value.startDate) + "T00:00:00",
+      endDate: dateTimeToDate(voucher.value.endDate) + "T23:59:59",
+    });
     // 새로운 바우처 목록을 다시 불러옴
     fetchVouchers();
     showCreationModal.value = false;
@@ -321,7 +318,7 @@ const closeVoucherCreation = () => {
 const requestVoucher = async (voucherId) => {
   try {
     const response = await axios.post(
-      `https://httpstest.mingle-crm.com/api/v1/vouchers/request/${voucherId}`
+      `http://localhost:8080/api/v1/vouchers/request/${voucherId}`
     );
     // 바우처 목록을 다시 불러옴
     fetchVouchers();
@@ -342,7 +339,7 @@ const requestVoucher = async (voucherId) => {
 const deleteVoucher = async (voucherId) => {
   try {
     const response = await axios.delete(
-      `https://httpstest.mingle-crm.com/api/v1/vouchers/${voucherId}`
+      `http://localhost:8080/api/v1/vouchers/${voucherId}`
     );
     // 바우처 목록을 다시 불러옴
     fetchVouchers();

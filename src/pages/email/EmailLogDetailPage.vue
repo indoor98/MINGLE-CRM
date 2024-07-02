@@ -125,14 +125,14 @@ const fetchEmailLogs = async (eventId) => {
     console.log("page : ", pagination.value.page);
 
     const response = await axios.get(
-      `https://httpstest.mingle-crm.com/api/emaillog/${eventId}/${
+      `http://localhost:8080/api/emaillog/${eventId}/${
         pagination.value.page - 1
       }`
     );
     emailLogs.value = response.data.data;
 
     const pagesNumberResponse = await axios.get(
-      `https://httpstest.mingle-crm.com/api/emaillog/pagesnumber/${eventId}`
+      `http://localhost:8080/api/emaillog/pagesnumber/${eventId}`
     );
 
     pagesNumber.value = Math.ceil(

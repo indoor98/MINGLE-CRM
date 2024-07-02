@@ -97,7 +97,7 @@ const columns = ref([
 const fetchRewardHistories = async (customerId) => {
   try {
     const response = await axios.get(
-      `https://httpstest.mingle-crm.com/api/v1/rewards/history/${customerId}`
+      `http://localhost:8080/api/v1/rewards/history/${customerId}`
     );
     console.log(customerId);
     console.log(response);

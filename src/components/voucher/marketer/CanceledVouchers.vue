@@ -205,7 +205,7 @@ const toTenWords = (beforeWord) => {
 const fetchVouchers = async () => {
   try {
     const response = await axios.get(
-      `https://httpstest.mingle-crm.com/api/v1/vouchers/canceled-marketer`
+      `http://localhost:8080/api/v1/vouchers/canceled-marketer`
     );
     vouchers.value = response.data.data.sort(
       (a, b) => b.voucherId - a.voucherId
@@ -244,7 +244,7 @@ const searchVouchers = async () => {
     };
 
     const response = await axios.post(
-      "https://httpstest.mingle-crm.com/api/v1/vouchers/search",
+      "http://localhost:8080/api/v1/vouchers/search",
       data
     );
     vouchers.value = response.data.data.sort(

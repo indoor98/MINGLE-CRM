@@ -107,7 +107,7 @@ const editingMemo = ref(false);
 const fetchCustomerDetail = async () => {
   try {
     const response = await axios.get(
-      `https://httpstest.mingle-crm.com/api/v1/customers/${customerId}`
+      `http://localhost:8080/api/v1/customers/${customerId}`
     );
     customer.value = response.data;
   } catch (error) {

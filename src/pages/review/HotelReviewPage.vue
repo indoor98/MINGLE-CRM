@@ -219,9 +219,7 @@ const getHotelReviews = async () => {
     console.log(searchCondition.value);
 
     const response = await axios.post(
-      `https://httpstest.mingle-crm.com/api/hotel/reviews/${
-        pagination.value.page - 1
-      }`,
+      `http://localhost:8080/api/hotel/reviews/${pagination.value.page - 1}`,
       searchCondition.value,
       { withCredentials: true }
     );
@@ -254,7 +252,7 @@ const getHotelReviewMetaData = async () => {
   }
 
   const response = await axios.get(
-    "https://httpstest.mingle-crm.com/api/hotel/review/meta",
+    "http://localhost:8080/api/hotel/review/meta",
     {
       params: searchCondition.value,
     }

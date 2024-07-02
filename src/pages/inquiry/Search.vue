@@ -96,7 +96,7 @@ const toggleDatePicker = () => {
 const applyFilters = async () => {
   try {
     const response = await axios.get(
-      "https://httpstest.mingle-crm.com/api/v1/inquiries/search",
+      "http://localhost:8080/api/v1/inquiries/search",
       {
         params: {
           ...filters.value,

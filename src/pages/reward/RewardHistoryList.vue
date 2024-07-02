@@ -107,7 +107,7 @@ const columns = ref([
 const fetchRewards = async () => {
   try {
     const response = await axios.get(
-      "https://httpstest.mingle-crm.com/api/v1/rewards/histories"
+      "http://localhost:8080/api/v1/rewards/histories"
     );
     rewards.value = response.data.data;
     errorMessage.value = "";
