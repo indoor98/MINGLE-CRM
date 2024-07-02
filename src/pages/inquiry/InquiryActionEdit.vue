@@ -1,5 +1,5 @@
 <template>
-  <q-card-section>
+  <q-card-section class="action-section">
     <!-- <div class="text-h6">조치 내용 수정</div> -->
     <q-separator />
     <q-form @submit="updateAction">
@@ -8,6 +8,7 @@
         label="조치 상태"
         :options="actionStatusOptions"
         required
+        class="action-select"
       />
       <q-input
         v-model="actionContent.content"
@@ -15,9 +16,21 @@
         rows="5"
         type="textarea"
         required
+        class="action-input"
       />
-      <q-btn label="저장" color="primary" type="submit" :loading="loading" />
-      <q-btn label="취소" color="secondary" @click="$emit('cancelEdit')" />
+      <q-btn
+        label="저장"
+        color="primary"
+        type="submit"
+        :loading="loading"
+        class="action-btn"
+      />
+      <q-btn
+        label="취소"
+        color="secondary"
+        @click="$emit('cancelEdit')"
+        class="action-btn"
+      />
     </q-form>
     <!-- 오류 메시지 표시 -->
     <div
@@ -122,7 +135,49 @@ const cancelEdit = () => {
 </script>
 
 <style scoped>
-.q-card {
-  margin-bottom: 1rem;
+.action-section {
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-select,
+.action-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.action-input:focus {
+  outline: none;
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, 0.25);
+}
+
+.action-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: #6c63ff;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+  background-color: #574fdc;
+}
+
+.action-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

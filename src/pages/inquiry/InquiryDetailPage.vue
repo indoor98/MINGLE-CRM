@@ -40,7 +40,7 @@
               <div class="q-td">
                 {{ inquiryDetail.inquiryResponse.employName }}
               </div>
-              <div class="q-th">액션 상태</div>
+              <div class="q-th">조치 상태</div>
               <div class="q-td">
                 {{ inquiryDetail.inquiryResponse.actionStatus }}
               </div>
@@ -83,6 +83,7 @@
             :inquiry-reply-id="inquiryDetail.inquiryReplyResponse.id"
             :initial-reply="inquiryDetail.inquiryReplyResponse.reply"
             @replyUpdated="handleReplyUpdated"
+            @cancelEdit="isEditing = false"
           />
         </q-card>
 

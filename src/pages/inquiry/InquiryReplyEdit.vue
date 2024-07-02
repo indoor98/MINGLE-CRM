@@ -13,13 +13,26 @@
           class="reply-input"
         />
         <q-btn
-          label="수정"
+          label="저장"
           color="primary"
           type="submit"
           :loading="loading"
           class="reply-btn"
         />
+        <q-btn
+          label="취소"
+          color="secondary"
+          @click="cancelEdit"
+          class="reply-btn"
+        />
       </q-form>
+      <!-- 오류 메시지 표시 -->
+      <div
+        v-if="errorMessage"
+        class="q-mt-xs q-pa-xs q-mb-xs q-bg-negative q-text-white"
+      >
+        {{ errorMessage }}
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -40,15 +53,17 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["replyUpdated"]);
+const emit = defineEmits(["replyUpdated", "cancelEdit"]);
 const updatedReply = ref({
   content: props.initialReply,
 });
 const loading = ref(false);
+const errorMessage = ref(null);
 
 const submitEdit = async () => {
   if (!updatedReply.value.content) return;
   loading.value = true;
+  errorMessage.value = null;
   try {
     const response = await axios.post(
       `http://localhost:8080/api/v1/inquiries/reply/${props.inquiryReplyId}`,
@@ -60,12 +75,17 @@ const submitEdit = async () => {
       }
     );
     console.log("답변 수정 성공:", response.data);
-    emit("replyUpdated"); // 부모 컴포넌트에 알림
+    emit("replyUpdated", response.data); // 부모 컴포넌트에 알림
   } catch (error) {
     console.error("답변 수정 실패:", error.response?.data || error.message);
+    errorMessage.value = error.response?.data?.message || "답변 수정 실패";
   } finally {
     loading.value = false;
   }
+};
+
+const cancelEdit = () => {
+  emit("cancelEdit");
 };
 </script>
 
