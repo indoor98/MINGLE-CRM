@@ -486,6 +486,9 @@ $secondary-color: #6c757d;
 
 .text-h4 {
   text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 0;
 }
 
 .search-container {

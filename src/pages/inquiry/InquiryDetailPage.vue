@@ -1,6 +1,12 @@
 <template>
   <q-page class="q-pa-xl">
     <section>
+      <q-btn
+        label="문의 목록으로 돌아가기"
+        color="primary"
+        @click="goToInquiryList"
+        class="q-mb-md"
+      />
       <div class="text-h4">문의 상세</div>
       <q-separator class="q-my-md" />
 
@@ -167,13 +173,14 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { api as axios } from "src/boot/axios";
 import InquiryReply from "src/pages/inquiry/InquiryReply.vue";
 import InquiryReplyEdit from "src/pages/inquiry/InquiryReplyEdit.vue";
 import InquiryAction from "src/pages/inquiry/InquiryAction.vue";
 import InquiryActionEdit from "src/pages/inquiry/InquiryActionEdit.vue";
 
+const router = useRouter();
 const route = useRoute();
 const inquiryId = route.params.inquiryId;
 const inquiryDetail = ref(null);
@@ -212,6 +219,10 @@ const handleActionUpdated = () => {
 };
 
 onMounted(fetchInquiryDetail);
+
+const goToInquiryList = () => {
+  router.push("/inquiry");
+};
 </script>
 
 <style scoped>
