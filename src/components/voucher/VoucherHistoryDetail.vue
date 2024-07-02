@@ -95,7 +95,6 @@
 
 <script setup>
 import { defineProps, defineEmits } from "vue";
-import { formatPrice } from "src/utils/utils.js";
 
 const props = defineProps(["voucher"]);
 const emit = defineEmits(["close"]);
