@@ -32,11 +32,11 @@ public class EventController {
     private final JwtUtil jwtUtil;
     private final LogService logService;
 
-    @PostMapping("/api/event/email")
-    public ResultResponse<Void> sendEventEmail(@RequestBody EventEmailSendRequest request) throws Exception {
-        eventService.sendEventEmail(request);
-        return new ResultResponse<>(HttpStatus.OK.value(), "success", null);
-    }
+//    @PostMapping("/api/event/email")
+//    public ResultResponse<Void> sendEventEmail(@RequestBody EventEmailSendRequest request) throws Exception {
+//        eventService.sendEventEmail(request);
+//        return new ResultResponse<>(HttpStatus.OK.value(), "success", null);
+//    }
 
     @GetMapping("/api/readcheck/{eventId}/{customerEmail}")
     public ResultResponse<Void> emailOpenLogging(

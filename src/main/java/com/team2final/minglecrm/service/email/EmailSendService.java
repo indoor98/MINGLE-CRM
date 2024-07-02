@@ -21,7 +21,14 @@ public class EmailSendService {
 
     public void sendMail(String toEmail,
                          String subject,
-                         String content) throws MessagingException {
+                         String text,
+                         String traceTag) throws MessagingException {
+
+        Context context = new Context();
+        context.setVariable("emailText", text);
+
+        String content = templateEngine.process("emailDefaultTemplate", context);
+        content += traceTag;
 
         MimeMessage mail = mailSender.createMimeMessage();
         MimeMessageHelper mailHelper = new MimeMessageHelper(mail, true, "UTF-8");
