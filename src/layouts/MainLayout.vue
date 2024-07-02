@@ -17,7 +17,7 @@
         </q-avatar>
 
         <q-toolbar-title shrink class="text-subtitle1 text-weight-bolder">
-          Mingle CRM
+          MINGLE CRM
         </q-toolbar-title>
         <q-space />
         <div class="search row items-center"></div>
@@ -247,7 +247,7 @@ const logout = async () => {
   try {
     console.log("로그아웃");
     const response = await customAxios.get(
-      "http://localhost:8080/api/v1/auth/logout",
+      "https://httpstest.mingle-crm.com/api/v1/auth/logout",
       {
         withCredentials: true,
       }
@@ -262,7 +262,7 @@ const logout = async () => {
 const renewToken = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8080/api/v1/auth/renew",
+      "https://httpstest.mingle-crm.com/api/v1/auth/renew",
       {
         withCredentials: true,
       }

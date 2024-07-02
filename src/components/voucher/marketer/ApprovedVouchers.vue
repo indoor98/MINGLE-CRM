@@ -73,7 +73,7 @@
             @click="searchVouchers"
             dense
             class="full-width"
-            style="height: -webkit-fill-available;"
+            style="height: -webkit-fill-available"
           />
         </div>
       </q-card-section>
@@ -253,7 +253,7 @@ const toTenWords = (beforeWord) => {
 const fetchVouchers = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/v1/vouchers/approved-marketer`
+      `https://httpstest.mingle-crm.com/api/v1/vouchers/approved-marketer`
     );
     vouchers.value = response.data.data.sort(
       (a, b) => b.voucherId - a.voucherId
@@ -292,7 +292,7 @@ const searchVouchers = async () => {
     };
 
     const response = await axios.post(
-      "http://localhost:8080/api/v1/vouchers/search",
+      "https://httpstest.mingle-crm.com/api/v1/vouchers/search",
       data
     );
     vouchers.value = response.data.data.sort(
@@ -318,7 +318,7 @@ const cancelVoucher = async (voucherId) => {
   }).onOk(async () => {
     try {
       await axios.post(
-        `http://localhost:8080/api/v1/vouchers/cancel/${voucherId}`
+        `https://httpstest.mingle-crm.com/api/v1/vouchers/cancel/${voucherId}`
       );
       Notify.create({
         color: "green",

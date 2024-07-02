@@ -149,12 +149,7 @@ import { api as axios } from "/src/boot/axios"; // axios 모듈을 기본 내보
 const current = ref(1);
 const reviews = ref([]);
 const restaurant = ref("선택 안함");
-const restaurantOptions = ref([
-  "선택 안함",
-  "담소정",
-  "하나미 스시",
-  "도림",
-]);
+const restaurantOptions = ref(["선택 안함", "담소정", "하나미 스시", "도림"]);
 const startDate = ref("");
 const endDate = ref("");
 
@@ -199,7 +194,9 @@ const getDiningReviews = async () => {
     console.log(searchCondition.value);
 
     const response = await axios.post(
-      `http://localhost:8080/api/dining/reviews/${pagination.value.page - 1}`,
+      `https://httpstest.mingle-crm.com/api/dining/reviews/${
+        pagination.value.page - 1
+      }`,
       searchCondition.value
     );
     reviews.value = response.data.data;
@@ -228,7 +225,7 @@ const getDiningReviewMetaData = async () => {
   }
 
   const response = await axios.get(
-    "http://localhost:8080/api/dining/review/meta",
+    "https://httpstest.mingle-crm.com/api/dining/review/meta",
     {
       params: searchCondition.value,
     }

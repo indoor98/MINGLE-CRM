@@ -191,7 +191,7 @@ const isActionEditing = ref(false);
 const fetchInquiryDetail = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/v1/inquiries/${inquiryId}`
+      `https://httpstest.mingle-crm.com/api/v1/inquiries/${inquiryId}`
     );
     console.log("문의 상세 정보:", response.data.data); // 로그 추가
     inquiryDetail.value = response.data.data;
