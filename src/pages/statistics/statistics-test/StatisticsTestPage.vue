@@ -218,7 +218,7 @@ const getYesterday = () => {
 const fetchVisitNum = async () => {
   try {
     const response = await axios.get(
-      "/api/v1/statistic/reservation/daily-reservation-cnt-date",
+      "/api/v1/statistics/customers/visit-customers/all",
       {
         params: {
           start: getYesterday(),
