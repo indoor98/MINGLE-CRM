@@ -13,67 +13,38 @@
           <q-card-section>
             <div class="text-h6">문의 정보</div>
             <q-separator />
-            <q-list>
-              <q-item>
-                <q-item-section
-                  >ID: {{ inquiryDetail.inquiryResponse.id }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >고객 이름:
-                  {{
-                    inquiryDetail.inquiryResponse.customerName
-                  }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >고객 전화:
-                  {{
-                    inquiryDetail.inquiryResponse.customerPhone
-                  }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >문의 제목:
-                  {{
-                    inquiryDetail.inquiryResponse.inquiryTitle
-                  }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >문의 내용:
-                  {{
-                    inquiryDetail.inquiryResponse.inquiryContent
-                  }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >답변 상태:
-                  {{
-                    inquiryDetail.inquiryResponse.isReply ? "Yes" : "No"
-                  }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >담당 직원:
-                  {{ inquiryDetail.inquiryResponse.employName }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >액션 상태:
-                  {{
-                    inquiryDetail.inquiryResponse.actionStatus
-                  }}</q-item-section
-                >
-              </q-item>
-            </q-list>
+            <div class="q-table">
+              <div class="q-th">ID</div>
+              <div class="q-td">{{ inquiryDetail.inquiryResponse.id }}</div>
+              <div class="q-th">고객 이름</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryResponse.customerName }}
+              </div>
+              <div class="q-th">고객 전화</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryResponse.customerPhone }}
+              </div>
+              <div class="q-th">문의 제목</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryResponse.inquiryTitle }}
+              </div>
+              <div class="q-th">문의 내용</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryResponse.inquiryContent }}
+              </div>
+              <div class="q-th">답변 상태</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryResponse.isReply ? "Yes" : "No" }}
+              </div>
+              <div class="q-th">담당 직원</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryResponse.employName }}
+              </div>
+              <div class="q-th">액션 상태</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryResponse.actionStatus }}
+              </div>
+            </div>
           </q-card-section>
         </q-card>
 
@@ -82,32 +53,24 @@
           <q-card-section>
             <div class="text-h6">답변 정보</div>
             <q-separator />
-            <q-list>
-              <q-item>
-                <q-item-section
-                  >답변 담당자 이메일:
-                  {{ inquiryDetail.inquiryReplyResponse.email }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >답변 담당자 이름:
-                  {{ inquiryDetail.inquiryReplyResponse.name }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >답변 내용:
-                  {{ inquiryDetail.inquiryReplyResponse.reply }}</q-item-section
-                >
-              </q-item>
-              <q-item>
-                <q-item-section
-                  >답변 날짜:
-                  {{ inquiryDetail.inquiryReplyResponse.date }}</q-item-section
-                >
-              </q-item>
-            </q-list>
+            <div class="q-table">
+              <div class="q-th">답변 담당자 이메일</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryReplyResponse.email }}
+              </div>
+              <div class="q-th">답변 담당자 이름</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryReplyResponse.name }}
+              </div>
+              <div class="q-th">답변 내용</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryReplyResponse.reply }}
+              </div>
+              <div class="q-th">답변 날짜</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryReplyResponse.date }}
+              </div>
+            </div>
             <q-btn
               v-if="!isEditing"
               label="수정"
@@ -123,6 +86,7 @@
           />
         </q-card>
 
+        <!-- 답변 등록 폼 -->
         <q-card v-else>
           <q-card-section>
             <div class="text-h6">답변 등록</div>
@@ -138,44 +102,28 @@
           <q-card-section>
             <div class="text-h6">조치 정보</div>
             <q-separator />
-            <q-list>
-              <q-item v-if="inquiryDetail.inquiryActionResponse">
-                <q-item-section
-                  >조치 담당자 이메일:
-                  {{
-                    inquiryDetail.inquiryActionResponse.email
-                  }}</q-item-section
-                >
-              </q-item>
-              <q-item v-if="inquiryDetail.inquiryActionResponse">
-                <q-item-section
-                  >조치 담당자 이름:
-                  {{ inquiryDetail.inquiryActionResponse.name }}</q-item-section
-                >
-              </q-item>
-              <q-item v-if="inquiryDetail.inquiryActionResponse">
-                <q-item-section
-                  >조치 내용:
-                  {{
-                    inquiryDetail.inquiryActionResponse.actionContent
-                  }}</q-item-section
-                >
-              </q-item>
-              <q-item v-if="inquiryDetail.inquiryActionResponse">
-                <q-item-section
-                  >조치 상태:
-                  {{
-                    inquiryDetail.inquiryActionResponse.actionStatus
-                  }}</q-item-section
-                >
-              </q-item>
-              <q-item v-if="inquiryDetail.inquiryActionResponse">
-                <q-item-section
-                  >조치 날짜:
-                  {{ inquiryDetail.inquiryActionResponse.date }}</q-item-section
-                >
-              </q-item>
-            </q-list>
+            <div class="q-table">
+              <div class="q-th">조치 담당자 이메일</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryActionResponse.email }}
+              </div>
+              <div class="q-th">조치 담당자 이름</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryActionResponse.name }}
+              </div>
+              <div class="q-th">조치 내용</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryActionResponse.actionContent }}
+              </div>
+              <div class="q-th">조치 상태</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryActionResponse.actionStatus }}
+              </div>
+              <div class="q-th">조치 날짜</div>
+              <div class="q-td">
+                {{ inquiryDetail.inquiryActionResponse.date }}
+              </div>
+            </div>
             <q-btn
               v-if="!isActionEditing"
               label="수정"
@@ -197,6 +145,7 @@
           />
         </q-card>
 
+        <!-- 조치 등록 폼 -->
         <q-card v-else>
           <q-card-section>
             <div class="text-h6">조치 내용 등록</div>
@@ -254,8 +203,7 @@ const handleActionSubmitted = () => {
 };
 
 const handleActionUpdated = () => {
-  // isActionEditing.value = false;
-  fetchInquiryDetail();
+  fetchInquiryDetail(); // 조치 내용이 수정된 후, 문의 상세 정보를 새로고침
 };
 
 onMounted(fetchInquiryDetail);
@@ -265,5 +213,44 @@ onMounted(fetchInquiryDetail);
 .q-page {
   max-width: 800px;
   margin: auto;
+}
+
+.text-h4 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.q-separator {
+  margin: 20px 0;
+}
+
+.q-card {
+  margin-bottom: 20px;
+}
+
+.q-card-section {
+  padding: 20px;
+}
+
+.q-table {
+  display: grid;
+  grid-template-columns: 150px auto;
+  gap: 10px;
+}
+
+.q-th {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.q-td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.q-btn {
+  margin-top: 10px;
 }
 </style>
