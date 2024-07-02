@@ -220,7 +220,7 @@ const columns = [
   {
     name: "name",
     label: "고객 이름",
-    align: "left",
+    align: "center",
     field: "name",
     sortable: true,
   },
@@ -243,6 +243,7 @@ const columns = [
     label: "직원 이름",
     align: "center",
     field: "employeeName",
+    sortable: true,
   },
   {
     name: "gender",

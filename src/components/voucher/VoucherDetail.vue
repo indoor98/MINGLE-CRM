@@ -32,10 +32,6 @@
             <td>{{ voucher.customerName }}</td>
           </tr>
           <tr>
-            <th>고객 이름</th>
-            <td>{{ voucher.customerName }}</td>
-          </tr>
-          <tr>
             <th>바우처 금액</th>
             <td>{{ formatPrice(voucher.amount) }}</td>
           </tr>
