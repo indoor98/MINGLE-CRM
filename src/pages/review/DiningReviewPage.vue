@@ -153,8 +153,7 @@ const restaurantOptions = ref([
   "선택 안함",
   "담소정",
   "하나미 스시",
-  "Château d Étoiles",
-  "Bella Vista",
+  "도림",
 ]);
 const startDate = ref("");
 const endDate = ref("");
@@ -204,14 +203,35 @@ const getDiningReviews = async () => {
       searchCondition.value
     );
     reviews.value = response.data.data;
+
+    getDiningReviewMetaData();
   } catch (error) {
     console.log(error);
   }
 };
 
 const getDiningReviewMetaData = async () => {
+  const searchCondition = ref({});
+
+  if (restaurant.value !== "선택 안함") {
+    searchCondition.value.restaurant = restaurant.value;
+  }
+  if (startDate.value !== "" && endDate.value !== "") {
+    // 2021-11-08T11:44:30.327959
+    searchCondition.value.startDate =
+      dateToLocalDateTime(startDate.value) + "T00:00:00";
+    searchCondition.value.endDate =
+      dateToLocalDateTime(endDate.value) + "T23:59:59";
+  }
+  if (customerName.value !== "") {
+    searchCondition.value.customerName = customerName;
+  }
+
   const response = await axios.get(
-    "http://localhost:8080/api/dining/review/meta"
+    "http://localhost:8080/api/dining/review/meta",
+    {
+      params: searchCondition.value,
+    }
   );
 
   pagination.value.pagesNumber = response.data.data.pagesNumber;

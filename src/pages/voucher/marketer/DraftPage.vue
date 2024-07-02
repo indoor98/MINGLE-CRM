@@ -75,7 +75,7 @@
 
       <!-- 바우처 생성 모달 -->
       <q-dialog v-model="showCreationModal">
-        <q-card>
+        <q-card style="width: 30%; padding: 20px">
           <q-card-section>
             <div class="text-h6">바우처 생성</div>
           </q-card-section>
@@ -91,6 +91,7 @@
             <q-input v-model="voucher.customerId" label="회원 ID" readonly />
             <q-input v-model="customerEmail" label="회원 이메일" readonly />
             <q-input v-model="voucher.reason" label="생성 이유" type="string" />
+            <q-input v-model="voucher.amount" label="금액" type="number" />
             <q-input
               v-model="voucher.startDate"
               mask="date"
@@ -209,13 +210,13 @@ const columns = ref([
     field: "voucherId",
     sortable: true,
   },
-  {
-    name: "customerId",
-    label: "회원 ID",
-    align: "center",
-    field: "customerId",
-    sortable: true,
-  },
+  // {
+  //   name: "customerId",
+  //   label: "회원 ID",
+  //   align: "center",
+  //   field: "customerId",
+  //   sortable: true,
+  // },
   {
     name: "customerName",
     label: "회원 이름",
@@ -270,7 +271,9 @@ const fetchVouchers = async () => {
     const response = await axios.get(
       "http://localhost:8080/api/v1/vouchers/before-requested"
     );
-    vouchers.value = response.data.data;
+    vouchers.value = response.data.data.sort(
+      (a, b) => b.voucherId - a.voucherId
+    );
     errorMessage.value = "";
   } catch (error) {
     console.error("바우처 목록을 불러오는 중 에러 발생:", error);
@@ -331,6 +334,7 @@ const requestVoucher = async (voucherId) => {
     Notify.create({
       type: "positive",
       message: "요청이 성공적으로 완료되었습니다.",
+      color: "green",
     });
   } catch (error) {
     console.error("바우처 요청 중 에러 발생:", error);
