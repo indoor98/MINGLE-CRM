@@ -17,7 +17,7 @@
         </q-avatar>
 
         <q-toolbar-title shrink class="text-subtitle1 text-weight-bolder">
-          Mingle CRM
+          MINGLE CRM
         </q-toolbar-title>
         <q-space />
         <div class="search row items-center"></div>

@@ -1,10 +1,13 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page style="align-content: center; text-align: center">
     <img
       alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
+      src="src/assets/mingle-logo.png"
+      style="width: 300px; height: 300px"
     />
+    <div style="font-size: 30px; color: darkblue; font-weight: bold">
+      MINGLE CRM
+    </div>
   </q-page>
 </template>
 

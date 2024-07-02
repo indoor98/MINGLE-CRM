@@ -73,7 +73,7 @@
             @click="searchVouchers"
             dense
             class="full-width"
-            style="height: -webkit-fill-available;"
+            style="height: -webkit-fill-available"
           />
         </div>
       </q-card-section>
