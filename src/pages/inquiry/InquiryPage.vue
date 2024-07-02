@@ -3,13 +3,13 @@
     <section>
       <div class="text-h4">상담</div>
       <q-separator class="q-my-md" />
-      <q-select
+      <!-- <q-select
         v-model="selectedOption"
         :options="options"
         label="문의 유형 선택"
         class="q-my-md"
         @change="handleOptionChange"
-      />
+      /> -->
     </section>
     <InquiryList
       v-if="selectedOption.value === 'all'"

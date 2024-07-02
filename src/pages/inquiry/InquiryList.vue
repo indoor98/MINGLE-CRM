@@ -1,140 +1,220 @@
 <template>
-  <div>
-    <div class="text-h4">전체 문의 목록</div>
-    <section class="search-container row q-col-gutter-xl flex-center q-pa-xs">
-      <div class="search-fields-container row q-col-gutter-sm q-mb-md">
-        <q-input
-          v-model="searchParams.customerName"
-          label="이름"
-          filled
-          class="search-field"
-        />
-        <q-input
-          v-model="searchParams.customerPhone"
-          label="전화번호"
-          filled
-          class="search-field"
-        />
-        <q-input
-          v-model="searchParams.inquiryTitle"
-          label="문의 제목"
-          filled
-          class="search-field"
-        />
-        <q-input
-          v-model="searchParams.inquiryContent"
-          label="문의 내용"
-          filled
-          class="search-field"
-        />
-        <q-input
-          v-model="searchParams.startDate"
-          label="시작일"
-          filled
-          class="search-field"
-        >
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy
-                cover
-                transition-show="scale"
-                transition-hide="scale"
-              >
-                <q-date v-model="searchParams.startDate" mask="YYYY-MM-DD">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="primary" flat />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
+  <q-page>
+    <div class="q-pa-md">
+      <h2 class="text-h4">전체 문의 목록</h2>
+      <q-card class="my-card">
+        <q-card-section class="row justify-center q-pa-xs">
+          <div class="col q-pa-sm">
+            <q-input
+              v-model="searchParams.customerName"
+              clearable
+              filled
+              color="purple-12"
+              label="이름"
+              dense
+              placeholder="이름을 입력하세요"
+            />
+          </div>
 
-        <q-input
-          v-model="searchParams.endDate"
-          label="종료일"
-          filled
-          class="search-field"
-        >
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy
-                cover
-                transition-show="scale"
-                transition-hide="scale"
-              >
-                <q-date v-model="searchParams.endDate" mask="YYYY-MM-DD">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="primary" flat />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
-        <q-select
-          v-model="searchParams.type"
-          :options="typeOptions"
-          label="문의 타입"
-          class="search-field"
-        />
-        <q-select
-          v-model="searchParams.isReply"
-          :options="replyOptions"
-          label="답변 여부"
-          class="search-field"
-        />
-        <q-select
-          v-model="searchParams.actionStatus"
-          :options="actionStatusOptions"
-          label="조치 상태"
-          class="search-field"
-        />
-        <q-btn
-          color="primary"
-          label="검색"
-          @click="fetchInquiriesSearch"
-          class="q-ml-sm search-btn"
-        />
-      </div>
-    </section>
-    <!-- 검색 입력 필드 생성
-      v-model을 통해 filter 변수와 양방향 바인딩
-      사용자가 입력한 검색어를 filter 변수에 저장
-      @request 이벤트 : 사용자가 페이지를 변경할 때마다 fetchInquiries 함수 호출-->
-    <q-table
-      :rows="filteredInquiries"
-      :columns="columns"
-      row-key="id"
-      :loading="loading"
-      v-model:pagination="pagination"
-      @request="onRequest"
-      @row-click="onRowClick"
-    />
-    <!-- <q-pagination
-      v-model="pagination.page"
-      :max="Math.min(5, maxPages)"
-      @page-change="fetchInquiries"
-      color="primary"
-      boundary-links
-      class="q-mt-md"
-      layout="pages"
-    /> -->
-  </div>
+          <div class="col q-pa-sm">
+            <q-input
+              v-model="searchParams.customerPhone"
+              clearable
+              filled
+              color="purple-12"
+              label="전화번호"
+              dense
+              placeholder="전화번호를 입력하세요"
+            />
+          </div>
+
+          <div class="col q-pa-sm">
+            <q-input
+              v-model="searchParams.inquiryTitle"
+              clearable
+              filled
+              color="purple-12"
+              label="문의 제목"
+              dense
+              placeholder="문의 제목을 입력하세요"
+            />
+          </div>
+
+          <div class="col q-pa-sm">
+            <q-input
+              v-model="searchParams.inquiryContent"
+              clearable
+              filled
+              color="purple-12"
+              label="문의 내용"
+              dense
+              placeholder="문의 내용을 입력하세요"
+            />
+          </div>
+
+          <div class="col q-pa-sm">
+            <q-input
+              v-model="searchParams.startDate"
+              clearable
+              filled
+              color="purple-12"
+              label="시작일"
+              dense
+              placeholder="시작일을 입력하세요"
+            >
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date v-model="searchParams.startDate" mask="YYYY-MM-DD">
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="선택"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+
+          <div class="col q-pa-sm">
+            <q-input
+              v-model="searchParams.endDate"
+              clearable
+              filled
+              color="purple-12"
+              label="종료일"
+              dense
+              placeholder="종료일을 입력하세요"
+            >
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date v-model="searchParams.endDate" mask="YYYY-MM-DD">
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="선택"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+
+          <div class="col q-pa-sm">
+            <q-select
+              v-model="searchParams.type"
+              filled
+              color="purple-12"
+              label="문의 타입"
+              :options="typeOptions"
+              emit-value
+              map-options
+              dense
+              placeholder="선택"
+            />
+          </div>
+
+          <div class="col q-pa-sm">
+            <q-select
+              v-model="searchParams.isReply"
+              filled
+              color="purple-12"
+              label="답변 여부"
+              :options="replyOptions"
+              emit-value
+              map-options
+              dense
+              placeholder="선택"
+            />
+          </div>
+
+          <div class="col q-pa-sm">
+            <q-select
+              v-model="searchParams.actionStatus"
+              filled
+              color="purple-12"
+              label="조치 상태"
+              :options="actionStatusOptions"
+              emit-value
+              map-options
+              dense
+              placeholder="선택"
+            />
+          </div>
+
+          <div class="col-auto q-pa-sm">
+            <q-btn
+              color="primary"
+              label="검색"
+              @click="fetchInquiriesSearch"
+              dense
+              class="full-width"
+              style="min-width: 50px; max-width: 100px"
+            />
+          </div>
+        </q-card-section>
+      </q-card>
+
+      <q-card class="q-mt-md">
+        <q-card-section>
+          <q-table
+            :rows="filteredInquiries"
+            :columns="columns"
+            row-key="id"
+            :loading="loading"
+            v-model:pagination="pagination"
+            @request="onRequest"
+            @row-click="onRowClick"
+          >
+            <template v-slot:no-data>
+              <q-tr>
+                <q-td :colspan="columns.length" class="text-center">
+                  검색 결과가 없습니다.
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+        </q-card-section>
+      </q-card>
+      <q-card class="q-mt-md">
+        <q-card-section v-if="errorMessage">
+          <p style="color: red" class="text-center">{{ errorMessage }}</p>
+        </q-card-section>
+      </q-card>
+    </div>
+  </q-page>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { api as axios } from "src/boot/axios";
-// import axios from "axios";
 import { useRouter } from "vue-router";
 import { useTokenStore } from "src/stores/token-store";
 
-const inquiries = ref([]); // 데이터를 저장하는 반응형 변수
-const loading = ref(false); // 데이터 로딩 상태를 나타냄
-const filter = ref(""); // 검색 입력 값을 저장
-const pagination = ref({ page: 1, rowsPerPage: 20, rowsNumber: 0 }); // 페이징 정보를 저장하는 반응형 변수 초기값 설정
-const maxPages = ref(1); // 전체 페이지 수를 저장하는 변수
+const inquiries = ref([]);
+const loading = ref(false);
+const filter = ref("");
+const pagination = ref({ page: 1, rowsPerPage: 20, rowsNumber: 0 });
+const maxPages = ref(1);
+const errorMessage = ref("");
 
 const searchParams = ref({
   customerName: "",
@@ -272,9 +352,8 @@ const hasSearchCriteria = () => {
   );
 };
 
-// 데이터 요청 함수
 const fetchInquiries = async () => {
-  loading.value = true; // 데이터 요청할 때 로딩 상태 true로 설정
+  loading.value = true;
   try {
     const response = await axios.get("/api/v1/inquiries", {
       params: {
@@ -287,6 +366,7 @@ const fetchInquiries = async () => {
     pagination.value.page = response.data.data.number + 1;
     pagination.value.rowsPerPage = response.data.data.size;
     pagination.value.rowsNumber = response.data.data.totalElements;
+    errorMessage.value = "";
 
     console.log("데이터 로드 완료:", response.data.data);
     console.log("페이지 정보:", pagination.value);
@@ -296,23 +376,27 @@ const fetchInquiries = async () => {
     console.log("총 항목 수:", pagination.value.rowsNumber);
   } catch (error) {
     console.error("문의를 가져오지 못했습니다. :", error);
+    errorMessage.value = "문의 목록을 불러오는 중 문제가 발생했습니다.";
   } finally {
     loading.value = false; // 로딩 상태 종료
   }
 };
 
-// 검색 조건을 기반으로 데이터를 요청하는 함수
 const fetchInquiriesSearch = async () => {
-  loading.value = true; // 데이터 요청할 때 로딩 상태 true로 설정
+  loading.value = true;
   try {
     const params = new URLSearchParams();
     params.append("page", pagination.value.page - 1);
     params.append("size", pagination.value.rowsPerPage);
-    params.append("customerName", searchParams.value.customerName);
-    params.append("customerPhone", searchParams.value.customerPhone);
-    params.append("inquiryTitle", searchParams.value.inquiryTitle);
-    params.append("inquiryContent", searchParams.value.inquiryContent);
-    params.append("keyword", searchParams.value.keyword);
+
+    if (searchParams.value.customerName)
+      params.append("customerName", searchParams.value.customerName);
+    if (searchParams.value.customerPhone)
+      params.append("customerPhone", searchParams.value.customerPhone);
+    if (searchParams.value.inquiryTitle)
+      params.append("inquiryTitle", searchParams.value.inquiryTitle);
+    if (searchParams.value.inquiryContent)
+      params.append("inquiryContent", searchParams.value.inquiryContent);
 
     // 대괄호를 직접 인코딩하여 추가
     if (searchParams.value.startDate) {
@@ -323,12 +407,14 @@ const fetchInquiriesSearch = async () => {
     }
     if (searchParams.value.type) params.append("type", searchParams.value.type);
     if (searchParams.value.isReply !== null) {
-      params.append("isReply", searchParams.value.isReply.value);
-      console.log("isReply", searchParams.value.isReply.value);
+      params.append("isReply", JSON.stringify(searchParams.value.isReply));
     }
     if (searchParams.value.actionStatus)
       params.append("actionStatus", searchParams.value.actionStatus.value);
     console.log(searchParams.value.actionStatus.value);
+
+    // 로그: 요청 전에 로그 찍기
+    console.log("요청 보낼 파라미터:", params.toString());
 
     const response = await axios.get(
       `/api/v1/inquiries/search?${params.toString()}`,
@@ -338,6 +424,7 @@ const fetchInquiriesSearch = async () => {
         },
       }
     );
+
     console.log("응답 데이터:", response.data.data);
 
     if (!response.data.data || !response.data.data.content) {
@@ -345,29 +432,14 @@ const fetchInquiriesSearch = async () => {
       return;
     }
 
-    // const { content, totalElements, totalPages } = response.data.data;
-
-    // inquiries.value = content.map((item) => ({
-    //   id: item.id,
-    //   customerName: item.customerName,
-    //   customerPhone: item.customerPhone,
-    //   date: new Date(item.date).toLocaleString(),
-    //   type: item.type,
-    //   isReply: item.isReply,
-    //   employName: item.employName,
-    //   inquiryTitle: item.inquiryTitle,
-    //   inquiryContent: item.inquiryContent,
-    //   actionStatus: item.actionStatus,
-    // }));
-
-    // pagination.value.rowsNumber = totalElements;
-    // maxPages.value = totalPages;
     inquiries.value = response.data.data.content;
     pagination.value.page = response.data.data.number + 1;
     pagination.value.rowsPerPage = response.data.data.size;
     pagination.value.rowsNumber = response.data.data.totalElements;
+    errorMessage.value = "";
   } catch (error) {
     console.error("문의를 가져오지 못했습니다. :", error);
+    errorMessage.value = "문의를 검색하는 중 문제가 발생했습니다.";
   } finally {
     loading.value = false; // 로딩 상태 종료
   }
@@ -409,8 +481,15 @@ const filteredInquiries = computed(() => {
 $primary-color: #007bff;
 $secondary-color: #6c757d;
 
+.my-card {
+  margin-bottom: 20px;
+}
+
 .text-h4 {
   text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 0;
 }
 
 .search-container {
