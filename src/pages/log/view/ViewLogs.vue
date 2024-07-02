@@ -242,7 +242,7 @@ export default {
       { label: "Consultant", value: "ROLE_CONSULTANT" },
     ];
     const customerGrades = [
-      { label: "New", value: "BROWN" },
+      { label: "BROWN", value: "BROWN" },
       { label: "GOLD", value: "GOLD" },
       { label: "DIAMOND", value: "DIAMOND" },
       { label: "SILVER", value: "SILVER" },
