@@ -121,7 +121,6 @@
           <div class="col q-pa-sm">
             <q-select
               v-model="searchParams.type"
-              multiple
               filled
               color="purple-12"
               label="문의 타입"
