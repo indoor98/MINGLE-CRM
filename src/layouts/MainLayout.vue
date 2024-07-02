@@ -168,13 +168,13 @@ const linksList = [
     ],
     roles: ["ROLE_MARKETER", "ROLE_CONSULTANT"],
   },
-  {
-    title: "리워드",
-    caption: "고객별 리워드 조회",
-    icon: "paid",
-    to: "/reward",
-    roles: ["ROLE_MANAGER"],
-  },
+  // {
+  //   title: "리워드",
+  //   caption: "고객별 리워드 조회",
+  //   icon: "paid",
+  //   to: "/reward",
+  //   roles: ["ROLE_MANAGER"],
+  // },
   {
     title: "상담",
     caption: "상담 탭",
