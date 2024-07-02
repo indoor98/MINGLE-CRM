@@ -323,10 +323,13 @@ const fetchInquiriesSearch = async () => {
     }
     if (searchParams.value.type) params.append("type", searchParams.value.type);
     if (searchParams.value.isReply !== null) {
-      params.append("isReply", JSON.stringify(searchParams.value.isReply));
+      params.append(
+        "isReply",
+        JSON.stringify(searchParams.value.isReply.value)
+      );
     }
     if (searchParams.value.actionStatus)
-      params.append("actionStatus", searchParams.value.actionStatus);
+      params.append("actionStatus", searchParams.value.actionStatus.value);
 
     // 로그: 요청 전에 로그 찍기
     console.log("요청 보낼 파라미터:", params.toString());
