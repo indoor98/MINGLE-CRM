@@ -287,9 +287,8 @@
  <summary>
    <h1>🌼시스템 아키텍처 </h1> 
   </summary>
-  
-  ![image](https://github.com/kinggodgeneralteam2/BE05-FIN-2TEAM-MINGLECRM-BACKEND/assets/98157935/fdd41ced-c439-4448-8f09-6dec4aed160e)
-
+ 
+  ![mingle 시스템 아키텍쳐](https://github.com/kinggodgeneralteam2/BE05-FIN-2TEAM-MINGLECRM-BACKEND/assets/85616993/f34f0d93-e69b-4189-9a3d-386b6e714efb)
   
 </details>
 
