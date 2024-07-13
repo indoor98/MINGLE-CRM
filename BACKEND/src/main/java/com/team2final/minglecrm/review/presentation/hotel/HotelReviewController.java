@@ -20,12 +20,6 @@ public class HotelReviewController {
 
     private final HotelReviewService hotelReviewService;
 
-//    @GetMapping("/api/hotel/reviews/{pageno}")
-//    public ResponseEntity<ResultResponse<List<HotelReviewResponse>>> getHotelReviewsWithPageNum(@PathVariable("pageno") int pageNo) {
-//        List<HotelReviewResponse> response = hotelReviewService.findAllHotelReviewsWithPaging(pageNo);
-//        return ResponseEntity.status(HttpStatus.OK).body(new ResultResponse<>(HttpStatusCode.valueOf(HttpStatus.OK.value()).value(), "전체 리뷰 목록 반환 성공", response));
-//    }
-
     @PostMapping("/api/hotel/reviews/{pageno}")
     public ResultResponse<List<HotelReviewConditionSearchResponse>> searchReviews(@PathVariable("pageno") int pageNo, @RequestBody HotelReviewConditionSearchRequest request) {
         return new ResultResponse<>(HttpStatus.OK.value(), "success" ,hotelReviewService.searchReviews(request, pageNo));
@@ -53,4 +47,5 @@ public class HotelReviewController {
         Long response = hotelReviewService.getHotelReviewsNumberByPeriod(startDate, endDate, hotel);
         return new ResultResponse<>(HttpStatus.OK.value(), "success", response);
     }
+
 }

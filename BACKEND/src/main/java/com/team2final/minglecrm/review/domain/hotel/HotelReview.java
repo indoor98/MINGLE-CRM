@@ -6,6 +6,7 @@ import com.team2final.minglecrm.customer.domain.Customer;
 import com.team2final.minglecrm.reservation.domain.hotel.RoomReservation;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,6 +42,22 @@ public class HotelReview {
     @JoinColumn(name = "room_reservation_id")
     private RoomReservation roomReservation;
 
+
+    @Builder
+    public HotelReview(
+            Double kindnessRating,
+            Double cleanlinessRating,
+            Double convenienceRating,
+            Double locationRating,
+            String comment
+    ) {
+        this.kindnessRating = kindnessRating;
+        this.cleanlinessRating = cleanlinessRating;
+        this.convenienceRating = convenienceRating;
+        this.locationRating = locationRating;
+        this.comment = comment;
+        this.createdTime = LocalDateTime.now();
+    }
 
 
 }

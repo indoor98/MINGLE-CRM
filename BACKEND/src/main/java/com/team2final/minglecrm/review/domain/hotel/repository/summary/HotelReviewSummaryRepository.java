@@ -9,8 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface HotelReviewSummaryRepository extends JpaRepository<HotelReviewSummary, Long>, HotelReviewSummaryQueryDslRepository {
+public interface HotelReviewSummaryRepository extends JpaRepository<HotelReviewSummary, Long> {
 
     List<HotelReviewSummary> findHotelReviewSummariesBySummaryTypeAndStartDateAndEndDateAndHotel(SummaryType summaryType, LocalDateTime startDate, LocalDateTime endDate, String hotel);
-    List<HotelReviewSummary> findHotelReviewSummariesBySummaryTypeOrderByStartDateDesc(SummaryType summaryType);
 }

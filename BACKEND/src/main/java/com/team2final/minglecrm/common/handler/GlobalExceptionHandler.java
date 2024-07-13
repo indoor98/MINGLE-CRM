@@ -18,7 +18,7 @@
 //
 //    @ExceptionHandler(NotFoundException.class)
 //    public ResponseEntity<ErrorResponse> handle(ChangeSetPersister.NotFoundException e, HttpServletRequest request) {
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.from(e));
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse(e);
 //    }
 //
 //

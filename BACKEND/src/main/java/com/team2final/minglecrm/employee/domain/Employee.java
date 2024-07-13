@@ -7,12 +7,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE employee SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 public class Employee {
 
     @Id
@@ -30,13 +34,10 @@ public class Employee {
 
     private LocalDateTime createdDate;
 
-    private Boolean isValid;
-
     private Boolean isDeleted;
 
     @Builder
-    public Employee(String name, String email, String password, String authority,
-            Boolean isDeleted) {
+    public Employee(String name, String email, String password, String authority) {
         this.name = name;
         this.email = email;
         this.password = password;

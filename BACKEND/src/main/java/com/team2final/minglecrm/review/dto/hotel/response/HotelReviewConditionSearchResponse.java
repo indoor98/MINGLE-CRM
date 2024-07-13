@@ -3,12 +3,14 @@ package com.team2final.minglecrm.review.dto.hotel.response;
 import com.querydsl.core.annotations.QueryProjection;
 import com.team2final.minglecrm.reservation.domain.hotel.RoomType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class HotelReviewConditionSearchResponse {
 
     private String customerName;

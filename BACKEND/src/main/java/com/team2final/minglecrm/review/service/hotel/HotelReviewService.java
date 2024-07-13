@@ -36,6 +36,7 @@ public class HotelReviewService {
     }
 
     public JoinedReviews getJoinedHotelReviews (LocalDateTime startDate, LocalDateTime endDate, String hotel) {
+
         HotelReviewConditionSearchRequest request = new HotelReviewConditionSearchRequest(null, hotel, null, startDate, endDate);
         List<HotelReviewForSummaryResponse> hotelReviewList = hotelReviewRepository.findHotelReviewsByCondition(request);
         StringBuilder response = new StringBuilder();
@@ -97,19 +98,10 @@ public class HotelReviewService {
         return (long) hotelReviews.size();
     }
 
-    public Double getAverageRating(HotelReview hotelReview) {
-        return (hotelReview.getCleanlinessRating() +
-                hotelReview.getConvenienceRating() +
-                hotelReview.getKindnessRating() +
-                hotelReview.getLocationRating())/4;
-    }
-
     public Double getAverageRating(HotelReviewForSummaryResponse hotelReview) {
         return (hotelReview.getCleanlinessRating() +
                 hotelReview.getConvenienceRating() +
                 hotelReview.getKindnessRating() +
                 hotelReview.getLocationRating())/4;
     }
-
-
 }
