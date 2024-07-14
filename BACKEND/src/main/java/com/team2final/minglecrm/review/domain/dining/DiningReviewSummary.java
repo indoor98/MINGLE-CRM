@@ -1,6 +1,6 @@
 package com.team2final.minglecrm.review.domain.dining;
 
-import com.team2final.minglecrm.ai.dto.response.DiningReviewSummaryResponse;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewSummaryResponse;
 import com.team2final.minglecrm.review.domain.SummaryType;
 import jakarta.persistence.*;
 import lombok.Builder;

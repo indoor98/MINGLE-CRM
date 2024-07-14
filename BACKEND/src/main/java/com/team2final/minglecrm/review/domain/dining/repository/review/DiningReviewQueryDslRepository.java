@@ -16,9 +16,9 @@ public interface DiningReviewQueryDslRepository {
 
     Page<DiningReviewConditionSearchResponse> searchByExpression(DiningReviewConditionSearchRequest condition, Pageable pageable);
 
-    Long countByExpression(DiningReviewConditionSearchRequest condition);
+    List<DiningReviewConditionSearchResponse> searchByExpression(DiningReviewConditionSearchRequest condition);
 
-    List<DiningReviewForSummary> findAllByStartDateCondition(LocalDateTime startDate);
+    Long countByExpression(DiningReviewConditionSearchRequest condition);
 
     List<DiningReviewConditionSearchForSummaryResponse> findDiningReviewsByCondition(DiningReviewConditionSearchRequest condition);
 }

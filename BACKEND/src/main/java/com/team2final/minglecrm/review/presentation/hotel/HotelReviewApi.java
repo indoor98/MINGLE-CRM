@@ -23,13 +23,13 @@ public class HotelReviewApi {
     private final AiService aiService;
 
     @GetMapping("/api/hotel/review/{page}")
-    public ResultResponse<HotelReviewCombinedResponse> getReviews(
+    ResultResponse<HotelReviewCombinedResponse> getReviews(
             @PathVariable("page") int page,
             @ModelAttribute HotelReviewConditionSearchRequest request) {
         HotelReviewMetaDataResponse metaData = hotelReviewService.getHotelReviewMetaData(request);
         List<HotelReviewConditionSearchResponse> reviews = hotelReviewService.searchReviews(request, page);
         HotelReviewCombinedResponse combinedResponse = new HotelReviewCombinedResponse(metaData, reviews);
-        return new ResultResponse<>(HttpStatus.OK.value(), "success", combinedResponse);
+        return ResultResponse.success(HttpStatus.OK.value(), "success", combinedResponse);
     }
 
     @GetMapping("/api/hotel/review/summary")

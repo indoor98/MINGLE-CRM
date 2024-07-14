@@ -15,7 +15,6 @@ public interface HotelReviewQueryDslRepository {
 
     List<HotelReviewConditionSearchResponse> searchByExpression(HotelReviewConditionSearchRequest condition);
 
-    List<HotelReviewForSummary> findAllByStartDateCondition(LocalDateTime startDate);
     List<HotelReviewForSummaryResponse> findHotelReviewsByCondition(HotelReviewConditionSearchRequest condition);
 
     Long countByExpression(HotelReviewConditionSearchRequest condition);

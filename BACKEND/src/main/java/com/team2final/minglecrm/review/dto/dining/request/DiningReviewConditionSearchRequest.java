@@ -1,14 +1,14 @@
 package com.team2final.minglecrm.review.dto.dining.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@NoArgsConstructor
 public class DiningReviewConditionSearchRequest {
 
     private String customerName;
@@ -16,4 +16,16 @@ public class DiningReviewConditionSearchRequest {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
+    @Builder
+    public DiningReviewConditionSearchRequest(
+            String customerName,
+            String restaurant,
+            LocalDateTime startDate,
+            LocalDateTime endDate
+    ) {
+        this.customerName = customerName;
+        this.restaurant = restaurant;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

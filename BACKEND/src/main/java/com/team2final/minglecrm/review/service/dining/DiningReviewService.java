@@ -56,7 +56,7 @@ public class DiningReviewService {
                 .build();
     }
 
-    public List<DiningReviewConditionSearchResponse> searchDiningReviews(Integer pageNo, DiningReviewConditionSearchRequest condition) {
+    public List<DiningReviewConditionSearchResponse> searchDiningReviews(DiningReviewConditionSearchRequest condition, Integer pageNo) {
         Page<DiningReviewConditionSearchResponse> page =  diningReviewRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
 
         return new ArrayList<>(page.getContent());
@@ -68,16 +68,6 @@ public class DiningReviewService {
                         .rowsNumber(rowsNumber)
                         .pagesNumber((long) Math.ceil((double) rowsNumber /ROWS_PER_PAGE))
                         .build();
-    }
-
-    public Double getDiningReviewAverageRatingByPeriod(LocalDateTime startDate, LocalDateTime endDate) {
-        List<DiningReview> diningReviews = diningReviewRepository.findDiningReviewByCreatedDateBetween(startDate, endDate);
-        double numOfReviews = (double) diningReviews.size();
-        double averageRating = 0;
-        for (DiningReview diningReview : diningReviews ) {
-            averageRating += getAverageRating(diningReview);
-        }
-        return averageRating / numOfReviews;
     }
 
     public Double getDiningReviewAverageRatingByPeriodAndRestaurant(LocalDateTime startDate, LocalDateTime endDate, String restaurant) {
@@ -102,13 +92,6 @@ public class DiningReviewService {
         List<DiningReviewConditionSearchForSummaryResponse> diningReviewResponses = diningReviewRepository.findDiningReviewsByCondition(request);
 
         return (long) diningReviewResponses.size();
-    }
-
-    public Double getAverageRating(DiningReview diningReview) {
-        return (diningReview.getCleanlinessRating() +
-                diningReview.getAtmosphereRating() +
-                diningReview.getKindnessRating() +
-                diningReview.getTasteRating())/4;
     }
 
     public Double getAverageRating(DiningReviewConditionSearchForSummaryResponse diningReview) {

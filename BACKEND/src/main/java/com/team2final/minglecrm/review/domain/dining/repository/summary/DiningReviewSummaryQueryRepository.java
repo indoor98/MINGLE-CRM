@@ -2,12 +2,10 @@ package com.team2final.minglecrm.review.domain.dining.repository.summary;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.team2final.minglecrm.ai.dto.request.DiningReviewSummaryRequest;
 import com.team2final.minglecrm.review.domain.SummaryType;
 import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
 import com.team2final.minglecrm.review.domain.dining.QDiningReviewSummary;
-import com.team2final.minglecrm.review.domain.hotel.Hotel;
-import com.team2final.minglecrm.review.domain.hotel.QHotelReviewSummary;
+import com.team2final.minglecrm.review.dto.dining.request.DiningReviewSummaryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

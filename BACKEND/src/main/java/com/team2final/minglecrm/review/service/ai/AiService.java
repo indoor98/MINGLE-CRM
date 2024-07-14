@@ -1,11 +1,14 @@
 package com.team2final.minglecrm.review.service.ai;
 
-import com.team2final.minglecrm.ai.dto.response.DiningReviewSummaryResponse;
+import com.team2final.minglecrm.review.dto.dining.request.DiningReviewSummaryRequest;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewSummaryResponse;
+import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.domain.dining.repository.summary.DiningReviewSummaryQueryRepository;
 import com.team2final.minglecrm.review.domain.hotel.repository.summary.HotelReviewSummaryQueryRepository;
+import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewSummaryResponse;
-import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
 import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
 import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewRepository;
 import com.team2final.minglecrm.review.domain.hotel.HotelReviewSummary;
@@ -21,7 +24,6 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -31,12 +33,14 @@ import java.util.stream.Stream;
 public class AiService {
 
     private final ChatClient chatClient;
+
     private final HotelReviewRepository hotelReviewRepository;
     private final HotelReviewSummaryRepository hotelReviewSummaryRepository;
-    private final DiningReviewRepository diningReviewRepository;
-    private final DiningReviewSummaryRepository diningReviewSummaryRepository;
     private final HotelReviewSummaryQueryRepository hotelReviewSummaryQueryRepository;
 
+    private final DiningReviewRepository diningReviewRepository;
+    private final DiningReviewSummaryRepository diningReviewSummaryRepository;
+    private final DiningReviewSummaryQueryRepository diningReviewSummaryQueryRepository;
 
     /* 해당 조건에 맞는 ai 호텔 리뷰 요약이 존재하는 경우 */
     public Optional<HotelReviewSummaryResponse> getHotelReviewSummary(HotelReviewSummaryRequest condition) {
@@ -60,7 +64,7 @@ public class AiService {
         }
 
         // 평균 평점 계산
-        Double averageRating = calculateOverallAverageRating(reviews);
+        Double averageRating = calculateOverallAverageRatingForHotel(reviews);
 
         /* 리뷰 String Join */
         StringBuilder JoinedReview = new StringBuilder();
@@ -95,6 +99,60 @@ public class AiService {
         return HotelReviewSummary.of(summary);
     }
 
+    /* 다이닝 리뷰 요약 조회 */
+    public Optional<DiningReviewSummaryResponse> getDiningReviewSummary(DiningReviewSummaryRequest condition) {
+        DiningReviewSummary diningReviewSummary = diningReviewSummaryQueryRepository.searchByCondition(condition);
+        return Optional.ofNullable(DiningReviewSummary.of(diningReviewSummary));
+    }
+
+    /* 다이닝 리뷰 ai 요약 생성 */
+    public DiningReviewSummaryResponse createDiningReviewSummary(DiningReviewSummaryRequest condition) {
+
+        DiningReviewConditionSearchRequest request = DiningReviewConditionSearchRequest.builder()
+                .startDate(condition.getStartDate())
+                .endDate(condition.getEndDate())
+                .restaurant(condition.getRestaurant())
+                .build();
+
+        /* 요약을 위한 리뷰 준비 */
+        List<DiningReviewConditionSearchResponse> reviews = diningReviewRepository.searchByExpression(request);
+
+        /* 평점 계산 */
+        Double averageRating = calculateOverallAverageRatingForDining(reviews);
+
+        /* 요약 내용 JOIN */
+        StringBuilder JoinedReview = new StringBuilder();
+        for (int i=0; i < reviews.size() ; i++) {
+            JoinedReview.append(i)
+                    .append(" 번째 리뷰 : ")
+                    .append(reviews.get(i).getReview())
+                    .append("\n");
+        }
+
+        /* 다이닝 리뷰 요약 생성 */
+        SummaryType summaryType = condition.getSummaryType();
+        String systemMessageContent = generateSystemMessage(condition.getSummaryType());
+        SystemMessage systemMessage = new SystemMessage(systemMessageContent);
+        UserMessage userMessage = new UserMessage(JoinedReview.toString());
+        Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
+        String summaryContent = chatClient.prompt(prompt).call().content();
+
+        DiningReviewSummary summary = DiningReviewSummary.builder()
+                .startDate(condition.getStartDate())
+                .endDate(condition.getEndDate())
+                .summaryType(condition.getSummaryType())
+                .restaurant(condition.getRestaurant())
+                .summary(summaryContent)
+                .averageRating(averageRating)
+                .reviewAmount((long) reviews.size())
+                .build();
+
+        diningReviewSummaryRepository.save(summary);
+
+        return DiningReviewSummary.of(summary);
+    }
+
+
     private String generateSystemMessage(SummaryType summaryType) {
         if (summaryType.equals(SummaryType.POSITIVE)) {
             return "너는 리뷰들을 하나의 문단을 요약해주는 훌륭한 챗 봇이야 리뷰들을 긍정적인 내용 위주로 요약해줘 \n";
@@ -103,65 +161,8 @@ public class AiService {
         }
     }
 
-    private void saveDiningSummary(JoinedReviews joinedDiningReviews, SummaryType summaryType, String summaryContent, String restaurant) {
-        DiningReviewSummary summary = DiningReviewSummary.builder()
-                .summary(summaryContent)
-                .summaryType(summaryType)
-                .restaurant(restaurant)
-                .startDate(joinedDiningReviews.getStartDate())
-                .endDate(joinedDiningReviews.getEndDate())
-                .build();
 
-        diningReviewSummaryRepository.save(summary);
-    }
-
-
-
-
-//    public HotelReviewSummaryResponse getHotelReviewSummaryByPeriod(
-//            LocalDateTime startDate,
-//            LocalDateTime endDate,
-//            SummaryType summaryType,
-//            String hotel) {
-//        List<HotelReviewSummary> entities =  hotelReviewSummaryRepository.findHotelReviewSummariesBySummaryTypeAndStartDateAndEndDateAndHotel(summaryType, startDate, endDate, hotel);
-//        if (entities.isEmpty()) {
-//            return null;
-//        } else {
-//            return HotelReviewSummaryResponse.of(entities.get(0));
-//        }
-//    }
-
-
-
-    public String createDiningReviewSummary(JoinedReviews joinedDiningReviews, SummaryType summaryType, String restaurant) {
-        String systemMessageContent = generateSystemMessage(summaryType);
-        SystemMessage systemMessage = new SystemMessage(systemMessageContent);
-
-        UserMessage userMessage = new UserMessage(joinedDiningReviews.getJoinedReviews());
-        Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
-        String answer = chatClient.prompt(prompt).call().content();
-
-        saveDiningSummary(joinedDiningReviews, summaryType, answer, restaurant);
-        return answer;
-    }
-
-
-
-    public DiningReviewSummaryResponse getDiningReviewSummaryByPeriod(
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            SummaryType summaryType,
-            String restaurant) {
-        List<DiningReviewSummary> entities = diningReviewSummaryRepository.findDiningReviewSummariesBySummaryTypeAndStartDateAndEndDateAndRestaurant(summaryType, startDate, endDate,restaurant);
-
-        if (entities.isEmpty()) {
-            return null;
-        } else {
-            return DiningReviewSummaryResponse.of(entities.get(0));
-        }
-    }
-
-    private static double calculateOverallAverageRating(List<HotelReviewConditionSearchResponse> reviews) {
+    private static double calculateOverallAverageRatingForHotel(List<HotelReviewConditionSearchResponse> reviews) {
         double totalSum = reviews.stream()
                 .flatMapToDouble(review -> Stream.of(
                         review.getKindnessRating(),
@@ -176,4 +177,18 @@ public class AiService {
         return totalCount > 0 ? totalSum / totalCount : 0.0;
     }
 
+    private static double calculateOverallAverageRatingForDining(List<DiningReviewConditionSearchResponse> reviews) {
+        double totalSum = reviews.stream()
+                .flatMapToDouble(review -> Stream.of(
+                        review.getKindnessRating(),
+                        review.getCleanlinessRating(),
+                        review.getAtmosphereRating(),
+                        review.getTasteRating()
+                ).mapToDouble(Double::doubleValue))
+                .sum();
+
+        long totalCount = reviews.size() * 4L; // 각 리뷰마다 4개의 레이팅이 있다고 가정
+
+        return totalCount > 0 ? totalSum / totalCount : 0.0;
+    }
 }

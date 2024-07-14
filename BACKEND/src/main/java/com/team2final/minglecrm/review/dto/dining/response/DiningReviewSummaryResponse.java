@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.ai.dto.response;
+package com.team2final.minglecrm.review.dto.dining.response;
 
 import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
 import com.team2final.minglecrm.review.domain.SummaryType;

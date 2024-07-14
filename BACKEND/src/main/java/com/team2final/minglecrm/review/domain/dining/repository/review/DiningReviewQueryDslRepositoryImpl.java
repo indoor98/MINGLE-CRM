@@ -71,14 +71,40 @@ public class DiningReviewQueryDslRepositoryImpl implements DiningReviewQueryDslR
         return new PageImpl<>(response, pageable, response.size());
     }
 
-    public List<DiningReviewForSummary> findAllByStartDateCondition(LocalDateTime startDate) {
+    @Override
+    public List<DiningReviewConditionSearchResponse> searchByExpression(DiningReviewConditionSearchRequest condition) {
+
         QDiningReview diningReview = QDiningReview.diningReview;
+        QCustomer customer = QCustomer.customer;
+        QDishReservation dishReservation = QDishReservation.dishReservation;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (condition.getCustomerName() != null) {
+            builder.and(customer.name.eq(condition.getCustomerName()));
+        }
+        if (condition.getRestaurant() != null) {
+            builder.and(dishReservation.restaurant.eq(condition.getRestaurant()));
+        }
+        if (condition.getStartDate() != null && condition.getEndDate() != null) {
+            builder.and(diningReview.createdDate.between(condition.getStartDate(), condition.getEndDate()));
+        }
+
         return queryFactory
-                .select(new QDiningReviewForSummary(
-                        diningReview.review
+                .select(new QDiningReviewConditionSearchResponse(
+                        customer.name,
+                        diningReview.kindnessRating,
+                        diningReview.tasteRating,
+                        diningReview.cleanlinessRating,
+                        diningReview.atmosphereRating,
+                        diningReview.review,
+                        diningReview.createdDate,
+                        dishReservation.restaurant
                 ))
                 .from(diningReview)
-                .where(diningReview.createdDate.after(startDate))
+                .join(diningReview.customer, customer)
+                .join(diningReview.dishReservation, dishReservation)
+                .where(builder)
                 .fetch();
     }
 
