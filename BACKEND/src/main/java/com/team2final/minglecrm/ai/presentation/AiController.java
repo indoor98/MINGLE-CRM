@@ -4,7 +4,7 @@ import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
 import com.team2final.minglecrm.common.exception.ResultResponse;
 import com.team2final.minglecrm.ai.dto.response.DiningReviewSummaryResponse;
 import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
-import com.team2final.minglecrm.review.domain.hotel.SummaryType;
+import com.team2final.minglecrm.review.domain.SummaryType;
 import com.team2final.minglecrm.review.service.ai.AiService;
 import com.team2final.minglecrm.review.service.dining.DiningReviewService;
 import lombok.RequiredArgsConstructor;

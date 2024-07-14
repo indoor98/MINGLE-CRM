@@ -1,9 +1,7 @@
-package com.team2final.minglecrm.review.domain.hotel.repository.hotelReview;
+package com.team2final.minglecrm.review.domain.hotel.repository.review;
 
 import com.team2final.minglecrm.ai.dto.vo.HotelReviewForSummary;
-import com.team2final.minglecrm.review.domain.hotel.HotelReview;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
-import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewSummaryRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewForSummaryResponse;
 import org.springframework.data.domain.Page;

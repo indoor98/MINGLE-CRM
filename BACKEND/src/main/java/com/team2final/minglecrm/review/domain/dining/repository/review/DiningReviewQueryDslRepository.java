@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.dining.repository;
+package com.team2final.minglecrm.review.domain.dining.repository.review;
 
 import com.team2final.minglecrm.ai.dto.vo.DiningReviewForSummary;
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;

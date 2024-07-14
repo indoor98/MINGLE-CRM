@@ -1,12 +1,11 @@
 package com.team2final.minglecrm.dining.review;
 
 
-import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewResponse;
 import com.team2final.minglecrm.customer.domain.Customer;
 import com.team2final.minglecrm.review.domain.dining.DiningReview;
 import com.team2final.minglecrm.reservation.domain.dining.DishReservation;
 import com.team2final.minglecrm.customer.domain.repository.CustomerRepository;
-import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewRepository;
+import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewRepository;
 import com.team2final.minglecrm.reservation.domain.dining.repository.DishReservationRepository;
 import com.team2final.minglecrm.review.service.dining.DiningReviewService;
 import org.junit.jupiter.api.*;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SpringBootTest
 class DiningReviewServiceTest {

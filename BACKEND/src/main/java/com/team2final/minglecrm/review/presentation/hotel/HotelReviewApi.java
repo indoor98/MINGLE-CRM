@@ -44,5 +44,4 @@ public class HotelReviewApi {
             return new ResultResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error", null);
         }
     }
-
 }

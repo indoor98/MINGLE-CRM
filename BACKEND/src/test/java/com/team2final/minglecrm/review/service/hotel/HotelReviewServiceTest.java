@@ -2,14 +2,11 @@ package com.team2final.minglecrm.review.service.hotel;
 
 import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
 import com.team2final.minglecrm.review.domain.hotel.Hotel;
-import com.team2final.minglecrm.review.domain.hotel.HotelReview;
-import com.team2final.minglecrm.review.domain.hotel.repository.hotelReview.HotelReviewRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.review.HotelReviewRepository;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewForSummaryResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewMetaDataResponse;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,15 +15,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

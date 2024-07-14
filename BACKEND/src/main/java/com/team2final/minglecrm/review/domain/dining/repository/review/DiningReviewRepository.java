@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.dining.repository;
+package com.team2final.minglecrm.review.domain.dining.repository.review;
 
 import com.team2final.minglecrm.review.domain.dining.DiningReview;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
 package com.team2final.minglecrm.review.domain.hotel;
 
-import com.querydsl.core.annotations.QueryProjection;
+import com.team2final.minglecrm.review.domain.SummaryType;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewSummaryResponse;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -24,7 +24,7 @@ public class HotelReviewSummary {
     private Double averageRating;
     private Long reviewAmount;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String summary;
 
     @Builder

@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.hotel;
+package com.team2final.minglecrm.review.domain;
 
 import lombok.Getter;
 

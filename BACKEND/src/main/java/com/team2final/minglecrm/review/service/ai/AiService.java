@@ -1,18 +1,17 @@
 package com.team2final.minglecrm.review.service.ai;
 
 import com.team2final.minglecrm.ai.dto.response.DiningReviewSummaryResponse;
-import com.team2final.minglecrm.review.domain.hotel.Hotel;
 import com.team2final.minglecrm.review.domain.hotel.repository.summary.HotelReviewSummaryQueryRepository;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewSummaryResponse;
 import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
 import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
-import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewRepository;
+import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewRepository;
 import com.team2final.minglecrm.review.domain.hotel.HotelReviewSummary;
-import com.team2final.minglecrm.review.domain.hotel.SummaryType;
-import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewSummaryRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.hotelReview.HotelReviewRepository;
+import com.team2final.minglecrm.review.domain.SummaryType;
+import com.team2final.minglecrm.review.domain.dining.repository.summary.DiningReviewSummaryRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.review.HotelReviewRepository;
 import com.team2final.minglecrm.review.domain.hotel.repository.summary.HotelReviewSummaryRepository;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewSummaryRequest;
 import lombok.RequiredArgsConstructor;

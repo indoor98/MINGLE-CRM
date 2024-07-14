@@ -1,7 +1,7 @@
-package com.team2final.minglecrm.review.domain.dining.repository;
+package com.team2final.minglecrm.review.domain.dining.repository.summary;
 
 import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
-import com.team2final.minglecrm.review.domain.hotel.SummaryType;
+import com.team2final.minglecrm.review.domain.SummaryType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

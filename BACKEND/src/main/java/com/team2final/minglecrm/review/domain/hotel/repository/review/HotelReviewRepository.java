@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.hotel.repository.hotelReview;
+package com.team2final.minglecrm.review.domain.hotel.repository.review;
 
 
 import com.team2final.minglecrm.review.domain.hotel.HotelReview;

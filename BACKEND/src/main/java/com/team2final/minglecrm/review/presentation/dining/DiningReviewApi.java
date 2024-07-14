@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class DiningReviewController {
+public class DiningReviewApi {
 
     private final DiningReviewService diningReviewService;
 
@@ -50,6 +50,4 @@ public class DiningReviewController {
         Long response = diningReviewService.getDiningReviewsNumberByPeriod(startDate, endDate, restaurant);
         return new ResultResponse<>(HttpStatus.OK.value(), "sucess", response);
     }
-
-
 }

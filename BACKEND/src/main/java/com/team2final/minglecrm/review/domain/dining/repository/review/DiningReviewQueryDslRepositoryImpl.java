@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.dining.repository;
+package com.team2final.minglecrm.review.domain.dining.repository.review;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -7,7 +7,6 @@ import com.team2final.minglecrm.ai.dto.vo.QDiningReviewForSummary;
 import com.team2final.minglecrm.customer.domain.QCustomer;
 import com.team2final.minglecrm.reservation.domain.dining.QDishReservation;
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
-import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewResponse;
 import com.team2final.minglecrm.reservation.dto.dining.response.QDiningReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.domain.dining.QDiningReview;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
@@ -17,7 +16,6 @@ import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.List;

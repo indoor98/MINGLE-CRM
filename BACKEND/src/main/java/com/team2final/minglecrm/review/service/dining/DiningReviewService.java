@@ -5,7 +5,7 @@ import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionS
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
 import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewResponse;
 import com.team2final.minglecrm.review.domain.dining.DiningReview;
-import com.team2final.minglecrm.review.domain.dining.repository.DiningReviewRepository;
+import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewRepository;
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchForSummaryResponse;
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewMetaDataResponse;
 import lombok.RequiredArgsConstructor;

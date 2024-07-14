@@ -1,4 +1,4 @@
-package com.team2final.minglecrm.review.domain.hotel.repository.hotelReview;
+package com.team2final.minglecrm.review.domain.hotel.repository.review;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -7,11 +7,8 @@ import com.team2final.minglecrm.ai.dto.vo.QHotelReviewForSummary;
 import com.team2final.minglecrm.customer.domain.QCustomer;
 import com.team2final.minglecrm.reservation.domain.hotel.QHotelRoom;
 import com.team2final.minglecrm.reservation.domain.hotel.QRoomReservation;
-import com.team2final.minglecrm.review.domain.hotel.Hotel;
-import com.team2final.minglecrm.review.domain.hotel.HotelReview;
 import com.team2final.minglecrm.review.domain.hotel.QHotelReview;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
-import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewSummaryRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewForSummaryResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.QHotelReviewConditionSearchResponse;

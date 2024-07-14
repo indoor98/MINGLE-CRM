@@ -1,21 +1,16 @@
 package com.team2final.minglecrm.review.domain.hotel.repository.summary;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team2final.minglecrm.review.domain.hotel.Hotel;
 import com.team2final.minglecrm.review.domain.hotel.HotelReviewSummary;
 import com.team2final.minglecrm.review.domain.hotel.QHotelReviewSummary;
-import com.team2final.minglecrm.review.domain.hotel.SummaryType;
+import com.team2final.minglecrm.review.domain.SummaryType;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewSummaryRequest;
-import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewSummaryResponse;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor

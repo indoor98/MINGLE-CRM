@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.ai.dto.request;
 
+import com.team2final.minglecrm.review.domain.SummaryType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,5 +11,5 @@ public class DiningReviewSummaryRequest {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String restaurant;
-    private String summaryType;
+    private SummaryType summaryType;
 }
