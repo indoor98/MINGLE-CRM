@@ -7,9 +7,11 @@ import com.team2final.minglecrm.ai.dto.vo.QHotelReviewForSummary;
 import com.team2final.minglecrm.customer.domain.QCustomer;
 import com.team2final.minglecrm.reservation.domain.hotel.QHotelRoom;
 import com.team2final.minglecrm.reservation.domain.hotel.QRoomReservation;
+import com.team2final.minglecrm.review.domain.hotel.Hotel;
 import com.team2final.minglecrm.review.domain.hotel.HotelReview;
 import com.team2final.minglecrm.review.domain.hotel.QHotelReview;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
+import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewSummaryRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewForSummaryResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.QHotelReviewConditionSearchResponse;
@@ -82,6 +84,49 @@ public class HotelReviewQueryDslRepositoryImpl implements HotelReviewQueryDslRep
         return new PageImpl<>(response, pageable, response.size());
     }
 
+    @Override
+    public List<HotelReviewConditionSearchResponse> searchByExpression(HotelReviewConditionSearchRequest condition) {
+
+        QHotelReview hotelReview = QHotelReview.hotelReview;
+        QCustomer customer = QCustomer.customer;
+        QRoomReservation roomReservation = QRoomReservation.roomReservation;
+        QHotelRoom hotelRoom = QHotelRoom.hotelRoom;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (condition.getCustomerName() != null) {
+            builder.and(customer.name.eq(condition.getCustomerName()));
+        }
+        if (condition.getHotel() != null) {
+            builder.and(hotelRoom.hotel.eq(condition.getHotel())); // Hotel 정보 검색
+        }
+        if (condition.getRoomType() != null) {
+            builder.and(hotelRoom.roomType.eq(condition.getRoomType()));
+        }
+        if (condition.getStartDate() != null && condition.getEndDate() != null) {
+            builder.and(hotelReview.createdTime.between(condition.getStartDate(), condition.getEndDate()));
+        }
+
+        return queryFactory
+                .select(new QHotelReviewConditionSearchResponse(
+                        customer.name,
+                        hotelReview.kindnessRating,
+                        hotelReview.cleanlinessRating,
+                        hotelReview.convenienceRating,
+                        hotelReview.locationRating,
+                        hotelReview.comment,
+                        hotelReview.createdTime,
+                        roomReservation.hotelRoom.roomType,
+                        hotelRoom.hotel // Hotel 정보 추가
+                ))
+                .from(hotelReview)
+                .join(hotelReview.customer, customer)
+                .join(hotelReview.roomReservation, roomReservation)
+                .join(roomReservation.hotelRoom, hotelRoom) // HotelRoom과 조인
+                .where(builder)
+                .fetch();
+    }
+
     public List<HotelReviewForSummary> findAllByStartDateCondition(LocalDateTime startDate) {
 
         QHotelReview hotelReview = QHotelReview.hotelReview;
@@ -136,6 +181,10 @@ public class HotelReviewQueryDslRepositoryImpl implements HotelReviewQueryDslRep
 
         if (condition.getHotel() != null) {
             builder.and(hotelRoom.hotel.eq(condition.getHotel())); // Hotel 정보 검색
+        }
+
+        if (condition.getRoomType() != null) {
+            builder.and(hotelRoom.roomType.eq(condition.getRoomType()));
         }
 
         if (condition.getStartDate() != null && condition.getEndDate() != null) {

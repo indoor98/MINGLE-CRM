@@ -2,6 +2,7 @@ package com.team2final.minglecrm.review.dto.hotel.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.team2final.minglecrm.reservation.domain.hotel.RoomType;
+import com.team2final.minglecrm.review.domain.hotel.Hotel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +22,7 @@ public class HotelReviewConditionSearchResponse {
     private String comment;
     private LocalDateTime createdTime;
     private RoomType roomType;
-    private String hotel;
+    private Hotel hotel;
 
 
     @QueryProjection
@@ -34,7 +35,7 @@ public class HotelReviewConditionSearchResponse {
             String comment,
             LocalDateTime createdTime,
             RoomType roomType,
-            String hotel
+            Hotel hotel
     ) {
         this.customerName = customerName;
         this.kindnessRating = kindnessRating;

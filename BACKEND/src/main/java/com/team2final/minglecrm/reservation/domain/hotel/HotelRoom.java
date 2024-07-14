@@ -1,5 +1,6 @@
 package com.team2final.minglecrm.reservation.domain.hotel;
 
+import com.team2final.minglecrm.review.domain.hotel.Hotel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,7 +20,8 @@ public class HotelRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String hotel;
+    @Enumerated(value = EnumType.STRING)
+    private Hotel hotel;
 
     private String address;
 

@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.review.service.hotel;
 
 import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
+import com.team2final.minglecrm.review.domain.hotel.Hotel;
 import com.team2final.minglecrm.review.domain.hotel.HotelReview;
 import com.team2final.minglecrm.review.domain.hotel.repository.hotelReview.HotelReviewRepository;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
@@ -68,7 +69,7 @@ class HotelReviewServiceTest {
         // Given
         LocalDateTime startDate = LocalDateTime.MIN;
         LocalDateTime endDate = LocalDateTime.MAX;
-        String hotel = "SEOUL";
+        Hotel hotel = Hotel.SEOUL;
 
         // Mock Data
         HotelReviewForSummaryResponse review = new HotelReviewForSummaryResponse();
@@ -109,7 +110,7 @@ class HotelReviewServiceTest {
     public void testGetHotelReviewAverageRatingByPeriod() {
         LocalDateTime startDate = LocalDateTime.now();
         LocalDateTime endDate = LocalDateTime.now().plusDays(1);
-        String hotel = "Hotel";
+        Hotel hotel = Hotel.SEOUL;
         HotelReviewForSummaryResponse review = new HotelReviewForSummaryResponse();
         review.setCleanlinessRating(4.0);
         review.setConvenienceRating(4.0);
@@ -129,7 +130,7 @@ class HotelReviewServiceTest {
     public void testGetHotelReviewsNumberByPeriod() {
         LocalDateTime startDate = LocalDateTime.now();
         LocalDateTime endDate = LocalDateTime.now().plusDays(1);
-        String hotel = "Hotel";
+        Hotel hotel = Hotel.SEOUL;
         List<HotelReviewForSummaryResponse> reviews = Collections.singletonList(new HotelReviewForSummaryResponse());
 
         when(hotelReviewRepository.findHotelReviewsByCondition(any())).thenReturn(reviews);

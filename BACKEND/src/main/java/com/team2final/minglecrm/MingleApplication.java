@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableMethodSecurity
 public class MingleApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(MingleApplication.class, args);
+		try {
+			SpringApplication.run(MingleApplication.class, args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

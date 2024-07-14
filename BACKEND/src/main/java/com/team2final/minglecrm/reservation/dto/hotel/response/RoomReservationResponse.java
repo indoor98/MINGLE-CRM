@@ -30,7 +30,7 @@ public class RoomReservationResponse {
                 roomReservation.getReservationDate(),
                 roomReservation.getCustomer().getName(),
                 roomReservation.getCustomer().getPhone(),
-                roomReservation.getHotelRoom().getHotel(),
+                roomReservation.getHotelRoom().getHotel().toString(),
                 roomReservation.getHotelRoom().getRoomType().name(),
                 roomReservation.getCustomer().getMemo()
                 );

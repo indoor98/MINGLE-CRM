@@ -1,6 +1,7 @@
 package com.team2final.minglecrm.review.service.hotel;
 
 import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
+import com.team2final.minglecrm.review.domain.hotel.Hotel;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.domain.hotel.HotelReview;
@@ -26,16 +27,19 @@ public class HotelReviewService {
     public List<HotelReviewConditionSearchResponse> searchReviews(HotelReviewConditionSearchRequest condition, int pageNo) {
 
         Page<HotelReviewConditionSearchResponse> page =  hotelReviewRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
-        List<HotelReviewConditionSearchResponse> response = new ArrayList<>();
 
-        for(HotelReviewConditionSearchResponse hotelReview : page.getContent() ) {
-            response.add(hotelReview);
-        }
-
-        return response;
+        return new ArrayList<>(page.getContent());
     }
 
-    public JoinedReviews getJoinedHotelReviews (LocalDateTime startDate, LocalDateTime endDate, String hotel) {
+    public HotelReviewMetaDataResponse getHotelReviewMetaData(HotelReviewConditionSearchRequest condition) {
+        long rowsNumber = hotelReviewRepository.countByExpression(condition);
+        return HotelReviewMetaDataResponse.builder()
+                .rowsNumber(rowsNumber)
+                .pagesNumber((long) Math.ceil((double) rowsNumber /ROWS_PER_PAGE))
+                .build();
+    }
+
+    public JoinedReviews getJoinedHotelReviews (LocalDateTime startDate, LocalDateTime endDate, Hotel hotel) {
 
         HotelReviewConditionSearchRequest request = new HotelReviewConditionSearchRequest(null, hotel, null, startDate, endDate);
         List<HotelReviewForSummaryResponse> hotelReviewList = hotelReviewRepository.findHotelReviewsByCondition(request);
@@ -59,16 +63,7 @@ public class HotelReviewService {
                 .build();
     }
 
-    public HotelReviewMetaDataResponse getHotelReviewMetaData(HotelReviewConditionSearchRequest condition) {
-        long rowsNumber = hotelReviewRepository.countByExpression(condition);
-        return HotelReviewMetaDataResponse.builder()
-                        .rowsNumber(rowsNumber)
-                        .pagesNumber((long) Math.ceil((double) rowsNumber /ROWS_PER_PAGE))
-                        .build();
-
-    }
-
-    public Double getHotelReviewAverageRatingByPeriod(LocalDateTime startDate, LocalDateTime endDate, String hotel) {
+    public Double getHotelReviewAverageRatingByPeriod(LocalDateTime startDate, LocalDateTime endDate, Hotel hotel) {
 
         if (hotel.equals("All")) {
             hotel = null;
@@ -85,16 +80,9 @@ public class HotelReviewService {
         return averageRating / numberOfReviews;
     }
 
-    public Long getHotelReviewsNumberByPeriod(LocalDateTime startDate, LocalDateTime endDate, String hotel) {
-
-        if (hotel.equals("All")) {
-            hotel = null;
-        }
-
+    public Long getHotelReviewsNumberByPeriod(LocalDateTime startDate, LocalDateTime endDate, Hotel hotel) {
         HotelReviewConditionSearchRequest request = new HotelReviewConditionSearchRequest(null, hotel, null, startDate, endDate);
         List<HotelReviewForSummaryResponse> hotelReviews = hotelReviewRepository.findHotelReviewsByCondition(request);
-
-
         return (long) hotelReviews.size();
     }
 
