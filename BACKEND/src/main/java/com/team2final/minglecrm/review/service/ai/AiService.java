@@ -1,22 +1,22 @@
 package com.team2final.minglecrm.review.service.ai;
 
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.domain.SummaryType;
+import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
+import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewQueryRepository;
+import com.team2final.minglecrm.review.domain.dining.repository.summary.DiningReviewSummaryQueryRepository;
+import com.team2final.minglecrm.review.domain.dining.repository.summary.DiningReviewSummaryRepository;
+import com.team2final.minglecrm.review.domain.hotel.HotelReviewSummary;
+import com.team2final.minglecrm.review.domain.hotel.repository.review.HotelReviewQueryRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.summary.HotelReviewSummaryQueryRepository;
+import com.team2final.minglecrm.review.domain.hotel.repository.summary.HotelReviewSummaryRepository;
+import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewSummaryRequest;
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewSummaryResponse;
-import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
-import com.team2final.minglecrm.review.domain.dining.repository.summary.DiningReviewSummaryQueryRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.summary.HotelReviewSummaryQueryRepository;
-import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewConditionSearchRequest;
+import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewSummaryRequest;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewSummaryResponse;
-import com.team2final.minglecrm.review.domain.dining.DiningReviewSummary;
-import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewRepository;
-import com.team2final.minglecrm.review.domain.hotel.HotelReviewSummary;
-import com.team2final.minglecrm.review.domain.SummaryType;
-import com.team2final.minglecrm.review.domain.dining.repository.summary.DiningReviewSummaryRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.review.HotelReviewRepository;
-import com.team2final.minglecrm.review.domain.hotel.repository.summary.HotelReviewSummaryRepository;
-import com.team2final.minglecrm.review.dto.hotel.request.HotelReviewSummaryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -34,11 +34,11 @@ public class AiService {
 
     private final ChatClient chatClient;
 
-    private final HotelReviewRepository hotelReviewRepository;
+    private final HotelReviewQueryRepository hotelReviewQueryRepository;
     private final HotelReviewSummaryRepository hotelReviewSummaryRepository;
     private final HotelReviewSummaryQueryRepository hotelReviewSummaryQueryRepository;
 
-    private final DiningReviewRepository diningReviewRepository;
+    private final DiningReviewQueryRepository diningReviewQueryRepository;
     private final DiningReviewSummaryRepository diningReviewSummaryRepository;
     private final DiningReviewSummaryQueryRepository diningReviewSummaryQueryRepository;
 
@@ -57,7 +57,7 @@ public class AiService {
                 .hotel(condition.getHotel())
                 .build();
 
-        List<HotelReviewConditionSearchResponse> reviews = hotelReviewRepository.searchByExpression(request);
+        List<HotelReviewConditionSearchResponse> reviews = hotelReviewQueryRepository.searchByExpression(request);
 
         if (reviews.isEmpty()) {
             throw new IllegalArgumentException("요약할 리뷰가 없습니다");
@@ -115,7 +115,7 @@ public class AiService {
                 .build();
 
         /* 요약을 위한 리뷰 준비 */
-        List<DiningReviewConditionSearchResponse> reviews = diningReviewRepository.searchByExpression(request);
+        List<DiningReviewConditionSearchResponse> reviews = diningReviewQueryRepository.searchByExpression(request);
 
         /* 평점 계산 */
         Double averageRating = calculateOverallAverageRatingForDining(reviews);

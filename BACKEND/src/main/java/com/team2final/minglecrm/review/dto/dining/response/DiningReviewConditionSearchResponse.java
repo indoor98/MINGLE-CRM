@@ -6,33 +6,34 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Setter
-public class DiningReviewConditionSearchForSummaryResponse {
+@Getter
+public class DiningReviewConditionSearchResponse {
 
-    private Double tasteRating;
+    private String customerName;
     private Double kindnessRating;
+    private Double tasteRating;
     private Double cleanlinessRating;
     private Double atmosphereRating;
-
     private String review;
     private LocalDateTime createdTime;
     private String restaurant;
 
-
     @QueryProjection
-    public DiningReviewConditionSearchForSummaryResponse(
-            Double tasteRating,
+    public DiningReviewConditionSearchResponse(
+            String customerName,
             Double kindnessRating,
+            Double tasteRating,
             Double cleanlinessRating,
             Double atmosphereRating,
             String review,
             LocalDateTime createdTime,
             String restaurant
     ) {
-        this.tasteRating = tasteRating;
+        this.customerName = customerName;
         this.kindnessRating = kindnessRating;
         this.cleanlinessRating = cleanlinessRating;
+        this.tasteRating = tasteRating;
         this.atmosphereRating = atmosphereRating;
         this.review = review;
         this.createdTime = createdTime;

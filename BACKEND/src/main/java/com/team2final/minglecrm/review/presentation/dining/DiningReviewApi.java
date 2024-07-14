@@ -2,7 +2,7 @@ package com.team2final.minglecrm.review.presentation.dining;
 
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewSummaryResponse;
 import com.team2final.minglecrm.common.exception.ResultResponse;
-import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewSummaryRequest;
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewCombinedResponse;

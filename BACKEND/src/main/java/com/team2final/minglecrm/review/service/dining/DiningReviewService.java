@@ -1,19 +1,14 @@
 package com.team2final.minglecrm.review.service.dining;
 
-import com.team2final.minglecrm.ai.dto.vo.JoinedReviews;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewQueryRepository;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
-import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewConditionSearchResponse;
-import com.team2final.minglecrm.reservation.dto.dining.response.DiningReviewResponse;
-import com.team2final.minglecrm.review.domain.dining.DiningReview;
-import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewRepository;
-import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchForSummaryResponse;
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewMetaDataResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,84 +16,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DiningReviewService {
 
-    private final DiningReviewRepository diningReviewRepository;
+    private final DiningReviewQueryRepository diningReviewQueryRepository;
     private final int ROWS_PER_PAGE = 9;
 
-    public List<DiningReviewResponse> findAllDiningReviewsWithPaging(Integer pageNo) {
-        Page<DiningReview> diningReviewPage = diningReviewRepository.findAll(PageRequest.of(pageNo, 9));
-
-        List<DiningReviewResponse> response = new ArrayList<>();
-        for (DiningReview diningReview : diningReviewPage) {
-            response.add(DiningReviewResponse.of(diningReview));
-        }
-        return response;
-    }
-
-    public JoinedReviews getJoinedDiningReviews (LocalDateTime startDate, LocalDateTime endDate, String restaurant) {
-        List<DiningReview> diningReviewList = diningReviewRepository.findDiningReviewByCreatedDateBetween(startDate, endDate);
-
-        if (diningReviewList.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder response = new StringBuilder();
-        for (int i=0; i < diningReviewList.size() ; i++) {
-            response.append(i)
-                    .append(" 번째 리뷰 : ")
-                    .append(diningReviewList.get(i).getReview())
-                    .append("\n");
-        }
-
-        return  JoinedReviews.builder()
-                .joinedReviews(response.toString())
-                .startDate(startDate)
-                .endDate(endDate)
-                .build();
-    }
-
     public List<DiningReviewConditionSearchResponse> searchDiningReviews(DiningReviewConditionSearchRequest condition, Integer pageNo) {
-        Page<DiningReviewConditionSearchResponse> page =  diningReviewRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
+        Page<DiningReviewConditionSearchResponse> page = diningReviewQueryRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
 
         return new ArrayList<>(page.getContent());
     }
 
     public DiningReviewMetaDataResponse getDiningReviewMetaData(DiningReviewConditionSearchRequest condition) {
-        long rowsNumber = diningReviewRepository.countByExpression(condition);
+        long rowsNumber = diningReviewQueryRepository.countByExpression(condition);
         return DiningReviewMetaDataResponse.builder()
-                        .rowsNumber(rowsNumber)
-                        .pagesNumber((long) Math.ceil((double) rowsNumber /ROWS_PER_PAGE))
-                        .build();
-    }
-
-    public Double getDiningReviewAverageRatingByPeriodAndRestaurant(LocalDateTime startDate, LocalDateTime endDate, String restaurant) {
-        if(restaurant.equals("All")) {
-            restaurant = null;
-        }
-        DiningReviewConditionSearchRequest request = new DiningReviewConditionSearchRequest(null, restaurant, startDate, endDate);
-        List<DiningReviewConditionSearchForSummaryResponse> diningReviewResponses = diningReviewRepository.findDiningReviewsByCondition(request);
-        double numOfReviews = (double) diningReviewResponses.size();
-        double averageRating = 0;
-        for ( DiningReviewConditionSearchForSummaryResponse response: diningReviewResponses) {
-            averageRating += getAverageRating(response);
-        }
-        return averageRating / numOfReviews;
-    }
-
-    public Long getDiningReviewsNumberByPeriod(LocalDateTime startDate, LocalDateTime endDate, String restaurant) {
-        if(restaurant.equals("All")) {
-            restaurant = null;
-        }
-        DiningReviewConditionSearchRequest request = new DiningReviewConditionSearchRequest(null, restaurant, startDate, endDate);
-        List<DiningReviewConditionSearchForSummaryResponse> diningReviewResponses = diningReviewRepository.findDiningReviewsByCondition(request);
-
-        return (long) diningReviewResponses.size();
-    }
-
-    public Double getAverageRating(DiningReviewConditionSearchForSummaryResponse diningReview) {
-        return (diningReview.getCleanlinessRating() +
-                diningReview.getAtmosphereRating() +
-                diningReview.getKindnessRating() +
-                diningReview.getTasteRating())/4;
+                .rowsNumber(rowsNumber)
+                .pagesNumber((long) Math.ceil((double) rowsNumber / ROWS_PER_PAGE))
+                .build();
     }
 
 }
