@@ -16,15 +16,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HotelReviewService {
 
-    private final HotelReviewQueryRepository hotelReviewQueryRepository;
     private final int ROWS_PER_PAGE = 9;
 
+    private final HotelReviewQueryRepository hotelReviewQueryRepository;
+
     public List<HotelReviewConditionSearchResponse> searchReviews(HotelReviewConditionSearchRequest condition, int pageNo) {
-
         Page<HotelReviewConditionSearchResponse> page =  hotelReviewQueryRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
-
         return new ArrayList<>(page.getContent());
     }
+
 
     public HotelReviewMetaDataResponse getHotelReviewMetaData(HotelReviewConditionSearchRequest condition) {
         long rowsNumber = hotelReviewQueryRepository.countByExpression(condition);

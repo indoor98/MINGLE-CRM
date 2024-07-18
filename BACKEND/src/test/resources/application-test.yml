@@ -1,31 +1,22 @@
 spring:
-#  mvc:
-#    cors:
-#      allowed-origins: http://mingle-front-bucket.s3-website.ap-northeast-2.amazonaws.com
-#      allowed-methods: GET,POST,PUT,DELETE,OPTIONS
-#      allowed-headers: "*"
-#      allow-credentials: true
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:mingledb
-#    username: sa
-#    password:
+  #  mvc:
+  #    cors:
+  #      allowed-origins: http://mingle-front-bucket.s3-website.ap-northeast-2.amazonaws.com
+  #      allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  #      allowed-headers: "*"
+  #      allow-credentials: true
 
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/mingle_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: 123456789
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
 
-  jpa:  # https://joyerim.tistory.com/6#%E2%96%AA%C2%A0JPA-1
+  jpa:
     defer-datasource-initialization: true
     show-sql: true
     hibernate:
       ddl-auto: create
-
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
 
   data:
     redis:
@@ -37,6 +28,12 @@ spring:
     live:
       atk: 300000
       rtk: 3000000
+
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
 
   mail:
     host: smtp.gmail.com
@@ -54,14 +51,12 @@ spring:
           timeout: 5000
           write timeout: 5000
 
-    auth-code-expiration-millis: 300000
-
   batch:
     job:
       enabled: false
       name: importFrequentCustomerJob, reservationStatisticsJob, birthdayReminderJob, purchaseItemJob
     jdbc:
-      initialize-schema: never
+      initialize-schema: always
 
   ai:
     openai:

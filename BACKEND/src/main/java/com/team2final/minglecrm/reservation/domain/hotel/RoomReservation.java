@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -56,4 +57,13 @@ public class RoomReservation {
     public void deleteHotelReservation() {
         this.payment.cancelReservation(true);
     }
+
+    /* 테스트를 위한 정적 팩터리 메서드 */
+    public static RoomReservation create(Customer customer, HotelRoom hotelRoom) {
+        RoomReservation roomReservation = new RoomReservation();
+        roomReservation.customer = customer;
+        roomReservation.hotelRoom = hotelRoom;
+        return roomReservation;
+    }
+
 }

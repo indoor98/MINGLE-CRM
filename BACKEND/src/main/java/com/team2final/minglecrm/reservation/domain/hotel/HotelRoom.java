@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Getter
@@ -31,4 +32,12 @@ public class HotelRoom {
     private RoomType roomType;
 
     private String roomState;
+
+    /* 테스트를 위한 정적 팩터리 메서드 */
+    public static HotelRoom create(Hotel hotel, RoomType roomType) {
+        HotelRoom hotelRoom = new HotelRoom();
+        hotelRoom.hotel = hotel;
+        hotelRoom.roomType = roomType;
+        return hotelRoom;
+    }
 }

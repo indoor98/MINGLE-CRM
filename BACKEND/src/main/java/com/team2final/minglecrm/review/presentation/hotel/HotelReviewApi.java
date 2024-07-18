@@ -10,6 +10,7 @@ import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewConditionSe
 import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewMetaDataResponse;
 import com.team2final.minglecrm.review.service.hotel.HotelReviewService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

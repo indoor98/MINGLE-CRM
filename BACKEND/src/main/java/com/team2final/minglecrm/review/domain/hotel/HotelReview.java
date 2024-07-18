@@ -49,14 +49,19 @@ public class HotelReview {
             Double cleanlinessRating,
             Double convenienceRating,
             Double locationRating,
-            String comment
+            String comment,
+            RoomReservation roomReservation,
+            Customer customer,
+            LocalDateTime createdTime
     ) {
         this.kindnessRating = kindnessRating;
         this.cleanlinessRating = cleanlinessRating;
         this.convenienceRating = convenienceRating;
         this.locationRating = locationRating;
         this.comment = comment;
-        this.createdTime = LocalDateTime.now();
+        this.createdTime = createdTime;
+        this.customer = customer;
+        this.roomReservation = roomReservation;
     }
 
 
