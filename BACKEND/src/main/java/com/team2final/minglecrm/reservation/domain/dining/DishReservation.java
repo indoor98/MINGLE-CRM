@@ -53,11 +53,17 @@ public class DishReservation {
 
 
     @Builder
-    public DishReservation(Long totalPrice, LocalDateTime reservationDate, Customer customer, Integer visitCount, String restaurant) {
+    public DishReservation(Long totalPrice,
+                           LocalDateTime reservationDate,
+                           Customer customer,
+                           LocalDateTime visitDate,
+                           Integer visitorCount,
+                           String restaurant) {
         this.totalPrice = totalPrice;
         this.reservationDate = reservationDate;
         this.customer = customer;
-        this.visitorCount = visitCount;
+        this.visitDate = visitDate;
+        this.visitorCount = visitorCount;
         this.restaurant = restaurant;
     }
 }

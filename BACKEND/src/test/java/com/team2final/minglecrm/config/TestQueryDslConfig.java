@@ -1,6 +1,8 @@
 package com.team2final.minglecrm.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.team2final.minglecrm.review.domain.dining.DiningReview;
+import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewQueryRepository;
 import com.team2final.minglecrm.review.domain.hotel.repository.review.HotelReviewQueryRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -21,6 +23,11 @@ public class TestQueryDslConfig {
     @Bean
     public HotelReviewQueryRepository hotelReviewQueryRepository() {
         return new HotelReviewQueryRepository(jpaQueryFactory());
+    }
+
+    @Bean
+    public DiningReviewQueryRepository diningReviewQueryRepository() {
+        return new DiningReviewQueryRepository(jpaQueryFactory());
     }
 
 }

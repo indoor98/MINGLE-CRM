@@ -185,7 +185,7 @@ class HotelReviewQueryRepositoryTest {
 
 
     @Test
-    @DisplayName("Hotel Review Count : 조건 X")
+    @DisplayName("Hotel Review Count : 모든 조건")
     void testCountByExpression_withAllCondition() {
         // Given
         HotelReviewConditionSearchRequest request = HotelReviewConditionSearchRequest.builder()
@@ -270,7 +270,7 @@ class HotelReviewQueryRepositoryTest {
     }
 
     @Test
-    @DisplayName("Hotel Review Count : 모든 조건")
+    @DisplayName("Hotel Review Count : 조건 X")
     void testCountByExpression_withNoCondition() {
         // Given
         HotelReviewConditionSearchRequest request = new HotelReviewConditionSearchRequest();

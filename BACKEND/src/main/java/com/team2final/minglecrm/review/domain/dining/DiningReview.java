@@ -36,10 +36,10 @@ public class DiningReview {
     @JoinColumn(name = "dish_reservation_id")
     private DishReservation dishReservation;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createdTime;
 
     @Builder
-    public DiningReview(Double tasteRating, Double kindnessRating, Double cleanlinessRating, Double atmosphereRating, String review, Customer customer, DishReservation dishReservation, LocalDateTime createdDate) {
+    public DiningReview(Double tasteRating, Double kindnessRating, Double cleanlinessRating, Double atmosphereRating, String review, Customer customer, DishReservation dishReservation, LocalDateTime createdTime) {
         this.tasteRating = tasteRating;
         this.kindnessRating = kindnessRating;
         this.cleanlinessRating = cleanlinessRating;
@@ -47,7 +47,7 @@ public class DiningReview {
         this.review = review;
         this.customer = customer;
         this.dishReservation = dishReservation;
-        this.createdDate = createdDate;
+        this.createdTime = createdTime;
     }
 
 }

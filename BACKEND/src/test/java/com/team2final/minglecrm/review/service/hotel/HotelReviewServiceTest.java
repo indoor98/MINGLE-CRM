@@ -22,8 +22,4 @@ class HotelReviewServiceTest {
         // When
         HotelReviewConditionSearchRequest request = new HotelReviewConditionSearchRequest();
     }
-
-
-
-
 }

@@ -33,17 +33,18 @@ public class HotelReviewQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        long total = getSearchQuery(condition).fetch().size();
+        Long total = getCountQuery(condition).fetchOne();
 
-        return new PageImpl<>(response, pageable, total);
+        return new PageImpl<>(response, pageable, total != null ? total : 0L);
     }
 
     public List<HotelReviewConditionSearchResponse> searchByExpression(HotelReviewConditionSearchRequest condition) {
         return getSearchQuery(condition).fetch();
     }
 
-    public Long countByExpression(HotelReviewConditionSearchRequest condition) {
-        return getCountQuery(condition).fetchOne();
+    public long countByExpression(HotelReviewConditionSearchRequest condition) {
+        Long count = getCountQuery(condition).fetchOne();
+        return count != null ? count : 0;
     }
 
     private JPAQuery<HotelReviewConditionSearchResponse> getSearchQuery(HotelReviewConditionSearchRequest conditionSearchRequest) {

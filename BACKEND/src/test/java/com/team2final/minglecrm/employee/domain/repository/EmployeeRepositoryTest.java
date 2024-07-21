@@ -33,7 +33,7 @@ class EmployeeRepositoryTest {
         employeeRepository.save(employee);
 
         // When
-        Boolean exists = employeeRepository.existsByEmail("test@example.com");
+        boolean exists = employeeRepository.existsByEmail("test@example.com");
 
         // Then
         assertTrue(exists);
