@@ -21,7 +21,6 @@ public class DiningReviewService {
 
     public List<DiningReviewConditionSearchResponse> searchDiningReviews(DiningReviewConditionSearchRequest condition, Integer pageNo) {
         Page<DiningReviewConditionSearchResponse> page = diningReviewQueryRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
-
         return new ArrayList<>(page.getContent());
     }
 
@@ -32,5 +31,4 @@ public class DiningReviewService {
                 .pagesNumber((long) Math.ceil((double) rowsNumber / ROWS_PER_PAGE))
                 .build();
     }
-
 }
