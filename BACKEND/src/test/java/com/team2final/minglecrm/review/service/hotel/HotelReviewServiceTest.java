@@ -33,7 +33,7 @@ class HotelReviewServiceTest {
     void testSearchReviews() {
         // Given
         HotelReviewConditionSearchRequest condition = new HotelReviewConditionSearchRequest();
-        int pageNo = 0;
+        int pageNo = 1;
 
         // Stubbing
         HotelReviewConditionSearchResponse reviewResponse = new HotelReviewConditionSearchResponse();
@@ -56,9 +56,6 @@ class HotelReviewServiceTest {
         HotelReviewConditionSearchRequest condition = new HotelReviewConditionSearchRequest();
 
         // Stubbing
-        HotelReviewConditionSearchResponse reviewResponse = new HotelReviewConditionSearchResponse();
-        Page<HotelReviewConditionSearchResponse> page = new PageImpl<>(Collections.singletonList(reviewResponse));
-
         when(hotelReviewQueryRepository.countByExpression(condition)).thenReturn(1L);
 
         // When

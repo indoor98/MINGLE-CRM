@@ -19,7 +19,7 @@ public class DiningReviewService {
     private final DiningReviewQueryRepository diningReviewQueryRepository;
     private final int ROWS_PER_PAGE = 9;
 
-    public List<DiningReviewConditionSearchResponse> searchDiningReviews(DiningReviewConditionSearchRequest condition, Integer pageNo) {
+    public List<DiningReviewConditionSearchResponse> searchDiningReviews(DiningReviewConditionSearchRequest condition, int pageNo) {
         Page<DiningReviewConditionSearchResponse> page = diningReviewQueryRepository.searchByExpression(condition, PageRequest.of(pageNo, ROWS_PER_PAGE));
         return new ArrayList<>(page.getContent());
     }

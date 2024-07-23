@@ -1,13 +1,16 @@
 package com.team2final.minglecrm.review.dto.dining.response;
 
 import com.querydsl.core.annotations.QueryProjection;
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Setter
 @Getter
+@NoArgsConstructor
 public class DiningReviewConditionSearchResponse {
 
     private String customerName;
