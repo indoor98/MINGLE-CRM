@@ -2,10 +2,8 @@ package com.team2final.minglecrm.review.service.dining;
 
 import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewQueryRepository;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
-import com.team2final.minglecrm.review.dto.dining.response.DiningReviewCombinedResponse;
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchResponse;
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewMetaDataResponse;
-import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewCombinedResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,9 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 

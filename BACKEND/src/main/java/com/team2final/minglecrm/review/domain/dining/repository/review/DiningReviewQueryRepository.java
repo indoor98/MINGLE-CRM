@@ -74,12 +74,16 @@ public class DiningReviewQueryRepository {
     public JPAQuery<Long> getCountQuery(DiningReviewConditionSearchRequest condition) {
         QDiningReview diningReview = QDiningReview.diningReview;
         QDishReservation dishReservation = QDishReservation.dishReservation;
+        QCustomer customer = QCustomer.customer;
+
 
         return queryFactory
                 .select(diningReview.count().longValue())
                 .from(diningReview)
+                .join(diningReview.customer, customer)
                 .join(diningReview.dishReservation, dishReservation)
                 .where(
+                        customerNameEq(condition.getCustomerName()),
                         restaurantEq(condition.getRestaurant()),
                         createdTimeBetween(condition.getStartDate(), condition.getEndDate())
                 );

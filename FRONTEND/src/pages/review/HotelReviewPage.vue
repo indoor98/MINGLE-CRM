@@ -202,9 +202,11 @@ const getHotelReviews = async () => {
     if (hotel.value !== "선택 안함") {
       searchCondition.value.hotel = hotel.value;
     }
+    
     if (roomType.value !== "선택 안함") {
       searchCondition.value.roomType = roomType.value;
     }
+
     if (startDate.value !== "" && endDate.value !== "") {
       // 2021-11-08T11:44:30.327959
       searchCondition.value.startDate =
@@ -218,47 +220,19 @@ const getHotelReviews = async () => {
 
     console.log(searchCondition.value);
 
-    const response = await axios.post(
-      `http://localhost:8080/api/hotel/reviews/${pagination.value.page - 1}`,
-      searchCondition.value,
+    const response = await axios.get(
+      `/api/hotel/review/${pagination.value.page - 1}`,{
+        params: searchCondition.value
+      },
       { withCredentials: true }
     );
-    getHotelReviewMetaData();
-    reviews.value = response.data.data;
+    console.log(response.data);
+    reviews.value = response.data.data.reviews;
+    pagination.value.pagesNumber = response.data.data.metaData.pagesNumber;
     console.log(reviews);
   } catch (error) {
     console.log(error);
   }
-};
-
-const getHotelReviewMetaData = async () => {
-  const searchCondition = ref({});
-
-  if (hotel.value !== "선택 안함") {
-    searchCondition.value.hotel = hotel.value;
-  }
-  if (roomType.value !== "선택 안함") {
-    searchCondition.value.roomType = roomType.value;
-  }
-  if (startDate.value !== "" && endDate.value !== "") {
-    // 2021-11-08T11:44:30.327959
-    searchCondition.value.startDate =
-      dateToLocalDateTime(startDate.value) + "T00:00:00";
-    searchCondition.value.endDate =
-      dateToLocalDateTime(endDate.value) + "T23:59:59";
-  }
-  if (customerName.value !== "") {
-    searchCondition.value.customerName = customerName;
-  }
-
-  const response = await axios.get(
-    "http://localhost:8080/api/hotel/review/meta",
-    {
-      params: searchCondition.value,
-    }
-  );
-
-  pagination.value.pagesNumber = response.data.data.pagesNumber;
 };
 
 // 페이지네이션 값이 변경될 때마다 getHotelReviews 함수 호출
@@ -272,8 +246,6 @@ watch(
 // 컴포넌트가 마운트될 때 getHotelReviews 함수 호출
 onMounted(() => {
   getHotelReviews();
-
-  getHotelReviewMetaData();
 });
 </script>
 

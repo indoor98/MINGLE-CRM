@@ -37,8 +37,10 @@ public class HotelReviewApi {
     ResultResponse<HotelReviewSummaryResponse> getHotelReviewSummary(
             @ModelAttribute HotelReviewSummaryRequest request) {
         try {
-            HotelReviewSummaryResponse response = aiService.getHotelReviewSummary(request)
-                    .orElseGet(() -> aiService.createHotelReviewSummary(request));
+            HotelReviewSummaryResponse response = aiService.getHotelReviewSummary(request);
+            if (response == null) {
+                response = aiService.createHotelReviewSummary(request);
+            }
 
             return new ResultResponse<>(HttpStatus.OK.value(), "success", response);
         } catch (Exception e) {

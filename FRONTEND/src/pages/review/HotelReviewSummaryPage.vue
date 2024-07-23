@@ -109,9 +109,7 @@
           class="align-right"
           @click="
             () => {
-              getHotelReviewsAverageRatings(startDate, endDate);
-              getHotelReviewsNumber(startDate, endDate);
-              getHotelReviewsSummaryByPeriod(startDate, endDate);
+              getHotelReviewSummary(startDate, endDate);
             }
           "
           >조회</q-btn
@@ -143,111 +141,37 @@ const summaryType = ref("POSITIVE");
 const hotel = ref("선택 안함");
 const hotelOptions = ref(["선택 안함", "SEOUL", "BUSAN", "SOKCHO"]);
 
-const getHotelReviewsAverageRatings = async (startDate, endDate) => {
-  try {
-    const start = new Date(startDate).toISOString();
-    const end = new Date(endDate).toISOString();
-    let hotelParam = hotel.value;
-    if (hotel.value === "선택 안함") {
-      hotelParam = "All";
-    } else {
-      hotelParam = hotel.value;
-    }
-    const response = await axios.get("/api/hotel/rating/average", {
-      params: {
-        startDate: start.slice(0, 11) + "00:00:00",
-        endDate: end.slice(0, 11) + "23:59:59",
-        hotel: hotelParam,
-      },
-    });
-    console.log(response.data.data);
-    averageRating.value = response.data.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-const getHotelReviewsNumber = async (startDate, endDate) => {
+const getHotelReviewSummary = async (startDate, endDate) => {
   try {
-    const start = new Date(startDate).toISOString();
-    const end = new Date(endDate).toISOString();
-    let hotelParam = hotel.value;
-    if (hotel.value === "선택 안함") {
-      hotelParam = "All";
-    } else {
-      hotelParam = hotel.value;
-    }
-    const response = await axios.get("/api/hotel/review/count", {
-      params: {
-        startDate: start.slice(0, 11) + "00:00:00",
-        endDate: end.slice(0, 11) + "23:59:59",
-        hotel: hotelParam,
-      },
-    });
-    console.log(response.data);
-    reviewsNumber.value = response.data.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-const getHotelReviewsSummaryByPeriod = async (startDate, endDate) => {
-  try {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
-    let hotelParam = hotel.value;
-    if (hotelParam === "선택 안함") {
-      hotelParam = "All";
+
+    const condition = ref({});
+
+    if (hotel.value !== "선택 안함") {
+      condition.value.hotel = hotel.value;
     }
+
+    condition.value.startDate = start.slice(0, 11) + "00:00:00";
+    condition.value.endDate = end.slice(0, 11) + "23:59:59";
+    condition.value.summaryType = summaryType.value;
 
     const response = await axios.get("/api/hotel/review/summary", {
-      params: {
-        startDate: start.slice(0, 11) + "00:00:00",
-        endDate: end.slice(0, 11) + "23:59:59",
-        summaryType: summaryType.value,
-        hotel: hotelParam,
-      },
+      params: condition.value
     });
     if (response.data.data === null) {
       console.log("리뷰 요약 데이터가 없습니다");
-      createHotelReviewsSummaryByPeriod(startDate, endDate);
     } else {
       summary.value = response.data.data.summary;
+      reviewsNumber.value = response.data.data.reviewAmount;
+      averageRating.value = response.data.data.averageRating;
     }
   } catch (error) {
     console.log(error);
   }
 };
 
-const createHotelReviewsSummaryByPeriod = async (startDate, endDate) => {
-  try {
-    const start = new Date(startDate).toISOString();
-    const end = new Date(endDate).toISOString();
-    let hotelParam = hotel.value;
-    if (hotelParam === "선택 안함") {
-      hotelParam = "All";
-    }
 
-    const response = await axios.post("/api/hotel/review/summary", {
-      startDate: start.slice(0, 11) + "00:00:00",
-      endDate: end.slice(0, 11) + "23:59:59",
-      summaryType: summaryType.value,
-      hotel: hotelParam,
-    });
-    if (response.data.data === null) {
-      window.alert("리뷰 데이터가 없습니다! 다른 날짜를 선택해주세요");
-      summary.value = "";
-      return;
-    }
-    summary.value = response.data.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-onMounted(() => {
-  // getHotelReviewsAverageRatings(, endDate.value);
-  // getHotelReviewsNumber();
-  // const converted = Date().toISOString().toString().slice(0, 11) + "00:00:00";
-});
 </script>

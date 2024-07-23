@@ -43,9 +43,9 @@ public class AiService {
     private final DiningReviewSummaryQueryRepository diningReviewSummaryQueryRepository;
 
     /* 해당 조건에 맞는 ai 호텔 리뷰 요약이 존재하는 경우 */
-    public Optional<HotelReviewSummaryResponse> getHotelReviewSummary(HotelReviewSummaryRequest condition) {
+    public HotelReviewSummaryResponse getHotelReviewSummary(HotelReviewSummaryRequest condition) {
         HotelReviewSummary hotelReviewSummary = hotelReviewSummaryQueryRepository.searchByCondition(condition);
-        return Optional.ofNullable(HotelReviewSummary.of(hotelReviewSummary));
+        return hotelReviewSummary != null ? HotelReviewSummary.of(hotelReviewSummary) : null;
     }
 
     /* 호텔 리뷰 요약 생성 */
@@ -100,9 +100,9 @@ public class AiService {
     }
 
     /* 다이닝 리뷰 요약 조회 */
-    public Optional<DiningReviewSummaryResponse> getDiningReviewSummary(DiningReviewSummaryRequest condition) {
+    public DiningReviewSummaryResponse getDiningReviewSummary(DiningReviewSummaryRequest condition) {
         DiningReviewSummary diningReviewSummary = diningReviewSummaryQueryRepository.searchByCondition(condition);
-        return Optional.ofNullable(DiningReviewSummary.of(diningReviewSummary));
+        return diningReviewSummary != null ? DiningReviewSummary.of(diningReviewSummary) : null;
     }
 
     /* 다이닝 리뷰 ai 요약 생성 */

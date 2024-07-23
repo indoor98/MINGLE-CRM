@@ -146,10 +146,9 @@
 import { ref, watch, onMounted } from "vue";
 import { api as axios } from "/src/boot/axios"; // axios 모듈을 기본 내보내기로 임포트
 
-const current = ref(1);
 const reviews = ref([]);
 const restaurant = ref("선택 안함");
-const restaurantOptions = ref(["선택 안함", "담소정", "하나미 스시", "도림"]);
+const restaurantOptions = ref(["선택 안함", "담소정", "도림"]);
 const startDate = ref("");
 const endDate = ref("");
 
@@ -193,44 +192,18 @@ const getDiningReviews = async () => {
 
     console.log(searchCondition.value);
 
-    const response = await axios.post(
-      `http://localhost:8080/api/dining/reviews/${pagination.value.page - 1}`,
-      searchCondition.value
+    const response = await axios.get(
+      `/api/dining/review/${pagination.value.page - 1}`,
+      {params: searchCondition.value}
     );
-    reviews.value = response.data.data;
 
-    getDiningReviewMetaData();
+    reviews.value = response.data.data.reviews;
+    pagination.value.pagesNumber = response.data.data.metaData.pagesNumber;
   } catch (error) {
     console.log(error);
   }
 };
 
-const getDiningReviewMetaData = async () => {
-  const searchCondition = ref({});
-
-  if (restaurant.value !== "선택 안함") {
-    searchCondition.value.restaurant = restaurant.value;
-  }
-  if (startDate.value !== "" && endDate.value !== "") {
-    // 2021-11-08T11:44:30.327959
-    searchCondition.value.startDate =
-      dateToLocalDateTime(startDate.value) + "T00:00:00";
-    searchCondition.value.endDate =
-      dateToLocalDateTime(endDate.value) + "T23:59:59";
-  }
-  if (customerName.value !== "") {
-    searchCondition.value.customerName = customerName;
-  }
-
-  const response = await axios.get(
-    "http://localhost:8080/api/dining/review/meta",
-    {
-      params: searchCondition.value,
-    }
-  );
-
-  pagination.value.pagesNumber = response.data.data.pagesNumber;
-};
 
 // 페이지네이션 값이 변경될 때마다 getHotelReviews 함수 호출
 watch(
@@ -243,7 +216,6 @@ watch(
 // 컴포넌트가 마운트될 때 getHotelReviews 함수 호출
 onMounted(() => {
   getDiningReviews();
-  getDiningReviewMetaData();
 });
 </script>
 

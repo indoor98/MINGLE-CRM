@@ -36,8 +36,10 @@ public class DiningReviewApi {
     ResultResponse<DiningReviewSummaryResponse> getDiningReviewSummary(
             @ModelAttribute DiningReviewSummaryRequest request) {
         try {
-            DiningReviewSummaryResponse response = aiService.getDiningReviewSummary(request)
-                    .orElseGet(() -> aiService.createDiningReviewSummary(request));
+            DiningReviewSummaryResponse response = aiService.getDiningReviewSummary(request);
+            if (response == null){
+                response = aiService.createDiningReviewSummary(request);
+            }
 
             return new ResultResponse<>(HttpStatus.OK.value(), "success", response);
         } catch (Exception e) {

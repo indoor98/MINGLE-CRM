@@ -109,9 +109,7 @@
           class="align-right"
           @click="
             () => {
-              getDiningReviewsAverageRatings(startDate, endDate);
-              getDiningReviewsNumber(startDate, endDate);
-              getDiningReviewsSummaryByPeriod(startDate, endDate);
+              getDiningReviewSummary(startDate, endDate);
             }
           "
           >조회</q-btn
@@ -132,7 +130,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { api as axios } from "src/boot/axios";
 
 const loading = ref(true);
@@ -147,118 +145,38 @@ const restaurant = ref("선택 안함");
 const restaurantOptions = ref([
   "선택 안함",
   "담소정",
-  "하나미 스시",
-  "Château d Étoiles",
-  "Bella Vista",
+  "하나미 스시"
 ]);
 
-const getDiningReviewsAverageRatings = async (startDate, endDate) => {
+
+const getDiningReviewSummary = async (startDate, endDate) => {
   try {
-    const start = new Date(startDate).toISOString();
-    const end = new Date(endDate).toISOString();
-    let restaurantParam = restaurant.value;
-
-    if (restaurantParam === "선택 안함") {
-      restaurantParam = "All";
-    }
-
-    const response = await axios.get("/api/dining/rating/average", {
-      params: {
-        startDate: start.slice(0, 11) + "00:00:00",
-        endDate: end.slice(0, 11) + "23:59:59",
-        restaurant: restaurantParam,
-      },
-    });
-    averageRating.value = response.data.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const getDiningReviewsNumber = async (startDate, endDate) => {
-  try {
+    const condition = ref({});
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
 
-    let restaurantParam = restaurant.value;
-
-    if (restaurantParam === "선택 안함") {
-      restaurantParam = "All";
+    if(restaurant.value != "선택 안함") {
+        condition.value.restaurant = restaurant.value;
     }
-    const response = await axios.get("/api/dining/review/count", {
-      params: {
-        startDate: start.slice(0, 11) + "00:00:00",
-        endDate: end.slice(0, 11) + "23:59:59",
-        restaurant: restaurantParam,
-      },
-    });
 
-    reviewsNumber.value = response.data.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const getDiningReviewsSummaryByPeriod = async (startDate, endDate) => {
-  try {
-    const start = new Date(startDate).toISOString();
-    const end = new Date(endDate).toISOString();
-
-    let restaurantParam = restaurant.value;
-
-    if (restaurantParam === "선택 안함") {
-      restaurantParam = "All";
-    }
+    condition.value.startDate = start.slice(0, 11) + "00:00:00";
+    condition.value.endDate = end.slice(0, 11) + "23:59:59";
+    condition.value.summaryType = summaryType.value;
 
     const response = await axios.get("/api/dining/review/summary", {
-      params: {
-        startDate: start.slice(0, 11) + "00:00:00",
-        endDate: end.slice(0, 11) + "23:59:59",
-        summaryType: summaryType.value,
-        restaurant: restaurantParam,
-      },
+      params: condition.value
     });
+
     if (response.data.data === null) {
       console.log("리뷰 요약 데이터가 없습니다");
-      createDiningReviewsSummaryByPeriod(startDate, endDate);
     } else {
       summary.value = response.data.data.summary;
+      reviewsNumber.value = response.data.data.reviewAmount;
+      averageRating.value = response.data.data.averageRating;
     }
   } catch (error) {
     console.log(error);
   }
 };
 
-const createDiningReviewsSummaryByPeriod = async (startDate, endDate) => {
-  try {
-    const start = new Date(startDate).toISOString();
-    const end = new Date(endDate).toISOString();
-
-    let restaurantParam = restaurant.value;
-    if (restaurant.value === "선택 안함") {
-      restaurantParam = "All";
-    }
-
-    const response = await axios.post("/api/dining/review/summary", {
-      startDate: start.slice(0, 11) + "00:00:00",
-      endDate: end.slice(0, 11) + "23:59:59",
-      summaryType: summaryType.value,
-      restaurant: restaurantParam,
-    });
-    if (response.data.data === null) {
-      window.alert("리뷰 데이터가 없습니다! 다른 날짜를 선택해주세요");
-      summary.value = "";
-      return;
-    }
-    summary.value = response.data.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-onMounted(() => {
-  // getHotelReviewsAverageRatings(, endDate.value);
-  // getHotelReviewsNumber();
-  // const converted = Date().toISOString().toString().slice(0, 11) + "00:00:00";
-});
 </script>

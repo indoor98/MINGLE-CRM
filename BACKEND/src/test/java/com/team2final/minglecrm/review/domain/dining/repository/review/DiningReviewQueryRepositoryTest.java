@@ -320,6 +320,4 @@ class DiningReviewQueryRepositoryTest {
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
     }
-
-
 }
