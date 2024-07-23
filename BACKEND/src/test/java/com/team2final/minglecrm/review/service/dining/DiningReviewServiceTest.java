@@ -2,7 +2,10 @@ package com.team2final.minglecrm.review.service.dining;
 
 import com.team2final.minglecrm.review.domain.dining.repository.review.DiningReviewQueryRepository;
 import com.team2final.minglecrm.review.dto.dining.request.DiningReviewConditionSearchRequest;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewCombinedResponse;
 import com.team2final.minglecrm.review.dto.dining.response.DiningReviewConditionSearchResponse;
+import com.team2final.minglecrm.review.dto.dining.response.DiningReviewMetaDataResponse;
+import com.team2final.minglecrm.review.dto.hotel.response.HotelReviewCombinedResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,7 +54,18 @@ class DiningReviewServiceTest {
 
     @Test
     void testGetDiningReviewMetaData() {
+        // Given
+        DiningReviewConditionSearchRequest condition = new DiningReviewConditionSearchRequest();
 
+        when(diningReviewQueryRepository.countByExpression(condition)).thenReturn(19L);
 
+        // When
+        DiningReviewMetaDataResponse response = diningReviewService.getDiningReviewMetaData(condition);
+
+        // Then
+        assertThat(response).isNotNull();
+        assertThat(response.getPagesNumber()).isEqualTo(3L);
+        assertThat(response.getRowsNumber()).isEqualTo(19L);
+        verify(diningReviewQueryRepository, times(1)).countByExpression(condition);
     }
 }
