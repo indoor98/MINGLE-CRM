@@ -12,11 +12,17 @@ spring:
     username: sa
     password:
 
+  sql:
+    init:
+      mode: never
+      data-locations: data.sql
+
   jpa:
     defer-datasource-initialization: true
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
+
 
   data:
     redis:

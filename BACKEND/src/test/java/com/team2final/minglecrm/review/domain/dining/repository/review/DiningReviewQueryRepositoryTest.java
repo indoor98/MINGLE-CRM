@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestQueryDslConfig.class)
-@TestPropertySource("classpath:application-test.yml")
+@TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class DiningReviewQueryRepositoryTest {
 
     @Autowired

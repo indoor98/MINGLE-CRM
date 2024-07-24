@@ -23,12 +23,16 @@ spring:
 #    url: jdbc:mariadb://localhost:3306/mingle_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
 #    username: root
 #    password: 123456789
+#
+#  sql:
+#    init:
+#      mode: always
 
   jpa:  # https://joyerim.tistory.com/6#%E2%96%AA%C2%A0JPA-1
     defer-datasource-initialization: true
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
 
 
 

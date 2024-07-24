@@ -6,12 +6,11 @@
     </appender>
 
     <logger name="jdbc" level="OFF"/>
-
-    <logger name="jdbc.sqlonly" level="OFF"/>
-    <logger name="jdbc.sqltiming" level="OFF"/>
+    <logger name="jdbc.sql only" level="OFF"/>
+    <logger name="jdbc.sliding" level="OFF"/>
     <logger name="jdbc.audit" level="OFF"/>
-    <logger name="jdbc.resultset" level="OFF"/>
-    <logger name="jdbc.resultsettable" level="OFF"/>
+    <logger name="jdbc.result" level="OFF"/>
+    <logger name="jdbc.result-settable" level="OFF"/>
     <logger name="jdbc.connection" level="OFF"/>
 
     <root level="OFF">

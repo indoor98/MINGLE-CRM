@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,8 +31,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource("classpath:application-test.yml")
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2, replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @Import(TestQueryDslConfig.class)
 class HotelReviewQueryRepositoryTest {
 
@@ -61,7 +63,7 @@ class HotelReviewQueryRepositoryTest {
                 .convenienceRating(2.0)
                 .comment("아주 좋은 호텔입니다.")
                 .customer(customer)
-                .createdTime(LocalDateTime.of(2024,1,1,10,35))
+                .createdTime(LocalDateTime.of(2024, 1, 1, 10, 35))
                 .build();
 
         entityManager.persist(hotelReview);
@@ -92,8 +94,8 @@ class HotelReviewQueryRepositoryTest {
                 .hotel(Hotel.SEOUL)
                 .roomType(RoomType.SUPERIOR)
                 .customerName("testCustomer1")
-                .startDate(LocalDateTime.of(2024,1,1,0,0))
-                .endDate(LocalDateTime.of(2024,1, 2, 23,59,59))
+                .startDate(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .endDate(LocalDateTime.of(2024, 1, 2, 23, 59, 59))
                 .build();
 
         Pageable pageable = PageRequest.of(0, 10);
@@ -104,6 +106,10 @@ class HotelReviewQueryRepositoryTest {
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().get(0).getCustomerName()).isEqualTo("testCustomer1");
+        assertThat(result.getContent().get(0).getCreatedTime()).isBetween(LocalDateTime.of(2024, 1, 1, 0, 0), LocalDateTime.of(2024, 1, 2, 23, 59, 59));
+        assertThat(result.getContent().get(0).getHotel()).isEqualTo(Hotel.SEOUL);
+        assertThat(result.getContent().get(0).getRoomType()).isEqualTo(RoomType.SUPERIOR);
     }
 
     @Test
@@ -123,11 +129,12 @@ class HotelReviewQueryRepositoryTest {
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().get(0).getHotel()).isEqualTo(Hotel.SEOUL);
     }
 
     @Test
     @DisplayName("Hotel Review 다중 검색 : 룸 타입 : Paging O")
-    void testSearchByExpression_withAllroomType_withPagination() {
+    void testSearchByExpression_withRoomType_withPagination() {
 
         // Given
         HotelReviewConditionSearchRequest request = HotelReviewConditionSearchRequest.builder()
@@ -142,6 +149,7 @@ class HotelReviewQueryRepositoryTest {
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().get(0).getRoomType()).isEqualTo(RoomType.SUPERIOR);
     }
 
     @Test
@@ -161,6 +169,7 @@ class HotelReviewQueryRepositoryTest {
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().get(0).getCustomerName()).isEqualTo("testCustomer1");
     }
 
     @Test
@@ -169,8 +178,8 @@ class HotelReviewQueryRepositoryTest {
 
         // Given
         HotelReviewConditionSearchRequest request = HotelReviewConditionSearchRequest.builder()
-                .startDate(LocalDateTime.of(2024,1,1,0,0))
-                .endDate(LocalDateTime.of(2024,1, 2, 23,59,59))
+                .startDate(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .endDate(LocalDateTime.of(2024, 1, 2, 23, 59, 59))
                 .build();
 
         Pageable pageable = PageRequest.of(0, 10);
@@ -181,6 +190,7 @@ class HotelReviewQueryRepositoryTest {
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().get(0).getCreatedTime()).isBetween(LocalDateTime.of(2024, 1, 1, 0, 0), LocalDateTime.of(2024, 1, 2, 23, 59, 59));
     }
 
 
@@ -192,8 +202,8 @@ class HotelReviewQueryRepositoryTest {
                 .hotel(Hotel.SEOUL)
                 .roomType(RoomType.SUPERIOR)
                 .customerName("testCustomer1")
-                .startDate(LocalDateTime.of(2024,1,1,0,0))
-                .endDate(LocalDateTime.of(2024,1, 2, 23,59,59))
+                .startDate(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .endDate(LocalDateTime.of(2024, 1, 2, 23, 59, 59))
                 .build();
 
         // When
@@ -257,8 +267,8 @@ class HotelReviewQueryRepositoryTest {
     void testCountByExpression_withDate() {
         // Given
         HotelReviewConditionSearchRequest request = HotelReviewConditionSearchRequest.builder()
-                .startDate(LocalDateTime.of(2024,1,1,0,0))
-                .endDate(LocalDateTime.of(2024,1, 2, 23,59,59))
+                .startDate(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .endDate(LocalDateTime.of(2024, 1, 2, 23, 59, 59))
                 .build();
 
         // When
@@ -336,8 +346,8 @@ class HotelReviewQueryRepositoryTest {
     void testSearchByExpression_withAllDate_withoutPagination() {
         // Given
         HotelReviewConditionSearchRequest request = HotelReviewConditionSearchRequest.builder()
-                .startDate(LocalDateTime.of(2024,1,1,0,0))
-                .endDate(LocalDateTime.of(2024,1, 2, 23,59,59))
+                .startDate(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .endDate(LocalDateTime.of(2024, 1, 2, 23, 59, 59))
                 .build();
 
         // When
@@ -356,8 +366,8 @@ class HotelReviewQueryRepositoryTest {
                 .hotel(Hotel.SEOUL)
                 .roomType(RoomType.SUPERIOR)
                 .customerName("testCustomer1")
-                .startDate(LocalDateTime.of(2024,1,1,0,0))
-                .endDate(LocalDateTime.of(2024,1, 2, 23,59,59))
+                .startDate(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .endDate(LocalDateTime.of(2024, 1, 2, 23, 59, 59))
                 .build();
 
         // When
