@@ -247,7 +247,7 @@ const logout = async () => {
   try {
     console.log("로그아웃");
     const response = await customAxios.get(
-      "http://localhost:8080/api/v1/auth/logout",
+      "http://localhost:8080/api/auth/logout",
       {
         withCredentials: true,
       }
@@ -262,17 +262,14 @@ const logout = async () => {
 const renewToken = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8080/api/v1/auth/renew",
+      "http://localhost:8080/api/auth/reissue",
       {
         withCredentials: true,
       }
     );
-    console.log(response.data);
-    console.log("renewToken 실행 완료");
-    if (response.data.code === 200) {
+    if (response.data.message === "success") {
       const { atk, atkExpiration } = response.data.data;
       store.setSigninResponse(atk, atkExpiration);
-      console.log("갱신 완료");
     } else {
       throw new Error("Token renewal failed");
     }

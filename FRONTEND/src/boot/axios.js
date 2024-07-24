@@ -17,7 +17,7 @@ export default boot(({ app }) => {
       const atkExpiration = store.atkExpiration;
 
       console.log(" global axios interceptors ");
-      if (config.url.includes("/api/v1/auth/renew")) {
+      if (config.url.includes("/api/auth/reissue")) {
         return config;
       }
 
@@ -25,7 +25,7 @@ export default boot(({ app }) => {
       if (!atk || new Date(atkExpiration) <= new Date()) {
         try {
           console.log("토큰 갱신 요청");
-          const response = await api.get("/api/v1/auth/renew", {
+          const response = await api.get("/api/auth/reissue", {
             withCredentials: true,
           });
           console.log("요청 보냄");

@@ -66,32 +66,10 @@ public class EmployeeService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean isEmailExists(String email) {
-        Employee employee = employeeRepository.findByEmail(email).orElseThrow();
-        return employee.getEmail().equals(email);
-    }
-
-    @Transactional(readOnly = true)
     public Boolean isValidEmailAndPassword(SignInRequest request) {
-        Optional<Employee> tempEmployee = employeeRepository.findByEmail(request.getEmail());
-
-        if (tempEmployee.isPresent()) {
-            Employee employee = tempEmployee.get();
-
-            if (!employee.getEmail().equals(request.getEmail())) {
-                return false;
-            }
-
-            boolean matches = passwordEncoder.matches(request.getPassword(), employee.getPassword());
-            if (!matches) {
-                return false;
-            }
-
-            return true;
-
-        } else {
-            return false;
-        }
+        return employeeRepository.findByEmail(request.getEmail())
+                .filter(employee -> passwordEncoder.matches(request.getPassword(), employee.getPassword()))
+                .isPresent();
     }
 
 
